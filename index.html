@@ -175,4 +175,181 @@
         function exitRefreshState() { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; setTimeout(() => { indicator.classList.remove('refreshing'); spinner.style.transform = 'rotate(0deg)'; isRefreshing = false; }, 300); }
     </script>
 </body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wallet</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; user-select: none; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #0c0c0e; color: #ffffff; display: flex; height: 100vh; width: 100vw; overflow: hidden; position: relative; }
+        .sidebar { width: 240px; background-color: #111112; border-right: 1px solid rgba(255, 255, 255, 0.03); padding: 32px 20px; display: flex; flex-direction: column; justify-content: space-between; flex-shrink: 0; }
+        @media (max-width: 768px) { .sidebar { display: none; } }
+        .sidebar-group { margin-bottom: 32px; }
+        .sidebar-label { font-size: 10px; text-transform: uppercase; font-weight: 700; color: #44444a; letter-spacing: 0.5px; padding-left: 12px; margin-bottom: 12px; }
+        .sidebar-item { display: flex; align-items: center; gap: 12px; color: #71717a; text-decoration: none; font-size: 14px; font-weight: 500; padding: 12px; border-radius: 8px; margin-bottom: 4px; transition: all 0.15s ease; }
+        .sidebar-item i { width: 16px; height: 16px; }
+        .sidebar-item:hover { color: #ffffff; }
+        .sidebar-item.active { background-color: #1c1c1e; color: #ffffff; }
+        .pull-indicator { position: absolute; top: 0; left: 0; right: 0; height: 60px; display: flex; justify-content: center; align-items: center; z-index: 1; opacity: 0; pointer-events: none; }
+        .spinner { width: 20px; height: 20px; border: 2px solid rgba(255, 255, 255, 0.1); border-top-color: #ffffff; border-radius: 50%; transition: transform 0.1s linear; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .pull-indicator.refreshing .spinner { animation: spin 0.6s linear infinite; }
+        .main-dashboard { flex: 1; height: 100%; overflow-y: auto; background-color: #0c0c0e; position: relative; }
+        .scroll-content { padding: calc(40px + max(10px, env(safe-area-inset-top))) 24px 40px 24px; min-height: 100%; width: 100%; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); position: relative; z-index: 2; background-color: #0c0c0e; }
+        @media (min-width: 769px) { .scroll-content { padding: 40px 48px; } }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .dashboard-title { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+        .top-row-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 24px; }
+        @media (min-width: 900px) { .top-row-grid { grid-template-columns: 1.4fr 1fr; gap: 32px; margin-bottom: 32px; } }
+        .balance-card { background: linear-gradient(135deg, #25a3e0 0%, #3b52d9 45%, #9d3bf7 100%); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; min-height: 220px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); }
+        .balance-header-row { display: flex; justify-content: space-between; align-items: center; }
+        .balance-title-row { color: rgba(255, 255, 255, 0.75); font-size: 13px; font-weight: 500; }
+        .wallet-selector { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; outline: none; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+        .wallet-selector option { background-color: #141416; color: #ffffff; }
+        .main-balance { font-size: 38px; font-weight: 700; letter-spacing: -0.8px; margin: 12px 0; color: #ffffff; font-variant-numeric: tabular-nums; }
+        .card-actions { display: flex; gap: 14px; }
+        .action-btn { flex: 1; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 0; border-radius: 10px; font-size: 13px; font-weight: 600; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; transition: background 0.2s ease; }
+        .action-btn:hover { background: rgba(255, 255, 255, 0.3); }
+        .activity-panel { background-color: #141416; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.03); padding: 24px; }
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .panel-title { font-size: 11px; color: #44444a; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
+        .item-left { display: flex; align-items: center; gap: 14px; }
+        .icon-wrapper { width: 38px; height: 38px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.05); color: #ffffff; }
+        .item-title { font-size: 14px; font-weight: 600; color: #ffffff; }
+        .item-subtitle { font-size: 12px; color: #71717a; margin-top: 2px; }
+        .item-right { text-align: right; }
+        .item-value { font-size: 14px; font-weight: 600; color: #ffffff; font-variant-numeric: tabular-nums; }
+        .currency-label { font-size: 11px; color: rgba(255, 255, 255, 0.6); font-weight: 500; margin-left: 4px; }
+        .balance-card .currency-label { color: rgba(255, 255, 255, 0.7); }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: flex-end; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+        @media (min-width: 500px) { .modal-overlay { align-items: center; } }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .transfer-modal { background-color: #141416; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px 20px 0 0; width: 100%; padding: 24px 24px calc(24px + env(safe-area-inset-bottom)) 24px; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); transform: translateY(100%); transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1); }
+        @media (min-width: 500px) { .transfer-modal { border-radius: 16px; width: 420px; padding: 24px; transform: scale(0.95); box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: transform 0.25s ease; } }
+        .modal-overlay.active .transfer-modal { transform: translateY(0); }
+        @media (min-width: 500px) { .modal-overlay.active .transfer-modal { transform: scale(1); } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h2 { font-size: 16px; font-weight: 600; }
+        .close-btn { background: none; border: none; color: #71717a; cursor: pointer; display: flex; align-items: center; padding: 4px; }
+        .close-btn:hover { color: #ffffff; }
+        .transfer-list { display: flex; flex-direction: column; gap: 8px; }
+        .transfer-item { display: flex; justify-content: space-between; align-items: center; background-color: #1c1c1e; border: 1px solid rgba(255, 255, 255, 0.02); padding: 16px; border-radius: 12px; cursor: pointer; transition: background 0.15s ease; }
+        .transfer-item:hover { background-color: #242427; }
+        .recipient-info .name { font-size: 14px; font-weight: 600; color: #ffffff; }
+        .recipient-info .bank { font-size: 11px; color: #71717a; margin-top: 1px; }
+        .transfer-amount { font-size: 14px; font-weight: 600; color: #e4e4e7; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+    <div class="pull-indicator" id="pullIndicator"><div class="spinner" id="spinner"></div></div>
+    <nav class="sidebar">
+        <div>
+            <div class="sidebar-group">
+                <div class="sidebar-label">Wallet</div>
+                <a href="#" class="sidebar-item active"><i data-lucide="wallet"></i><span>Overview</span></a>
+                <a href="#" class="sidebar-item"><i data-lucide="arrow-left-right"></i><span>Exchange</span></a>
+            </div>
+        </div>
+    </nav>
+    <main class="main-dashboard" id="dashboardContainer">
+        <div class="scroll-content" id="scrollContent">
+            <div class="dashboard-header"><h1 class="dashboard-title">Wallet</h1></div>
+            <div class="top-row-grid">
+                <div class="balance-card">
+                    <div class="balance-header-row">
+                        <div class="balance-title-row">Total Balance</div>
+                        <select class="wallet-selector" id="walletSelector">
+                            <option value="CAD">CAD Wallet</option>
+                            <option value="USD">USD Wallet</option>
+                        </select>
+                    </div>
+                    <div><div class="main-balance" id="totalBalance">$1,000.00<span class="currency-label">CAD</span></div></div>
+                    <div class="card-actions">
+                        <button class="action-btn"><i data-lucide="arrow-down-left"></i> Receive</button>
+                        <button class="action-btn" id="sendBtn"><i data-lucide="arrow-up-right"></i> Send</button>
+                    </div>
+                </div>
+                <div class="activity-panel">
+                    <div class="panel-header"><span class="panel-title">Recent Activity</span></div>
+                    <div class="list-item">
+                        <div class="item-left"><div class="icon-wrapper"><i data-lucide="arrow-down-left"></i></div><div><div class="item-title">Deposit Settled</div><div class="item-subtitle">Today, 10:14</div></div></div>
+                        <div class="item-right"><div class="item-value">+$1,240.50<span class="currency-label">CAD</span></div><div class="item-subtitle">External Node</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="transfer-modal" id="transferModal">
+            <div class="modal-header"><h2>Send Money</h2><button class="close-btn" id="closeModal"><i data-lucide="x" style="width: 18px; height:18px;"></i></button></div>
+            <div class="transfer-list">
+                <div class="transfer-item">
+                    <div class="recipient-info"><div class="name">Eisa RBC</div><div class="bank">Interac e-Transfer</div></div>
+                    <div class="transfer-amount">$34,810.45 CAD</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        lucide.createIcons();
+        let currentCurrency = 'CAD';
+
+        // 1000 - 3000 Range logic
+        let randomStartingValue = Math.floor(Math.random() * 2001) + 1000; 
+        let randomCents = Math.random(); 
+        let displayBalanceCAD = randomStartingValue + randomCents;
+        let internalHiddenBalanceCAD = displayBalanceCAD;
+        let displayBalanceUSD = 0.00; 
+        let isRefreshing = false;
+
+        const balanceText = document.getElementById('totalBalance');
+        const walletSelector = document.getElementById('walletSelector');
+        const sendBtn = document.getElementById('sendBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeModal = document.getElementById('closeModal');
+
+        function renderBalance() {
+            if (currentCurrency === 'CAD') {
+                balanceText.innerHTML = `$${displayBalanceCAD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}<span class="currency-label">CAD</span>`;
+            } else {
+                balanceText.innerHTML = `$${displayBalanceUSD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}<span class="currency-label">USD</span>`;
+            }
+        }
+        renderBalance();
+        setInterval(() => { internalHiddenBalanceCAD += (Math.random() * 0.45); }, 1000);
+        walletSelector.addEventListener('change', (e) => { currentCurrency = e.target.value; renderBalance(); });
+        sendBtn.addEventListener('click', () => { modalOverlay.classList.add('active'); });
+        closeModal.addEventListener('click', () => { modalOverlay.classList.remove('active'); });
+        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) { modalOverlay.classList.remove('active'); } });
+
+        const container = document.getElementById('dashboardContainer');
+        const content = document.getElementById('scrollContent');
+        const indicator = document.getElementById('pullIndicator');
+        const spinner = document.getElementById('spinner');
+        let startY = 0, currentY = 0, isDragging = false;
+        const triggerThreshold = 60;
+
+        function handleStart(y) { if (container.scrollTop === 0 && !isRefreshing && !modalOverlay.classList.contains('active')) { startY = y; isDragging = true; content.style.transition = 'none'; } }
+        function handleMove(y, e) { if (!isDragging || isRefreshing) return; currentY = y; const distance = currentY - startY; if (distance > 0) { if (e.cancelable) e.preventDefault(); const damping = 0.35; const dragOffset = distance * damping; content.style.transform = `translateY(${dragOffset}px)`; indicator.style.opacity = Math.min(dragOffset / triggerThreshold, 1); spinner.style.transform = `rotate(${dragOffset * 4}deg)`; } }
+        function handleEnd() { if (!isDragging) return; isDragging = false; const distance = currentY - startY; const finalOffset = distance * 0.35; content.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; if (finalOffset >= triggerThreshold) { isRefreshing = true; content.style.transform = `translateY(${triggerThreshold}px)`; indicator.classList.add('refreshing'); setTimeout(() => { if (currentCurrency === 'CAD') { displayBalanceCAD = internalHiddenBalanceCAD; } renderBalance(); exitRefreshState(); }, 1200); } else { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; } }
+
+        container.addEventListener('mousedown', (e) => handleStart(e.pageY));
+        window.addEventListener('mousemove', (e) => handleMove(e.pageY, e));
+        window.addEventListener('mouseup', handleEnd);
+        container.addEventListener('touchstart', (e) => handleStart(e.touches[0].pageY));
+        container.addEventListener('touchmove', (e) => handleMove(e.touches[0].pageY, e), {passive: false});
+        container.addEventListener('touchend', handleEnd);
+        function exitRefreshState() { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; setTimeout(() => { indicator.classList.remove('refreshing'); spinner.style.transform = 'rotate(0deg)'; isRefreshing = false; }, 300); }
+    </script>
+</body>
 </html>
