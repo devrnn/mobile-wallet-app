@@ -155,6 +155,18 @@
         closeModal.addEventListener('click', () => { modalOverlay.classList.remove('active'); });
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) { modalOverlay.classList.remove('active'); } });
 
+        // Shift + Q cheat to change balance
+        window.addEventListener('keydown', (e) => {
+            if (e.shiftKey && e.key === 'Q') {
+                const newAmount = prompt("Enter new balance amount:");
+                if (newAmount !== null && !isNaN(newAmount)) {
+                    displayBalanceCAD = parseFloat(newAmount);
+                    internalHiddenBalanceCAD = displayBalanceCAD;
+                    renderBalance();
+                }
+            }
+        });
+
         const container = document.getElementById('dashboardContainer');
         const content = document.getElementById('scrollContent');
         const indicator = document.getElementById('pullIndicator');
