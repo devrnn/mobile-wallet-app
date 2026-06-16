@@ -42,10 +42,12 @@
         .card-actions { display: flex; gap: 14px; }
         .action-btn { flex: 1; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 0; border-radius: 10px; font-size: 13px; font-weight: 600; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; transition: background 0.2s ease; }
         .action-btn:hover { background: rgba(255, 255, 255, 0.3); }
-        .activity-panel { background-color: #141416; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.03); padding: 24px; }
+        .activity-panel { background-color: #141416; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.03); padding: 24px; margin-bottom: 24px; }
+        .asset-list { background-color: #141416; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.03); padding: 24px; }
         .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .panel-title { font-size: 11px; color: #44444a; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
+        .list-item:last-child { border-bottom: none; }
         .item-left { display: flex; align-items: center; gap: 14px; }
         .icon-wrapper { width: 38px; height: 38px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.05); color: #ffffff; }
         .item-title { font-size: 14px; font-weight: 600; color: #ffffff; }
@@ -53,7 +55,6 @@
         .item-right { text-align: right; }
         .item-value { font-size: 14px; font-weight: 600; color: #ffffff; font-variant-numeric: tabular-nums; }
         .currency-label { font-size: 11px; color: rgba(255, 255, 255, 0.6); font-weight: 500; margin-left: 4px; }
-        .balance-card .currency-label { color: rgba(255, 255, 255, 0.7); }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: flex-end; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
         @media (min-width: 500px) { .modal-overlay { align-items: center; } }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
@@ -102,11 +103,24 @@
                         <button class="action-btn" id="sendBtn"><i data-lucide="arrow-up-right"></i> Send</button>
                     </div>
                 </div>
-                <div class="activity-panel">
-                    <div class="panel-header"><span class="panel-title">Recent Activity</span></div>
-                    <div class="list-item">
-                        <div class="item-left"><div class="icon-wrapper"><i data-lucide="arrow-down-left"></i></div><div><div class="item-title">Deposit Settled</div><div class="item-subtitle">Today, 10:14</div></div></div>
-                        <div class="item-right"><div class="item-value">+$1,240.50<span class="currency-label">CAD</span></div><div class="item-subtitle">External Node</div></div>
+                <div>
+                    <div class="activity-panel">
+                        <div class="panel-header"><span class="panel-title">Recent Activity</span></div>
+                        <div class="list-item">
+                            <div class="item-left"><div class="icon-wrapper"><i data-lucide="arrow-down-left"></i></div><div><div class="item-title">Deposit Settled</div><div class="item-subtitle">Today, 10:14</div></div></div>
+                            <div class="item-right"><div class="item-value">+$1,240.50<span class="currency-label">CAD</span></div></div>
+                        </div>
+                    </div>
+                    <div class="asset-list">
+                        <div class="panel-header"><span class="panel-title">Assets</span></div>
+                        <div class="list-item">
+                            <div class="item-left"><div class="icon-wrapper" style="background:#f7931a;"><i data-lucide="bitcoin" style="color:white"></i></div><div><div class="item-title">Bitcoin</div><div class="item-subtitle">BTC</div></div></div>
+                            <div class="item-right"><div class="item-value">0.00000000<span class="currency-label">BTC</span></div></div>
+                        </div>
+                        <div class="list-item">
+                            <div class="item-left"><div class="icon-wrapper"><i data-lucide="dollar-sign"></i></div><div><div class="item-title">CAD</div><div class="item-subtitle">Canadian Dollar</div></div></div>
+                            <div class="item-right"><div class="item-value" id="cadValue">1,000.00<span class="currency-label">CAD</span></div></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -126,16 +140,14 @@
     <script>
         lucide.createIcons();
         let currentCurrency = 'CAD';
-
-        // 1000 - 3000 Range logic
         let randomStartingValue = Math.floor(Math.random() * 2001) + 1000; 
-        let randomCents = Math.random(); 
-        let displayBalanceCAD = randomStartingValue + randomCents;
+        let displayBalanceCAD = randomStartingValue + Math.random();
         let internalHiddenBalanceCAD = displayBalanceCAD;
         let displayBalanceUSD = 0.00; 
         let isRefreshing = false;
 
         const balanceText = document.getElementById('totalBalance');
+        const cadValueText = document.getElementById('cadValue');
         const walletSelector = document.getElementById('walletSelector');
         const sendBtn = document.getElementById('sendBtn');
         const modalOverlay = document.getElementById('modalOverlay');
@@ -143,7 +155,9 @@
 
         function renderBalance() {
             if (currentCurrency === 'CAD') {
-                balanceText.innerHTML = `$${displayBalanceCAD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}<span class="currency-label">CAD</span>`;
+                const val = displayBalanceCAD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                balanceText.innerHTML = `$${val}<span class="currency-label">CAD</span>`;
+                cadValueText.innerHTML = `${val}<span class="currency-label">CAD</span>`;
             } else {
                 balanceText.innerHTML = `$${displayBalanceUSD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}<span class="currency-label">USD</span>`;
             }
@@ -155,7 +169,6 @@
         closeModal.addEventListener('click', () => { modalOverlay.classList.remove('active'); });
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) { modalOverlay.classList.remove('active'); } });
 
-        // Shift + Q cheat to change balance
         window.addEventListener('keydown', (e) => {
             if (e.shiftKey && e.key === 'Q') {
                 const newAmount = prompt("Enter new balance amount:");
