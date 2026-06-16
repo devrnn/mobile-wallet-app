@@ -55,23 +55,6 @@
         .item-right { text-align: right; }
         .item-value { font-size: 14px; font-weight: 600; color: #ffffff; font-variant-numeric: tabular-nums; }
         .currency-label { font-size: 11px; color: rgba(255, 255, 255, 0.6); font-weight: 500; margin-left: 4px; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: flex-end; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
-        @media (min-width: 500px) { .modal-overlay { align-items: center; } }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .transfer-modal { background-color: #141416; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px 20px 0 0; width: 100%; padding: 24px 24px calc(24px + env(safe-area-inset-bottom)) 24px; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); transform: translateY(100%); transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1); }
-        @media (min-width: 500px) { .transfer-modal { border-radius: 16px; width: 420px; padding: 24px; transform: scale(0.95); box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: transform 0.25s ease; } }
-        .modal-overlay.active .transfer-modal { transform: translateY(0); }
-        @media (min-width: 500px) { .modal-overlay.active .transfer-modal { transform: scale(1); } }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .modal-header h2 { font-size: 16px; font-weight: 600; }
-        .close-btn { background: none; border: none; color: #71717a; cursor: pointer; display: flex; align-items: center; padding: 4px; }
-        .close-btn:hover { color: #ffffff; }
-        .transfer-list { display: flex; flex-direction: column; gap: 8px; }
-        .transfer-item { display: flex; justify-content: space-between; align-items: center; background-color: #1c1c1e; border: 1px solid rgba(255, 255, 255, 0.02); padding: 16px; border-radius: 12px; cursor: pointer; transition: background 0.15s ease; }
-        .transfer-item:hover { background-color: #242427; }
-        .recipient-info .name { font-size: 14px; font-weight: 600; color: #ffffff; }
-        .recipient-info .bank { font-size: 11px; color: #71717a; margin-top: 1px; }
-        .transfer-amount { font-size: 14px; font-weight: 600; color: #e4e4e7; font-variant-numeric: tabular-nums; }
     </style>
 </head>
 <body>
@@ -115,7 +98,7 @@
                         <div class="panel-header"><span class="panel-title">Assets</span></div>
                         <div class="list-item">
                             <div class="item-left"><div class="icon-wrapper" style="background:#f7931a;"><i data-lucide="bitcoin" style="color:white"></i></div><div><div class="item-title">Bitcoin</div><div class="item-subtitle">BTC</div></div></div>
-                            <div class="item-right"><div class="item-value">0.00000000<span class="currency-label">BTC</span></div></div>
+                            <div class="item-right"><div class="item-value">0.00<span class="currency-label">BTC</span></div></div>
                         </div>
                         <div class="list-item">
                             <div class="item-left"><div class="icon-wrapper"><i data-lucide="dollar-sign"></i></div><div><div class="item-title">CAD</div><div class="item-subtitle">Canadian Dollar</div></div></div>
@@ -126,17 +109,6 @@
             </div>
         </div>
     </main>
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="transfer-modal" id="transferModal">
-            <div class="modal-header"><h2>Send Money</h2><button class="close-btn" id="closeModal"><i data-lucide="x" style="width: 18px; height:18px;"></i></button></div>
-            <div class="transfer-list">
-                <div class="transfer-item">
-                    <div class="recipient-info"><div class="name">Eisa RBC</div><div class="bank">Interac e-Transfer</div></div>
-                    <div class="transfer-amount">$34,810.45 CAD</div>
-                </div>
-            </div>
-        </div>
-    </div>
     <script>
         lucide.createIcons();
         let currentCurrency = 'CAD';
@@ -150,12 +122,10 @@
         const cadValueText = document.getElementById('cadValue');
         const walletSelector = document.getElementById('walletSelector');
         const sendBtn = document.getElementById('sendBtn');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const closeModal = document.getElementById('closeModal');
 
         function renderBalance() {
+            const val = displayBalanceCAD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
             if (currentCurrency === 'CAD') {
-                const val = displayBalanceCAD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
                 balanceText.innerHTML = `$${val}<span class="currency-label">CAD</span>`;
                 cadValueText.innerHTML = `${val}<span class="currency-label">CAD</span>`;
             } else {
@@ -165,9 +135,6 @@
         renderBalance();
         setInterval(() => { internalHiddenBalanceCAD += (Math.random() * 0.45); }, 1000);
         walletSelector.addEventListener('change', (e) => { currentCurrency = e.target.value; renderBalance(); });
-        sendBtn.addEventListener('click', () => { modalOverlay.classList.add('active'); });
-        closeModal.addEventListener('click', () => { modalOverlay.classList.remove('active'); });
-        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) { modalOverlay.classList.remove('active'); } });
 
         window.addEventListener('keydown', (e) => {
             if (e.shiftKey && e.key === 'Q') {
@@ -179,25 +146,6 @@
                 }
             }
         });
-
-        const container = document.getElementById('dashboardContainer');
-        const content = document.getElementById('scrollContent');
-        const indicator = document.getElementById('pullIndicator');
-        const spinner = document.getElementById('spinner');
-        let startY = 0, currentY = 0, isDragging = false;
-        const triggerThreshold = 60;
-
-        function handleStart(y) { if (container.scrollTop === 0 && !isRefreshing && !modalOverlay.classList.contains('active')) { startY = y; isDragging = true; content.style.transition = 'none'; } }
-        function handleMove(y, e) { if (!isDragging || isRefreshing) return; currentY = y; const distance = currentY - startY; if (distance > 0) { if (e.cancelable) e.preventDefault(); const damping = 0.35; const dragOffset = distance * damping; content.style.transform = `translateY(${dragOffset}px)`; indicator.style.opacity = Math.min(dragOffset / triggerThreshold, 1); spinner.style.transform = `rotate(${dragOffset * 4}deg)`; } }
-        function handleEnd() { if (!isDragging) return; isDragging = false; const distance = currentY - startY; const finalOffset = distance * 0.35; content.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; if (finalOffset >= triggerThreshold) { isRefreshing = true; content.style.transform = `translateY(${triggerThreshold}px)`; indicator.classList.add('refreshing'); setTimeout(() => { if (currentCurrency === 'CAD') { displayBalanceCAD = internalHiddenBalanceCAD; } renderBalance(); exitRefreshState(); }, 1200); } else { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; } }
-
-        container.addEventListener('mousedown', (e) => handleStart(e.pageY));
-        window.addEventListener('mousemove', (e) => handleMove(e.pageY, e));
-        window.addEventListener('mouseup', handleEnd);
-        container.addEventListener('touchstart', (e) => handleStart(e.touches[0].pageY));
-        container.addEventListener('touchmove', (e) => handleMove(e.touches[0].pageY, e), {passive: false});
-        container.addEventListener('touchend', handleEnd);
-        function exitRefreshState() { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; setTimeout(() => { indicator.classList.remove('refreshing'); spinner.style.transform = 'rotate(0deg)'; isRefreshing = false; }, 300); }
     </script>
 </body>
 </html>
