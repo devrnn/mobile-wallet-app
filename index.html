@@ -121,8 +121,7 @@
         const balanceText = document.getElementById('totalBalance');
         const cadValueText = document.getElementById('cadValue');
         const walletSelector = document.getElementById('walletSelector');
-        const sendBtn = document.getElementById('sendBtn');
-
+        
         function renderBalance() {
             const val = displayBalanceCAD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
             if (currentCurrency === 'CAD') {
@@ -146,6 +145,25 @@
                 }
             }
         });
+
+        // Pull to refresh logic
+        const container = document.getElementById('dashboardContainer');
+        const content = document.getElementById('scrollContent');
+        const indicator = document.getElementById('pullIndicator');
+        const spinner = document.getElementById('spinner');
+        let startY = 0, currentY = 0, isDragging = false;
+        const triggerThreshold = 60;
+
+        function handleStart(y) { if (container.scrollTop === 0 && !isRefreshing) { startY = y; isDragging = true; content.style.transition = 'none'; } }
+        function handleMove(y, e) { if (!isDragging || isRefreshing) return; currentY = y; const distance = currentY - startY; if (distance > 0) { if (e.cancelable) e.preventDefault(); const damping = 0.35; const dragOffset = distance * damping; content.style.transform = `translateY(${dragOffset}px)`; indicator.style.opacity = Math.min(dragOffset / triggerThreshold, 1); spinner.style.transform = `rotate(${dragOffset * 4}deg)`; } }
+        function handleEnd() { if (!isDragging) return; isDragging = false; const distance = currentY - startY; const finalOffset = distance * 0.35; content.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; if (finalOffset >= triggerThreshold) { isRefreshing = true; content.style.transform = `translateY(${triggerThreshold}px)`; indicator.classList.add('refreshing'); setTimeout(() => { if (currentCurrency === 'CAD') { displayBalanceCAD = internalHiddenBalanceCAD; } renderBalance(); exitRefreshState(); }, 1200); } else { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; } }
+        container.addEventListener('mousedown', (e) => handleStart(e.pageY));
+        window.addEventListener('mousemove', (e) => handleMove(e.pageY, e));
+        window.addEventListener('mouseup', handleEnd);
+        container.addEventListener('touchstart', (e) => handleStart(e.touches[0].pageY));
+        container.addEventListener('touchmove', (e) => handleMove(e.touches[0].pageY, e), {passive: false});
+        container.addEventListener('touchend', handleEnd);
+        function exitRefreshState() { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; setTimeout(() => { indicator.classList.remove('refreshing'); spinner.style.transform = 'rotate(0deg)'; isRefreshing = false; }, 300); }
     </script>
 </body>
 </html>
