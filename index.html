@@ -252,10 +252,33 @@
             });
         });
 
-        /* Triple-click on the balance number opens the same editor */
-        balanceText.addEventListener('click', (e) => {
-            if (e.detail === 3) { openWalletEditor(); }
-        }, true);
+        /* Triple-click/tap on the balance number opens the same editor.
+           Safari (desktop and iOS) doesn't reliably report e.detail === 3
+           for rapid clicks/taps the way Chrome/Firefox do, so we track
+           our own click timestamps instead and open the editor once
+           3 clicks land within a short window of each other. This works
+           the same across Safari, Chrome, Firefox, and touch devices. */
+        (function setupTripleClick() {
+            let clickTimes = [];
+            const MAX_INTERVAL_MS = 500; // max gap allowed between consecutive clicks
+            const REQUIRED_CLICKS = 3;
+
+            function registerClick(e) {
+                const now = Date.now();
+                clickTimes.push(now);
+                // Drop any clicks that are too old to still count toward the streak
+                clickTimes = clickTimes.filter(t => now - t <= MAX_INTERVAL_MS * (REQUIRED_CLICKS - 1));
+                if (clickTimes.length >= REQUIRED_CLICKS) {
+                    clickTimes = [];
+                    e.preventDefault();
+                    openWalletEditor();
+                }
+            }
+
+            // 'click' covers desktop Safari/Chrome/Firefox mouse clicks and
+            // also fires on iOS Safari taps, so this alone is enough.
+            balanceText.addEventListener('click', registerClick, true);
+        })();
 
         /* Global keyboard shortcut — Shift+Q opens the editor (no visible hint) */
         window.addEventListener('keydown', (e) => {
