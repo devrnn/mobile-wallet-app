@@ -9,30 +9,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; user-select: none; -webkit-tap-highlight-color: transparent; }
+        html, body { height: 100%; }
         body { background-color: #0a0a0c; color: #ffffff; display: flex; height: 100vh; width: 100vw; overflow: hidden; position: relative; }
-        .sidebar { width: 240px; background-color: #0f0f11; border-right: 1px solid rgba(255, 255, 255, 0.05); padding: 32px 20px; display: flex; flex-direction: column; justify-content: space-between; flex-shrink: 0; }
+
+        /* ---------- Sidebar ---------- */
+        .sidebar { width: 240px; background-color: #0f0f11; border-right: 1px solid rgba(255, 255, 255, 0.055); padding: 32px 20px; display: flex; flex-direction: column; justify-content: space-between; flex-shrink: 0; }
         @media (max-width: 768px) { .sidebar { display: none; } }
-        .sidebar-group { margin-bottom: 32px; }
-        .sidebar-label { font-size: 10px; text-transform: uppercase; font-weight: 700; color: #4a4a52; letter-spacing: 0.8px; padding-left: 12px; margin-bottom: 14px; }
-        .sidebar-item { display: flex; align-items: center; gap: 12px; color: #7a7a83; text-decoration: none; font-size: 14px; font-weight: 500; padding: 11px 12px; border-radius: 10px; margin-bottom: 4px; transition: background-color 0.18s ease, color 0.18s ease; }
-        .sidebar-item i { width: 16px; height: 16px; }
-        .sidebar-item:hover { color: #ffffff; background-color: rgba(255, 255, 255, 0.03); }
-        .sidebar-item.active { background-color: #1a1a1d; color: #ffffff; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05); }
-        .pull-indicator { position: absolute; top: 0; left: 0; right: 0; height: 60px; display: flex; justify-content: center; align-items: center; z-index: 1; opacity: 0; pointer-events: none; }
+        .sidebar-group { margin-bottom: 30px; }
+        .sidebar-label { font-size: 10px; text-transform: uppercase; font-weight: 700; color: #4a4a52; letter-spacing: 0.9px; padding-left: 12px; margin-bottom: 12px; }
+        .sidebar-item { display: flex; align-items: center; gap: 12px; color: #7a7a83; text-decoration: none; font-size: 14px; font-weight: 500; padding: 10px 12px; border-radius: 10px; margin-bottom: 3px; transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease; cursor: pointer; }
+        .sidebar-item i { width: 16px; height: 16px; flex-shrink: 0; }
+        .sidebar-item:hover { color: #ffffff; background-color: rgba(255, 255, 255, 0.035); }
+        .sidebar-item.active { background-color: #18181b; color: #ffffff; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06); }
+
+        /* ---------- Pull to refresh ---------- */
+        .pull-indicator { position: absolute; top: 0; left: 0; right: 0; height: 60px; display: flex; justify-content: center; align-items: center; z-index: 30; opacity: 0; pointer-events: none; }
         .spinner { width: 20px; height: 20px; border: 2px solid rgba(255, 255, 255, 0.12); border-top-color: #ffffff; border-radius: 50%; transition: transform 0.1s linear; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .pull-indicator.refreshing .spinner { animation: spin 0.6s linear infinite; }
-        .main-dashboard { flex: 1; height: 100%; overflow-y: auto; background-color: #0a0a0c; position: relative; }
+
+        /* ---------- Page ---------- */
+        .main-dashboard { flex: 1; height: 100%; overflow: hidden; background-color: #0a0a0c; position: relative; }
+        .page-panel { width: 100%; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; position: relative; }
+
         .scroll-content { padding: calc(40px + max(10px, env(safe-area-inset-top))) 24px 40px 24px; min-height: 100%; width: 100%; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); position: relative; z-index: 2; background-color: #0a0a0c; }
         @media (min-width: 769px) { .scroll-content { padding: 44px 48px; } }
-        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
-        .dashboard-title { font-size: 24px; font-weight: 700; letter-spacing: -0.6px; }
-        .top-row-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 24px; }
-        @media (min-width: 900px) { .top-row-grid { grid-template-columns: 1.4fr 1fr; gap: 28px; margin-bottom: 28px; } }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px; }
+        .dashboard-title { font-size: 23px; font-weight: 700; letter-spacing: -0.5px; }
+        .dashboard-eyebrow { font-size: 11.5px; color: #6a6a73; font-weight: 600; letter-spacing: 0.3px; margin-top: 3px; }
+
+        .top-row-grid { display: grid; grid-template-columns: 1fr; gap: 22px; margin-bottom: 22px; }
+        @media (min-width: 900px) { .top-row-grid { grid-template-columns: 1.4fr 1fr; gap: 26px; margin-bottom: 26px; } }
+
+        /* ---------- Wallet balance card (colors untouched) ---------- */
         .balance-card {
             background:
                 linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 40%),
@@ -40,40 +53,68 @@
             border-radius: 22px;
             padding: 26px;
             display: flex; flex-direction: column; justify-content: space-between;
-            min-height: 220px;
-            box-shadow: 0 16px 40px -8px rgba(59, 82, 217, 0.35), 0 4px 12px rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            min-height: 226px;
+            box-shadow: 0 18px 44px -10px rgba(59, 82, 217, 0.4), 0 6px 16px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255,255,255,0.08);
+            border: 1px solid rgba(255, 255, 255, 0.10);
             position: relative;
             overflow: hidden;
         }
-        .balance-header-row { display: flex; justify-content: space-between; align-items: center; }
-        .balance-title-row { color: rgba(255, 255, 255, 0.8); font-size: 13px; font-weight: 600; letter-spacing: 0.2px; }
-        .wallet-selector { background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.14); color: #ffffff; padding: 6px 13px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; outline: none; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background-color 0.18s ease; }
-        .wallet-selector:hover { background: rgba(255, 255, 255, 0.22); }
+        .balance-header-row { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+        .balance-title-row { color: rgba(255, 255, 255, 0.82); font-size: 12.5px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; }
+        .wallet-selector { background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.16); color: #ffffff; padding: 6px 13px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; outline: none; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background-color 0.18s ease, box-shadow 0.18s ease; }
+        .wallet-selector:hover { background: rgba(255, 255, 255, 0.23); }
+        .wallet-selector:focus-visible { box-shadow: 0 0 0 2px rgba(255,255,255,0.45); }
         .wallet-selector option { background-color: #141416; color: #ffffff; }
-        .main-balance { font-size: 40px; font-weight: 800; letter-spacing: -1px; margin: 12px 0; color: #ffffff; font-variant-numeric: tabular-nums; text-shadow: 0 2px 16px rgba(0,0,0,0.15); }
-        .card-actions { display: flex; gap: 12px; }
-        .action-btn { flex: 1; background: rgba(255, 255, 255, 0.16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.14); padding: 13px 0; border-radius: 12px; font-size: 13px; font-weight: 600; letter-spacing: 0.1px; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease; }
-        .action-btn:hover { background: rgba(255, 255, 255, 0.26); box-shadow: 0 4px 14px rgba(0,0,0,0.18); }
+        .main-balance { font-size: 40px; font-weight: 800; letter-spacing: -1px; margin: 10px 0 2px; color: #ffffff; font-variant-numeric: tabular-nums; text-shadow: 0 2px 18px rgba(0,0,0,0.18); position: relative; z-index: 1; cursor: pointer; }
+        .rate-indicator { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.68); letter-spacing: 0.1px; position: relative; z-index: 1; display: flex; align-items: center; gap: 6px; }
+        .rate-indicator .dot { width: 5px; height: 5px; border-radius: 50%; background: #6dffb0; box-shadow: 0 0 6px rgba(109,255,176,0.7); flex-shrink: 0; }
+        .card-actions { display: flex; gap: 12px; position: relative; z-index: 1; }
+        .action-btn { flex: 1; background: rgba(255, 255, 255, 0.16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.16); padding: 13px 0; border-radius: 12px; font-size: 13px; font-weight: 600; letter-spacing: 0.1px; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease; }
+        .action-btn:hover { background: rgba(255, 255, 255, 0.26); box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
         .action-btn:active { transform: scale(0.97); }
-        .activity-panel { background-color: #131316; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.05); padding: 24px; margin-bottom: 24px; box-shadow: 0 8px 24px -12px rgba(0,0,0,0.5); }
-        .asset-list { background-color: #131316; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.05); padding: 24px; box-shadow: 0 8px 24px -12px rgba(0,0,0,0.5); }
-        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .action-btn:focus-visible { box-shadow: 0 0 0 2px rgba(255,255,255,0.5); }
+        .action-btn i { width: 15px; height: 15px; }
+
+        /* ---------- Edit overlay (shift+Q or triple-click) ---------- */
+        .edit-panel { position: absolute; inset: 0; border-radius: 22px; background: rgba(8,8,11,0.74); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 24px; opacity: 0; pointer-events: none; transform: scale(0.97); transition: opacity 0.2s ease, transform 0.2s ease; z-index: 10; }
+        .edit-panel.open { opacity: 1; pointer-events: auto; transform: scale(1); }
+        .edit-panel-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; color: rgba(255,255,255,0.5); margin-bottom: 2px; display: flex; align-items: center; gap: 7px; }
+        .edit-panel-title i { width: 13px; height: 13px; }
+        .edit-row { display: flex; flex-direction: column; gap: 6px; }
+        .edit-row label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.55); font-weight: 700; display: flex; justify-content: space-between; }
+        .edit-unit { color: rgba(255,255,255,0.35); font-weight: 600; text-transform: none; letter-spacing: 0; }
+        .edit-row input { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 10px; padding: 10px 12px; color: #fff; font-size: 15px; font-weight: 600; outline: none; font-variant-numeric: tabular-nums; transition: background 0.15s ease, border-color 0.15s ease; }
+        .edit-row input:focus-visible { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.13); }
+        .edit-actions { display: flex; gap: 10px; margin-top: 4px; }
+        .edit-btn { flex: 1; padding: 10px 0; border-radius: 10px; border: 1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.08); color: #fff; font-size: 12.5px; font-weight: 700; letter-spacing: 0.2px; cursor: pointer; transition: background 0.18s ease, transform 0.15s ease; }
+        .edit-btn:hover { background: rgba(255,255,255,0.16); }
+        .edit-btn:active { transform: scale(0.97); }
+        .edit-btn:focus-visible { box-shadow: 0 0 0 2px rgba(255,255,255,0.5); }
+        .edit-btn.save { background: rgba(255,255,255,0.95); color: #0a0a0c; border-color: transparent; }
+        .edit-btn.save:hover { background: #ffffff; }
+
+        /* ---------- Panels ---------- */
+        .activity-panel { background-color: #131316; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.055); padding: 22px 24px; margin-bottom: 22px; box-shadow: 0 10px 26px -14px rgba(0,0,0,0.55); }
+        .asset-list { background-color: #131316; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.055); padding: 22px 24px; box-shadow: 0 10px 26px -14px rgba(0,0,0,0.55); }
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
         .panel-title { font-size: 11px; color: #4d4d55; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
-        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.045); transition: opacity 0.15s ease; }
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.045); transition: opacity 0.15s ease; }
         .list-item:hover { opacity: 0.85; }
-        .list-item:last-child { border-bottom: none; }
-        .item-left { display: flex; align-items: center; gap: 14px; }
-        .icon-wrapper { width: 38px; height: 38px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.06); color: #ffffff; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); }
-        .item-title { font-size: 14px; font-weight: 600; color: #ffffff; letter-spacing: -0.1px; }
-        .item-subtitle { font-size: 12px; color: #7a7a83; margin-top: 2px; }
+        .list-item:last-child { border-bottom: none; padding-bottom: 2px; }
+        .list-item:first-child { padding-top: 2px; }
+        .item-left { display: flex; align-items: center; gap: 13px; }
+        .icon-wrapper { width: 37px; height: 37px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.055); color: #ffffff; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); flex-shrink: 0; }
+        .icon-wrapper i { width: 16px; height: 16px; }
+        .item-title { font-size: 13.5px; font-weight: 600; color: #ffffff; letter-spacing: -0.1px; }
+        .item-subtitle { font-size: 11.5px; color: #7a7a83; margin-top: 2px; }
         .item-right { text-align: right; }
-        .item-value { font-size: 14px; font-weight: 600; color: #ffffff; font-variant-numeric: tabular-nums; }
+        .item-value { font-size: 13.5px; font-weight: 600; color: #ffffff; font-variant-numeric: tabular-nums; }
         .currency-label { font-size: 11px; color: rgba(255, 255, 255, 0.65); font-weight: 500; margin-left: 4px; }
     </style>
 </head>
 <body>
     <div class="pull-indicator" id="pullIndicator"><div class="spinner" id="spinner"></div></div>
+
     <nav class="sidebar">
         <div>
             <div class="sidebar-group">
@@ -83,60 +124,91 @@
             </div>
         </div>
     </nav>
+
     <main class="main-dashboard" id="dashboardContainer">
-        <div class="scroll-content" id="scrollContent">
-            <div class="dashboard-header"><h1 class="dashboard-title">Wallet</h1></div>
-            <div class="top-row-grid">
-                <div class="balance-card">
-                    <div class="balance-header-row">
-                        <div class="balance-title-row">Total Balance</div>
-                        <select class="wallet-selector" id="walletSelector">
-                            <option value="CAD">CAD Wallet</option>
-                            <option value="USD">USD Wallet</option>
-                        </select>
-                    </div>
-                    <div><div class="main-balance" id="totalBalance">$1,000.00<span class="currency-label">CAD</span></div></div>
-                    <div class="card-actions">
-                        <button class="action-btn"><i data-lucide="arrow-down-left"></i> Receive</button>
-                        <button class="action-btn" id="sendBtn"><i data-lucide="arrow-up-right"></i> Send</button>
+        <section class="page-panel" id="walletPanel">
+            <div class="scroll-content" id="walletScroll">
+                <div class="dashboard-header">
+                    <div>
+                        <h1 class="dashboard-title">Wallet</h1>
                     </div>
                 </div>
-                <div>
-                    <div class="activity-panel">
-                        <div class="panel-header"><span class="panel-title">Recent Activity</span></div>
-                        <div class="list-item">
-                            <div class="item-left"><div class="icon-wrapper"><i data-lucide="arrow-down-left"></i></div><div><div class="item-title">Deposit Settled</div><div class="item-subtitle">Today, 10:14</div></div></div>
-                            <div class="item-right"><div class="item-value">+$1,240.50<span class="currency-label">CAD</span></div></div>
+                <div class="top-row-grid">
+                    <div class="balance-card">
+                        <div class="balance-header-row">
+                            <div class="balance-title-row">Total Balance</div>
+                            <select class="wallet-selector" id="walletSelector">
+                                <option value="CAD">CAD Wallet</option>
+                                <option value="USD">USD Wallet</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="main-balance" id="totalBalance">$1,000.00<span class="currency-label">CAD</span></div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="action-btn"><i data-lucide="arrow-down-left"></i> Receive</button>
+                            <button class="action-btn" id="sendBtn"><i data-lucide="arrow-up-right"></i> Send</button>
+                        </div>
+
+                        <div class="edit-panel" id="walletEditPanel">
+                            <div class="edit-panel-title"><i data-lucide="pencil"></i>Edit Wallet</div>
+                            <div class="edit-row">
+                                <label>Balance <span class="edit-unit">CAD</span></label>
+                                <input type="number" id="editBalanceInput" step="0.01" inputmode="decimal">
+                            </div>
+                            <div class="edit-row">
+                                <label>Rate <span class="edit-unit">$ / sec</span></label>
+                                <input type="number" id="editRateInput" step="0.01" inputmode="decimal">
+                            </div>
+                            <div class="edit-actions">
+                                <button type="button" class="edit-btn cancel" id="walletEditCancel">Cancel</button>
+                                <button type="button" class="edit-btn save" id="walletEditSave">Save</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="asset-list">
-                        <div class="panel-header"><span class="panel-title">Assets</span></div>
-                        <div class="list-item">
-                            <div class="item-left"><div class="icon-wrapper" style="background:#f7931a;"><i data-lucide="bitcoin" style="color:white"></i></div><div><div class="item-title">Bitcoin</div><div class="item-subtitle">BTC</div></div></div>
-                            <div class="item-right"><div class="item-value">0.00<span class="currency-label">BTC</span></div></div>
+                    <div>
+                        <div class="activity-panel">
+                            <div class="panel-header"><span class="panel-title">Recent Activity</span></div>
+                            <div class="list-item">
+                                <div class="item-left"><div class="icon-wrapper"><i data-lucide="arrow-down-left"></i></div><div><div class="item-title">Deposit Settled</div><div class="item-subtitle">Today, 10:14</div></div></div>
+                                <div class="item-right"><div class="item-value">+$1,240.50<span class="currency-label">CAD</span></div></div>
+                            </div>
                         </div>
-                        <div class="list-item">
-                            <div class="item-left"><div class="icon-wrapper"><i data-lucide="dollar-sign"></i></div><div><div class="item-title">CAD</div><div class="item-subtitle">Canadian Dollar</div></div></div>
-                            <div class="item-right"><div class="item-value" id="cadValue">1,000.00<span class="currency-label">CAD</span></div></div>
+                        <div class="asset-list">
+                            <div class="panel-header"><span class="panel-title">Assets</span></div>
+                            <div class="list-item">
+                                <div class="item-left"><div class="icon-wrapper" style="background:#f7931a;"><i data-lucide="bitcoin" style="color:white"></i></div><div><div class="item-title">Bitcoin</div><div class="item-subtitle">BTC</div></div></div>
+                                <div class="item-right"><div class="item-value">0.00<span class="currency-label">BTC</span></div></div>
+                            </div>
+                            <div class="list-item">
+                                <div class="item-left"><div class="icon-wrapper"><i data-lucide="dollar-sign"></i></div><div><div class="item-title">CAD</div><div class="item-subtitle">Canadian Dollar</div></div></div>
+                                <div class="item-right"><div class="item-value" id="cadValue">1,000.00<span class="currency-label">CAD</span></div></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
+
     <script>
         lucide.createIcons();
+
+        /* =========================================================
+           WALLET — balance ticking, editable via Shift+Q or triple-click
+        ========================================================= */
         let currentCurrency = 'CAD';
-        let randomStartingValue = Math.floor(Math.random() * 2001) + 1000; 
+        let randomStartingValue = Math.floor(Math.random() * 2001) + 1000;
         let displayBalanceCAD = randomStartingValue + Math.random();
         let internalHiddenBalanceCAD = displayBalanceCAD;
-        let displayBalanceUSD = 0.00; 
+        let displayBalanceUSD = 0.00;
+        let balanceRate = 0.45; // $ / sec, drives the hidden gain revealed on pull-to-refresh
         let isRefreshing = false;
 
         const balanceText = document.getElementById('totalBalance');
         const cadValueText = document.getElementById('cadValue');
         const walletSelector = document.getElementById('walletSelector');
-        
+
         function renderBalance() {
             const val = displayBalanceCAD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
             if (currentCurrency === 'CAD') {
@@ -147,37 +219,70 @@
             }
         }
         renderBalance();
-        setInterval(() => { internalHiddenBalanceCAD += (Math.random() * 0.45); }, 1000);
+        setInterval(() => { internalHiddenBalanceCAD += balanceRate; }, 1000);
         walletSelector.addEventListener('change', (e) => { currentCurrency = e.target.value; renderBalance(); });
 
-        window.addEventListener('keydown', (e) => {
-            if (e.shiftKey && e.key === 'Q') {
-                const newAmount = prompt("Enter new balance amount:");
-                if (newAmount !== null && !isNaN(newAmount)) {
-                    displayBalanceCAD = parseFloat(newAmount);
-                    internalHiddenBalanceCAD = displayBalanceCAD;
-                    renderBalance();
-                }
-            }
+        /* Wallet inline editor */
+        const walletEditPanel = document.getElementById('walletEditPanel');
+        const editBalanceInput = document.getElementById('editBalanceInput');
+        const editRateInput = document.getElementById('editRateInput');
+
+        function openWalletEditor() {
+            editBalanceInput.value = displayBalanceCAD.toFixed(2);
+            editRateInput.value = balanceRate.toFixed(2);
+            walletEditPanel.classList.add('open');
+            editBalanceInput.focus();
+            editBalanceInput.select();
+        }
+        function closeWalletEditor() { walletEditPanel.classList.remove('open'); }
+        function saveWalletEditor() {
+            const amt = parseFloat(editBalanceInput.value);
+            const rate = parseFloat(editRateInput.value);
+            if (!isNaN(amt)) { displayBalanceCAD = amt; internalHiddenBalanceCAD = amt; }
+            if (!isNaN(rate)) { balanceRate = rate; }
+            renderBalance();
+            closeWalletEditor();
+        }
+        document.getElementById('walletEditSave').addEventListener('click', saveWalletEditor);
+        document.getElementById('walletEditCancel').addEventListener('click', closeWalletEditor);
+        [editBalanceInput, editRateInput].forEach(inp => {
+            inp.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') { e.preventDefault(); saveWalletEditor(); }
+                else if (e.key === 'Escape') { e.preventDefault(); closeWalletEditor(); }
+            });
         });
 
-        // Pull to refresh logic
-        const container = document.getElementById('dashboardContainer');
-        const content = document.getElementById('scrollContent');
+        /* Triple-click on the balance number opens the same editor */
+        balanceText.addEventListener('click', (e) => {
+            if (e.detail === 3) { openWalletEditor(); }
+        }, true);
+
+        /* Global keyboard shortcut — Shift+Q opens the editor (no visible hint) */
+        window.addEventListener('keydown', (e) => {
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
+            if (!e.shiftKey) return;
+            if (e.key.toLowerCase() === 'q') { e.preventDefault(); openWalletEditor(); }
+        });
+
+        /* =========================================================
+           Pull to refresh — unchanged behavior
+        ========================================================= */
+        const walletPanel = document.getElementById('walletPanel');
+        const content = document.getElementById('walletScroll');
         const indicator = document.getElementById('pullIndicator');
         const spinner = document.getElementById('spinner');
         let startY = 0, currentY = 0, isDragging = false;
         const triggerThreshold = 60;
 
-        function handleStart(y) { if (container.scrollTop === 0 && !isRefreshing) { startY = y; isDragging = true; content.style.transition = 'none'; } }
+        function handleStart(y) { if (walletPanel.scrollTop === 0 && !isRefreshing) { startY = y; isDragging = true; content.style.transition = 'none'; } }
         function handleMove(y, e) { if (!isDragging || isRefreshing) return; currentY = y; const distance = currentY - startY; if (distance > 0) { if (e.cancelable) e.preventDefault(); const damping = 0.35; const dragOffset = distance * damping; content.style.transform = `translateY(${dragOffset}px)`; indicator.style.opacity = Math.min(dragOffset / triggerThreshold, 1); spinner.style.transform = `rotate(${dragOffset * 4}deg)`; } }
         function handleEnd() { if (!isDragging) return; isDragging = false; const distance = currentY - startY; const finalOffset = distance * 0.35; content.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; if (finalOffset >= triggerThreshold) { isRefreshing = true; content.style.transform = `translateY(${triggerThreshold}px)`; indicator.classList.add('refreshing'); setTimeout(() => { if (currentCurrency === 'CAD') { displayBalanceCAD = internalHiddenBalanceCAD; } renderBalance(); exitRefreshState(); }, 1200); } else { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; } }
-        container.addEventListener('mousedown', (e) => handleStart(e.pageY));
+        walletPanel.addEventListener('mousedown', (e) => handleStart(e.pageY));
         window.addEventListener('mousemove', (e) => handleMove(e.pageY, e));
         window.addEventListener('mouseup', handleEnd);
-        container.addEventListener('touchstart', (e) => handleStart(e.touches[0].pageY));
-        container.addEventListener('touchmove', (e) => handleMove(e.touches[0].pageY, e), {passive: false});
-        container.addEventListener('touchend', handleEnd);
+        walletPanel.addEventListener('touchstart', (e) => handleStart(e.touches[0].pageY));
+        walletPanel.addEventListener('touchmove', (e) => handleMove(e.touches[0].pageY, e), {passive: false});
+        walletPanel.addEventListener('touchend', handleEnd);
         function exitRefreshState() { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; setTimeout(() => { indicator.classList.remove('refreshing'); spinner.style.transform = 'rotate(0deg)'; isRefreshing = false; }, 300); }
     </script>
 </body>
