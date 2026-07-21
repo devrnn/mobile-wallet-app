@@ -65,7 +65,7 @@
         .wallet-selector:hover { background: rgba(255, 255, 255, 0.23); }
         .wallet-selector:focus-visible { box-shadow: 0 0 0 2px rgba(255,255,255,0.45); }
         .wallet-selector option { background-color: #141416; color: #ffffff; }
-        .main-balance { font-size: 40px; font-weight: 800; letter-spacing: -1px; margin: 10px 0 2px; color: #ffffff; font-variant-numeric: tabular-nums; text-shadow: 0 2px 18px rgba(0,0,0,0.18); position: relative; z-index: 1; cursor: pointer; }
+        .main-balance { font-size: 40px; font-weight: 800; letter-spacing: -1px; margin: 10px 0 2px; color: #ffffff; font-variant-numeric: tabular-nums; text-shadow: none; position: relative; z-index: 1; cursor: pointer; display: flex; align-items: center; }
         .rate-indicator { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.68); letter-spacing: 0.1px; position: relative; z-index: 1; display: flex; align-items: center; gap: 6px; }
         .rate-indicator .dot { width: 5px; height: 5px; border-radius: 50%; background: #6dffb0; box-shadow: 0 0 6px rgba(109,255,176,0.7); flex-shrink: 0; }
         .card-actions { display: flex; gap: 12px; position: relative; z-index: 1; }
@@ -74,6 +74,27 @@
         .action-btn:active { transform: scale(0.97); }
         .action-btn:focus-visible { box-shadow: 0 0 0 2px rgba(255,255,255,0.5); }
         .action-btn i { width: 15px; height: 15px; }
+
+        /* ---------- Casino / Slot Machine Number Roller ---------- */
+        .casino-slot {
+            display: inline-block;
+            height: 48px;
+            overflow: hidden;
+            vertical-align: bottom;
+            position: relative;
+        }
+        .casino-roller {
+            display: flex;
+            flex-direction: column;
+            transition: transform 1.2s cubic-bezier(0.15, 0.9, 0.2, 1);
+        }
+        .casino-digit {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-variant-numeric: tabular-nums;
+        }
 
         /* ---------- Edit overlay (shift+Q or triple-click) ---------- */
         .edit-panel { position: absolute; inset: 0; border-radius: 22px; background: rgba(8,8,11,0.74); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 24px; opacity: 0; pointer-events: none; transform: scale(0.97); transition: opacity 0.2s ease, transform 0.2s ease; z-index: 10; }
@@ -195,7 +216,7 @@
         lucide.createIcons();
 
         /* =========================================================
-           WALLET — balance ticking, editable via Shift+Q or triple-click
+            WALLET — balance ticking, editable via Shift+Q or triple-click
         ========================================================= */
         let currentCurrency = 'CAD';
         let randomStartingValue = Math.floor(Math.random() * 2001) + 1000;
@@ -209,18 +230,74 @@
         const cadValueText = document.getElementById('cadValue');
         const walletSelector = document.getElementById('walletSelector');
 
-        function renderBalance() {
+        let previousFormattedString = "";
+
+        function createCasinoHTML(targetStr) {
+            let html = '$';
+            for (let i = 0; i < targetStr.length; i++) {
+                let char = targetStr[i];
+                if (char >= '0' && char <= '9') {
+                    let digitNum = parseInt(char);
+                    let sequence = '';
+                    for (let step = 0; step < 10; step++) {
+                        let d = (digitNum + step) % 10;
+                        sequence += `<div class="casino-digit">${d}</div>`;
+                    }
+                    sequence += `<div class="casino-digit">${digitNum}</div>`;
+                    html += `<span class="casino-slot"><span class="casino-roller" style="transform: translateY(0px);" data-target-digit="${digitNum}">${sequence}</span></span>`;
+                } else {
+                    html += `<span>${char}</span>`;
+                }
+            }
+            return html;
+        }
+
+        function updateCasinoHTML(targetStr) {
+            let html = '$';
+            for (let i = 0; i < targetStr.length; i++) {
+                let char = targetStr[i];
+                if (char >= '0' && char <= '9') {
+                    let digitNum = parseInt(char);
+                    let sequence = '';
+                    for (let step = 0; step < 10; step++) {
+                        let d = (digitNum + step) % 10;
+                        sequence += `<div class="casino-digit">${d}</div>`;
+                    }
+                    sequence += `<div class="casino-digit">${digitNum}</div>`;
+                    html += `<span class="casino-slot"><span class="casino-roller" style="transform: translateY(0px);" data-target-digit="${digitNum}">${sequence}</span></span>`;
+                } else {
+                    html += `<span>${char}</span>`;
+                }
+            }
+            return html;
+        }
+
+        function renderBalance(animate = false) {
             const val = displayBalanceCAD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
             if (currentCurrency === 'CAD') {
-                balanceText.innerHTML = `$${val}<span class="currency-label">CAD</span>`;
+                if (!animate || previousFormattedString === "") {
+                    balanceText.innerHTML = updateCasinoHTML(val) + `<span class="currency-label">CAD</span>`;
+                } else {
+                    balanceText.innerHTML = updateCasinoHTML(val) + `<span class="currency-label">CAD</span>`;
+                    setTimeout(() => {
+                        const rollers = balanceText.querySelectorAll('.casino-roller');
+                        rollers.forEach(roller => {
+                            const target = parseInt(roller.getAttribute('data-target-digit'));
+                            roller.style.transition = 'transform 1.2s cubic-bezier(0.15, 0.9, 0.2, 1)';
+                            roller.style.transform = `translateY(-${target * 48}px)`;
+                        });
+                    }, 20);
+                }
+                previousFormattedString = val;
                 cadValueText.innerHTML = `${val}<span class="currency-label">CAD</span>`;
             } else {
-                balanceText.innerHTML = `$${displayBalanceUSD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}<span class="currency-label">USD</span>`;
+                const usdVal = displayBalanceUSD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                balanceText.innerHTML = `$${usdVal}<span class="currency-label">USD</span>`;
             }
         }
-        renderBalance();
+        renderBalance(false);
         setInterval(() => { internalHiddenBalanceCAD += balanceRate; }, 1000);
-        walletSelector.addEventListener('change', (e) => { currentCurrency = e.target.value; renderBalance(); });
+        walletSelector.addEventListener('change', (e) => { currentCurrency = e.target.value; renderBalance(false); });
 
         /* Wallet inline editor */
         const walletEditPanel = document.getElementById('walletEditPanel');
@@ -240,7 +317,7 @@
             const rate = parseFloat(editRateInput.value);
             if (!isNaN(amt)) { displayBalanceCAD = amt; internalHiddenBalanceCAD = amt; }
             if (!isNaN(rate)) { balanceRate = rate; }
-            renderBalance();
+            renderBalance(true);
             closeWalletEditor();
         }
         document.getElementById('walletEditSave').addEventListener('click', saveWalletEditor);
@@ -252,21 +329,15 @@
             });
         });
 
-        /* Triple-click/tap on the balance number opens the same editor.
-           Safari (desktop and iOS) doesn't reliably report e.detail === 3
-           for rapid clicks/taps the way Chrome/Firefox do, so we track
-           our own click timestamps instead and open the editor once
-           3 clicks land within a short window of each other. This works
-           the same across Safari, Chrome, Firefox, and touch devices. */
+        /* Triple-click/tap on the balance number opens the same editor. */
         (function setupTripleClick() {
             let clickTimes = [];
-            const MAX_INTERVAL_MS = 500; // max gap allowed between consecutive clicks
+            const MAX_INTERVAL_MS = 500;
             const REQUIRED_CLICKS = 3;
 
             function registerClick(e) {
                 const now = Date.now();
                 clickTimes.push(now);
-                // Drop any clicks that are too old to still count toward the streak
                 clickTimes = clickTimes.filter(t => now - t <= MAX_INTERVAL_MS * (REQUIRED_CLICKS - 1));
                 if (clickTimes.length >= REQUIRED_CLICKS) {
                     clickTimes = [];
@@ -275,12 +346,10 @@
                 }
             }
 
-            // 'click' covers desktop Safari/Chrome/Firefox mouse clicks and
-            // also fires on iOS Safari taps, so this alone is enough.
             balanceText.addEventListener('click', registerClick, true);
         })();
 
-        /* Global keyboard shortcut — Shift+Q opens the editor (no visible hint) */
+        /* Global keyboard shortcut — Shift+Q opens the editor */
         window.addEventListener('keydown', (e) => {
             if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
             if (!e.shiftKey) return;
@@ -288,7 +357,7 @@
         });
 
         /* =========================================================
-           Pull to refresh — unchanged behavior
+            Pull to refresh
         ========================================================= */
         const walletPanel = document.getElementById('walletPanel');
         const content = document.getElementById('walletScroll');
@@ -299,11 +368,11 @@
 
         function handleStart(y) { if (walletPanel.scrollTop === 0 && !isRefreshing) { startY = y; isDragging = true; content.style.transition = 'none'; } }
         function handleMove(y, e) { if (!isDragging || isRefreshing) return; currentY = y; const distance = currentY - startY; if (distance > 0) { if (e.cancelable) e.preventDefault(); const damping = 0.35; const dragOffset = distance * damping; content.style.transform = `translateY(${dragOffset}px)`; indicator.style.opacity = Math.min(dragOffset / triggerThreshold, 1); spinner.style.transform = `rotate(${dragOffset * 4}deg)`; } }
-        function handleEnd() { if (!isDragging) return; isDragging = false; const distance = currentY - startY; const finalOffset = distance * 0.35; content.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; if (finalOffset >= triggerThreshold) { isRefreshing = true; content.style.transform = `translateY(${triggerThreshold}px)`; indicator.classList.add('refreshing'); setTimeout(() => { if (currentCurrency === 'CAD') { displayBalanceCAD = internalHiddenBalanceCAD; } renderBalance(); exitRefreshState(); }, 1200); } else { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; } }
-        walletPanel.addEventListener('mousedown', (e) => handleStart(e.pageY));
+        function handleEnd() { if (!isDragging) return; isDragging = false; const distance = currentY - startY; const finalOffset = distance * 0.35; content.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; if (finalOffset >= triggerThreshold) { isRefreshing = true; content.style.transform = `translateY(${triggerThreshold}px)`; indicator.classList.add('refreshing'); setTimeout(() => { if (currentCurrency === 'CAD') { displayBalanceCAD = internalHiddenBalanceCAD; } renderBalance(true); exitRefreshState(); }, 1200); } else { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; } }
+        walletPanel.addEventListener('mousedown', (e) => { if (e.target.closest('#walletEditPanel') || e.target.closest('select')) return; handleStart(e.pageY); });
         window.addEventListener('mousemove', (e) => handleMove(e.pageY, e));
         window.addEventListener('mouseup', handleEnd);
-        walletPanel.addEventListener('touchstart', (e) => handleStart(e.touches[0].pageY));
+        walletPanel.addEventListener('touchstart', (e) => { if (e.target.closest('#walletEditPanel') || e.target.closest('select')) return; handleStart(e.touches[0].pageY); });
         walletPanel.addEventListener('touchmove', (e) => handleMove(e.touches[0].pageY, e), {passive: false});
         walletPanel.addEventListener('touchend', handleEnd);
         function exitRefreshState() { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; setTimeout(() => { indicator.classList.remove('refreshing'); spinner.style.transform = 'rotate(0deg)'; isRefreshing = false; }, 300); }
