@@ -116,7 +116,6 @@
         .market-header-flex { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
         .market-asset-name { font-size: 18px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; }
         
-        /* Flashing price color transition classes */
         .market-price-display { 
             font-size: 26px; 
             font-weight: 800; 
@@ -163,29 +162,83 @@
         .view-mode-btn.active { background: rgba(255, 255, 255, 0.12); color: #fff; }
         .view-mode-btn i { width: 13px; height: 13px; }
 
-        /* ---------- Fake Bitcoin Graph Styles ---------- */
+        /* ---------- Graph & Buy Markers ---------- */
         .chart-container { height: 160px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); padding: 12px; display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden; margin-bottom: 20px; transition: all 0.2s ease; }
         .chart-svg { width: 100%; height: 105px; overflow: visible; }
-        .chart-line { fill: none; stroke: #22c55e; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: d 0.2s ease; }
+        .chart-line { fill: none; stroke: #22c55e; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
         .chart-area { fill: url(#chartGradient); opacity: 0.25; }
-        .chart-tooltip { position: absolute; top: 12px; left: 12px; font-size: 11px; color: #7a7a83; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .buy-line-dash { stroke: #22c55e; stroke-width: 1.5; stroke-dasharray: 4 4; opacity: 0.7; }
+        .buy-marker-dot { fill: #22c55e; stroke: #ffffff; stroke-width: 1.5; cursor: pointer; }
+
+        .chart-tooltip { position: absolute; top: 12px; left: 12px; font-size: 11px; color: #7a7a83; font-weight: 600; display: flex; align-items: center; gap: 6px; z-index: 5; }
         .chart-zoom-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: background 0.15s ease; }
         .chart-zoom-btn:hover { background: rgba(255,255,255,0.16); }
 
-        /* Price-Only Display Mode container styling */
         .price-only-container { height: 160px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); padding: 12px; display: none; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; margin-bottom: 20px; text-align: center; }
         .price-only-value { font-size: 38px; font-weight: 900; font-variant-numeric: tabular-nums; color: #ffffff; transition: color 0.15s ease; }
 
-        /* Fullscreen Chart Modal */
-        .chart-modal { position: fixed; inset: 0; background: rgba(10, 10, 12, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 100; display: flex; flex-direction: column; padding: 32px; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+        /* Fullscreen Interactive Zoomable Chart Modal */
+        .chart-modal { position: fixed; inset: 0; background: rgba(10, 10, 12, 0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 100; display: flex; flex-direction: column; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
         .chart-modal.open { opacity: 1; pointer-events: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .modal-title { font-size: 20px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; }
-        .modal-close { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s ease; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .modal-title { font-size: 18px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .modal-close { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s ease; }
         .modal-close:hover { background: rgba(255,255,255,0.18); }
-        .modal-content-card { background: #131316; border: 1px solid rgba(255,255,255,0.055); border-radius: 20px; padding: 28px; flex: 1; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
-        .modal-svg-wrapper { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
-        .modal-svg { width: 100%; height: 100%; max-height: 400px; overflow: visible; }
+        
+        .modal-content-card { background: #131316; border: 1px solid rgba(255,255,255,0.055); border-radius: 20px; padding: 24px; flex: 1; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
+        .modal-controls-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+        .zoom-toolbar { display: flex; gap: 6px; background: rgba(255,255,255,0.04); padding: 4px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); }
+        .zoom-tool-btn { background: transparent; border: none; color: #a1a1aa; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 7px; cursor: pointer; transition: background 0.15s ease, color 0.15s ease; display: inline-flex; align-items: center; gap: 5px; }
+        .zoom-tool-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+        .zoom-tool-btn.active { background: rgba(255,255,255,0.16); color: #fff; }
+        .zoom-tool-btn i { width: 14px; height: 14px; }
+
+        .modal-svg-wrapper { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; position: relative; cursor: grab; }
+        .modal-svg-wrapper:active { cursor: grabbing; }
+        .modal-svg { width: 100%; height: 100%; overflow: visible; }
+
+        /* ---------- On-Page Notification Banner ---------- */
+        .app-notification-banner {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 200;
+            background: #18181b;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 16px 20px;
+            max-width: 360px;
+            width: calc(100% - 48px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            transform: translateY(120px);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .app-notification-banner.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .notif-icon-wrap {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .notif-icon-wrap.gain { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+        .notif-icon-wrap.loss { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        .notif-content { flex: 1; }
+        .notif-title { font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+        .notif-desc { font-size: 12.5px; color: #a1a1aa; line-height: 1.4; font-variant-numeric: tabular-nums; }
+        .notif-close { background: transparent; border: none; color: #7a7a83; cursor: pointer; padding: 2px; display: flex; align-items: center; justify-content: center; transition: color 0.15s ease; }
+        .notif-close:hover { color: #fff; }
     </style>
 </head>
 <body>
@@ -286,7 +339,6 @@
                     <div>
                         <h1 class="dashboard-title">Market</h1>
                     </div>
-                    <!-- View Mode Selector Toggle Buttons -->
                     <div class="view-mode-selector">
                         <button class="view-mode-btn active" id="modeBtnGraph" onclick="setMarketViewMode('graph')">
                             <i data-lucide="line-chart"></i> Graph
@@ -314,7 +366,7 @@
                         <!-- Miniature Price Graph Container -->
                         <div class="chart-container" id="miniChartContainer" style="cursor: pointer;" title="Click to view full graph">
                             <div class="chart-tooltip">
-                                <span>High-Volatility Mode</span>
+                                <span>Steady-Pace Mode</span>
                                 <button class="chart-zoom-btn" type="button" onclick="openChartModal(event)">Expand Graph</button>
                             </div>
                             <svg class="chart-svg" viewBox="0 0 300 100" preserveAspectRatio="none">
@@ -324,6 +376,7 @@
                                         <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
                                     </linearGradient>
                                 </defs>
+                                <g id="miniBuyMarkersGroup"></g>
                                 <path id="miniChartArea" class="chart-area" d="" />
                                 <path id="miniChartLine" class="chart-line" d="" />
                             </svg>
@@ -331,7 +384,7 @@
 
                         <!-- Price-Only Mode Container -->
                         <div class="price-only-container" id="priceOnlyContainer">
-                            <div style="font-size: 11px; color: #7a7a83; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.8px;">Fast Flash Price Tracker</div>
+                            <div style="font-size: 11px; color: #7a7a83; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.8px;">Steady Price Tracker</div>
                             <div class="price-only-value" id="largeTrackerPrice">$88,420.50</div>
                         </div>
 
@@ -374,7 +427,6 @@
                             </div>
                         </div>
                         
-                        <!-- Profit / Gained Indicator -->
                         <div id="profitIndicatorBox" style="margin-bottom: 14px; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; font-size: 12.5px;">
                             <span style="color: #7a7a83; font-weight: 500;">Total P&amp;L (Gained):</span>
                             <span id="pnlValueText" style="font-weight: 700; color: #22c55e; font-variant-numeric: tabular-nums;">+$0.00 CAD</span>
@@ -390,36 +442,54 @@
         </section>
     </main>
 
-    <!-- Fullscreen Chart Modal -->
+    <!-- Fullscreen Interactive Zoomable Chart Modal -->
     <div class="chart-modal" id="chartModal">
         <div class="modal-header">
             <div class="modal-title">
                 <div class="icon-wrapper" style="background:#f7931a; width: 32px; height: 32px;"><i data-lucide="bitcoin" style="color:white; width: 16px; height: 16px;"></i></div>
-                Bitcoin / CAD Price Graph (High-Speed)
+                Bitcoin / CAD Detailed Graph
             </div>
             <button class="modal-close" onclick="closeChartModal()"><i data-lucide="x" style="width: 18px; height: 18px;"></i></button>
         </div>
         <div class="modal-content-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div class="modal-controls-row">
                 <div>
-                    <div style="font-size: 12px; color: #7a7a83; text-transform: uppercase; font-weight: 700;">Current Price</div>
-                    <div style="font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums;" id="modalBtcPrice">$88,420.50</div>
+                    <div style="font-size: 11px; color: #7a7a83; text-transform: uppercase; font-weight: 700;">Live Price</div>
+                    <div style="font-size: 24px; font-weight: 800; font-variant-numeric: tabular-nums;" id="modalBtcPrice">$88,420.50</div>
+                </div>
+                <div class="zoom-toolbar">
+                    <button class="zoom-tool-btn" onclick="zoomChartCenter(1.25)" title="Zoom In"><i data-lucide="zoom-in"></i> Zoom In</button>
+                    <button class="zoom-tool-btn" onclick="zoomChartCenter(0.8)" title="Zoom Out"><i data-lucide="zoom-out"></i> Zoom Out</button>
+                    <button class="zoom-tool-btn active" onclick="resetChartZoom()" title="Reset Zoom">Reset</button>
                 </div>
                 <div id="modalChangeBadge" class="market-price-change positive"><i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>+3.42%</div>
             </div>
-            <div class="modal-svg-wrapper">
-                <svg class="modal-svg" viewBox="0 0 600 250" preserveAspectRatio="none">
+            <div class="modal-svg-wrapper" id="modalSvgWrapper">
+                <svg class="modal-svg" id="modalSvg" viewBox="0 0 800 350" preserveAspectRatio="none">
                     <defs>
                         <linearGradient id="modalChartGradient" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stop-color="#22c55e" stop-opacity="0.4"/>
                             <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
                         </linearGradient>
                     </defs>
+                    <g id="modalBuyMarkersGroup"></g>
                     <path id="modalChartArea" fill="url(#modalChartGradient)" d="" />
                     <path id="modalChartLine" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="" />
                 </svg>
             </div>
         </div>
+    </div>
+
+    <!-- On-Page Notification Banner -->
+    <div class="app-notification-banner" id="appNotificationBanner">
+        <div class="notif-icon-wrap" id="notifIconWrap">
+            <i id="notifLucideIcon" data-lucide="trending-up" style="width: 16px; height: 16px;"></i>
+        </div>
+        <div class="notif-content">
+            <div class="notif-title" id="notifTitle">Trade Executed</div>
+            <div class="notif-desc" id="notifDesc">Successfully completed transaction.</div>
+        </div>
+        <button class="notif-close" onclick="hideAppNotification()"><i data-lucide="x" style="width: 16px; height: 16px;"></i></button>
     </div>
 
     <script>
@@ -449,7 +519,36 @@
         });
 
         /* =========================================================
-            WALLET & MARKET LOGIC
+            NOTIFICATIONS
+        ========================================================= */
+        let notifTimeout = null;
+        function showAppNotification(title, message, type = 'gain') {
+            const banner = document.getElementById('appNotificationBanner');
+            const iconWrap = document.getElementById('notifIconWrap');
+            const iconElem = document.getElementById('notifLucideIcon');
+            const titleElem = document.getElementById('notifTitle');
+            const descElem = document.getElementById('notifDesc');
+
+            titleElem.innerText = title;
+            descElem.innerHTML = message;
+
+            iconWrap.className = `notif-icon-wrap ${type}`;
+            iconElem.setAttribute('data-lucide', type === 'gain' ? 'trending-up' : 'trending-down');
+            lucide.createIcons();
+
+            banner.classList.add('show');
+            if (notifTimeout) clearTimeout(notifTimeout);
+            notifTimeout = setTimeout(() => { hideAppNotification(); }, 5000);
+        }
+
+        function hideAppNotification() {
+            const banner = document.getElementById('appNotificationBanner');
+            banner.classList.remove('show');
+            if (notifTimeout) clearTimeout(notifTimeout);
+        }
+
+        /* =========================================================
+            WALLET & MARKET DATA
         ========================================================= */
         let currentCurrency = 'CAD';
         let randomStartingValue = Math.floor(Math.random() * 2001) + 1000;
@@ -457,14 +556,21 @@
         let internalHiddenBalanceCAD = displayBalanceCAD;
         let displayBalanceUSD = 0.00;
         let balanceRate = 0.45; 
-        let isRefreshing = false;
         
         let bitcoinBalance = 0.00;
+        let avgPurchasePrice = 0.00;
         let currentBtcPrice = 88420.50;
-        let marketMode = 'buy'; // 'buy' or 'sell'
-        let marketViewMode = 'graph'; // 'graph' or 'price'
+        let marketMode = 'buy';
+        let marketViewMode = 'graph';
 
         let priceHistory = [85200, 85900, 85400, 86200, 87100, 86800, 87500, 88100, 87900, 88420.50];
+        let buyTransactions = [];
+
+        // Strict ViewBox Zoom & Pan State (0 to 800 width, 0 to 350 height)
+        let vbX = 0;
+        let vbY = 0;
+        let vbWidth = 800;
+        let vbHeight = 350;
 
         const balanceText = document.getElementById('totalBalance');
         const cadValueText = document.getElementById('cadValue');
@@ -509,10 +615,10 @@
 
             if (profitOrLoss >= 0) {
                 pnlElement.style.color = '#22c55e';
-                pnlElement.innerText = `+${formattedPnl} CAD`;
+                pnlElement.innerText = `+$${formattedPnl} CAD`;
             } else {
                 pnlElement.style.color = '#ef4444';
-                pnlElement.innerText = `-${formattedPnl} CAD`;
+                pnlElement.innerText = `-$${formattedPnl} CAD`;
             }
         }
 
@@ -520,7 +626,6 @@
         setInterval(() => { internalHiddenBalanceCAD += balanceRate; }, 1000);
         walletSelector.addEventListener('change', (e) => { currentCurrency = e.target.value; renderBalance(); });
 
-        /* View Mode Toggle Function */
         function setMarketViewMode(mode) {
             marketViewMode = mode;
             const btnGraph = document.getElementById('modeBtnGraph');
@@ -542,57 +647,53 @@
             }
         }
 
-        /* High-speed price fluctuations (every 800ms) with larger swings for instant cents/dollars change */
+        /* Market moves every 3 seconds */
         setInterval(() => {
             const oldPrice = currentBtcPrice;
-            // Larger delta swings (up to ±$1,500 movement per tick) making even small $1 deposits swing by cents/dollars instantly
-            const delta = (Math.random() - 0.485) * 1500;
+            const delta = (Math.random() - 0.485) * 1200;
             currentBtcPrice = Math.max(10000, currentBtcPrice + delta);
             
             const formattedPrice = `$${currentBtcPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             
-            // Update prices across displays
             document.getElementById('marketBtcPrice').innerText = formattedPrice;
             document.getElementById('modalBtcPrice').innerText = formattedPrice;
             document.getElementById('largeTrackerPrice').innerText = formattedPrice;
 
-            // Trigger flashing green/red effect on price text elements
             const topPriceElem = document.getElementById('marketBtcPrice');
             const trackerPriceElem = document.getElementById('largeTrackerPrice');
-            
             const flashClass = currentBtcPrice >= oldPrice ? 'flash-green' : 'flash-red';
             
             topPriceElem.classList.remove('flash-green', 'flash-red');
             trackerPriceElem.classList.remove('flash-green', 'flash-red');
-            
-            void topPriceElem.offsetWidth; // Force CSS reflow to restart transition
+            void topPriceElem.offsetWidth;
             void trackerPriceElem.offsetWidth;
-
             topPriceElem.classList.add(flashClass);
             trackerPriceElem.classList.add(flashClass);
 
             setTimeout(() => {
                 topPriceElem.classList.remove('flash-green', 'flash-red');
                 trackerPriceElem.classList.remove('flash-green', 'flash-red');
-            }, 350);
+            }, 500);
 
-            // Push to price history
             priceHistory.push(currentBtcPrice);
-            if (priceHistory.length > 30) priceHistory.shift();
+            if (priceHistory.length > 50) priceHistory.shift();
 
             if (marketViewMode === 'graph') {
                 renderCharts();
             }
             renderBalance();
-        }, 800);
+        }, 3000);
 
+        /* =========================================================
+            ADVANCED CHART RENDERING (BOUNDED ZOOM & PAN)
+        ========================================================= */
         function renderCharts() {
             if (priceHistory.length < 2) return;
             const min = Math.min(...priceHistory);
             const max = Math.max(...priceHistory);
             const range = max - min || 1;
 
-            // Mini Chart Coordinates (ViewBox 300 x 100)
+            // 1. Render Miniature Chart
             const w1 = 300, h1 = 100;
             let pts1 = [];
             priceHistory.forEach((p, idx) => {
@@ -600,26 +701,128 @@
                 const y = h1 - ((p - min) / range) * (h1 - 20) - 10;
                 pts1.push(`${x},${y}`);
             });
-            const linePath1 = `M ${pts1.join(' L ')}`;
-            const areaPath1 = `M 0,${h1} L ${pts1.join(' L ')} L ${w1},${h1} Z`;
+            document.getElementById('miniChartLine').setAttribute('d', `M ${pts1.join(' L ')}`);
+            document.getElementById('miniChartArea').setAttribute('d', `M 0,${h1} L ${pts1.join(' L ')} L ${w1},${h1} Z`);
 
-            document.getElementById('miniChartLine').setAttribute('d', linePath1);
-            document.getElementById('miniChartArea').setAttribute('d', areaPath1);
+            let miniMarkersHTML = '';
+            buyTransactions.forEach(tx => {
+                if (tx.index < priceHistory.length) {
+                    const x = (tx.index / (priceHistory.length - 1)) * w1;
+                    const y = h1 - ((tx.price - min) / range) * (h1 - 20) - 10;
+                    miniMarkersHTML += `<line x1="0" y1="${y}" x2="${w1}" y2="${y}" class="buy-line-dash" />`;
+                    miniMarkersHTML += `<circle cx="${x}" cy="${y}" r="3.5" class="buy-marker-dot" />`;
+                }
+            });
+            document.getElementById('miniBuyMarkersGroup').innerHTML = miniMarkersHTML;
 
-            // Modal Chart Coordinates (ViewBox 600 x 250)
-            const w2 = 600, h2 = 250;
+            // 2. Render Modal Chart (Strict Bounded ViewBox)
+            const w2 = 800, h2 = 350;
             let pts2 = [];
             priceHistory.forEach((p, idx) => {
                 const x = (idx / (priceHistory.length - 1)) * w2;
-                const y = h2 - ((p - min) / range) * (h2 - 40) - 20;
-                pts2.push(`${x},${y}`);
+                const y = h2 - ((p - min) / range) * (h2 - 60) - 30;
+                pts2.push({x, y});
             });
-            const linePath2 = `M ${pts2.join(' L ')}`;
-            const areaPath2 = `M 0,${h2} L ${pts2.join(' L ')} L ${w2},${h2} Z`;
 
-            document.getElementById('modalChartLine').setAttribute('d', linePath2);
-            document.getElementById('modalChartArea').setAttribute('d', areaPath2);
+            // Clamp and constrain ViewBox so user cannot pan outside the graph boundaries
+            vbWidth = Math.max(150, Math.min(800, vbWidth));
+            vbHeight = Math.max(70, Math.min(350, vbHeight));
+            vbX = Math.max(0, Math.min(800 - vbWidth, vbX));
+            vbY = Math.max(0, Math.min(350 - vbHeight, vbY));
+
+            const modalSvg = document.getElementById('modalSvg');
+            modalSvg.setAttribute('viewBox', `${vbX} ${vbY} ${vbWidth} ${vbHeight}`);
+
+            let linePts2 = [];
+            pts2.forEach(pt => {
+                linePts2.push(`${pt.x},${pt.y}`);
+            });
+            document.getElementById('modalChartLine').setAttribute('d', `M ${linePts2.join(' L ')}`);
+            document.getElementById('modalChartArea').setAttribute('d', `M 0,${h2} L ${linePts2.join(' L ')} L ${w2},${h2} Z`);
+
+            let modalMarkersHTML = '';
+            const currentZoomScale = 800 / vbWidth;
+            buyTransactions.forEach(tx => {
+                if (tx.index < priceHistory.length) {
+                    const pt = pts2[tx.index];
+                    if (pt) {
+                        modalMarkersHTML += `<line x1="0" y1="${pt.y}" x2="${w2}" y2="${pt.y}" class="buy-line-dash" stroke-width="${1.5 / currentZoomScale}" />`;
+                        modalMarkersHTML += `<circle cx="${pt.x}" cy="${pt.y}" r="${4.5 / currentZoomScale}" class="buy-marker-dot" stroke-width="${1.5 / currentZoomScale}" />`;
+                    }
+                }
+            });
+            document.getElementById('modalBuyMarkersGroup').innerHTML = modalMarkersHTML;
         }
+
+        /* Center-based Zoom for Tool Buttons */
+        function zoomChartCenter(factor) {
+            const cx = vbX + vbWidth / 2;
+            const cy = vbY + vbHeight / 2;
+            const newWidth = Math.max(150, Math.min(800, vbWidth / factor));
+            const newHeight = Math.max(70, Math.min(350, vbHeight / factor));
+
+            vbX = cx - newWidth / 2;
+            vbY = cy - newHeight / 2;
+            vbWidth = newWidth;
+            vbHeight = newHeight;
+            renderCharts();
+        }
+
+        function resetChartZoom() {
+            vbX = 0;
+            vbY = 0;
+            vbWidth = 800;
+            vbHeight = 350;
+            renderCharts();
+        }
+
+        /* Mouse Drag & Wheel Zoom focused precisely under cursor */
+        const modalSvgWrapper = document.getElementById('modalSvgWrapper');
+        let isDraggingChart = false;
+        let startClientX = 0;
+        let startClientY = 0;
+
+        modalSvgWrapper.addEventListener('mousedown', (e) => {
+            isDraggingChart = true;
+            startClientX = e.clientX;
+            startClientY = e.clientY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDraggingChart) return;
+            const dx = e.clientX - startClientX;
+            const dy = e.clientY - startClientY;
+            startClientX = e.clientX;
+            startClientY = e.clientY;
+
+            const rect = modalSvgWrapper.getBoundingClientRect();
+            const scaleX = vbWidth / rect.width;
+            const scaleY = vbHeight / rect.height;
+
+            vbX -= dx * scaleX;
+            vbY -= dy * scaleY;
+            renderCharts();
+        });
+
+        window.addEventListener('mouseup', () => { isDraggingChart = false; });
+
+        modalSvgWrapper.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const rect = modalSvgWrapper.getBoundingClientRect();
+            const mouseXSVG = vbX + ((e.clientX - rect.left) / rect.width) * vbWidth;
+            const mouseYSVG = vbY + ((e.clientY - rect.top) / rect.height) * vbHeight;
+
+            const zoomFactor = e.deltaY < 0 ? 1.15 : 0.87;
+            const newWidth = Math.max(150, Math.min(800, vbWidth / zoomFactor));
+            const newHeight = Math.max(70, Math.min(350, vbHeight / zoomFactor));
+
+            vbX = mouseXSVG - (mouseXSVG - vbX) * (newWidth / vbWidth);
+            vbY = mouseYSVG - (mouseYSVG - vbY) * (newHeight / vbHeight);
+            vbWidth = newWidth;
+            vbHeight = newHeight;
+            renderCharts();
+        }, { passive: false });
+
         renderCharts();
 
         /* Fullscreen Chart Modal Control */
@@ -627,6 +830,7 @@
         function openChartModal(e) {
             if (e) e.stopPropagation();
             chartModal.classList.add('open');
+            renderCharts();
         }
         function closeChartModal() {
             chartModal.classList.remove('open');
@@ -679,52 +883,102 @@
         function executeMarketTrade() {
             const amount = parseFloat(document.getElementById('marketAmountInput').value);
             if (!amount || amount <= 0) {
-                alert('Please enter a valid amount.');
+                showAppNotification('Invalid Amount', 'Please enter a valid amount to proceed.', 'loss');
                 return;
             }
 
             if (marketMode === 'buy') {
                 if (amount > displayBalanceCAD) {
-                    alert('Insufficient CAD balance.');
+                    showAppNotification('Insufficient Balance', 'You do not have enough CAD in your wallet.', 'loss');
                     return;
                 }
                 const btcBought = amount / currentBtcPrice;
+                
+                buyTransactions.push({
+                    index: priceHistory.length - 1,
+                    price: currentBtcPrice,
+                    amount: btcBought
+                });
+
+                if (bitcoinBalance > 0) {
+                    const totalCost = (bitcoinBalance * avgPurchasePrice) + amount;
+                    bitcoinBalance += btcBought;
+                    avgPurchasePrice = totalCost / bitcoinBalance;
+                } else {
+                    bitcoinBalance += btcBought;
+                    avgPurchasePrice = currentBtcPrice;
+                }
+
                 displayBalanceCAD -= amount;
                 internalHiddenBalanceCAD -= amount;
-                bitcoinBalance += btcBought;
+
+                renderBalance();
+                renderCharts();
+                document.getElementById('marketAmountInput').value = '';
+                document.getElementById('marketTotalOutput').value = '';
+                
+                showAppNotification('Purchase Successful', `Bought ${btcBought.toFixed(6)} BTC for $${amount.toFixed(2)} CAD`, 'gain');
             } else {
                 if (amount > bitcoinBalance) {
-                    alert('Insufficient Bitcoin balance.');
+                    showAppNotification('Insufficient Balance', 'You do not have enough Bitcoin to sell.', 'loss');
                     return;
                 }
-                const cadReceived = amount * currentBtcPrice;
+                
+                const costBasis = amount * avgPurchasePrice;
+                const proceeds = amount * currentBtcPrice;
+                const profitOrLoss = proceeds - costBasis;
+                
                 bitcoinBalance -= amount;
-                displayBalanceCAD += cadReceived;
-                internalHiddenBalanceCAD += cadReceived;
-            }
+                if (bitcoinBalance <= 0.000001) {
+                    bitcoinBalance = 0;
+                    avgPurchasePrice = 0;
+                    buyTransactions = []; 
+                }
 
-            renderBalance();
-            document.getElementById('marketAmountInput').value = '';
-            document.getElementById('marketTotalOutput').value = '';
-            alert(`Successfully executed market ${marketMode}!`);
+                displayBalanceCAD += proceeds;
+                internalHiddenBalanceCAD += proceeds;
+
+                renderBalance();
+                renderCharts();
+                document.getElementById('marketAmountInput').value = '';
+                document.getElementById('marketTotalOutput').value = '';
+
+                const formattedPL = Math.abs(profitOrLoss).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                if (profitOrLoss >= 0) {
+                    showAppNotification('Sale Successful (Gain)', `Sold ${amount.toFixed(6)} BTC<br>Gain: +$${formattedPL} CAD`, 'gain');
+                } else {
+                    showAppNotification('Sale Successful (Loss)', `Sold ${amount.toFixed(6)} BTC<br>Loss: -$${formattedPL} CAD`, 'loss');
+                }
+            }
         }
 
-        /* Sell All Functionality */
         function executeSellAll() {
             if (bitcoinBalance <= 0) {
-                alert('You have no Bitcoin to sell.');
+                showAppNotification('No Assets', 'You have no Bitcoin to sell.', 'loss');
                 return;
             }
-            const cadReceived = bitcoinBalance * currentBtcPrice;
             const soldBtc = bitcoinBalance;
+            const costBasis = soldBtc * avgPurchasePrice;
+            const cadReceived = soldBtc * currentBtcPrice;
+            const profitOrLoss = cadReceived - costBasis;
+
             bitcoinBalance = 0;
+            avgPurchasePrice = 0;
+            buyTransactions = [];
             displayBalanceCAD += cadReceived;
             internalHiddenBalanceCAD += cadReceived;
 
             renderBalance();
+            renderCharts();
             document.getElementById('marketAmountInput').value = '';
             document.getElementById('marketTotalOutput').value = '';
-            alert(`Successfully sold all ${soldBtc.toFixed(6)} BTC for $${cadReceived.toFixed(2)} CAD!`);
+
+            const formattedPL = Math.abs(profitOrLoss).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            if (profitOrLoss >= 0) {
+                showAppNotification('Sell All Successful (Gain)', `Sold all ${soldBtc.toFixed(6)} BTC for $${cadReceived.toFixed(2)} CAD<br>Gain: +$${formattedPL} CAD`, 'gain');
+            } else {
+                showAppNotification('Sell All Successful (Loss)', `Sold all ${soldBtc.toFixed(6)} BTC for $${cadReceived.toFixed(2)} CAD<br>Loss: -$${formattedPL} CAD`, 'loss');
+            }
         }
 
         /* Wallet inline editor */
@@ -757,7 +1011,6 @@
             });
         });
 
-        /* Triple-click/tap on the balance number opens the editor. */
         (function setupTripleClick() {
             let clickTimes = [];
             const MAX_INTERVAL_MS = 500;
@@ -773,11 +1026,9 @@
                     openWalletEditor();
                 }
             }
-
             balanceText.addEventListener('click', registerClick, true);
         })();
 
-        /* Global keyboard shortcut — Shift+Q opens the editor */
         window.addEventListener('keydown', (e) => {
             if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
             if (!e.shiftKey) return;
@@ -794,6 +1045,7 @@
 
         function handleStart(y) { if (walletPanel.scrollTop === 0 && !isRefreshing) { startY = y; isDragging = true; content.style.transition = 'none'; } }
         function handleMove(y, e) { if (!isDragging || isRefreshing) return; currentY = y; const distance = currentY - startY; if (distance > 0) { if (e.cancelable) e.preventDefault(); const damping = 0.35; const dragOffset = distance * damping; content.style.transform = `translateY(${dragOffset}px)`; indicator.style.opacity = Math.min(dragOffset / triggerThreshold, 1); spinner.style.transform = `rotate(${dragOffset * 4}deg)`; } }
+        let isRefreshing = false;
         function handleEnd() { if (!isDragging) return; isDragging = false; const distance = currentY - startY; const finalOffset = distance * 0.35; content.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; if (finalOffset >= triggerThreshold) { isRefreshing = true; content.style.transform = `translateY(${triggerThreshold}px)`; indicator.classList.add('refreshing'); setTimeout(() => { if (currentCurrency === 'CAD') { displayBalanceCAD = internalHiddenBalanceCAD; } renderBalance(); exitRefreshState(); }, 1200); } else { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; } }
         walletPanel.addEventListener('mousedown', (e) => handleStart(e.pageY));
         window.addEventListener('mousemove', (e) => handleMove(e.pageY, e));
