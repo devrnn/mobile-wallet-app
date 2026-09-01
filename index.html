@@ -103,142 +103,39 @@
         .item-left { display: flex; align-items: center; gap: 13px; }
         .icon-wrapper { width: 37px; height: 37px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.055); color: #ffffff; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); flex-shrink: 0; }
         .icon-wrapper i { width: 16px; height: 16px; }
+        .solana-icon { width: 37px; height: 37px; border-radius: 50%; background: #000000; display: flex; justify-content: center; align-items: center; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); }
+        .solana-icon svg { width: 22px; height: 22px; }
         .item-title { font-size: 13.5px; font-weight: 600; color: #ffffff; letter-spacing: -0.1px; }
         .item-subtitle { font-size: 11.5px; color: #7a7a83; margin-top: 2px; }
         .item-right { text-align: right; }
         .item-value { font-size: 13.5px; font-weight: 600; color: #ffffff; font-variant-numeric: tabular-nums; }
+        .item-value.neg { color: #ef4444; }
+        .item-value.pos { color: #10b981; }
         .currency-label { font-size: 11px; color: rgba(255, 255, 255, 0.65); font-weight: 500; margin-left: 4px; }
 
-        /* ---------- Market Panel Styling ---------- */
-        .market-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
-        @media (min-width: 900px) { .market-grid { grid-template-columns: 1.6fr 1fr; } }
-        .market-card { background-color: #131316; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.055); padding: 24px; box-shadow: 0 10px 26px -14px rgba(0,0,0,0.55); }
-        .market-header-flex { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-        .market-asset-name { font-size: 18px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; }
-        
-        .market-price-display { 
-            font-size: 26px; 
-            font-weight: 800; 
-            font-variant-numeric: tabular-nums; 
-            margin-top: 4px; 
-            transition: color 0.15s ease;
-        }
-        .market-price-display.flash-green { color: #22c55e !important; }
-        .market-price-display.flash-red { color: #ef4444 !important; }
+        /* ---------- Exchange Modal & Popups ---------- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+        .modal-overlay.open { opacity: 1; pointer-events: auto; }
+        .modal-card { background: #131316; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; width: 90%; max-width: 360px; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative; }
+        .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; text-align: center; }
+        .modal-field { margin-bottom: 14px; }
+        .modal-field label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #7a7a83; font-weight: 700; margin-bottom: 6px; }
+        .modal-field select, .modal-field input { width: 100%; background: #1a1a1e; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px 12px; color: #fff; font-size: 14px; font-weight: 600; outline: none; }
+        .error-text { color: #ef4444; font-size: 11.5px; font-weight: 600; margin-top: 6px; display: none; }
+        .modal-btn { width: 100%; background: #2aa8e6; color: #fff; border: none; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .modal-btn:hover { background: #2394cb; }
 
-        .market-price-change { font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; }
-        .market-price-change.positive { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
-        .market-price-change.negative { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
-        
-        .market-tabs { display: flex; background: rgba(255, 255, 255, 0.04); padding: 4px; border-radius: 10px; margin-bottom: 20px; }
-        .market-tab { flex: 1; text-align: center; padding: 10px; font-size: 12.5px; font-weight: 600; color: #7a7a83; border-radius: 8px; cursor: pointer; border: none; background: transparent; transition: all 0.18s ease; }
-        .market-tab.active.buy { background: #22c55e; color: #000; }
-        .market-tab.active.sell { background: #ef4444; color: #fff; }
+        .toast-notification { position: fixed; top: 20px; right: 20px; background: #10b981; color: #ffffff; padding: 14px 20px; border-radius: 12px; font-size: 13.5px; font-weight: 600; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); display: flex; align-items: center; gap: 10px; z-index: 200; transform: translateY(-100px); opacity: 0; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease; }
+        .toast-notification.show { transform: translateY(0); opacity: 1; }
 
-        .market-form-group { margin-bottom: 16px; }
-        .market-form-label { display: flex; justify-content: space-between; font-size: 11px; text-transform: uppercase; font-weight: 700; color: #7a7a83; margin-bottom: 8px; letter-spacing: 0.5px; }
-        .market-input-wrapper { position: relative; display: flex; align-items: center; }
-        .market-input { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 12px 16px; color: #fff; font-size: 16px; font-weight: 600; outline: none; font-variant-numeric: tabular-nums; transition: border-color 0.18s ease; }
-        .market-input:focus { border-color: rgba(255, 255, 255, 0.3); }
-        .market-input-suffix { position: absolute; right: 16px; font-size: 13px; font-weight: 600; color: #7a7a83; }
-
-        .market-submit-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity 0.18s ease, transform 0.15s ease; margin-top: 6px; }
-        .market-submit-btn.buy { background: #22c55e; color: #000; }
-        .market-submit-btn.sell { background: #ef4444; color: #fff; }
-        .market-submit-btn:hover { opacity: 0.9; }
-        .market-submit-btn:active { transform: scale(0.98); }
-
-        .market-submit-row { display: flex; gap: 10px; margin-top: 6px; }
-        .market-submit-row .market-submit-btn { margin-top: 0; }
-
-        .market-stats-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.045); font-size: 13px; }
-        .market-stats-row:last-child { border-bottom: none; }
-        .market-stats-label { color: #7a7a83; font-weight: 500; }
-        .market-stats-val { font-weight: 600; font-variant-numeric: tabular-nums; }
-
-        /* ---------- View Mode Selector Header & Styles ---------- */
-        .view-mode-selector { display: flex; background: rgba(255, 255, 255, 0.04); padding: 3px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.06); }
-        .view-mode-btn { background: transparent; border: none; color: #7a7a83; font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: 6px; cursor: pointer; transition: background 0.15s ease, color 0.15s ease; display: inline-flex; align-items: center; gap: 5px; }
-        .view-mode-btn.active { background: rgba(255, 255, 255, 0.12); color: #fff; }
-        .view-mode-btn i { width: 13px; height: 13px; }
-
-        /* ---------- Graph & Buy Markers ---------- */
-        .chart-container { height: 160px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); padding: 12px; display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden; margin-bottom: 20px; transition: all 0.2s ease; }
-        .chart-svg { width: 100%; height: 105px; overflow: visible; }
-        .chart-line { fill: none; stroke: #22c55e; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-        .chart-area { fill: url(#chartGradient); opacity: 0.25; }
-        .buy-line-dash { stroke: #22c55e; stroke-width: 1.5; stroke-dasharray: 4 4; opacity: 0.7; }
-        .buy-marker-dot { fill: #22c55e; stroke: #ffffff; stroke-width: 1.5; cursor: pointer; }
-
-        .chart-tooltip { position: absolute; top: 12px; left: 12px; font-size: 11px; color: #7a7a83; font-weight: 600; display: flex; align-items: center; gap: 6px; z-index: 5; }
-        .chart-zoom-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: background 0.15s ease; }
-        .chart-zoom-btn:hover { background: rgba(255,255,255,0.16); }
-
-        .price-only-container { height: 160px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); padding: 12px; display: none; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; margin-bottom: 20px; text-align: center; }
-        .price-only-value { font-size: 38px; font-weight: 900; font-variant-numeric: tabular-nums; color: #ffffff; transition: color 0.15s ease; }
-
-        /* Fullscreen Interactive Zoomable Chart Modal */
-        .chart-modal { position: fixed; inset: 0; background: rgba(10, 10, 12, 0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 100; display: flex; flex-direction: column; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
-        .chart-modal.open { opacity: 1; pointer-events: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-        .modal-title { font-size: 18px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; }
-        .modal-close { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s ease; }
-        .modal-close:hover { background: rgba(255,255,255,0.18); }
-        
-        .modal-content-card { background: #131316; border: 1px solid rgba(255,255,255,0.055); border-radius: 20px; padding: 24px; flex: 1; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
-        .modal-controls-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
-        .zoom-toolbar { display: flex; gap: 6px; background: rgba(255,255,255,0.04); padding: 4px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); }
-        .zoom-tool-btn { background: transparent; border: none; color: #a1a1aa; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 7px; cursor: pointer; transition: background 0.15s ease, color 0.15s ease; display: inline-flex; align-items: center; gap: 5px; }
-        .zoom-tool-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
-        .zoom-tool-btn.active { background: rgba(255,255,255,0.16); color: #fff; }
-        .zoom-tool-btn i { width: 14px; height: 14px; }
-
-        .modal-svg-wrapper { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; position: relative; cursor: grab; }
-        .modal-svg-wrapper:active { cursor: grabbing; }
-        .modal-svg { width: 100%; height: 100%; overflow: visible; }
-
-        /* ---------- On-Page Notification Banner ---------- */
-        .app-notification-banner {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 200;
-            background: #18181b;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 16px;
-            padding: 16px 20px;
-            max-width: 360px;
-            width: calc(100% - 48px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            transform: translateY(120px);
-            opacity: 0;
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-            pointer-events: none;
-        }
-        .app-notification-banner.show {
-            transform: translateY(0);
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .notif-icon-wrap {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .notif-icon-wrap.gain { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
-        .notif-icon-wrap.loss { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
-        .notif-content { flex: 1; }
-        .notif-title { font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 3px; }
-        .notif-desc { font-size: 12.5px; color: #a1a1aa; line-height: 1.4; font-variant-numeric: tabular-nums; }
-        .notif-close { background: transparent; border: none; color: #7a7a83; cursor: pointer; padding: 2px; display: flex; align-items: center; justify-content: center; transition: color 0.15s ease; }
-        .notif-close:hover { color: #fff; }
+        /* Conversion Cost Breakdown Table */
+        .cost-card { background: #131316; border: 1px solid rgba(255,255,255,0.055); border-radius: 18px; padding: 20px; margin-top: 18px; }
+        .cost-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .cost-row:last-child { border-bottom: none; }
+        .cost-label { color: #7a7a83; }
+        .cost-val { color: #fff; font-variant-numeric: tabular-nums; }
+        .live-preview-box { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 10px 12px; margin-bottom: 14px; font-size: 12.5px; font-weight: 600; color: #7a7a83; display: flex; justify-content: space-between; align-items: center; }
+        .live-preview-val { color: #10b981; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -277,7 +174,7 @@
                             <div class="main-balance" id="totalBalance">$1,000.00<span class="currency-label">CAD</span></div>
                         </div>
                         <div class="card-actions">
-                            <button class="action-btn"><i data-lucide="arrow-down-left"></i> Receive</button>
+                            <button class="action-btn" id="exchangeBtn"><i data-lucide="arrow-left-right"></i> Exchange</button>
                             <button class="action-btn" id="sendBtn"><i data-lucide="arrow-up-right"></i> Send</button>
                         </div>
 
@@ -302,7 +199,7 @@
                             <div class="panel-header"><span class="panel-title">Recent Activity</span></div>
                             <div class="list-item">
                                 <div class="item-left"><div class="icon-wrapper"><i data-lucide="arrow-down-left"></i></div><div><div class="item-title">Deposit Settled</div><div class="item-subtitle">Today, 10:14</div></div></div>
-                                <div class="item-right"><div class="item-value">+$1,240.50<span class="currency-label">CAD</span></div></div>
+                                <div class="item-right"><div class="item-value pos">+$1,240.50<span class="currency-label">CAD</span></div></div>
                             </div>
                         </div>
                         <div class="asset-list">
@@ -310,6 +207,10 @@
                             <div class="list-item">
                                 <div class="item-left"><div class="icon-wrapper" style="background:#f7931a;"><i data-lucide="bitcoin" style="color:white"></i></div><div><div class="item-title">Bitcoin</div><div class="item-subtitle">BTC</div></div></div>
                                 <div class="item-right"><div class="item-value" id="btcAssetValue">0.00<span class="currency-label">BTC</span></div></div>
+                            </div>
+                            <div class="list-item">
+                                <div class="item-left"><div class="solana-icon"><svg viewBox="0 0 397.7 311.7" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="solanaGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#9945FF"/><stop offset="100%" stop-color="#14F195"/></linearGradient></defs><path fill="url(#solanaGrad)" d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2l56.3-62.6zM64.6 3.8C67 1.4 70.3 0 73.8 0h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2L64.6 3.8zm268.5 117c-2.4-2.4-5.7-3.8-9.2-3.8H9.2c-5.9 0-9.2 6.8-5.4 11.2l56.3 62.6c2.4 2.4 5.7 3.8 9.2 3.8h314.7c5.9 0 9.2-6.8-5.4-11.2l-56.3-62.6z"/></svg></div><div><div class="item-title">Solana</div><div class="item-subtitle">SOL</div></div></div>
+                                <div class="item-right"><div class="item-value" id="solAssetValue">0.00<span class="currency-label">SOL</span></div></div>
                             </div>
                             <div class="list-item">
                                 <div class="item-left"><div class="icon-wrapper"><i data-lucide="dollar-sign"></i></div><div><div class="item-title">CAD</div><div class="item-subtitle">Canadian Dollar</div></div></div>
@@ -321,13 +222,38 @@
             </div>
         </section>
 
-        <!-- Exchange Panel -->
+        <!-- Exchange Panel (Page 2: Conversion Details) -->
         <section class="page-panel" id="exchangePanel">
             <div class="scroll-content">
                 <div class="dashboard-header">
                     <div>
-                        <h1 class="dashboard-title">Exchange</h1>
+                        <h1 class="dashboard-title">Exchange Breakdown & Costs</h1>
                     </div>
+                </div>
+                <div class="activity-panel">
+                    <div class="panel-header"><span class="panel-title">Conversion Fees & Purchases</span></div>
+                    <div class="list-item">
+                        <div class="item-left"><div class="icon-wrapper" style="background:rgba(239, 68, 68, 0.1); color:#ef4444;"><i data-lucide="percent"></i></div><div><div class="item-title">Exchange Network Fee (1.5%)</div><div class="item-subtitle">Estimated Network Cost</div></div></div>
+                        <div class="item-right"><div class="item-value neg" id="feeVal">- $3.75<span class="currency-label" id="feeCurrLabel">CAD</span></div></div>
+                    </div>
+                    <div class="list-item">
+                        <div class="item-left"><div class="icon-wrapper" style="background:rgba(239, 68, 68, 0.1); color:#ef4444;"><i data-lucide="receipt"></i></div><div><div class="item-title">Conversion Tax (13% HST)</div><div class="item-subtitle">Estimated Tax Charge</div></div></div>
+                        <div class="item-right"><div class="item-value neg" id="taxVal">- $32.50<span class="currency-label" id="taxCurrLabel">CAD</span></div></div>
+                    </div>
+                    <div class="list-item">
+                        <div class="item-left"><div class="icon-wrapper" style="background:rgba(239, 68, 68, 0.1); color:#ef4444;"><i data-lucide="shopping-bag"></i></div><div><div class="item-title">Recent Purchase Deductions</div><div class="item-subtitle">Hardware & Scooter Parts</div></div></div>
+                        <div class="item-right"><div class="item-value neg" id="purchaseVal">- $45.00<span class="currency-label" id="purchaseCurrLabel">CAD</span></div></div>
+                    </div>
+                    <div class="list-item">
+                        <div class="item-left"><div class="solana-icon"><svg viewBox="0 0 397.7 311.7" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="solanaGrad2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#9945FF"/><stop offset="100%" stop-color="#14F195"/></linearGradient></defs><path fill="url(#solanaGrad2)" d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2l56.3-62.6zM64.6 3.8C67 1.4 70.3 0 73.8 0h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2L64.6 3.8zm268.5 117c-2.4-2.4-5.7-3.8-9.2-3.8H9.2c-5.9 0-9.2 6.8-5.4 11.2l56.3 62.6c2.4 2.4 5.7 3.8 9.2 3.8h314.7c5.9 0 9.2-6.8-5.4-11.2l-56.3-62.6z"/></svg></div><div><div class="item-title">Net Crypto Recieved</div><div class="item-subtitle">Estimated Yield (SOL)</div></div></div>
+                        <div class="item-right"><div class="item-value pos" id="netYieldVal">+ 1.85<span class="currency-label">SOL</span></div></div>
+                    </div>
+                </div>
+
+                <div class="cost-card">
+                    <div class="cost-row"><span class="cost-label">Base Amount</span><span class="cost-val" id="summaryBase">$250.00 CAD</span></div>
+                    <div class="cost-row"><span class="cost-label">Total Deductions & Tax</span><span class="cost-val" id="summaryDeductions" style="color:#ef4444;">-$81.25 CAD</span></div>
+                    <div class="cost-row" style="font-weight: 800; font-size: 14px;"><span class="cost-label" style="color:#fff;">Final Settlement</span><span class="cost-val" id="summaryFinal" style="color:#10b981;">+1.85 SOL</span></div>
                 </div>
             </div>
         </section>
@@ -339,165 +265,58 @@
                     <div>
                         <h1 class="dashboard-title">Market</h1>
                     </div>
-                    <div class="view-mode-selector">
-                        <button class="view-mode-btn active" id="modeBtnGraph" onclick="setMarketViewMode('graph')">
-                            <i data-lucide="line-chart"></i> Graph
-                        </button>
-                        <button class="view-mode-btn" id="modeBtnPrice" onclick="setMarketViewMode('price')">
-                            <i data-lucide="hash"></i> Price Only
-                        </button>
-                    </div>
-                </div>
-                <div class="market-grid">
-                    <div class="market-card">
-                        <div class="market-header-flex">
-                            <div>
-                                <div class="market-asset-name">
-                                    <div class="icon-wrapper" style="background:#f7931a; width: 30px; height: 30px;"><i data-lucide="bitcoin" style="color:white; width: 14px; height: 14px;"></i></div>
-                                    Bitcoin / CAD
-                                </div>
-                                <div class="market-price-display" id="marketBtcPrice">$88,420.50</div>
-                            </div>
-                            <div>
-                                <div class="market-price-change positive" id="marketPriceChange"><i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>+3.42%</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Miniature Price Graph Container -->
-                        <div class="chart-container" id="miniChartContainer" style="cursor: pointer;" title="Click to view full graph">
-                            <div class="chart-tooltip">
-                                <span>Steady-Pace Mode</span>
-                                <button class="chart-zoom-btn" type="button" onclick="openChartModal(event)">Expand Graph</button>
-                            </div>
-                            <svg class="chart-svg" viewBox="0 0 300 100" preserveAspectRatio="none">
-                                <defs>
-                                    <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.5"/>
-                                        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
-                                    </linearGradient>
-                                </defs>
-                                <g id="miniBuyMarkersGroup"></g>
-                                <path id="miniChartArea" class="chart-area" d="" />
-                                <path id="miniChartLine" class="chart-line" d="" />
-                            </svg>
-                        </div>
-
-                        <!-- Price-Only Mode Container -->
-                        <div class="price-only-container" id="priceOnlyContainer">
-                            <div style="font-size: 11px; color: #7a7a83; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.8px;">Steady Price Tracker</div>
-                            <div class="price-only-value" id="largeTrackerPrice">$88,420.50</div>
-                        </div>
-
-                        <div>
-                            <div class="panel-header"><span class="panel-title">Market Statistics</span></div>
-                            <div class="market-stats-row">
-                                <span class="market-stats-label">24h High</span>
-                                <span class="market-stats-val" id="statHigh">$90,150.00</span>
-                            </div>
-                            <div class="market-stats-row">
-                                <span class="market-stats-label">24h Low</span>
-                                <span class="market-stats-val" id="statLow">$85,210.00</span>
-                            </div>
-                            <div class="market-stats-row">
-                                <span class="market-stats-label">24h Volume</span>
-                                <span class="market-stats-val">1,428.50 BTC</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="market-card">
-                        <div class="market-tabs">
-                            <button class="market-tab active buy" id="tabBuy" onclick="setMarketMode('buy')">Buy</button>
-                            <button class="market-tab" id="tabSell" onclick="setMarketMode('sell')">Sell</button>
-                        </div>
-                        <div class="market-form-group">
-                            <div class="market-form-label">
-                                <span id="marketAvailableLabel">Available: $1,000.00 CAD</span>
-                            </div>
-                            <div class="market-input-wrapper">
-                                <input type="number" class="market-input" id="marketAmountInput" placeholder="0.00" step="0.01" oninput="calculateMarketTotal()">
-                                <span class="market-input-suffix" id="marketInputSuffix">CAD</span>
-                            </div>
-                        </div>
-                        <div class="market-form-group">
-                            <div class="market-form-label"><span>Estimated Total</span></div>
-                            <div class="market-input-wrapper">
-                                <input type="text" class="market-input" id="marketTotalOutput" placeholder="0.00" readonly style="opacity: 0.7;">
-                                <span class="market-input-suffix" id="marketOutputSuffix">BTC</span>
-                            </div>
-                        </div>
-                        
-                        <div id="profitIndicatorBox" style="margin-bottom: 14px; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; font-size: 12.5px;">
-                            <span style="color: #7a7a83; font-weight: 500;">Total P&amp;L (Gained):</span>
-                            <span id="pnlValueText" style="font-weight: 700; color: #22c55e; font-variant-numeric: tabular-nums;">+$0.00 CAD</span>
-                        </div>
-
-                        <div class="market-submit-row" id="marketSubmitRow">
-                            <button class="market-submit-btn buy" id="marketSubmitBtn" onclick="executeMarketTrade()">Buy Bitcoin</button>
-                            <button class="market-submit-btn sell" id="sellAllBtn" onclick="executeSellAll()" style="display: none;">Sell All</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Fullscreen Interactive Zoomable Chart Modal -->
-    <div class="chart-modal" id="chartModal">
-        <div class="modal-header">
-            <div class="modal-title">
-                <div class="icon-wrapper" style="background:#f7931a; width: 32px; height: 32px;"><i data-lucide="bitcoin" style="color:white; width: 16px; height: 16px;"></i></div>
-                Bitcoin / CAD Detailed Graph
+    <!-- Exchange Modal Overlay -->
+    <div class="modal-overlay" id="exchangeModal">
+        <div class="modal-card">
+            <div class="modal-title">Instant Exchange</div>
+            <div class="modal-field">
+                <label>From</label>
+                <select id="exFrom">
+                    <option value="CAD">CAD (Canadian Dollar)</option>
+                    <option value="USD">USD (US Dollar)</option>
+                    <option value="BTC">BTC (Bitcoin)</option>
+                    <option value="SOL">SOL (Solana)</option>
+                </select>
             </div>
-            <button class="modal-close" onclick="closeChartModal()"><i data-lucide="x" style="width: 18px; height: 18px;"></i></button>
-        </div>
-        <div class="modal-content-card">
-            <div class="modal-controls-row">
-                <div>
-                    <div style="font-size: 11px; color: #7a7a83; text-transform: uppercase; font-weight: 700;">Live Price</div>
-                    <div style="font-size: 24px; font-weight: 800; font-variant-numeric: tabular-nums;" id="modalBtcPrice">$88,420.50</div>
-                </div>
-                <div class="zoom-toolbar">
-                    <button class="zoom-tool-btn" onclick="zoomChartCenter(1.25)" title="Zoom In"><i data-lucide="zoom-in"></i> Zoom In</button>
-                    <button class="zoom-tool-btn" onclick="zoomChartCenter(0.8)" title="Zoom Out"><i data-lucide="zoom-out"></i> Zoom Out</button>
-                    <button class="zoom-tool-btn active" onclick="resetChartZoom()" title="Reset Zoom">Reset</button>
-                </div>
-                <div id="modalChangeBadge" class="market-price-change positive"><i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>+3.42%</div>
+            <div class="modal-field">
+                <label>To</label>
+                <select id="exTo">
+                    <option value="SOL">SOL (Solana)</option>
+                    <option value="BTC">BTC (Bitcoin)</option>
+                    <option value="CAD">CAD (Canadian Dollar)</option>
+                    <option value="USD">USD (US Dollar)</option>
+                </select>
             </div>
-            <div class="modal-svg-wrapper" id="modalSvgWrapper">
-                <svg class="modal-svg" id="modalSvg" viewBox="0 0 800 350" preserveAspectRatio="none">
-                    <defs>
-                        <linearGradient id="modalChartGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#22c55e" stop-opacity="0.4"/>
-                            <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
-                        </linearGradient>
-                    </defs>
-                    <g id="modalBuyMarkersGroup"></g>
-                    <path id="modalChartArea" fill="url(#modalChartGradient)" d="" />
-                    <path id="modalChartLine" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="" />
-                </svg>
+            <div class="modal-field">
+                <label>Amount</label>
+                <input type="number" id="exAmount" value="250" step="10">
+                <div class="error-text" id="exError">Insufficient balance for this conversion.</div>
             </div>
+            <div class="live-preview-box">
+                <span>You Will Receive:</span>
+                <span class="live-preview-val" id="livePreviewVal">0.00 SOL</span>
+            </div>
+            <button class="modal-btn" id="confirmExchangeBtn">
+                <span>Confirm Exchange</span>
+            </button>
         </div>
     </div>
 
-    <!-- On-Page Notification Banner -->
-    <div class="app-notification-banner" id="appNotificationBanner">
-        <div class="notif-icon-wrap" id="notifIconWrap">
-            <i id="notifLucideIcon" data-lucide="trending-up" style="width: 16px; height: 16px;"></i>
-        </div>
-        <div class="notif-content">
-            <div class="notif-title" id="notifTitle">Trade Executed</div>
-            <div class="notif-desc" id="notifDesc">Successfully completed transaction.</div>
-        </div>
-        <button class="notif-close" onclick="hideAppNotification()"><i data-lucide="x" style="width: 16px; height: 16px;"></i></button>
+    <!-- Green Success Popup -->
+    <div class="toast-notification" id="toastNotification">
+        <i data-lucide="check-circle"></i>
+        <span id="toastMessage">250 CAD got exchanged to SOL successfully!</span>
     </div>
 
     <script>
         lucide.createIcons();
 
-        /* =========================================================
-            Sidebar Navigation
-        ========================================================= */
+        /* Sidebar Navigation */
         const sidebarItems = document.querySelectorAll('.sidebar-item');
         const pagePanels = document.querySelectorAll('.page-panel');
 
@@ -518,468 +337,41 @@
             });
         });
 
-        /* =========================================================
-            NOTIFICATIONS
-        ========================================================= */
-        let notifTimeout = null;
-        function showAppNotification(title, message, type = 'gain') {
-            const banner = document.getElementById('appNotificationBanner');
-            const iconWrap = document.getElementById('notifIconWrap');
-            const iconElem = document.getElementById('notifLucideIcon');
-            const titleElem = document.getElementById('notifTitle');
-            const descElem = document.getElementById('notifDesc');
-
-            titleElem.innerText = title;
-            descElem.innerHTML = message;
-
-            iconWrap.className = `notif-icon-wrap ${type}`;
-            iconElem.setAttribute('data-lucide', type === 'gain' ? 'trending-up' : 'trending-down');
-            lucide.createIcons();
-
-            banner.classList.add('show');
-            if (notifTimeout) clearTimeout(notifTimeout);
-            notifTimeout = setTimeout(() => { hideAppNotification(); }, 5000);
-        }
-
-        function hideAppNotification() {
-            const banner = document.getElementById('appNotificationBanner');
-            banner.classList.remove('show');
-            if (notifTimeout) clearTimeout(notifTimeout);
-        }
-
-        /* =========================================================
-            WALLET & MARKET DATA
-        ========================================================= */
+        /* WALLET DATA */
         let currentCurrency = 'CAD';
         let randomStartingValue = Math.floor(Math.random() * 2001) + 1000;
         let displayBalanceCAD = randomStartingValue + Math.random();
         let internalHiddenBalanceCAD = displayBalanceCAD;
-        let displayBalanceUSD = 0.00;
+        let displayBalanceUSD = 500.00;
         let balanceRate = 0.45; 
         
         let bitcoinBalance = 0.00;
-        let avgPurchasePrice = 0.00;
-        let currentBtcPrice = 88420.50;
-        let marketMode = 'buy';
-        let marketViewMode = 'graph';
-
-        let priceHistory = [85200, 85900, 85400, 86200, 87100, 86800, 87500, 88100, 87900, 88420.50];
-        let buyTransactions = [];
-
-        // Strict ViewBox Zoom & Pan State (0 to 800 width, 0 to 350 height)
-        let vbX = 0;
-        let vbY = 0;
-        let vbWidth = 800;
-        let vbHeight = 350;
+        let solanaBalance = 0.00;
 
         const balanceText = document.getElementById('totalBalance');
         const cadValueText = document.getElementById('cadValue');
         const btcAssetValueText = document.getElementById('btcAssetValue');
+        const solAssetValueText = document.getElementById('solAssetValue');
         const walletSelector = document.getElementById('walletSelector');
 
         function renderBalance() {
-            const val = displayBalanceCAD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            const valCAD = displayBalanceCAD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            const valUSD = displayBalanceUSD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
             if (currentCurrency === 'CAD') {
-                balanceText.innerHTML = `$${val}<span class="currency-label">CAD</span>`;
-                cadValueText.innerHTML = `${val}<span class="currency-label">CAD</span>`;
+                balanceText.innerHTML = `$${valCAD}<span class="currency-label">CAD</span>`;
             } else {
-                balanceText.innerHTML = `$${displayBalanceUSD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}<span class="currency-label">USD</span>`;
+                balanceText.innerHTML = `$${valUSD}<span class="currency-label">USD</span>`;
             }
+            cadValueText.innerHTML = `${valCAD}<span class="currency-label">CAD</span>`;
             btcAssetValueText.innerHTML = `${bitcoinBalance.toFixed(4)}<span class="currency-label">BTC</span>`;
-            
-            const availLabel = document.getElementById('marketAvailableLabel');
-            const sellAllBtn = document.getElementById('sellAllBtn');
-            const submitBtn = document.getElementById('marketSubmitBtn');
-
-            if (marketMode === 'buy') {
-                availLabel.innerText = `Available: $${val} CAD`;
-                sellAllBtn.style.display = 'none';
-                submitBtn.style.width = '100%';
-            } else {
-                availLabel.innerText = `Available: ${bitcoinBalance.toFixed(4)} BTC`;
-                sellAllBtn.style.display = bitcoinBalance > 0 ? 'block' : 'none';
-                submitBtn.style.width = bitcoinBalance > 0 ? '50%' : '100%';
-            }
-
-            updateProfitDisplay();
-        }
-
-        function updateProfitDisplay() {
-            const currentBtcValueCAD = bitcoinBalance * currentBtcPrice;
-            const totalWorth = displayBalanceCAD + currentBtcValueCAD;
-            const initialBaseline = randomStartingValue; 
-            const profitOrLoss = totalWorth - initialBaseline;
-
-            const pnlElement = document.getElementById('pnlValueText');
-            const formattedPnl = Math.abs(profitOrLoss).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-
-            if (profitOrLoss >= 0) {
-                pnlElement.style.color = '#22c55e';
-                pnlElement.innerText = `+$${formattedPnl} CAD`;
-            } else {
-                pnlElement.style.color = '#ef4444';
-                pnlElement.innerText = `-$${formattedPnl} CAD`;
+            if (solAssetValueText) {
+                solAssetValueText.innerHTML = `${solanaBalance.toFixed(2)}<span class="currency-label">SOL</span>`;
             }
         }
 
         renderBalance();
         setInterval(() => { internalHiddenBalanceCAD += balanceRate; }, 1000);
         walletSelector.addEventListener('change', (e) => { currentCurrency = e.target.value; renderBalance(); });
-
-        function setMarketViewMode(mode) {
-            marketViewMode = mode;
-            const btnGraph = document.getElementById('modeBtnGraph');
-            const btnPrice = document.getElementById('modeBtnPrice');
-            const chartContainer = document.getElementById('miniChartContainer');
-            const priceOnlyContainer = document.getElementById('priceOnlyContainer');
-
-            if (mode === 'graph') {
-                btnGraph.classList.add('active');
-                btnPrice.classList.remove('active');
-                chartContainer.style.display = 'flex';
-                priceOnlyContainer.style.display = 'none';
-                renderCharts();
-            } else {
-                btnPrice.classList.add('active');
-                btnGraph.classList.remove('active');
-                chartContainer.style.display = 'none';
-                priceOnlyContainer.style.display = 'flex';
-            }
-        }
-
-        /* Market moves every 3 seconds */
-        setInterval(() => {
-            const oldPrice = currentBtcPrice;
-            const delta = (Math.random() - 0.485) * 1200;
-            currentBtcPrice = Math.max(10000, currentBtcPrice + delta);
-            
-            const formattedPrice = `$${currentBtcPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            
-            document.getElementById('marketBtcPrice').innerText = formattedPrice;
-            document.getElementById('modalBtcPrice').innerText = formattedPrice;
-            document.getElementById('largeTrackerPrice').innerText = formattedPrice;
-
-            const topPriceElem = document.getElementById('marketBtcPrice');
-            const trackerPriceElem = document.getElementById('largeTrackerPrice');
-            const flashClass = currentBtcPrice >= oldPrice ? 'flash-green' : 'flash-red';
-            
-            topPriceElem.classList.remove('flash-green', 'flash-red');
-            trackerPriceElem.classList.remove('flash-green', 'flash-red');
-            void topPriceElem.offsetWidth;
-            void trackerPriceElem.offsetWidth;
-            topPriceElem.classList.add(flashClass);
-            trackerPriceElem.classList.add(flashClass);
-
-            setTimeout(() => {
-                topPriceElem.classList.remove('flash-green', 'flash-red');
-                trackerPriceElem.classList.remove('flash-green', 'flash-red');
-            }, 500);
-
-            priceHistory.push(currentBtcPrice);
-            if (priceHistory.length > 50) priceHistory.shift();
-
-            if (marketViewMode === 'graph') {
-                renderCharts();
-            }
-            renderBalance();
-        }, 3000);
-
-        /* =========================================================
-            ADVANCED CHART RENDERING (BOUNDED ZOOM & PAN)
-        ========================================================= */
-        function renderCharts() {
-            if (priceHistory.length < 2) return;
-            const min = Math.min(...priceHistory);
-            const max = Math.max(...priceHistory);
-            const range = max - min || 1;
-
-            // 1. Render Miniature Chart
-            const w1 = 300, h1 = 100;
-            let pts1 = [];
-            priceHistory.forEach((p, idx) => {
-                const x = (idx / (priceHistory.length - 1)) * w1;
-                const y = h1 - ((p - min) / range) * (h1 - 20) - 10;
-                pts1.push(`${x},${y}`);
-            });
-            document.getElementById('miniChartLine').setAttribute('d', `M ${pts1.join(' L ')}`);
-            document.getElementById('miniChartArea').setAttribute('d', `M 0,${h1} L ${pts1.join(' L ')} L ${w1},${h1} Z`);
-
-            let miniMarkersHTML = '';
-            buyTransactions.forEach(tx => {
-                if (tx.index < priceHistory.length) {
-                    const x = (tx.index / (priceHistory.length - 1)) * w1;
-                    const y = h1 - ((tx.price - min) / range) * (h1 - 20) - 10;
-                    miniMarkersHTML += `<line x1="0" y1="${y}" x2="${w1}" y2="${y}" class="buy-line-dash" />`;
-                    miniMarkersHTML += `<circle cx="${x}" cy="${y}" r="3.5" class="buy-marker-dot" />`;
-                }
-            });
-            document.getElementById('miniBuyMarkersGroup').innerHTML = miniMarkersHTML;
-
-            // 2. Render Modal Chart (Strict Bounded ViewBox)
-            const w2 = 800, h2 = 350;
-            let pts2 = [];
-            priceHistory.forEach((p, idx) => {
-                const x = (idx / (priceHistory.length - 1)) * w2;
-                const y = h2 - ((p - min) / range) * (h2 - 60) - 30;
-                pts2.push({x, y});
-            });
-
-            // Clamp and constrain ViewBox so user cannot pan outside the graph boundaries
-            vbWidth = Math.max(150, Math.min(800, vbWidth));
-            vbHeight = Math.max(70, Math.min(350, vbHeight));
-            vbX = Math.max(0, Math.min(800 - vbWidth, vbX));
-            vbY = Math.max(0, Math.min(350 - vbHeight, vbY));
-
-            const modalSvg = document.getElementById('modalSvg');
-            modalSvg.setAttribute('viewBox', `${vbX} ${vbY} ${vbWidth} ${vbHeight}`);
-
-            let linePts2 = [];
-            pts2.forEach(pt => {
-                linePts2.push(`${pt.x},${pt.y}`);
-            });
-            document.getElementById('modalChartLine').setAttribute('d', `M ${linePts2.join(' L ')}`);
-            document.getElementById('modalChartArea').setAttribute('d', `M 0,${h2} L ${linePts2.join(' L ')} L ${w2},${h2} Z`);
-
-            let modalMarkersHTML = '';
-            const currentZoomScale = 800 / vbWidth;
-            buyTransactions.forEach(tx => {
-                if (tx.index < priceHistory.length) {
-                    const pt = pts2[tx.index];
-                    if (pt) {
-                        modalMarkersHTML += `<line x1="0" y1="${pt.y}" x2="${w2}" y2="${pt.y}" class="buy-line-dash" stroke-width="${1.5 / currentZoomScale}" />`;
-                        modalMarkersHTML += `<circle cx="${pt.x}" cy="${pt.y}" r="${4.5 / currentZoomScale}" class="buy-marker-dot" stroke-width="${1.5 / currentZoomScale}" />`;
-                    }
-                }
-            });
-            document.getElementById('modalBuyMarkersGroup').innerHTML = modalMarkersHTML;
-        }
-
-        /* Center-based Zoom for Tool Buttons */
-        function zoomChartCenter(factor) {
-            const cx = vbX + vbWidth / 2;
-            const cy = vbY + vbHeight / 2;
-            const newWidth = Math.max(150, Math.min(800, vbWidth / factor));
-            const newHeight = Math.max(70, Math.min(350, vbHeight / factor));
-
-            vbX = cx - newWidth / 2;
-            vbY = cy - newHeight / 2;
-            vbWidth = newWidth;
-            vbHeight = newHeight;
-            renderCharts();
-        }
-
-        function resetChartZoom() {
-            vbX = 0;
-            vbY = 0;
-            vbWidth = 800;
-            vbHeight = 350;
-            renderCharts();
-        }
-
-        /* Mouse Drag & Wheel Zoom focused precisely under cursor */
-        const modalSvgWrapper = document.getElementById('modalSvgWrapper');
-        let isDraggingChart = false;
-        let startClientX = 0;
-        let startClientY = 0;
-
-        modalSvgWrapper.addEventListener('mousedown', (e) => {
-            isDraggingChart = true;
-            startClientX = e.clientX;
-            startClientY = e.clientY;
-        });
-
-        window.addEventListener('mousemove', (e) => {
-            if (!isDraggingChart) return;
-            const dx = e.clientX - startClientX;
-            const dy = e.clientY - startClientY;
-            startClientX = e.clientX;
-            startClientY = e.clientY;
-
-            const rect = modalSvgWrapper.getBoundingClientRect();
-            const scaleX = vbWidth / rect.width;
-            const scaleY = vbHeight / rect.height;
-
-            vbX -= dx * scaleX;
-            vbY -= dy * scaleY;
-            renderCharts();
-        });
-
-        window.addEventListener('mouseup', () => { isDraggingChart = false; });
-
-        modalSvgWrapper.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            const rect = modalSvgWrapper.getBoundingClientRect();
-            const mouseXSVG = vbX + ((e.clientX - rect.left) / rect.width) * vbWidth;
-            const mouseYSVG = vbY + ((e.clientY - rect.top) / rect.height) * vbHeight;
-
-            const zoomFactor = e.deltaY < 0 ? 1.15 : 0.87;
-            const newWidth = Math.max(150, Math.min(800, vbWidth / zoomFactor));
-            const newHeight = Math.max(70, Math.min(350, vbHeight / zoomFactor));
-
-            vbX = mouseXSVG - (mouseXSVG - vbX) * (newWidth / vbWidth);
-            vbY = mouseYSVG - (mouseYSVG - vbY) * (newHeight / vbHeight);
-            vbWidth = newWidth;
-            vbHeight = newHeight;
-            renderCharts();
-        }, { passive: false });
-
-        renderCharts();
-
-        /* Fullscreen Chart Modal Control */
-        const chartModal = document.getElementById('chartModal');
-        function openChartModal(e) {
-            if (e) e.stopPropagation();
-            chartModal.classList.add('open');
-            renderCharts();
-        }
-        function closeChartModal() {
-            chartModal.classList.remove('open');
-        }
-        document.getElementById('miniChartContainer').addEventListener('click', openChartModal);
-
-        /* Market Buy/Sell Toggle & Calculator */
-        function setMarketMode(mode) {
-            marketMode = mode;
-            const tabBuy = document.getElementById('tabBuy');
-            const tabSell = document.getElementById('tabSell');
-            const submitBtn = document.getElementById('marketSubmitBtn');
-            const inputSuffix = document.getElementById('marketInputSuffix');
-            const outputSuffix = document.getElementById('marketOutputSuffix');
-            
-            document.getElementById('marketAmountInput').value = '';
-            document.getElementById('marketTotalOutput').value = '';
-
-            if (mode === 'buy') {
-                tabBuy.className = 'market-tab active buy';
-                tabSell.className = 'market-tab';
-                submitBtn.className = 'market-submit-btn buy';
-                submitBtn.innerText = 'Buy Bitcoin';
-                inputSuffix.innerText = 'CAD';
-                outputSuffix.innerText = 'BTC';
-            } else {
-                tabBuy.className = 'market-tab';
-                tabSell.className = 'market-tab active sell';
-                submitBtn.className = 'market-submit-btn sell';
-                submitBtn.innerText = 'Sell Bitcoin';
-                inputSuffix.innerText = 'BTC';
-                outputSuffix.innerText = 'CAD';
-            }
-            renderBalance();
-        }
-
-        function calculateMarketTotal() {
-            const val = parseFloat(document.getElementById('marketAmountInput').value) || 0;
-            const outputField = document.getElementById('marketTotalOutput');
-            
-            if (marketMode === 'buy') {
-                const btcAmount = val / currentBtcPrice;
-                outputField.value = btcAmount > 0 ? btcAmount.toFixed(6) : '';
-            } else {
-                const cadAmount = val * currentBtcPrice;
-                outputField.value = cadAmount > 0 ? cadAmount.toFixed(2) : '';
-            }
-        }
-
-        function executeMarketTrade() {
-            const amount = parseFloat(document.getElementById('marketAmountInput').value);
-            if (!amount || amount <= 0) {
-                showAppNotification('Invalid Amount', 'Please enter a valid amount to proceed.', 'loss');
-                return;
-            }
-
-            if (marketMode === 'buy') {
-                if (amount > displayBalanceCAD) {
-                    showAppNotification('Insufficient Balance', 'You do not have enough CAD in your wallet.', 'loss');
-                    return;
-                }
-                const btcBought = amount / currentBtcPrice;
-                
-                buyTransactions.push({
-                    index: priceHistory.length - 1,
-                    price: currentBtcPrice,
-                    amount: btcBought
-                });
-
-                if (bitcoinBalance > 0) {
-                    const totalCost = (bitcoinBalance * avgPurchasePrice) + amount;
-                    bitcoinBalance += btcBought;
-                    avgPurchasePrice = totalCost / bitcoinBalance;
-                } else {
-                    bitcoinBalance += btcBought;
-                    avgPurchasePrice = currentBtcPrice;
-                }
-
-                displayBalanceCAD -= amount;
-                internalHiddenBalanceCAD -= amount;
-
-                renderBalance();
-                renderCharts();
-                document.getElementById('marketAmountInput').value = '';
-                document.getElementById('marketTotalOutput').value = '';
-                
-                showAppNotification('Purchase Successful', `Bought ${btcBought.toFixed(6)} BTC for $${amount.toFixed(2)} CAD`, 'gain');
-            } else {
-                if (amount > bitcoinBalance) {
-                    showAppNotification('Insufficient Balance', 'You do not have enough Bitcoin to sell.', 'loss');
-                    return;
-                }
-                
-                const costBasis = amount * avgPurchasePrice;
-                const proceeds = amount * currentBtcPrice;
-                const profitOrLoss = proceeds - costBasis;
-                
-                bitcoinBalance -= amount;
-                if (bitcoinBalance <= 0.000001) {
-                    bitcoinBalance = 0;
-                    avgPurchasePrice = 0;
-                    buyTransactions = []; 
-                }
-
-                displayBalanceCAD += proceeds;
-                internalHiddenBalanceCAD += proceeds;
-
-                renderBalance();
-                renderCharts();
-                document.getElementById('marketAmountInput').value = '';
-                document.getElementById('marketTotalOutput').value = '';
-
-                const formattedPL = Math.abs(profitOrLoss).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                if (profitOrLoss >= 0) {
-                    showAppNotification('Sale Successful (Gain)', `Sold ${amount.toFixed(6)} BTC<br>Gain: +$${formattedPL} CAD`, 'gain');
-                } else {
-                    showAppNotification('Sale Successful (Loss)', `Sold ${amount.toFixed(6)} BTC<br>Loss: -$${formattedPL} CAD`, 'loss');
-                }
-            }
-        }
-
-        function executeSellAll() {
-            if (bitcoinBalance <= 0) {
-                showAppNotification('No Assets', 'You have no Bitcoin to sell.', 'loss');
-                return;
-            }
-            const soldBtc = bitcoinBalance;
-            const costBasis = soldBtc * avgPurchasePrice;
-            const cadReceived = soldBtc * currentBtcPrice;
-            const profitOrLoss = cadReceived - costBasis;
-
-            bitcoinBalance = 0;
-            avgPurchasePrice = 0;
-            buyTransactions = [];
-            displayBalanceCAD += cadReceived;
-            internalHiddenBalanceCAD += cadReceived;
-
-            renderBalance();
-            renderCharts();
-            document.getElementById('marketAmountInput').value = '';
-            document.getElementById('marketTotalOutput').value = '';
-
-            const formattedPL = Math.abs(profitOrLoss).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            if (profitOrLoss >= 0) {
-                showAppNotification('Sell All Successful (Gain)', `Sold all ${soldBtc.toFixed(6)} BTC for $${cadReceived.toFixed(2)} CAD<br>Gain: +$${formattedPL} CAD`, 'gain');
-            } else {
-                showAppNotification('Sell All Successful (Loss)', `Sold all ${soldBtc.toFixed(6)} BTC for $${cadReceived.toFixed(2)} CAD<br>Loss: -$${formattedPL} CAD`, 'loss');
-            }
-        }
 
         /* Wallet inline editor */
         const walletEditPanel = document.getElementById('walletEditPanel');
@@ -1033,6 +425,156 @@
             if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
             if (!e.shiftKey) return;
             if (e.key.toLowerCase() === 'q') { e.preventDefault(); openWalletEditor(); }
+        });
+
+        /* Exchange Modal & Calculation Logic */
+        const exchangeBtn = document.getElementById('exchangeBtn');
+        const exchangeModal = document.getElementById('exchangeModal');
+        const confirmExchangeBtn = document.getElementById('confirmExchangeBtn');
+        const toastNotification = document.getElementById('toastNotification');
+        const toastMessage = document.getElementById('toastMessage');
+        const exAmountInput = document.getElementById('exAmount');
+        const exError = document.getElementById('exError');
+        const exFromSelect = document.getElementById('exFrom');
+        const exToSelect = document.getElementById('exTo');
+        const livePreviewVal = document.getElementById('livePreviewVal');
+
+        const exchangeRatesInUSD = {
+            USD: 1.0,
+            CAD: 0.74,
+            BTC: 95000.0,
+            SOL: 92.0
+        };
+
+        function calculateConversion(amount, fromCurr, toCurr) {
+            const amountInUSD = amount * exchangeRatesInUSD[fromCurr];
+            const netAmountInUSD = amountInUSD * 0.855; // 1.5% fee + 13% tax
+            const receivedAmount = netAmountInUSD / exchangeRatesInUSD[toCurr];
+
+            const feeInFrom = amount * 0.015;
+            const taxInFrom = amount * 0.13;
+            const totalDeductionsInFrom = feeInFrom + taxInFrom;
+
+            return {
+                receivedAmount,
+                feeInFrom,
+                taxInFrom,
+                totalDeductionsInFrom
+            };
+        }
+
+        function updateLivePreview() {
+            const amount = parseFloat(exAmountInput.value) || 0;
+            const fromCurr = exFromSelect.value;
+            const toCurr = exToSelect.value;
+
+            if (fromCurr === toCurr) {
+                livePreviewVal.textContent = `${amount.toFixed(2)} ${toCurr}`;
+                return;
+            }
+
+            const { receivedAmount } = calculateConversion(amount, fromCurr, toCurr);
+            const decimals = (toCurr === 'BTC') ? 6 : (toCurr === 'SOL' ? 4 : 2);
+            livePreviewVal.textContent = `${receivedAmount.toFixed(decimals)} ${toCurr}`;
+        }
+
+        function updateConversionPage(amt, fromCurr, toCurr) {
+            const { receivedAmount, feeInFrom, taxInFrom, totalDeductionsInFrom } = calculateConversion(amt, fromCurr, toCurr);
+            const decimals = (toCurr === 'BTC') ? 6 : (toCurr === 'SOL' ? 4 : 2);
+
+            document.getElementById('feeVal').innerHTML = `- ${feeInFrom.toFixed(2)}<span class="currency-label">${fromCurr}</span>`;
+            document.getElementById('taxVal').innerHTML = `- ${taxInFrom.toFixed(2)}<span class="currency-label">${fromCurr}</span>`;
+            document.getElementById('purchaseVal').innerHTML = `- 0.00<span class="currency-label">${fromCurr}</span>`;
+            document.getElementById('netYieldVal').innerHTML = `+ ${receivedAmount.toFixed(decimals)}<span class="currency-label">${toCurr}</span>`;
+            
+            document.getElementById('summaryBase').textContent = `${amt.toFixed(2)} ${fromCurr}`;
+            document.getElementById('summaryDeductions').textContent = `-${totalDeductionsInFrom.toFixed(2)} ${fromCurr}`;
+            document.getElementById('summaryFinal').textContent = `+${receivedAmount.toFixed(decimals)} ${toCurr}`;
+        }
+
+        exAmountInput.addEventListener('input', updateLivePreview);
+        exFromSelect.addEventListener('change', updateLivePreview);
+        exToSelect.addEventListener('change', updateLivePreview);
+
+        exchangeBtn.addEventListener('click', () => {
+            exError.style.display = 'none';
+            updateLivePreview();
+            exchangeModal.classList.add('open');
+        });
+
+        exchangeModal.addEventListener('click', (e) => {
+            if (e.target === exchangeModal) {
+                exchangeModal.classList.remove('open');
+            }
+        });
+
+        function getBalanceForCurrency(curr) {
+            if (curr === 'CAD') return internalHiddenBalanceCAD;
+            if (curr === 'USD') return displayBalanceUSD;
+            if (curr === 'BTC') return bitcoinBalance;
+            if (curr === 'SOL') return solanaBalance;
+            return 0;
+        }
+
+        function deductBalanceForCurrency(curr, amount) {
+            if (curr === 'CAD') {
+                internalHiddenBalanceCAD -= amount;
+            } else if (curr === 'USD') {
+                displayBalanceUSD -= amount;
+            } else if (curr === 'BTC') {
+                bitcoinBalance -= amount;
+            } else if (curr === 'SOL') {
+                solanaBalance -= amount;
+            }
+        }
+
+        function addBalanceForCurrency(curr, amount) {
+            if (curr === 'CAD') displayBalanceCAD += amount;
+            else if (curr === 'USD') displayBalanceUSD += amount;
+            else if (curr === 'BTC') bitcoinBalance += amount;
+            else if (curr === 'SOL') solanaBalance += amount;
+        }
+
+        confirmExchangeBtn.addEventListener('click', () => {
+            const amount = parseFloat(exAmountInput.value) || 0;
+            const fromCurr = exFromSelect.value;
+            const toCurr = exToSelect.value;
+
+            if (fromCurr === toCurr) {
+                exError.textContent = 'Cannot convert between the same currency.';
+                exError.style.display = 'block';
+                return;
+            }
+
+            const availableBalance = getBalanceForCurrency(fromCurr);
+
+            if (amount <= 0 || amount > availableBalance) {
+                exError.textContent = 'Insufficient balance for this conversion.';
+                exError.style.display = 'block';
+                return;
+            }
+
+            exError.style.display = 'none';
+            confirmExchangeBtn.innerHTML = `<div class="spinner" style="border-top-color:#fff; width:16px; height:16px;"></div> Exchanging...`;
+
+            setTimeout(() => {
+                confirmExchangeBtn.innerHTML = `<span>Confirm Exchange</span>`;
+                exchangeModal.classList.remove('open');
+
+                const { receivedAmount } = calculateConversion(amount, fromCurr, toCurr);
+
+                deductBalanceForCurrency(fromCurr, amount);
+                addBalanceForCurrency(toCurr, receivedAmount);
+
+                updateConversionPage(amount, fromCurr, toCurr);
+
+                toastMessage.textContent = `${amount.toFixed(2)} ${fromCurr} got exchanged to ${toCurr} successfully!`;
+                toastNotification.classList.add('show');
+
+                setTimeout(() => {
+                    toastNotification.classList.remove('show');
+                }, 3500);
+            }, 1200);
         });
 
         /* Pull to refresh */
