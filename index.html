@@ -167,11 +167,12 @@
         .toast-notification.show { transform: translateY(0); opacity: 1; }
 
         /* Conversion Cost Breakdown Table */
-        .cost-card { background: #131316; border: 1px solid rgba(255,255,255,0.055); border-radius: 18px; padding: 20px; margin-top: 18px; }
+        .cost-card { background: #131316; border: 1px solid rgba(255,255,255,0.055); border-radius: 18px; padding: 20px; margin-top: 18px; display: none; }
         .cost-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
         .cost-row:last-child { border-bottom: none; }
         .cost-label { color: #7a7a83; }
         .cost-val { color: #fff; font-variant-numeric: tabular-nums; }
+        .empty-exchange-state { text-align: center; color: #7a7a83; font-size: 13.5px; padding: 30px 0; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -222,9 +223,9 @@
                         </div>
 
                         <div class="edit-panel" id="walletEditPanel">
-                            <div class="edit-panel-title"><i data-lucide="pencil"></i>Edit Wallet</div>
+                            <div class="edit-panel-title"><i data-lucide="pencil"></i>Edit <span id="editWalletName">CAD</span> Wallet</div>
                             <div class="edit-row">
-                                <label>Balance <span class="edit-unit">CAD</span></label>
+                                <label>Balance <span class="edit-unit" id="editUnitLabel">CAD</span></label>
                                 <input type="number" id="editBalanceInput" step="0.01" inputmode="decimal">
                             </div>
                             <div class="edit-row">
@@ -264,6 +265,10 @@
                                 <div class="item-left"><div class="icon-wrapper"><i data-lucide="dollar-sign"></i></div><div><div class="item-title">CAD</div><div class="item-subtitle">Canadian Dollar</div></div></div>
                                 <div class="item-right"><div class="item-value" id="cadValue">1,000.00<span class="currency-label">CAD</span></div></div>
                             </div>
+                            <div class="list-item">
+                                <div class="item-left"><div class="icon-wrapper"><i data-lucide="dollar-sign"></i></div><div><div class="item-title">USD</div><div class="item-subtitle">United States Dollar</div></div></div>
+                                <div class="item-right"><div class="item-value" id="usdValue">500.00<span class="currency-label">USD</span></div></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -279,34 +284,36 @@
                         <h1 class="dashboard-title">Exchange Breakdown & Costs</h1>
                     </div>
                 </div>
-                <div class="activity-panel" style="display:block;">
+                <div class="activity-panel" id="exchangeDetailsPanel" style="display:none;">
                     <div class="panel-header"><span class="panel-title">Conversion Fees & Purchases</span></div>
                     <div class="list-item">
                         <div class="item-left"><div class="icon-wrapper" style="background:rgba(239, 68, 68, 0.1); color:#ef4444;"><i data-lucide="arrow-up-right"></i></div><div><div class="item-title">Amount Sent</div><div class="item-subtitle">Exchange Base Amount</div></div></div>
-                        <div class="item-right"><div class="item-value neg" id="baseSentVal">- 250.00<span class="currency-label" id="baseSentCurrLabel">CAD</span></div></div>
+                        <div class="item-right"><div class="item-value neg" id="baseSentVal">- 0.00<span class="currency-label" id="baseSentCurrLabel">CAD</span></div></div>
                     </div>
                     <div class="list-item">
                         <div class="item-left"><div class="icon-wrapper" style="background:rgba(239, 68, 68, 0.1); color:#ef4444;"><i data-lucide="percent"></i></div><div><div class="item-title">Exchange Network Fee (1.5%)</div><div class="item-subtitle">Estimated Network Cost</div></div></div>
-                        <div class="item-right"><div class="item-value neg" id="feeVal">- $3.75<span class="currency-label" id="feeCurrLabel">CAD</span></div></div>
+                        <div class="item-right"><div class="item-value neg" id="feeVal">- $0.00<span class="currency-label" id="feeCurrLabel">CAD</span></div></div>
                     </div>
                     <div class="list-item">
                         <div class="item-left"><div class="icon-wrapper" style="background:rgba(239, 68, 68, 0.1); color:#ef4444;"><i data-lucide="receipt"></i></div><div><div class="item-title">Conversion Tax (13% HST)</div><div class="item-subtitle">Estimated Tax Charge</div></div></div>
-                        <div class="item-right"><div class="item-value neg" id="taxVal">- $32.50<span class="currency-label" id="taxCurrLabel">CAD</span></div></div>
+                        <div class="item-right"><div class="item-value neg" id="taxVal">- $0.00<span class="currency-label" id="taxCurrLabel">CAD</span></div></div>
                     </div>
                     <div class="list-item">
                         <div class="item-left"><div class="icon-wrapper" style="background:rgba(239, 68, 68, 0.1); color:#ef4444;"><i data-lucide="shopping-bag"></i></div><div><div class="item-title">Recent Purchase Deductions</div><div class="item-subtitle">Hardware & Scooter Parts</div></div></div>
                         <div class="item-right"><div class="item-value neg" id="purchaseVal">- $0.00<span class="currency-label" id="purchaseCurrLabel">CAD</span></div></div>
                     </div>
                     <div class="list-item">
-                        <div class="item-left"><div class="solana-icon"><svg viewBox="0 0 397.7 311.7" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="solanaGrad2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#9945FF"/><stop offset="100%" stop-color="#14F195"/></linearGradient></defs><path fill="url(#solanaGrad2)" d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2l56.3-62.6zM64.6 3.8C67 1.4 70.3 0 73.8 0h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2L64.6 3.8zm268.5 117c-2.4-2.4-5.7-3.8-9.2-3.8H9.2c-5.9 0-9.2 6.8-5.4 11.2l56.3 62.6c2.4 2.4 5.7 3.8 9.2 3.8h314.7c5.9 0 9.2-6.8-5.4-11.2l-56.3-62.6z"/></svg></div><div><div class="item-title">Net Crypto Recieved</div><div class="item-subtitle">Estimated Yield (SOL)</div></div></div>
-                        <div class="item-right"><div class="item-value pos" id="netYieldVal">+ 1.8500<span class="currency-label">SOL</span></div></div>
+                        <div class="item-left"><div class="solana-icon"><svg viewBox="0 0 397.7 311.7" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="solanaGrad2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#9945FF"/><stop offset="100%" stop-color="#14F195"/></linearGradient></defs><path fill="url(#solanaGrad2)" d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2l56.3-62.6zM64.6 3.8C67 1.4 70.3 0 73.8 0h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2L64.6 3.8zm268.5 117c-2.4-2.4-5.7-3.8-9.2-3.8H9.2c-5.9 0-9.2 6.8-5.4 11.2l56.3 62.6c2.4 2.4 5.7 3.8 9.2 3.8h314.7c5.9 0 9.2-6.8-5.4-11.2l-56.3-62.6z"/></svg></div><div><div class="item-title">Net Crypto Received</div><div class="item-subtitle">Estimated Yield</div></div></div>
+                        <div class="item-right"><div class="item-value pos" id="netYieldVal">+ 0.0000<span class="currency-label">SOL</span></div></div>
                     </div>
                 </div>
 
-                <div class="cost-card">
-                    <div class="cost-row"><span class="cost-label">Base Amount</span><span class="cost-val" id="summaryBase">$250.00 CAD</span></div>
-                    <div class="cost-row"><span class="cost-label">Total Deductions & Tax</span><span class="cost-val" id="summaryDeductions" style="color:#ef4444;">-$36.25 CAD</span></div>
-                    <div class="cost-row" style="font-weight: 800; font-size: 14px;"><span class="cost-label" style="color:#fff;">Final Settlement</span><span class="cost-val" id="summaryFinal" style="color:#10b981;">+1.8500 SOL</span></div>
+                <div class="empty-exchange-state" id="emptyExchangeState">No exchange transactions made yet. Complete an exchange to view the breakdown.</div>
+
+                <div class="cost-card" id="costCard">
+                    <div class="cost-row"><span class="cost-label">Base Amount</span><span class="cost-val" id="summaryBase">$0.00 CAD</span></div>
+                    <div class="cost-row"><span class="cost-label">Total Deductions & Tax</span><span class="cost-val" id="summaryDeductions" style="color:#ef4444;">-$0.00 CAD</span></div>
+                    <div class="cost-row" style="font-weight: 800; font-size: 14px;"><span class="cost-label" style="color:#fff;">Final Settlement</span><span class="cost-val" id="summaryFinal" style="color:#10b981;">+0.0000 SOL</span></div>
                 </div>
             </div>
         </section>
@@ -381,7 +388,7 @@
     <!-- Green Success Popup -->
     <div class="toast-notification" id="toastNotification">
         <i data-lucide="check-circle"></i>
-        <span id="toastMessage">250 CAD got exchanged to SOL successfully!</span>
+        <span id="toastMessage">Exchange completed successfully!</span>
     </div>
 
     <script>
@@ -469,21 +476,24 @@
         let displayBalanceCAD = randomStartingValue + Math.random();
         let internalHiddenBalanceCAD = displayBalanceCAD;
         let displayBalanceUSD = 500.00;
-        let balanceRate = 0.45; 
+        let internalHiddenBalanceUSD = displayBalanceUSD;
+        let balanceRateCAD = 0.45;
+        let balanceRateUSD = 0.25;
         
         let bitcoinBalance = 0.00;
         let solanaBalance = 0.00;
 
         const balanceText = document.getElementById('totalBalance');
         const cadValueText = document.getElementById('cadValue');
+        const usdValueText = document.getElementById('usdValue');
         const btcAssetValueText = document.getElementById('btcAssetValue');
         const solAssetValueText = document.getElementById('solAssetValue');
         const walletSelector = document.getElementById('walletSelector');
-        const availableBalanceSubtext = document.getElementById('availableBalanceSubtext');
+        let availableBalanceSubtext = document.getElementById('availableBalanceSubtext');
 
         function getBalanceForCurrency(curr) {
             if (curr === 'CAD') return internalHiddenBalanceCAD;
-            if (curr === 'USD') return displayBalanceUSD;
+            if (curr === 'USD') return internalHiddenBalanceUSD;
             if (curr === 'BTC') return bitcoinBalance;
             if (curr === 'SOL') return solanaBalance;
             return 0;
@@ -510,6 +520,7 @@
                 balanceText.innerHTML = `$${valUSD}<span class="currency-label">USD</span>`;
             }
             cadValueText.innerHTML = `${valCAD}<span class="currency-label">CAD</span>`;
+            usdValueText.innerHTML = `${valUSD}<span class="currency-label">USD</span>`;
             btcAssetValueText.innerHTML = `${bitcoinBalance.toFixed(4)}<span class="currency-label">BTC</span>`;
             if (solAssetValueText) {
                 solAssetValueText.innerHTML = `${solanaBalance.toFixed(4)}<span class="currency-label">SOL</span>`;
@@ -519,17 +530,29 @@
 
         renderBalance();
         renderRecentActivity();
-        setInterval(() => { internalHiddenBalanceCAD += balanceRate; }, 1000);
+        setInterval(() => { 
+            internalHiddenBalanceCAD += balanceRateCAD;
+            internalHiddenBalanceUSD += balanceRateUSD;
+        }, 1000);
         walletSelector.addEventListener('change', (e) => { currentCurrency = e.target.value; renderBalance(); });
 
         /* Wallet inline editor */
         const walletEditPanel = document.getElementById('walletEditPanel');
         const editBalanceInput = document.getElementById('editBalanceInput');
         const editRateInput = document.getElementById('editRateInput');
+        const editWalletName = document.getElementById('editWalletName');
+        const editUnitLabel = document.getElementById('editUnitLabel');
 
         function openWalletEditor() {
-            editBalanceInput.value = displayBalanceCAD.toFixed(2);
-            editRateInput.value = balanceRate.toFixed(2);
+            editWalletName.textContent = currentCurrency;
+            editUnitLabel.textContent = currentCurrency;
+            if (currentCurrency === 'CAD') {
+                editBalanceInput.value = displayBalanceCAD.toFixed(2);
+                editRateInput.value = balanceRateCAD.toFixed(2);
+            } else {
+                editBalanceInput.value = displayBalanceUSD.toFixed(2);
+                editRateInput.value = balanceRateUSD.toFixed(2);
+            }
             walletEditPanel.classList.add('open');
             editBalanceInput.focus();
             editBalanceInput.select();
@@ -538,8 +561,22 @@
         function saveWalletEditor() {
             const amt = parseFloat(editBalanceInput.value);
             const rate = parseFloat(editRateInput.value);
-            if (!isNaN(amt)) { displayBalanceCAD = amt; internalHiddenBalanceCAD = amt; }
-            if (!isNaN(rate)) { balanceRate = rate; }
+            if (!isNaN(amt)) {
+                if (currentCurrency === 'CAD') {
+                    displayBalanceCAD = amt;
+                    internalHiddenBalanceCAD = amt;
+                } else {
+                    displayBalanceUSD = amt;
+                    internalHiddenBalanceUSD = amt;
+                }
+            }
+            if (!isNaN(rate)) {
+                if (currentCurrency === 'CAD') {
+                    balanceRateCAD = rate;
+                } else {
+                    balanceRateUSD = rate;
+                }
+            }
             renderBalance();
             closeWalletEditor();
         }
@@ -640,6 +677,10 @@
             const dec = (toCurr === 'BTC' || toCurr === 'SOL') ? 4 : 2;
             const fromDec = (fromCurr === 'BTC' || fromCurr === 'SOL') ? 4 : 2;
 
+            document.getElementById('exchangeDetailsPanel').style.display = 'block';
+            document.getElementById('emptyExchangeState').style.display = 'none';
+            document.getElementById('costCard').style.display = 'block';
+
             document.getElementById('baseSentVal').innerHTML = `- ${amt.toFixed(fromDec)}<span class="currency-label">${fromCurr}</span>`;
             document.getElementById('feeVal').innerHTML = `- ${feeInFrom.toFixed(fromDec)}<span class="currency-label">${fromCurr}</span>`;
             document.getElementById('taxVal').innerHTML = `- ${taxInFrom.toFixed(fromDec)}<span class="currency-label">${fromCurr}</span>`;
@@ -676,7 +717,8 @@
                 internalHiddenBalanceCAD = roundPrecision(internalHiddenBalanceCAD - amount, 4);
                 displayBalanceCAD = internalHiddenBalanceCAD;
             } else if (curr === 'USD') {
-                displayBalanceUSD = roundPrecision(displayBalanceUSD - amount, 4);
+                internalHiddenBalanceUSD = roundPrecision(internalHiddenBalanceUSD - amount, 4);
+                displayBalanceUSD = internalHiddenBalanceUSD;
             } else if (curr === 'BTC') {
                 bitcoinBalance = roundPrecision(bitcoinBalance - amount, 4);
             } else if (curr === 'SOL') {
@@ -690,6 +732,7 @@
                 internalHiddenBalanceCAD = displayBalanceCAD;
             } else if (curr === 'USD') {
                 displayBalanceUSD = roundPrecision(displayBalanceUSD + amount, 4);
+                internalHiddenBalanceUSD = displayBalanceUSD;
             } else if (curr === 'BTC') {
                 bitcoinBalance = roundPrecision(bitcoinBalance + amount, 4);
             } else if (curr === 'SOL') {
@@ -760,11 +803,11 @@
         const spinner = document.getElementById('spinner');
         let startY = 0, currentY = 0, isDragging = false;
         const triggerThreshold = 60;
-https://tr.rbxcdn.com/30DAY-Avatar-96D12C93A737E67DF2EC4DD1F7755E84-Png/720/720/Avatar/Webp/noFilter$0
+
         function handleStart(y) { if (walletPanel.scrollTop === 0 && !isRefreshing) { startY = y; isDragging = true; content.style.transition = 'none'; } }
         function handleMove(y, e) { if (!isDragging || isRefreshing) return; currentY = y; const distance = currentY - startY; if (distance > 0) { if (e.cancelable) e.preventDefault(); const damping = 0.35; const dragOffset = distance * damping; content.style.transform = `translateY(${dragOffset}px)`; indicator.style.opacity = Math.min(dragOffset / triggerThreshold, 1); spinner.style.transform = `rotate(${dragOffset * 4}deg)`; } }
         let isRefreshing = false;
-        function handleEnd() { if (!isDragging) return; isDragging = false; const distance = currentY - startY; const finalOffset = distance * 0.35; content.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; if (finalOffset >= triggerThreshold) { isRefreshing = true; content.style.transform = `translateY(${triggerThreshold}px)`; indicator.classList.add('refreshing'); setTimeout(() => { if (currentCurrency === 'CAD') { displayBalanceCAD = internalHiddenBalanceCAD; } renderBalance(); exitRefreshState(); }, 1200); } else { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; } }
+        function handleEnd() { if (!isDragging) return; isDragging = false; const distance = currentY - startY; const finalOffset = distance * 0.35; content.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; if (finalOffset >= triggerThreshold) { isRefreshing = true; content.style.transform = `translateY(${triggerThreshold}px)`; indicator.classList.add('refreshing'); setTimeout(() => { if (currentCurrency === 'CAD') { displayBalanceCAD = internalHiddenBalanceCAD; } else if (currentCurrency === 'USD') { displayBalanceUSD = internalHiddenBalanceUSD; } renderBalance(); exitRefreshState(); }, 1200); } else { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; } }
         walletPanel.addEventListener('mousedown', (e) => handleStart(e.pageY));
         window.addEventListener('mousemove', (e) => handleMove(e.pageY, e));
         window.addEventListener('mouseup', handleEnd);
