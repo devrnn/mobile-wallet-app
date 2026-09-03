@@ -286,7 +286,7 @@
                             </div>
                             <div class="list-item">
                                 <div class="item-left"><div class="icon-wrapper"><i data-lucide="dollar-sign"></i></div><div><div class="item-title">USD</div><div class="item-subtitle">United States Dollar</div></div></div>
-                                <div class="item-right"><div class="item-value" id="usdValue">500.00<span class="currency-label">USD</span></div></div>
+                                <div class="item-right"><div class="item-value" id="usdValue">0.00<span class="currency-label">USD</span></div></div>
                             </div>
                         </div>
                     </div>
@@ -494,10 +494,10 @@
         let randomStartingValue = Math.floor(Math.random() * 2001) + 1000;
         let displayBalanceCAD = randomStartingValue + Math.random();
         let internalHiddenBalanceCAD = displayBalanceCAD;
-        let displayBalanceUSD = 500.00;
-        let internalHiddenBalanceUSD = displayBalanceUSD;
-        let balanceRateCAD = 0.45;
-        let balanceRateUSD = 0.25;
+        let displayBalanceUSD = 0.00;
+        let internalHiddenBalanceUSD = 0.00;
+        let balanceRateCAD = 0.00;
+        let balanceRateUSD = 0.00;
         
         let bitcoinBalance = 0.00;
         let solanaBalance = 0.00;
