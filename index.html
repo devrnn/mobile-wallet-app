@@ -28,6 +28,20 @@
             --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
         }
 
+        /* Vibrant Blue-Purple Gradient Theme */
+        body.theme-gradient {
+            --card-gradient: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.18) 0%, transparent 50%), linear-gradient(135deg, #2ea3e6 0%, #3b52d9 45%, #9333ea 100%);
+            --card-border: rgba(255, 255, 255, 0.14);
+            --card-shadow: 0 20px 50px -12px rgba(59, 82, 217, 0.45), 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Emerald Cyber Theme */
+        body.theme-emerald {
+            --card-gradient: radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.25) 0%, transparent 50%), linear-gradient(135deg, #064e3b 0%, #022c22 50%, #0f172a 100%);
+            --card-border: rgba(52, 211, 153, 0.25);
+            --card-shadow: 0 20px 50px -12px rgba(16, 185, 129, 0.35), 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; user-select: none; -webkit-tap-highlight-color: transparent; }
         html, body { height: 100%; background-color: var(--bg-main); }
         body { color: var(--text-main); display: flex; height: 100vh; width: 100vw; overflow: hidden; position: relative; }
@@ -35,7 +49,6 @@
         /* ---------- Sidebar & Drawer Layout ---------- */
         .sidebar { width: 240px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-subtle); padding: 32px 20px; display: flex; flex-direction: column; justify-content: space-between; flex-shrink: 0; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 90; }
         
-        /* Mobile Overlay & Mobile Drawer Rules */
         .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 80; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
 
@@ -58,24 +71,99 @@
         .sidebar-item:hover i { transform: scale(1.1); }
         .sidebar-item.active { background-color: #151518; color: #ffffff; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 4px 12px rgba(0,0,0,0.4); font-weight: 600; }
 
-        /* Mobile Menu Header Trigger */
         .menu-btn { display: none; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.07); color: #fff; width: 38px; height: 38px; border-radius: 11px; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .menu-btn:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--border-hover); transform: scale(1.02); }
         .menu-btn:active { transform: scale(0.96); }
         .menu-btn i { width: 18px; height: 18px; }
 
-        /* ---------- Pull to refresh ---------- */
-        .pull-indicator { position: absolute; top: 0; left: 0; right: 0; height: 60px; display: flex; justify-content: center; align-items: center; z-index: 30; opacity: 0; pointer-events: none; }
-        .spinner { width: 20px; height: 20px; border: 2px solid rgba(255, 255, 255, 0.1); border-top-color: #ffffff; border-radius: 50%; transition: transform 0.1s linear; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .pull-indicator.refreshing .spinner { animation: spin 0.6s linear infinite; }
+        /* ---------- Ultra Native Reload UI ---------- */
+        .pull-indicator {
+            position: absolute;
+            top: max(16px, env(safe-area-inset-top));
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px) scale(0.85);
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+            will-change: transform, opacity;
+        }
+
+        .pull-indicator.visible { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+
+        .refresh-capsule {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px 8px 12px;
+            background: rgba(18, 18, 22, 0.75);
+            backdrop-filter: blur(24px) saturate(200%);
+            -webkit-backdrop-filter: blur(24px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 30px;
+            box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .pull-indicator.ready .refresh-capsule {
+            background: rgba(28, 28, 36, 0.92);
+            border-color: rgba(255, 255, 255, 0.28);
+            box-shadow: 0 14px 36px -6px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .spinner-box { width: 20px; height: 20px; position: relative; display: flex; align-items: center; justify-content: center; }
+        .spinner-svg { width: 20px; height: 20px; transform: rotate(-90deg); }
+        .spinner-bg { stroke: rgba(255, 255, 255, 0.12); stroke-width: 2.5; fill: none; }
+        .spinner-arc { stroke: #ffffff; stroke-width: 2.5; stroke-linecap: round; fill: none; stroke-dasharray: 53.4; stroke-dashoffset: 53.4; transition: stroke-dashoffset 0.1s linear, stroke 0.3s ease; }
+
+        .pull-indicator.refreshing .spinner-svg { animation: iosSpin 0.75s linear infinite; }
+
+        .success-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-green);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .success-icon i { width: 16px; height: 16px; }
+        .pull-indicator.completed .spinner-svg { opacity: 0; }
+        .pull-indicator.completed .success-icon { opacity: 1; transform: scale(1); }
+
+        @keyframes iosSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .refresh-text { font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, 0.85); letter-spacing: -0.1px; white-space: nowrap; }
+
+        /* Button Loading Overlay */
+        .modal-btn { position: relative; overflow: hidden; }
+        .modal-btn.loading { color: transparent !important; pointer-events: none; }
+        .modal-btn.loading::after {
+            content: ""; position: absolute; inset: 0; margin: auto; width: 18px; height: 18px;
+            border: 2px solid rgba(10, 10, 12, 0.2); border-top-color: #0a0a0c; border-radius: 50%;
+            animation: iosSpin 0.65s linear infinite;
+        }
 
         /* ---------- Page ---------- */
         .main-dashboard { flex: 1; height: 100%; overflow: hidden; background-color: var(--bg-main); position: relative; }
         .page-panel { width: 100%; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; position: relative; display: none; opacity: 0; transform: translateY(8px); transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .page-panel.active { display: block; opacity: 1; transform: translateY(0); }
 
-        .scroll-content { padding: calc(40px + max(10px, env(safe-area-inset-top))) 28px 48px 28px; min-height: 100%; width: 100%; position: relative; z-index: 2; background-color: var(--bg-main); }
+        .scroll-content { 
+            padding: calc(40px + max(10px, env(safe-area-inset-top))) 28px 48px 28px; 
+            min-height: 100%; 
+            width: 100%; 
+            position: relative; 
+            z-index: 2; 
+            background-color: var(--bg-main); 
+            will-change: transform;
+        }
         @media (min-width: 769px) { .scroll-content { padding: 48px 56px; } }
         .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; gap: 16px; }
         .dashboard-title-group { display: flex; align-items: center; gap: 14px; }
@@ -95,19 +183,19 @@
             border: 1px solid var(--card-border);
             position: relative;
             overflow: hidden;
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: background 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .balance-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.15);
         }
         .balance-header-row { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
-        .balance-title-row { color: var(--text-muted); font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
+        .balance-title-row { color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
         .wallet-selector { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-hover); color: #ffffff; padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; outline: none; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .wallet-selector:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); }
         .wallet-selector:focus-visible { box-shadow: 0 0 0 3px rgba(255,255,255,0.2); }
         .wallet-selector option { background-color: var(--bg-card); color: #ffffff; }
-        .main-balance { font-size: 42px; font-weight: 800; letter-spacing: -1.2px; margin: 12px 0 4px; color: #ffffff; font-variant-numeric: tabular-nums; position: relative; z-index: 1; cursor: pointer; width: fit-content; transition: opacity 0.15s ease; }
+        .main-balance { font-size: 42px; font-weight: 800; letter-spacing: -1.2px; margin: 12px 0 4px; color: var(--text-main); font-variant-numeric: tabular-nums; position: relative; z-index: 1; cursor: pointer; width: fit-content; transition: opacity 0.15s ease; }
         .main-balance:hover { opacity: 0.92; }
         .card-actions { display: flex; gap: 12px; position: relative; z-index: 1; }
         
@@ -164,10 +252,21 @@
         .item-title { font-size: 13.5px; font-weight: 600; color: #ffffff; letter-spacing: -0.1px; }
         .item-subtitle { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
         .item-right { text-align: right; }
-        .item-value { font-size: 13.5px; font-weight: 600; color: #ffffff; font-variant-numeric: tabular-nums; }
+        .item-value { font-size: 13.5px; font-weight: 600; color: #ffffff; font-variant-numeric: tabular-nums; cursor: pointer; user-select: none; }
         .item-value.neg { color: var(--accent-red); }
         .item-value.pos { color: var(--accent-green); }
         .currency-label { font-size: 11px; color: rgba(255, 255, 255, 0.4); font-weight: 500; margin-left: 4px; }
+
+        /* ---------- Settings Theme Card Grid ---------- */
+        .theme-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 14px; }
+        .theme-card { background: var(--bg-card); border: 2px solid var(--border-subtle); border-radius: 16px; padding: 18px; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; gap: 12px; }
+        .theme-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+        .theme-card.active { border-color: #ffffff; background: rgba(255, 255, 255, 0.03); }
+        .theme-preview-box { height: 60px; border-radius: 10px; width: 100%; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .theme-preview-box.dark { background: radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.15) 0%, transparent 45%), linear-gradient(135deg, #1e1e24 0%, #111115 100%); }
+        .theme-preview-box.gradient { background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.18) 0%, transparent 50%), linear-gradient(135deg, #2ea3e6 0%, #3b52d9 45%, #9333ea 100%); }
+        .theme-preview-box.emerald { background: radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.25) 0%, transparent 50%), linear-gradient(135deg, #064e3b 0%, #022c22 50%, #0f172a 100%); }
+        .theme-label { font-size: 13.5px; font-weight: 600; color: #fff; display: flex; justify-content: space-between; align-items: center; }
 
         /* ---------- Exchange Modal & Popups ---------- */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -187,7 +286,6 @@
         .modal-field input::placeholder { color: #4a4a52; }
         .field-subtext { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 8px; display: block; }
 
-        /* Conversion Preview Breakdowns */
         .preview-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px; margin-bottom: 18px; display: flex; flex-direction: column; gap: 9px; }
         .preview-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 600; color: var(--text-muted); }
         .preview-row.highlight { color: #ffffff; font-weight: 700; border-top: 1px solid var(--border-subtle); padding-top: 8px; margin-top: 2px; }
@@ -203,7 +301,6 @@
         .toast-notification.show { transform: translateY(0) scale(1); opacity: 1; }
         .toast-notification i { width: 18px; height: 18px; color: var(--accent-green); }
 
-        /* Conversion Cost Breakdown Table */
         .cost-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 22px; margin-top: 20px; display: none; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); }
         .cost-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; padding: 10px 0; border-bottom: 1px solid var(--border-subtle); }
         .cost-row:last-child { border-bottom: none; }
@@ -213,7 +310,21 @@
     </style>
 </head>
 <body>
-    <div class="pull-indicator" id="pullIndicator"><div class="spinner" id="spinner"></div></div>
+    <!-- Professional Apple-Style Reload UI -->
+    <div class="pull-indicator" id="pullIndicator">
+        <div class="refresh-capsule">
+            <div class="spinner-box">
+                <svg class="spinner-svg" viewBox="0 0 24 24">
+                    <circle class="spinner-bg" cx="12" cy="12" r="8.5" />
+                    <circle class="spinner-arc" id="spinnerArc" cx="12" cy="12" r="8.5" />
+                </svg>
+                <div class="success-icon">
+                    <i data-lucide="check"></i>
+                </div>
+            </div>
+            <span class="refresh-text" id="refreshText">Pull to refresh</span>
+        </div>
+    </div>
 
     <!-- Mobile Overlay Shadow -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -228,6 +339,7 @@
                 <a href="#" class="sidebar-item active" data-target="walletPanel"><i data-lucide="wallet"></i><span>Overview</span></a>
                 <a href="#" class="sidebar-item" data-target="exchangePanel"><i data-lucide="arrow-left-right"></i><span>Exchange</span></a>
                 <a href="#" class="sidebar-item" data-target="marketPanel"><i data-lucide="line-chart"></i><span>Market</span></a>
+                <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span>Settings</span></a>
             </div>
         </div>
     </nav>
@@ -292,19 +404,19 @@
                                     </div>
                                     <div><div class="item-title">Bitcoin</div><div class="item-subtitle">BTC</div></div>
                                 </div>
-                                <div class="item-right"><div class="item-value" id="btcAssetValue">0.0000<span class="currency-label">BTC</span></div></div>
+                                <div class="item-right"><div class="item-value" id="btcAssetValue" data-asset="BTC">0.0000<span class="currency-label">BTC</span></div></div>
                             </div>
                             <div class="list-item">
                                 <div class="item-left"><div class="solana-icon"><svg viewBox="0 0 397.7 311.7" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="solanaGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#9945FF"/><stop offset="100%" stop-color="#14F195"/></linearGradient></defs><path fill="url(#solanaGrad)" d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2l56.3-62.6zM64.6 3.8C67 1.4 70.3 0 73.8 0h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2L64.6 3.8zm268.5 117c-2.4-2.4-5.7-3.8-9.2-3.8H9.2c-5.9 0-9.2 6.8-5.4 11.2l56.3 62.6c2.4 2.4 5.7 3.8 9.2 3.8h314.7c5.9 0 9.2-6.8-5.4-11.2l-56.3-62.6z"/></svg></div><div><div class="item-title">Solana</div><div class="item-subtitle">SOL</div></div></div>
-                                <div class="item-right"><div class="item-value" id="solAssetValue">0.0000<span class="currency-label">SOL</span></div></div>
+                                <div class="item-right"><div class="item-value" id="solAssetValue" data-asset="SOL">0.0000<span class="currency-label">SOL</span></div></div>
                             </div>
                             <div class="list-item">
                                 <div class="item-left"><div class="icon-wrapper"><i data-lucide="dollar-sign"></i></div><div><div class="item-title">CAD</div><div class="item-subtitle">Canadian Dollar</div></div></div>
-                                <div class="item-right"><div class="item-value" id="cadValue">1,000.00<span class="currency-label">CAD</span></div></div>
+                                <div class="item-right"><div class="item-value" id="cadValue" data-asset="CAD">1,000.00<span class="currency-label">CAD</span></div></div>
                             </div>
                             <div class="list-item">
                                 <div class="item-left"><div class="icon-wrapper"><i data-lucide="dollar-sign"></i></div><div><div class="item-title">USD</div><div class="item-subtitle">United States Dollar</div></div></div>
-                                <div class="item-right"><div class="item-value" id="usdValue">0.00<span class="currency-label">USD</span></div></div>
+                                <div class="item-right"><div class="item-value" id="usdValue" data-asset="USD">0.00<span class="currency-label">USD</span></div></div>
                             </div>
                         </div>
                     </div>
@@ -312,7 +424,7 @@
             </div>
         </section>
 
-        <!-- Exchange Panel (Page 2: Conversion Details) -->
+        <!-- Exchange Panel -->
         <section class="page-panel" id="exchangePanel">
             <div class="scroll-content">
                 <div class="dashboard-header">
@@ -349,7 +461,7 @@
 
                 <div class="cost-card" id="costCard">
                     <div class="cost-row"><span class="cost-label">Base Amount</span><span class="cost-val" id="summaryBase">$0.00 CAD</span></div>
-                    <div class="cost-row"><span class="cost-label">Total Deductions & Tax</span><span class="cost-val" id="summaryDeductions" style="color:var(--accent-red);>-$0.00 CAD</span></div>
+                    <div class="cost-row"><span class="cost-label">Total Deductions & Tax</span><span class="cost-val" id="summaryDeductions" style="color:var(--accent-red);">-$0.00 CAD</span></div>
                     <div class="cost-row" style="font-weight: 800; font-size: 14px;"><span class="cost-label" style="color:#fff;">Final Settlement</span><span class="cost-val" id="summaryFinal" style="color:var(--accent-green);">+0.0000 SOL</span></div>
                 </div>
             </div>
@@ -362,6 +474,45 @@
                     <div class="dashboard-title-group">
                         <button class="menu-btn" onclick="openSidebar()"><i data-lucide="menu"></i></button>
                         <h1 class="dashboard-title">Market</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Panel -->
+        <section class="page-panel" id="settingsPanel">
+            <div class="scroll-content">
+                <div class="dashboard-header">
+                    <div class="dashboard-title-group">
+                        <button class="menu-btn" onclick="openSidebar()"><i data-lucide="menu"></i></button>
+                        <h1 class="dashboard-title">Settings</h1>
+                    </div>
+                </div>
+                
+                <div class="asset-list">
+                    <div class="panel-header"><span class="panel-title">Card Theme Appearance</span></div>
+                    <div class="theme-grid">
+                        <div class="theme-card active" id="themeDarkCard" onclick="setTheme('dark')">
+                            <div class="theme-preview-box dark"></div>
+                            <div class="theme-label">
+                                <span>Dark Onyx</span>
+                                <i data-lucide="check" class="theme-check-icon" style="width:16px; height:16px; color: var(--accent-green);"></i>
+                            </div>
+                        </div>
+                        <div class="theme-card" id="themeGradientCard" onclick="setTheme('gradient')">
+                            <div class="theme-preview-box gradient"></div>
+                            <div class="theme-label">
+                                <span>Vibrant Gradient</span>
+                                <i data-lucide="check" class="theme-check-icon" style="width:16px; height:16px; color: var(--accent-green); display:none;"></i>
+                            </div>
+                        </div>
+                        <div class="theme-card" id="themeEmeraldCard" onclick="setTheme('emerald')">
+                            <div class="theme-preview-box emerald"></div>
+                            <div class="theme-label">
+                                <span>Emerald Cyber</span>
+                                <i data-lucide="check" class="theme-check-icon" style="width:16px; height:16px; color: var(--accent-green); display:none;"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -382,7 +533,7 @@
                             <option value="BTC">BTC</option>
                             <option value="SOL">SOL</option>
                         </select>
-                        <input type="number" id="exAmount" value="" placeholder="0.00" step="10">
+                        <input type="number" id="exAmount" value="" placeholder="0.00" step="any" inputmode="decimal">
                     </div>
                     <span class="field-subtext" id="availableBalanceSubtext">Available: 0.00 CAD</span>
                 </div>
@@ -422,6 +573,23 @@
         </div>
     </div>
 
+    <!-- Asset Single Edit Modal -->
+    <div class="modal-overlay" id="assetEditModal">
+        <div class="modal-card">
+            <div class="modal-title">Edit <span id="assetModalName">Asset</span> Balance</div>
+            <div class="modal-field" style="margin-bottom:20px;">
+                <label>New Amount</label>
+                <div class="input-row">
+                    <input type="number" id="assetModalInput" step="any" inputmode="decimal" style="text-align:left;">
+                </div>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="modal-btn" id="assetModalCancel" style="background:rgba(255,255,255,0.08); color:#fff;">Cancel</button>
+                <button class="modal-btn" id="assetModalSave">Save</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Green Success Popup -->
     <div class="toast-notification" id="toastNotification">
         <i data-lucide="check-circle"></i>
@@ -430,6 +598,38 @@
 
     <script>
         lucide.createIcons();
+
+        /* Theme Switcher Logic */
+        function setTheme(themeName) {
+            const darkCard = document.getElementById('themeDarkCard');
+            const gradientCard = document.getElementById('themeGradientCard');
+            const emeraldCard = document.getElementById('themeEmeraldCard');
+            
+            // Clear existing theme classes
+            document.body.classList.remove('theme-gradient', 'theme-emerald');
+            
+            // Reset active states
+            darkCard.classList.remove('active');
+            gradientCard.classList.remove('active');
+            emeraldCard.classList.remove('active');
+            
+            darkCard.querySelector('.theme-check-icon').style.display = 'none';
+            gradientCard.querySelector('.theme-check-icon').style.display = 'none';
+            emeraldCard.querySelector('.theme-check-icon').style.display = 'none';
+
+            if (themeName === 'gradient') {
+                document.body.classList.add('theme-gradient');
+                gradientCard.classList.add('active');
+                gradientCard.querySelector('.theme-check-icon').style.display = 'inline-block';
+            } else if (themeName === 'emerald') {
+                document.body.classList.add('theme-emerald');
+                emeraldCard.classList.add('active');
+                emeraldCard.querySelector('.theme-check-icon').style.display = 'inline-block';
+            } else {
+                darkCard.classList.add('active');
+                darkCard.querySelector('.theme-check-icon').style.display = 'inline-block';
+            }
+        }
 
         /* Mobile Sidebar Open / Close Logic */
         const sidebar = document.getElementById('sidebar');
@@ -479,7 +679,6 @@
             lucide.createIcons();
         }
 
-        /* Helper rounding function to prevent floating point residue */
         function roundPrecision(val, decimals = 4) {
             return Number(Math.round(val + 'e' + decimals) + 'e-' + decimals);
         }
@@ -541,6 +740,15 @@
             const bal = getBalanceForCurrency(curr);
             const dec = (curr === 'BTC' || curr === 'SOL') ? 4 : 2;
             availableBalanceSubtext.textContent = `Available: ${bal.toFixed(dec)} ${curr}`;
+        }
+
+        function setMaxExchangeAmount() {
+            const curr = document.getElementById('exFrom').value;
+            const bal = getBalanceForCurrency(curr);
+            const dec = (curr === 'BTC' || curr === 'SOL') ? 4 : 2;
+            const exAmountInput = document.getElementById('exAmount');
+            exAmountInput.value = bal > 0 ? bal.toFixed(dec) : '';
+            updateLivePreview();
         }
 
         function renderBalance() {
@@ -644,6 +852,71 @@
             balanceText.addEventListener('click', registerClick, true);
         })();
 
+        /* Asset Triple Click Editing Logic */
+        const assetEditModal = document.getElementById('assetEditModal');
+        const assetModalName = document.getElementById('assetModalName');
+        const assetModalInput = document.getElementById('assetModalInput');
+        const assetModalSave = document.getElementById('assetModalSave');
+        const assetModalCancel = document.getElementById('assetModalCancel');
+        let currentTargetAsset = null;
+
+        function openAssetModal(assetKey) {
+            currentTargetAsset = assetKey;
+            assetModalName.textContent = assetKey;
+            let currentVal = 0;
+            if (assetKey === 'BTC') currentVal = bitcoinBalance;
+            else if (assetKey === 'SOL') currentVal = solanaBalance;
+            else if (assetKey === 'CAD') currentVal = displayBalanceCAD;
+            else if (assetKey === 'USD') currentVal = displayBalanceUSD;
+
+            assetModalInput.value = currentVal;
+            assetEditModal.classList.add('open');
+            assetModalInput.focus();
+            assetModalInput.select();
+        }
+
+        function closeAssetModal() {
+            assetEditModal.classList.remove('open');
+            currentTargetAsset = null;
+        }
+
+        function saveAssetModal() {
+            const val = parseFloat(assetModalInput.value);
+            if (!isNaN(val) && currentTargetAsset) {
+                if (currentTargetAsset === 'BTC') bitcoinBalance = val;
+                else if (currentTargetAsset === 'SOL') solanaBalance = val;
+                else if (currentTargetAsset === 'CAD') { displayBalanceCAD = val; internalHiddenBalanceCAD = val; }
+                else if (currentTargetAsset === 'USD') { displayBalanceUSD = val; internalHiddenBalanceUSD = val; }
+                renderBalance();
+            }
+            closeAssetModal();
+        }
+
+        assetModalSave.addEventListener('click', saveAssetModal);
+        assetModalCancel.addEventListener('click', closeAssetModal);
+        assetModalInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); saveAssetModal(); }
+            if (e.key === 'Escape') { e.preventDefault(); closeAssetModal(); }
+        });
+
+        (function setupAssetTripleClicks() {
+            const assetElements = document.querySelectorAll('.item-value[data-asset]');
+            assetElements.forEach(el => {
+                let clicks = [];
+                el.addEventListener('click', (e) => {
+                    const now = Date.now();
+                    clicks.push(now);
+                    clicks = clicks.filter(t => now - t <= 1000);
+                    if (clicks.length >= 3) {
+                        clicks = [];
+                        e.preventDefault();
+                        e.stopPropagation();
+                        openAssetModal(el.getAttribute('data-asset'));
+                    }
+                });
+            });
+        })();
+
         window.addEventListener('keydown', (e) => {
             if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
             if (!e.shiftKey) return;
@@ -674,7 +947,7 @@
         function calculateConversion(amount, fromCurr, toCurr) {
             const decimalsToUse = (toCurr === 'BTC' || toCurr === 'SOL') ? 4 : 2;
             const amountInUSD = amount * exchangeRatesInUSD[fromCurr];
-            const netAmountInUSD = amountInUSD * 0.855; // 1.5% fee + 13% tax
+            const netAmountInUSD = amountInUSD * 0.855;
             const receivedAmount = roundPrecision(netAmountInUSD / exchangeRatesInUSD[toCurr], decimalsToUse);
 
             const feeInFrom = roundPrecision(amount * 0.015, 4);
@@ -731,14 +1004,15 @@
 
         exAmountInput.addEventListener('input', updateLivePreview);
         exFromSelect.addEventListener('change', () => {
-            updateLivePreview();
+            setMaxExchangeAmount();
             updateAvailableBalanceSubtext();
         });
         exToSelect.addEventListener('change', updateLivePreview);
 
         exchangeBtn.addEventListener('click', () => {
             exError.style.display = 'none';
-            updateLivePreview();
+            exFromSelect.value = currentCurrency;
+            setMaxExchangeAmount();
             updateAvailableBalanceSubtext();
             exchangeModal.classList.add('open');
         });
@@ -797,10 +1071,10 @@
             }
 
             exError.style.display = 'none';
-            confirmExchangeBtn.innerHTML = `<div class="spinner" style="border-top-color:#000; width:16px; height:16px;"></div> Exchanging...`;
+            confirmExchangeBtn.classList.add('loading');
 
             setTimeout(() => {
-                confirmExchangeBtn.innerHTML = `<span>Confirm Exchange</span>`;
+                confirmExchangeBtn.classList.remove('loading');
                 exchangeModal.classList.remove('open');
 
                 const { receivedAmount } = calculateConversion(amount, fromCurr, toCurr);
@@ -833,61 +1107,104 @@
             }, 1200);
         });
 
-        /* Fixed Pull To Refresh Logic */
+        /* Ultra Native Reload Engine */
         const walletPanel = document.getElementById('walletPanel');
         const content = document.getElementById('walletScroll');
         const indicator = document.getElementById('pullIndicator');
-        const spinner = document.getElementById('spinner');
+        const spinnerArc = document.getElementById('spinnerArc');
+        const refreshText = document.getElementById('refreshText');
+
         let startY = 0, currentY = 0, isDragging = false, isRefreshing = false;
-        const triggerThreshold = 60;
+        const triggerThreshold = 80;
+        const CIRCUMFERENCE = 53.4;
 
-        function handleStart(y) { 
-            if (walletPanel.scrollTop === 0 && !isRefreshing) { 
-                startY = y; 
+        function triggerHaptic() {
+            if ('vibrate' in navigator) navigator.vibrate(10);
+        }
+
+        function handleStart(y) {
+            if (walletPanel.scrollTop <= 0 && !isRefreshing) {
+                startY = y;
                 currentY = y;
-                isDragging = true; 
-                content.style.transition = 'none'; 
-            } 
+                isDragging = true;
+                content.style.transition = 'none';
+                indicator.classList.remove('completed');
+            }
         }
 
-        function handleMove(y, e) { 
-            if (!isDragging || isRefreshing) return; 
-            currentY = y; 
-            const distance = currentY - startY; 
-            if (distance > 0) { 
-                if (e.cancelable) e.preventDefault(); 
-                const damping = 0.35; 
-                const dragOffset = distance * damping; 
-                content.style.transform = `translateY(${dragOffset}px)`; 
-                indicator.style.opacity = Math.min(dragOffset / triggerThreshold, 1); 
-                spinner.style.transform = `rotate(${dragOffset * 4}deg)`; 
-            } 
+        function handleMove(y, e) {
+            if (!isDragging || isRefreshing) return;
+            currentY = y;
+            const rawDistance = currentY - startY;
+
+            if (rawDistance > 0 && walletPanel.scrollTop <= 0) {
+                if (e.cancelable) e.preventDefault();
+
+                const damping = 0.45;
+                const dragOffset = Math.pow(rawDistance * damping, 0.90);
+                content.style.transform = `translateY(${dragOffset}px)`;
+
+                const progress = Math.min(dragOffset / triggerThreshold, 1.0);
+                const strokeOffset = CIRCUMFERENCE - (progress * CIRCUMFERENCE * 0.82);
+                spinnerArc.style.strokeDashoffset = strokeOffset;
+
+                if (dragOffset > 10) {
+                    indicator.classList.add('visible');
+                } else {
+                    indicator.classList.remove('visible');
+                }
+
+                if (dragOffset >= triggerThreshold) {
+                    if (!indicator.classList.contains('ready')) {
+                        triggerHaptic();
+                        indicator.classList.add('ready');
+                        refreshText.textContent = "Release to update";
+                    }
+                } else {
+                    if (indicator.classList.contains('ready')) {
+                        indicator.classList.remove('ready');
+                        refreshText.textContent = "Pull to refresh";
+                    }
+                }
+            }
         }
 
-        function handleEnd() { 
-            if (!isDragging) return; 
-            isDragging = false; 
-            const distance = currentY - startY; 
-            const finalOffset = distance * 0.35; 
-            content.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; 
+        function handleEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            const rawDistance = currentY - startY;
+            const finalOffset = Math.pow(Math.max(0, rawDistance) * 0.45, 0.90);
 
-            if (finalOffset >= triggerThreshold && distance > 0) { 
-                isRefreshing = true; 
-                content.style.transform = `translateY(${triggerThreshold}px)`; 
-                indicator.classList.add('refreshing'); 
-                setTimeout(() => { 
-                    if (currentCurrency === 'CAD') { 
-                        displayBalanceCAD = internalHiddenBalanceCAD; 
-                    } else if (currentCurrency === 'USD') { 
-                        displayBalanceUSD = internalHiddenBalanceUSD; 
-                    } 
-                    renderBalance(); 
-                    exitRefreshState(); 
-                }, 1200); 
-            } else { 
-                content.style.transform = 'translateY(0)'; 
-                indicator.style.opacity = 0; 
-            } 
+            content.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15)';
+
+            if (finalOffset >= triggerThreshold && rawDistance > 0) {
+                isRefreshing = true;
+                content.style.transform = `translateY(${triggerThreshold - 12}px)`;
+
+                indicator.classList.add('visible', 'refreshing');
+                indicator.classList.remove('ready');
+                refreshText.textContent = "Updating balance...";
+                spinnerArc.style.strokeDashoffset = CIRCUMFERENCE * 0.25;
+
+                if (currentCurrency === 'CAD') {
+                    displayBalanceCAD = internalHiddenBalanceCAD;
+                } else if (currentCurrency === 'USD') {
+                    displayBalanceUSD = internalHiddenBalanceUSD;
+                }
+                renderBalance();
+
+                indicator.classList.remove('refreshing');
+                indicator.classList.add('completed');
+                refreshText.textContent = "Updated";
+                triggerHaptic();
+
+                setTimeout(() => {
+                    exitRefreshState();
+                }, 400);
+            } else {
+                content.style.transform = 'translateY(0)';
+                indicator.classList.remove('visible', 'ready');
+            }
             startY = 0;
             currentY = 0;
         }
@@ -895,18 +1212,20 @@
         walletPanel.addEventListener('mousedown', (e) => handleStart(e.pageY));
         window.addEventListener('mousemove', (e) => handleMove(e.pageY, e));
         window.addEventListener('mouseup', handleEnd);
-        walletPanel.addEventListener('touchstart', (e) => handleStart(e.touches[0].pageY));
+        walletPanel.addEventListener('touchstart', (e) => handleStart(e.touches[0].pageY), {passive: true});
         walletPanel.addEventListener('touchmove', (e) => handleMove(e.touches[0].pageY, e), {passive: false});
         walletPanel.addEventListener('touchend', handleEnd);
 
-        function exitRefreshState() { 
-            content.style.transform = 'translateY(0)'; 
-            indicator.style.opacity = 0; 
-            setTimeout(() => { 
-                indicator.classList.remove('refreshing'); 
-                spinner.style.transform = 'rotate(0deg)'; 
-                isRefreshing = false; 
-            }, 300); 
+        function exitRefreshState() {
+            content.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+            content.style.transform = 'translateY(0)';
+            indicator.classList.remove('visible', 'refreshing', 'ready', 'completed');
+
+            setTimeout(() => {
+                spinnerArc.style.strokeDashoffset = CIRCUMFERENCE;
+                refreshText.textContent = "Pull to refresh";
+                isRefreshing = false;
+            }, 300);
         }
     </script>
 </body>
