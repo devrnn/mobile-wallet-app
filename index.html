@@ -12,39 +12,55 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        :root {
+            --bg-main: #070709;
+            --bg-sidebar: #0c0c0e;
+            --bg-card: #111115;
+            --bg-input: #18181d;
+            --border-subtle: rgba(255, 255, 255, 0.05);
+            --border-hover: rgba(255, 255, 255, 0.12);
+            --text-main: #ffffff;
+            --text-muted: #7a7a83;
+            --accent-green: #34d399;
+            --accent-red: #f87171;
+            --card-gradient: radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.15) 0%, transparent 45%), linear-gradient(135deg, #1e1e24 0%, #111115 100%);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; user-select: none; -webkit-tap-highlight-color: transparent; }
-        html, body { height: 100%; }
-        body { background-color: #070709; color: #ffffff; display: flex; height: 100vh; width: 100vw; overflow: hidden; position: relative; }
+        html, body { height: 100%; background-color: var(--bg-main); }
+        body { color: var(--text-main); display: flex; height: 100vh; width: 100vw; overflow: hidden; position: relative; }
 
         /* ---------- Sidebar & Drawer Layout ---------- */
-        .sidebar { width: 240px; background-color: #0c0c0e; border-right: 1px solid rgba(255, 255, 255, 0.04); padding: 32px 20px; display: flex; flex-direction: column; justify-content: space-between; flex-shrink: 0; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 90; }
+        .sidebar { width: 240px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-subtle); padding: 32px 20px; display: flex; flex-direction: column; justify-content: space-between; flex-shrink: 0; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 90; }
         
         /* Mobile Overlay & Mobile Drawer Rules */
-        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 80; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 80; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
 
         @media (max-width: 768px) {
-            .sidebar { position: fixed; top: 0; bottom: 0; left: 0; transform: translateX(-100%); box-shadow: 20px 0 40px rgba(0,0,0,0.5); }
+            .sidebar { position: fixed; top: 0; bottom: 0; left: 0; transform: translateX(-100%); box-shadow: 20px 0 40px rgba(0,0,0,0.8); }
             .sidebar.open { transform: translateX(0); }
             .menu-btn { display: flex !important; }
             .sidebar-close-btn { display: flex !important; }
         }
 
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .sidebar-close-btn { display: none; background: transparent; border: none; color: #7a7a83; cursor: pointer; padding: 6px; border-radius: 8px; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .sidebar-close-btn { display: none; background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: 8px; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .sidebar-close-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.06); }
 
         .sidebar-group { margin-bottom: 30px; }
         .sidebar-label { font-size: 10px; text-transform: uppercase; font-weight: 700; color: #4a4a52; letter-spacing: 0.9px; padding-left: 12px; margin-bottom: 12px; }
-        .sidebar-item { display: flex; align-items: center; gap: 12px; color: #7a7a83; text-decoration: none; font-size: 13.5px; font-weight: 500; padding: 11px 12px; border-radius: 12px; margin-bottom: 4px; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; }
+        .sidebar-item { display: flex; align-items: center; gap: 12px; color: var(--text-muted); text-decoration: none; font-size: 13.5px; font-weight: 500; padding: 11px 12px; border-radius: 12px; margin-bottom: 4px; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; }
         .sidebar-item i { width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .sidebar-item:hover { color: #ffffff; background-color: rgba(255, 255, 255, 0.04); transform: translateX(2px); }
         .sidebar-item:hover i { transform: scale(1.1); }
-        .sidebar-item.active { background-color: #151518; color: #ffffff; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 4px 12px rgba(0,0,0,0.2); font-weight: 600; }
+        .sidebar-item.active { background-color: #151518; color: #ffffff; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 4px 12px rgba(0,0,0,0.4); font-weight: 600; }
 
         /* Mobile Menu Header Trigger */
         .menu-btn { display: none; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.07); color: #fff; width: 38px; height: 38px; border-radius: 11px; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
-        .menu-btn:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.12); transform: scale(1.02); }
+        .menu-btn:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--border-hover); transform: scale(1.02); }
         .menu-btn:active { transform: scale(0.96); }
         .menu-btn i { width: 18px; height: 18px; }
 
@@ -55,11 +71,11 @@
         .pull-indicator.refreshing .spinner { animation: spin 0.6s linear infinite; }
 
         /* ---------- Page ---------- */
-        .main-dashboard { flex: 1; height: 100%; overflow: hidden; background-color: #070709; position: relative; }
+        .main-dashboard { flex: 1; height: 100%; overflow: hidden; background-color: var(--bg-main); position: relative; }
         .page-panel { width: 100%; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; position: relative; display: none; opacity: 0; transform: translateY(8px); transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .page-panel.active { display: block; opacity: 1; transform: translateY(0); }
 
-        .scroll-content { padding: calc(40px + max(10px, env(safe-area-inset-top))) 28px 48px 28px; min-height: 100%; width: 100%; position: relative; z-index: 2; background-color: #070709; }
+        .scroll-content { padding: calc(40px + max(10px, env(safe-area-inset-top))) 28px 48px 28px; min-height: 100%; width: 100%; position: relative; z-index: 2; background-color: var(--bg-main); }
         @media (min-width: 769px) { .scroll-content { padding: 48px 56px; } }
         .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; gap: 16px; }
         .dashboard-title-group { display: flex; align-items: center; gap: 14px; }
@@ -68,130 +84,132 @@
         .top-row-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 24px; }
         @media (min-width: 900px) { .top-row-grid { grid-template-columns: 1.4fr 1fr; gap: 28px; margin-bottom: 28px; } }
 
-        /* ---------- Wallet balance card ---------- */
+        /* ---------- Unified Wallet balance card ---------- */
         .balance-card {
-            background:
-                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.18) 0%, transparent 50%),
-                linear-gradient(135deg, #2ea3e6 0%, #3b52d9 45%, #9333ea 100%);
+            background: var(--card-gradient);
             border-radius: 24px;
             padding: 28px;
             display: flex; flex-direction: column; justify-content: space-between;
             min-height: 236px;
-            box-shadow: 0 20px 50px -12px rgba(59, 82, 217, 0.45), 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255,255,255,0.25);
-            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: var(--card-shadow), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
             position: relative;
             overflow: hidden;
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .balance-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 24px 60px -10px rgba(59, 82, 217, 0.55), 0 10px 24px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255,255,255,0.3);
+            box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.15);
         }
         .balance-header-row { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
-        .balance-title-row { color: rgba(255, 255, 255, 0.85); font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; }
-        .wallet-selector { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; outline: none; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
-        .wallet-selector:hover { background: rgba(255, 255, 255, 0.25); border-color: rgba(255, 255, 255, 0.35); }
-        .wallet-selector:focus-visible { box-shadow: 0 0 0 3px rgba(255,255,255,0.4); }
-        .wallet-selector option { background-color: #121215; color: #ffffff; }
-        .main-balance { font-size: 42px; font-weight: 800; letter-spacing: -1.2px; margin: 12px 0 4px; color: #ffffff; font-variant-numeric: tabular-nums; text-shadow: 0 2px 20px rgba(0,0,0,0.2); position: relative; z-index: 1; cursor: pointer; width: fit-content; transition: opacity 0.15s ease; }
+        .balance-title-row { color: var(--text-muted); font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
+        .wallet-selector { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-hover); color: #ffffff; padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; outline: none; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .wallet-selector:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); }
+        .wallet-selector:focus-visible { box-shadow: 0 0 0 3px rgba(255,255,255,0.2); }
+        .wallet-selector option { background-color: var(--bg-card); color: #ffffff; }
+        .main-balance { font-size: 42px; font-weight: 800; letter-spacing: -1.2px; margin: 12px 0 4px; color: #ffffff; font-variant-numeric: tabular-nums; position: relative; z-index: 1; cursor: pointer; width: fit-content; transition: opacity 0.15s ease; }
         .main-balance:hover { opacity: 0.92; }
         .card-actions { display: flex; gap: 12px; position: relative; z-index: 1; }
-        .action-btn { flex: 1; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 13px 0; border-radius: 14px; font-size: 13px; font-weight: 600; letter-spacing: 0.1px; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .action-btn:hover { background: rgba(255, 255, 255, 0.25); border-color: rgba(255, 255, 255, 0.35); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.18); }
+        
+        .action-btn { flex: 1; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #ffffff; border: 1px solid var(--border-hover); padding: 13px 0; border-radius: 14px; font-size: 13px; font-weight: 600; letter-spacing: 0.1px; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); text-decoration: none; }
+        .action-btn:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(255, 255, 255, 0.25); transform: translateY(-1px); }
         .action-btn:active { transform: translateY(1px) scale(0.98); }
-        .action-btn:focus-visible { box-shadow: 0 0 0 3px rgba(255,255,255,0.4); }
+        .action-btn:focus-visible { box-shadow: 0 0 0 3px rgba(255,255,255,0.2); }
         .action-btn i { width: 15px; height: 15px; transition: transform 0.2s ease; }
         .action-btn:hover i { transform: scale(1.1); }
 
+        .action-btn.primary { background: #ffffff; color: #000000; border: 1px solid #ffffff; }
+        .action-btn.primary:hover { background: #e6e6e6; border-color: #e6e6e6; }
+
         /* ---------- Edit overlay ---------- */
-        .edit-panel { position: absolute; inset: 0; border-radius: 24px; background: rgba(10, 10, 14, 0.82); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 28px; opacity: 0; pointer-events: none; transform: scale(0.96); transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); z-index: 10; border: 1px solid rgba(255,255,255,0.1); }
+        .edit-panel { position: absolute; inset: 0; border-radius: 24px; background: rgba(12, 12, 15, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 28px; opacity: 0; pointer-events: none; transform: scale(0.96); transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); z-index: 10; border: 1px solid var(--border-hover); }
         .edit-panel.open { opacity: 1; pointer-events: auto; transform: scale(1); }
-        .edit-panel-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; color: rgba(255,255,255,0.6); margin-bottom: 2px; display: flex; align-items: center; gap: 7px; }
+        .edit-panel-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; color: var(--text-muted); margin-bottom: 2px; display: flex; align-items: center; gap: 7px; }
         .edit-panel-title i { width: 13px; height: 13px; }
         .edit-row { display: flex; flex-direction: column; gap: 6px; }
-        .edit-row label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: rgba(255,255,255,0.6); font-weight: 700; display: flex; justify-content: space-between; }
-        .edit-unit { color: rgba(255,255,255,0.4); font-weight: 600; text-transform: none; letter-spacing: 0; }
-        .edit-row input { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 11px 14px; color: #fff; font-size: 15px; font-weight: 600; outline: none; font-variant-numeric: tabular-nums; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
-        .edit-row input:focus-visible { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 3px rgba(255,255,255,0.15); }
+        .edit-row label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); font-weight: 700; display: flex; justify-content: space-between; }
+        .edit-unit { color: rgba(255,255,255,0.3); font-weight: 600; text-transform: none; letter-spacing: 0; }
+        .edit-row input { background: var(--bg-input); border: 1px solid var(--border-hover); border-radius: 12px; padding: 11px 14px; color: #fff; font-size: 15px; font-weight: 600; outline: none; font-variant-numeric: tabular-nums; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .edit-row input:focus-visible { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.08); box-shadow: 0 0 0 3px rgba(255,255,255,0.1); }
         .edit-actions { display: flex; gap: 10px; margin-top: 4px; }
-        .edit-btn { flex: 1; padding: 11px 0; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0.2px; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
-        .edit-btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); transform: translateY(-1px); }
+        .edit-btn { flex: 1; padding: 11px 0; border-radius: 12px; border: 1px solid var(--border-hover); background: rgba(255,255,255,0.04); color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0.2px; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .edit-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); transform: translateY(-1px); }
         .edit-btn:active { transform: translateY(1px) scale(0.98); }
-        .edit-btn:focus-visible { box-shadow: 0 0 0 3px rgba(255,255,255,0.3); }
+        .edit-btn:focus-visible { box-shadow: 0 0 0 3px rgba(255,255,255,0.2); }
         .edit-btn.save { background: #ffffff; color: #0a0a0c; border-color: transparent; }
-        .edit-btn.save:hover { background: #f0f0f0; box-shadow: 0 4px 16px rgba(255,255,255,0.25); }
+        .edit-btn.save:hover { background: #f0f0f0; }
 
         /* ---------- Panels ---------- */
-        .activity-panel { background-color: #111115; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.045); padding: 24px; margin-bottom: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); display: none; transition: transform 0.2s ease; }
-        .asset-list { background-color: #111115; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.045); padding: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); }
+        .activity-panel { background-color: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-subtle); padding: 24px; margin-bottom: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); display: none; transition: transform 0.2s ease; }
+        .asset-list { background-color: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-subtle); padding: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); }
         .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
         .panel-title { font-size: 11px; color: #5a5a65; font-weight: 700; text-transform: uppercase; letter-spacing: 0.9px; }
         
-        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 13px 12px; margin: 0 -12px; border-radius: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.035); transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 13px 12px; margin: 0 -12px; border-radius: 12px; border-bottom: 1px solid var(--border-subtle); transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .list-item:hover { background-color: rgba(255, 255, 255, 0.025); transform: translateX(2px); }
         .list-item:last-child { border-bottom: none; }
         .item-left { display: flex; align-items: center; gap: 14px; }
-        .icon-wrapper { width: 38px; height: 38px; border-radius: 12px; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.05); color: #ffffff; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); flex-shrink: 0; transition: transform 0.2s ease; }
+        .icon-wrapper { width: 38px; height: 38px; border-radius: 12px; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.04); color: #ffffff; border: 1px solid var(--border-subtle); flex-shrink: 0; transition: transform 0.2s ease; }
         .list-item:hover .icon-wrapper { transform: scale(1.05); }
         .icon-wrapper i { width: 16px; height: 16px; }
         
-        .bitcoin-icon { width: 38px; height: 38px; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; transition: transform 0.2s ease; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); }
+        .bitcoin-icon { width: 38px; height: 38px; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; transition: transform 0.2s ease; overflow: hidden; border: 1px solid var(--border-subtle); }
         .list-item:hover .bitcoin-icon { transform: scale(1.05); }
         .bitcoin-icon svg { width: 38px; height: 38px; }
         
-        .solana-icon { width: 38px; height: 38px; border-radius: 12px; background: #000000; display: flex; justify-content: center; align-items: center; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); transition: transform 0.2s ease; }
+        .solana-icon { width: 38px; height: 38px; border-radius: 12px; background: #000000; display: flex; justify-content: center; align-items: center; flex-shrink: 0; border: 1px solid var(--border-hover); transition: transform 0.2s ease; }
         .list-item:hover .solana-icon { transform: scale(1.05); }
         .solana-icon svg { width: 22px; height: 22px; }
         
         .item-title { font-size: 13.5px; font-weight: 600; color: #ffffff; letter-spacing: -0.1px; }
-        .item-subtitle { font-size: 11.5px; color: #7a7a83; margin-top: 2px; }
+        .item-subtitle { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
         .item-right { text-align: right; }
         .item-value { font-size: 13.5px; font-weight: 600; color: #ffffff; font-variant-numeric: tabular-nums; }
-        .item-value.neg { color: #f87171; }
-        .item-value.pos { color: #34d399; }
-        .currency-label { font-size: 11px; color: rgba(255, 255, 255, 0.5); font-weight: 500; margin-left: 4px; }
+        .item-value.neg { color: var(--accent-red); }
+        .item-value.pos { color: var(--accent-green); }
+        .currency-label { font-size: 11px; color: rgba(255, 255, 255, 0.4); font-weight: 500; margin-left: 4px; }
 
         /* ---------- Exchange Modal & Popups ---------- */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .modal-overlay.open { opacity: 1; pointer-events: auto; }
-        .modal-card { background: #121216; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; width: 90%; max-width: 380px; padding: 26px; box-shadow: 0 24px 60px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255,255,255,0.08); position: relative; transform: scale(0.95) translateY(10px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .modal-card { background: var(--bg-card); border: 1px solid var(--border-hover); border-radius: 24px; width: 90%; max-width: 380px; padding: 26px; box-shadow: 0 24px 60px rgba(0,0,0,0.8); position: relative; transform: scale(0.95) translateY(10px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .modal-overlay.open .modal-card { transform: scale(1) translateY(0); }
         .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 20px; text-align: center; color: #fff; letter-spacing: -0.3px; }
         
         .swap-inputs { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; position: relative; }
-        .modal-field { background: #18181d; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 12px 14px; transition: all 0.2s ease; }
-        .modal-field:focus-within { border-color: rgba(255,255,255,0.2); background: #1c1c22; box-shadow: 0 0 0 3px rgba(255,255,255,0.06); }
-        .modal-field label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: #7a7a83; font-weight: 700; margin-bottom: 6px; }
+        .modal-field { background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px 14px; transition: all 0.2s ease; }
+        .modal-field:focus-within { border-color: var(--border-hover); background: #1c1c22; box-shadow: 0 0 0 3px rgba(255,255,255,0.03); }
+        .modal-field label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); font-weight: 700; margin-bottom: 6px; }
         .input-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
         .modal-field select { background: transparent; border: none; color: #fff; font-size: 14px; font-weight: 600; outline: none; cursor: pointer; width: 100%; }
-        .modal-field select option { background-color: #141418; color: #fff; }
+        .modal-field select option { background-color: var(--bg-card); color: #fff; }
         .modal-field input { background: transparent; border: none; color: #fff; font-size: 16px; font-weight: 600; outline: none; width: 100%; text-align: right; font-variant-numeric: tabular-nums; }
         .modal-field input::placeholder { color: #4a4a52; }
-        .field-subtext { font-size: 11px; color: #7a7a83; font-weight: 500; margin-top: 8px; display: block; }
+        .field-subtext { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 8px; display: block; }
 
         /* Conversion Preview Breakdowns */
-        .preview-box { background: rgba(255, 255, 255, 0.025); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 14px; margin-bottom: 18px; display: flex; flex-direction: column; gap: 9px; }
-        .preview-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 600; color: #8a8a95; }
-        .preview-row.highlight { color: #ffffff; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-top: 2px; }
-        .live-preview-val { color: #34d399; font-weight: 700; font-size: 13.5px; }
+        .preview-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px; margin-bottom: 18px; display: flex; flex-direction: column; gap: 9px; }
+        .preview-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 600; color: var(--text-muted); }
+        .preview-row.highlight { color: #ffffff; font-weight: 700; border-top: 1px solid var(--border-subtle); padding-top: 8px; margin-top: 2px; }
+        .live-preview-val { color: var(--accent-green); font-weight: 700; font-size: 13.5px; }
 
-        .error-text { color: #f87171; font-size: 12px; font-weight: 600; margin-bottom: 14px; text-align: center; display: none; }
+        .error-text { color: var(--accent-red); font-size: 12px; font-weight: 600; margin-bottom: 14px; text-align: center; display: none; }
         
-        .modal-btn { width: 100%; background: #ffffff; color: #0a0a0c; border: none; padding: 13px; border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 16px rgba(255,255,255,0.15); }
-        .modal-btn:hover { background: #f0f0f0; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,255,255,0.25); }
+        .modal-btn { width: 100%; background: #ffffff; color: #0a0a0c; border: none; padding: 13px; border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .modal-btn:hover { background: #f0f0f0; transform: translateY(-1px); }
         .modal-btn:active { transform: translateY(1px) scale(0.98); }
 
-        .toast-notification { position: fixed; top: 24px; right: 24px; background: #059669; color: #ffffff; padding: 14px 22px; border-radius: 14px; font-size: 13.5px; font-weight: 600; box-shadow: 0 12px 30px rgba(5, 150, 105, 0.35), inset 0 1px 1px rgba(255,255,255,0.3); display: flex; align-items: center; gap: 10px; z-index: 200; transform: translateY(-120px) scale(0.95); opacity: 0; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; }
+        .toast-notification { position: fixed; top: 24px; right: 24px; background: var(--bg-card); color: #ffffff; border: 1px solid var(--border-hover); padding: 14px 22px; border-radius: 14px; font-size: 13.5px; font-weight: 600; box-shadow: 0 12px 30px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 10px; z-index: 200; transform: translateY(-120px) scale(0.95); opacity: 0; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; }
         .toast-notification.show { transform: translateY(0) scale(1); opacity: 1; }
-        .toast-notification i { width: 18px; height: 18px; color: #ffffff; }
+        .toast-notification i { width: 18px; height: 18px; color: var(--accent-green); }
 
         /* Conversion Cost Breakdown Table */
-        .cost-card { background: #111115; border: 1px solid rgba(255,255,255,0.045); border-radius: 20px; padding: 22px; margin-top: 20px; display: none; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); }
-        .cost-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .cost-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 22px; margin-top: 20px; display: none; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); }
+        .cost-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; padding: 10px 0; border-bottom: 1px solid var(--border-subtle); }
         .cost-row:last-child { border-bottom: none; }
-        .cost-label { color: #7a7a83; }
+        .cost-label { color: var(--text-muted); }
         .cost-val { color: #fff; font-variant-numeric: tabular-nums; }
-        .empty-exchange-state { text-align: center; color: #7a7a83; font-size: 13.5px; padding: 40px 0; font-weight: 500; }
+        .empty-exchange-state { text-align: center; color: var(--text-muted); font-size: 13.5px; padding: 40px 0; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -237,7 +255,7 @@
                             <div class="main-balance" id="totalBalance">$1,000.00<span class="currency-label">CAD</span></div>
                         </div>
                         <div class="card-actions">
-                            <button class="action-btn" id="exchangeBtn"><i data-lucide="arrow-left-right"></i> Exchange</button>
+                            <button class="action-btn primary" id="exchangeBtn"><i data-lucide="arrow-left-right"></i> Exchange</button>
                             <a class="action-btn" id="transferBtn" href="https://mobile.rbcroyalbank.com/mb/mxweb/rbc/download-ip-en.html" target="_blank" rel="noopener noreferrer"><i data-lucide="arrow-up-right"></i> Transfer</a>
                         </div>
 
@@ -306,19 +324,19 @@
                 <div class="activity-panel" id="exchangeDetailsPanel" style="display:none;">
                     <div class="panel-header"><span class="panel-title">Conversion Fees & Purchases</span></div>
                     <div class="list-item">
-                        <div class="item-left"><div class="icon-wrapper" style="background:rgba(248, 113, 113, 0.1); color:#f87171;"><i data-lucide="arrow-up-right"></i></div><div><div class="item-title">Amount Sent</div><div class="item-subtitle">Exchange Base Amount</div></div></div>
+                        <div class="item-left"><div class="icon-wrapper" style="background:rgba(248, 113, 113, 0.08); color:var(--accent-red); border:none;"><i data-lucide="arrow-up-right"></i></div><div><div class="item-title">Amount Sent</div><div class="item-subtitle">Exchange Base Amount</div></div></div>
                         <div class="item-right"><div class="item-value neg" id="baseSentVal">- 0.00<span class="currency-label" id="baseSentCurrLabel">CAD</span></div></div>
                     </div>
                     <div class="list-item">
-                        <div class="item-left"><div class="icon-wrapper" style="background:rgba(248, 113, 113, 0.1); color:#f87171;"><i data-lucide="percent"></i></div><div><div class="item-title">Exchange Network Fee (1.5%)</div><div class="item-subtitle">Estimated Network Cost</div></div></div>
+                        <div class="item-left"><div class="icon-wrapper" style="background:rgba(248, 113, 113, 0.08); color:var(--accent-red); border:none;"><i data-lucide="percent"></i></div><div><div class="item-title">Exchange Network Fee (1.5%)</div><div class="item-subtitle">Estimated Network Cost</div></div></div>
                         <div class="item-right"><div class="item-value neg" id="feeVal">- $0.00<span class="currency-label" id="feeCurrLabel">CAD</span></div></div>
                     </div>
                     <div class="list-item">
-                        <div class="item-left"><div class="icon-wrapper" style="background:rgba(248, 113, 113, 0.1); color:#f87171;"><i data-lucide="receipt"></i></div><div><div class="item-title">Conversion Tax (13% HST)</div><div class="item-subtitle">Estimated Tax Charge</div></div></div>
+                        <div class="item-left"><div class="icon-wrapper" style="background:rgba(248, 113, 113, 0.08); color:var(--accent-red); border:none;"><i data-lucide="receipt"></i></div><div><div class="item-title">Conversion Tax (13% HST)</div><div class="item-subtitle">Estimated Tax Charge</div></div></div>
                         <div class="item-right"><div class="item-value neg" id="taxVal">- $0.00<span class="currency-label" id="taxCurrLabel">CAD</span></div></div>
                     </div>
                     <div class="list-item">
-                        <div class="item-left"><div class="icon-wrapper" style="background:rgba(248, 113, 113, 0.1); color:#f87171;"><i data-lucide="shopping-bag"></i></div><div><div class="item-title">Recent Purchase Deductions</div><div class="item-subtitle">Hardware & Scooter Parts</div></div></div>
+                        <div class="item-left"><div class="icon-wrapper" style="background:rgba(248, 113, 113, 0.08); color:var(--accent-red); border:none;"><i data-lucide="shopping-bag"></i></div><div><div class="item-title">Recent Purchase Deductions</div><div class="item-subtitle">Hardware & Scooter Parts</div></div></div>
                         <div class="item-right"><div class="item-value neg" id="purchaseVal">- $0.00<span class="currency-label" id="purchaseCurrLabel">CAD</span></div></div>
                     </div>
                     <div class="list-item">
@@ -331,8 +349,8 @@
 
                 <div class="cost-card" id="costCard">
                     <div class="cost-row"><span class="cost-label">Base Amount</span><span class="cost-val" id="summaryBase">$0.00 CAD</span></div>
-                    <div class="cost-row"><span class="cost-label">Total Deductions & Tax</span><span class="cost-val" id="summaryDeductions" style="color:#f87171;">-$0.00 CAD</span></div>
-                    <div class="cost-row" style="font-weight: 800; font-size: 14px;"><span class="cost-label" style="color:#fff;">Final Settlement</span><span class="cost-val" id="summaryFinal" style="color:#34d399;">+0.0000 SOL</span></div>
+                    <div class="cost-row"><span class="cost-label">Total Deductions & Tax</span><span class="cost-val" id="summaryDeductions" style="color:var(--accent-red);>-$0.00 CAD</span></div>
+                    <div class="cost-row" style="font-weight: 800; font-size: 14px;"><span class="cost-label" style="color:#fff;">Final Settlement</span><span class="cost-val" id="summaryFinal" style="color:var(--accent-green);">+0.0000 SOL</span></div>
                 </div>
             </div>
         </section>
