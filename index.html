@@ -815,25 +815,81 @@
             }, 1200);
         });
 
-        /* Pull to refresh */
+        /* Fixed Pull To Refresh Logic */
         const walletPanel = document.getElementById('walletPanel');
         const content = document.getElementById('walletScroll');
         const indicator = document.getElementById('pullIndicator');
         const spinner = document.getElementById('spinner');
-        let startY = 0, currentY = 0, isDragging = false;
+        let startY = 0, currentY = 0, isDragging = false, isRefreshing = false;
         const triggerThreshold = 60;
 
-        function handleStart(y) { if (walletPanel.scrollTop === 0 && !isRefreshing) { startY = y; isDragging = true; content.style.transition = 'none'; } }
-        function handleMove(y, e) { if (!isDragging || isRefreshing) return; currentY = y; const distance = currentY - startY; if (distance > 0) { if (e.cancelable) e.preventDefault(); const damping = 0.35; const dragOffset = distance * damping; content.style.transform = `translateY(${dragOffset}px)`; indicator.style.opacity = Math.min(dragOffset / triggerThreshold, 1); spinner.style.transform = `rotate(${dragOffset * 4}deg)`; } }
-        let isRefreshing = false;
-        function handleEnd() { if (!isDragging) return; isDragging = false; const distance = currentY - startY; const finalOffset = distance * 0.35; content.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; if (finalOffset >= triggerThreshold) { isRefreshing = true; content.style.transform = `translateY(${triggerThreshold}px)`; indicator.classList.add('refreshing'); setTimeout(() => { if (currentCurrency === 'CAD') { displayBalanceCAD = internalHiddenBalanceCAD; } else if (currentCurrency === 'USD') { displayBalanceUSD = internalHiddenBalanceUSD; } renderBalance(); exitRefreshState(); }, 1200); } else { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; } }
+        function handleStart(y) { 
+            if (walletPanel.scrollTop === 0 && !isRefreshing) { 
+                startY = y; 
+                currentY = y;
+                isDragging = true; 
+                content.style.transition = 'none'; 
+            } 
+        }
+
+        function handleMove(y, e) { 
+            if (!isDragging || isRefreshing) return; 
+            currentY = y; 
+            const distance = currentY - startY; 
+            if (distance > 0) { 
+                if (e.cancelable) e.preventDefault(); 
+                const damping = 0.35; 
+                const dragOffset = distance * damping; 
+                content.style.transform = `translateY(${dragOffset}px)`; 
+                indicator.style.opacity = Math.min(dragOffset / triggerThreshold, 1); 
+                spinner.style.transform = `rotate(${dragOffset * 4}deg)`; 
+            } 
+        }
+
+        function handleEnd() { 
+            if (!isDragging) return; 
+            isDragging = false; 
+            const distance = currentY - startY; 
+            const finalOffset = distance * 0.35; 
+            content.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; 
+
+            if (finalOffset >= triggerThreshold && distance > 0) { 
+                isRefreshing = true; 
+                content.style.transform = `translateY(${triggerThreshold}px)`; 
+                indicator.classList.add('refreshing'); 
+                setTimeout(() => { 
+                    if (currentCurrency === 'CAD') { 
+                        displayBalanceCAD = internalHiddenBalanceCAD; 
+                    } else if (currentCurrency === 'USD') { 
+                        displayBalanceUSD = internalHiddenBalanceUSD; 
+                    } 
+                    renderBalance(); 
+                    exitRefreshState(); 
+                }, 1200); 
+            } else { 
+                content.style.transform = 'translateY(0)'; 
+                indicator.style.opacity = 0; 
+            } 
+            startY = 0;
+            currentY = 0;
+        }
+
         walletPanel.addEventListener('mousedown', (e) => handleStart(e.pageY));
         window.addEventListener('mousemove', (e) => handleMove(e.pageY, e));
         window.addEventListener('mouseup', handleEnd);
         walletPanel.addEventListener('touchstart', (e) => handleStart(e.touches[0].pageY));
         walletPanel.addEventListener('touchmove', (e) => handleMove(e.touches[0].pageY, e), {passive: false});
         walletPanel.addEventListener('touchend', handleEnd);
-        function exitRefreshState() { content.style.transform = 'translateY(0)'; indicator.style.opacity = 0; setTimeout(() => { indicator.classList.remove('refreshing'); spinner.style.transform = 'rotate(0deg)'; isRefreshing = false; }, 300); }
+
+        function exitRefreshState() { 
+            content.style.transform = 'translateY(0)'; 
+            indicator.style.opacity = 0; 
+            setTimeout(() => { 
+                indicator.classList.remove('refreshing'); 
+                spinner.style.transform = 'rotate(0deg)'; 
+                isRefreshing = false; 
+            }, 300); 
+        }
     </script>
 </body>
 </html>
