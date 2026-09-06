@@ -401,7 +401,7 @@
         .modal-btn:hover { background: #f0f0f0; transform: translateY(-1px); }
         .modal-btn:active { transform: translateY(1px) scale(0.98); }
 
-        .toast-notification { position: fixed; top: 24px; right: 24px; background: var(--bg-card); color: #ffffff; border: 1px solid var(--border-hover); padding: 14px 22px; border-radius: 14px; font-size: 13.5px; font-weight: 600; box-shadow: 0 12px 30px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 10px; z-index: 200; transform: translateY(-120px) scale(0.95); opacity: 0; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; }
+        .toast-notification { position: fixed; top: max(24px, calc(env(safe-area-inset-top) + 16px)); right: 24px; background: var(--bg-card); color: #ffffff; border: 1px solid var(--border-hover); padding: 14px 22px; border-radius: 14px; font-size: 13.5px; font-weight: 600; box-shadow: 0 12px 30px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 10px; z-index: 200; transform: translateY(-120px) scale(0.95); opacity: 0; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; }
         .toast-notification.show { transform: translateY(0) scale(1); opacity: 1; }
         .toast-notification i { width: 18px; height: 18px; color: var(--accent-green); }
 
