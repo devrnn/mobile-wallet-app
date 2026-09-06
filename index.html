@@ -425,7 +425,6 @@
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
-            cursor: pointer;
         }
         .market-card:hover { transform: translateY(-3px); box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.9), inset 0 1px 1px rgba(255, 255, 255, 0.15); }
         
@@ -453,16 +452,29 @@
         .market-stat { display: flex; flex-direction: column; gap: 4px; }
         .market-stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); font-weight: 700; }
         .market-stat-value { font-size: 13px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
-        
-        .market-alert { display: flex; align-items: center; gap: 8px; background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.15); padding: 10px 12px; border-radius: 10px; margin-top: 14px; font-size: 11.5px; color: var(--accent-green); font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
-        .market-alert:hover { background: rgba(52, 211, 153, 0.14); }
-        .market-alert i { width: 14px; height: 14px; flex-shrink: 0; }
-        .market-alert.inactive { background: rgba(255, 255, 255, 0.03); border-color: rgba(255, 255, 255, 0.08); color: var(--text-muted); }
-        .market-alert.inactive:hover { background: rgba(255, 255, 255, 0.06); }
-        .market-alert.alerts-disabled-globally { opacity: 0.35; pointer-events: none; cursor: default; }
-        .market-alert.hidden-alert { display: none; }
 
-        .market-buy-btn { margin-top: 14px; width: 100%; }
+        /* Bell alert toggle - now just a small icon button in the card header */
+        .market-alert-bell {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .market-alert-bell:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
+        .market-alert-bell:active { transform: translateY(1px) scale(0.95); }
+        .market-alert-bell i { width: 16px; height: 16px; transition: transform 0.2s ease; }
+        .market-alert-bell.active { background: rgba(52, 211, 153, 0.15); border-color: rgba(52, 211, 153, 0.3); color: var(--accent-green); }
+        .market-alert-bell.disabled-global { opacity: 0.35; pointer-events: none; }
+
+        .market-buy-btn { margin-top: 18px; width: 100%; }
 
         /* Price tick animation */
         @keyframes tickUp { 0%{transform:translateY(0)} 50%{transform:translateY(-3px)} 100%{transform:translateY(0)} }
@@ -686,6 +698,9 @@
                                     <div class="market-coin-sub">BTC</div>
                                 </div>
                             </div>
+                            <button class="market-alert-bell" id="btcAlertBell" onclick="toggleCoinAlert('BTC', event)" title="Toggle price alerts" type="button">
+                                <i data-lucide="bell"></i>
+                            </button>
                         </div>
                         <div class="market-price" id="btcPrice">$95,000</div>
                         <div class="market-change">
@@ -701,10 +716,6 @@
                                 <div class="market-stat-label">24h Low</div>
                                 <div class="market-stat-value" id="btcLow">$92,800</div>
                             </div>
-                        </div>
-                        <div class="market-alert" id="btcAlert">
-                            <i data-lucide="bell"></i>
-                            <span>Price alerts enabled</span>
                         </div>
                         <button class="action-btn primary market-buy-btn" onclick="openBuyModal('BTC', event)"><i data-lucide="shopping-cart"></i> Buy BTC</button>
                     </div>
@@ -723,6 +734,9 @@
                                     <div class="market-coin-sub">SOL</div>
                                 </div>
                             </div>
+                            <button class="market-alert-bell" id="solAlertBell" onclick="toggleCoinAlert('SOL', event)" title="Toggle price alerts" type="button">
+                                <i data-lucide="bell-off"></i>
+                            </button>
                         </div>
                         <div class="market-price" id="solPrice">$92.50</div>
                         <div class="market-change">
@@ -738,10 +752,6 @@
                                 <div class="market-stat-label">24h Low</div>
                                 <div class="market-stat-value" id="solLow">$88.50</div>
                             </div>
-                        </div>
-                        <div class="market-alert inactive" id="solAlert">
-                            <i data-lucide="bell-off"></i>
-                            <span>Alerts disabled</span>
                         </div>
                         <button class="action-btn primary market-buy-btn" onclick="openBuyModal('SOL', event)"><i data-lucide="shopping-cart"></i> Buy SOL</button>
                     </div>
@@ -764,6 +774,9 @@
                                     <div class="market-coin-sub">ETH</div>
                                 </div>
                             </div>
+                            <button class="market-alert-bell" id="ethAlertBell" onclick="toggleCoinAlert('ETH', event)" title="Toggle price alerts" type="button">
+                                <i data-lucide="bell-off"></i>
+                            </button>
                         </div>
                         <div class="market-price" id="ethPrice">$3,200</div>
                         <div class="market-change">
@@ -779,10 +792,6 @@
                                 <div class="market-stat-label">24h Low</div>
                                 <div class="market-stat-value" id="ethLow">$3,100</div>
                             </div>
-                        </div>
-                        <div class="market-alert inactive" id="ethAlert">
-                            <i data-lucide="bell-off"></i>
-                            <span>Alerts disabled</span>
                         </div>
                         <button class="action-btn primary market-buy-btn" onclick="openBuyModal('ETH', event)"><i data-lucide="shopping-cart"></i> Buy ETH</button>
                     </div>
@@ -1352,6 +1361,7 @@
         /* Sidebar Navigation */
         const sidebarItems = document.querySelectorAll('.sidebar-item');
         const pagePanels = document.querySelectorAll('.page-panel');
+        let currentPanelId = 'walletPanel';
 
         sidebarItems.forEach(item => {
             item.addEventListener('click', (e) => {
@@ -1359,6 +1369,7 @@
                 sidebarItems.forEach(nav => nav.classList.remove('active'));
                 item.classList.add('active');
                 const targetId = item.getAttribute('data-target');
+                currentPanelId = targetId;
                 pagePanels.forEach(panel => {
                     panel.classList.toggle('active', panel.id === targetId);
                 });
@@ -1583,6 +1594,12 @@
 
         const exchangeRatesInUSD = { USD: 1.0, CAD: 0.74, BTC: 95000.0, SOL: 92.0, ETH: 3200.0 };
 
+        function showToast(message, duration = 3500) {
+            toastMessage.textContent = message;
+            toastNotification.classList.add('show');
+            setTimeout(() => toastNotification.classList.remove('show'), duration);
+        }
+
         /* ============================
            MARKET DATA & PRICE ENGINE
            ============================ */
@@ -1634,6 +1651,7 @@
 
             const direction = data.price >= oldPrice ? 'up' : 'down';
             updateCoinDisplay(coin, direction);
+            maybeShowPriceAlertToast(coin);
         }
 
         function updateCoinDisplay(coin, flashDir) {
@@ -1726,32 +1744,30 @@
         /* Price alerts state */
         let priceAlertsEnabled = { BTC: true, SOL: false, ETH: false };
         let globalAlertsOn = false; // tracks togglePriceAlerts setting
+        let lastAlertToastAt = { BTC: 0, SOL: 0, ETH: 0 };
+        const ALERT_TOAST_MIN_GAP_MS = 12000;
 
         function updateMarketAlerts() {
             ['BTC', 'SOL', 'ETH'].forEach(coin => {
-                const alertEl = document.getElementById(`${coin.toLowerCase()}Alert`);
-                if (!alertEl) return;
+                const bell = document.getElementById(`${coin.toLowerCase()}AlertBell`);
+                if (!bell) return;
 
-                if (!globalAlertsOn) {
-                    // When market price updates is OFF: hide the alert row entirely
-                    alertEl.classList.add('hidden-alert');
-                    return;
-                }
+                bell.classList.toggle('disabled-global', !globalAlertsOn);
 
-                alertEl.classList.remove('hidden-alert');
-
-                if (priceAlertsEnabled[coin]) {
-                    alertEl.classList.remove('inactive');
-                    alertEl.innerHTML = '<i data-lucide="bell"></i><span>Price alerts enabled</span>';
+                if (globalAlertsOn && priceAlertsEnabled[coin]) {
+                    bell.classList.add('active');
+                    bell.innerHTML = '<i data-lucide="bell"></i>';
+                    bell.title = 'Price alerts enabled';
                 } else {
-                    alertEl.classList.add('inactive');
-                    alertEl.innerHTML = '<i data-lucide="bell-off"></i><span>Alerts disabled</span>';
+                    bell.classList.remove('active');
+                    bell.innerHTML = '<i data-lucide="bell-off"></i>';
+                    bell.title = globalAlertsOn ? 'Price alerts disabled' : 'Enable Market Price Updates in Settings first';
                 }
             });
             lucide.createIcons();
         }
 
-        // Initially hide alerts (toggle is off by default)
+        // Initially reflect default state (global off)
         updateMarketAlerts();
 
         // Toggle price alerts master switch
@@ -1760,18 +1776,35 @@
             updateMarketAlerts();
         });
 
-        // Click card to toggle individual alert (only when global is on)
-        function handleCardAlertToggle(coin, evt) {
+        // Click the bell icon on a market card to toggle that coin's alert
+        function toggleCoinAlert(coin, evt) {
+            if (evt) evt.stopPropagation();
             if (!globalAlertsOn) return;
-            // Don't fire if user clicked the buy button
-            if (evt && evt.target.closest('.market-buy-btn')) return;
             priceAlertsEnabled[coin] = !priceAlertsEnabled[coin];
             updateMarketAlerts();
         }
 
-        document.getElementById('btcCard').addEventListener('click', (e) => handleCardAlertToggle('BTC', e));
-        document.getElementById('solCard').addEventListener('click', (e) => handleCardAlertToggle('SOL', e));
-        document.getElementById('ethCard').addEventListener('click', (e) => handleCardAlertToggle('ETH', e));
+        function maybeShowPriceAlertToast(coin) {
+            if (!globalAlertsOn || !priceAlertsEnabled[coin]) return;
+            if (currentPanelId === 'marketPanel') return; // don't nag while already looking at the market
+
+            const now = Date.now();
+            if (now - lastAlertToastAt[coin] < ALERT_TOAST_MIN_GAP_MS) return;
+            lastAlertToastAt[coin] = now;
+
+            const data = marketPrices[coin];
+            const isUp = data.changePct >= 0;
+            const sign = isUp ? '+' : '';
+            const priceStr = coin === 'SOL'
+                ? `$${data.price.toFixed(2)}`
+                : `$${data.price.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+
+            const msg = currentLang === 'fr-CA'
+                ? `${coin} est maintenant à ${priceStr} (${sign}${data.changePct.toFixed(2)}%)`
+                : `${coin} is now ${priceStr} (${sign}${data.changePct.toFixed(2)}%)`;
+
+            showToast(msg);
+        }
 
         /* Buy button on market cards */
         function openBuyModal(currency, evt) {
@@ -1913,9 +1946,7 @@
                 renderBalance();
 
                 if (document.getElementById('toggleTxAlerts').checked) {
-                    toastMessage.textContent = dict.exSuccessMsg(amount, fromCurr, receivedAmount, toCurr);
-                    toastNotification.classList.add('show');
-                    setTimeout(() => toastNotification.classList.remove('show'), 3500);
+                    showToast(dict.exSuccessMsg(amount, fromCurr, receivedAmount, toCurr));
                 }
             }, 1200);
         });
@@ -1934,9 +1965,7 @@
             recentActivities = [];
             renderRecentActivity();
             const dict = translations[currentLang] || translations['en-CA'];
-            toastMessage.textContent = dict.activityClearedMsg;
-            toastNotification.classList.add('show');
-            setTimeout(() => toastNotification.classList.remove('show'), 2500);
+            showToast(dict.activityClearedMsg, 2500);
         });
 
         document.getElementById('btnResetApp').addEventListener('click', () => {
@@ -1958,9 +1987,7 @@
             renderBalance();
             updateMarketAlerts();
             const dict = translations[currentLang] || translations['en-CA'];
-            toastMessage.textContent = dict.settingsResetMsg;
-            toastNotification.classList.add('show');
-            setTimeout(() => toastNotification.classList.remove('show'), 2500);
+            showToast(dict.settingsResetMsg, 2500);
         });
 
         /* ============================
