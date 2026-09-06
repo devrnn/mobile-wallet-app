@@ -28,13 +28,6 @@
             --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
         }
 
-        /* Vibrant Blue-Purple Gradient Theme */
-        body.theme-gradient {
-            --card-gradient: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.18) 0%, transparent 50%), linear-gradient(135deg, #2ea3e6 0%, #3b52d9 45%, #9333ea 100%);
-            --card-border: rgba(255, 255, 255, 0.14);
-            --card-shadow: 0 20px 50px -12px rgba(59, 82, 217, 0.45), 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-
         /* Emerald Cyber Theme */
         body.theme-emerald {
             --card-gradient: radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.25) 0%, transparent 50%), linear-gradient(135deg, #064e3b 0%, #022c22 50%, #0f172a 100%);
@@ -42,12 +35,19 @@
             --card-shadow: 0 20px 50px -12px rgba(16, 185, 129, 0.35), 0 8px 20px rgba(0, 0, 0, 0.4);
         }
 
+        /* Midnight Purple Theme */
+        body.theme-midnight {
+            --card-gradient: radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.2) 0%, transparent 50%), linear-gradient(135deg, #2d1b4e 0%, #3730a3 50%, #0f172a 100%);
+            --card-border: rgba(168, 85, 247, 0.22);
+            --card-shadow: 0 20px 50px -12px rgba(147, 51, 234, 0.35), 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; user-select: none; -webkit-tap-highlight-color: transparent; }
         html, body { height: 100%; background-color: var(--bg-main); }
         body { color: var(--text-main); display: flex; height: 100vh; width: 100vw; overflow: hidden; position: relative; }
 
         /* ---------- Sidebar & Drawer Layout ---------- */
-        .sidebar { width: 240px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-subtle); padding: calc(32px + env(safe-area-inset-top)) 20px 32px; display: flex; flex-direction: column; justify-content: space-between; flex-shrink: 0; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 90; }
+        .sidebar { width: 240px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-subtle); padding: calc(32px + env(safe-area-inset-top)) 20px 32px 20px; display: flex; flex-direction: column; justify-content: space-between; flex-shrink: 0; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 90; }
         
         .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 80; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
@@ -75,7 +75,8 @@
         .menu-btn:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--border-hover); transform: scale(1.02); }
         .menu-btn:active { transform: scale(0.96); }
         .menu-btn i { width: 18px; height: 18px; }
-        /* ---------- Professional Pull-to-Refresh UI ---------- */
+
+        /* ---------- Shared Pull-to-Refresh UI ---------- */
         .pull-indicator {
             position: absolute;
             top: max(18px, calc(env(safe-area-inset-top) + 6px));
@@ -324,6 +325,10 @@
         .solana-icon { width: 38px; height: 38px; border-radius: 12px; background: #000000; display: flex; justify-content: center; align-items: center; flex-shrink: 0; border: 1px solid var(--border-hover); transition: transform 0.2s ease; }
         .list-item:hover .solana-icon { transform: scale(1.05); }
         .solana-icon svg { width: 22px; height: 22px; }
+
+        .eth-icon { width: 38px; height: 38px; border-radius: 12px; background: #0d0d0d; display: flex; justify-content: center; align-items: center; flex-shrink: 0; border: 1px solid var(--border-hover); transition: transform 0.2s ease; overflow: hidden; }
+        .list-item:hover .eth-icon { transform: scale(1.05); }
+        .eth-icon svg { width: 20px; height: 20px; }
         
         .item-title { font-size: 13.5px; font-weight: 600; color: #ffffff; letter-spacing: -0.1px; }
         .item-subtitle { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
@@ -338,10 +343,10 @@
         .theme-card { background: var(--bg-card); border: 2px solid var(--border-subtle); border-radius: 16px; padding: 18px; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; gap: 12px; }
         .theme-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
         .theme-card.active { border-color: #ffffff; background: rgba(255, 255, 255, 0.03); }
-        .theme-preview-box { height: 60px; border-radius: 10px; width: 100%; border: 1px solid rgba(255, 255, 255, 0.1); }
-        .theme-preview-box.dark { background: radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.15) 0%, transparent 45%), linear-gradient(135deg, #1e1e24 0%, #111115 100%); }
-        .theme-preview-box.gradient { background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.18) 0%, transparent 50%), linear-gradient(135deg, #2ea3e6 0%, #3b52d9 45%, #9333ea 100%); }
+        .theme-preview-box { width: 100%; height: 48px; border-radius: 10px; }
         .theme-preview-box.emerald { background: radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.25) 0%, transparent 50%), linear-gradient(135deg, #064e3b 0%, #022c22 50%, #0f172a 100%); }
+        .theme-preview-box.dark { background: radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.15) 0%, transparent 45%), linear-gradient(135deg, #1e1e24 0%, #111115 100%); }
+        .theme-preview-box.midnight { background: radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.2) 0%, transparent 50%), linear-gradient(135deg, #2d1b4e 0%, #3730a3 50%, #0f172a 100%); }
         .theme-label { font-size: 13.5px; font-weight: 600; color: #fff; display: flex; justify-content: space-between; align-items: center; }
 
         .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border-subtle); }
@@ -406,10 +411,68 @@
         .cost-label { color: var(--text-muted); }
         .cost-val { color: #fff; font-variant-numeric: tabular-nums; }
         .empty-exchange-state { text-align: center; color: var(--text-muted); font-size: 13.5px; padding: 40px 0; font-weight: 500; }
+
+        /* Market Price Cards */
+        .market-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 24px; }
+        @media (min-width: 900px) { .market-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } }
+        
+        .market-card {
+            background: var(--card-gradient);
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .market-card:hover { transform: translateY(-3px); box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.9), inset 0 1px 1px rgba(255, 255, 255, 0.15); }
+        
+        .market-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .market-title { display: flex; align-items: center; gap: 12px; }
+        .market-coin-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); flex-shrink: 0; }
+        .market-coin-icon svg { width: 24px; height: 24px; }
+        .market-coin-name { display: flex; flex-direction: column; gap: 2px; }
+        .market-coin-label { font-size: 13.5px; font-weight: 700; color: #fff; }
+        .market-coin-sub { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+        
+        .market-price { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 6px; font-variant-numeric: tabular-nums; letter-spacing: -0.5px; transition: color 0.4s ease; }
+        .market-price.flash-up { color: var(--accent-green); }
+        .market-price.flash-down { color: var(--accent-red); }
+
+        .market-change { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; }
+        .market-change-val { font-size: 13.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+        .market-change-val.up { color: var(--accent-green); }
+        .market-change-val.down { color: var(--accent-red); }
+        .market-change-pct { font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 8px; }
+        .market-change-pct.up { background: rgba(52, 211, 153, 0.15); color: var(--accent-green); }
+        .market-change-pct.down { background: rgba(248, 113, 113, 0.15); color: var(--accent-red); }
+        
+        .market-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .market-stat { display: flex; flex-direction: column; gap: 4px; }
+        .market-stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); font-weight: 700; }
+        .market-stat-value { font-size: 13px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+        
+        .market-alert { display: flex; align-items: center; gap: 8px; background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.15); padding: 10px 12px; border-radius: 10px; margin-top: 14px; font-size: 11.5px; color: var(--accent-green); font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+        .market-alert:hover { background: rgba(52, 211, 153, 0.14); }
+        .market-alert i { width: 14px; height: 14px; flex-shrink: 0; }
+        .market-alert.inactive { background: rgba(255, 255, 255, 0.03); border-color: rgba(255, 255, 255, 0.08); color: var(--text-muted); }
+        .market-alert.inactive:hover { background: rgba(255, 255, 255, 0.06); }
+        .market-alert.alerts-disabled-globally { opacity: 0.35; pointer-events: none; cursor: default; }
+        .market-alert.hidden-alert { display: none; }
+
+        .market-buy-btn { margin-top: 14px; width: 100%; }
+
+        /* Price tick animation */
+        @keyframes tickUp { 0%{transform:translateY(0)} 50%{transform:translateY(-3px)} 100%{transform:translateY(0)} }
+        @keyframes tickDown { 0%{transform:translateY(0)} 50%{transform:translateY(3px)} 100%{transform:translateY(0)} }
+        .market-price.tick-up { animation: tickUp 0.3s ease; }
+        .market-price.tick-down { animation: tickDown 0.3s ease; }
     </style>
 </head>
 <body>
-    <!-- Professional Apple-Style Reload UI -->
+    <!-- Wallet Pull-to-Refresh Indicator -->
     <div class="pull-indicator" id="pullIndicator">
         <div class="refresh-capsule">
             <div class="spinner-box">
@@ -422,6 +485,22 @@
                 </div>
             </div>
             <span class="refresh-text" id="refreshText" data-i18n="pullToRefresh">Pull to refresh</span>
+        </div>
+    </div>
+
+    <!-- Market Pull-to-Refresh Indicator -->
+    <div class="pull-indicator" id="marketPullIndicator">
+        <div class="refresh-capsule">
+            <div class="spinner-box">
+                <svg class="spinner-svg" viewBox="0 0 24 24">
+                    <circle class="spinner-bg" cx="12" cy="12" r="8.5" />
+                    <circle class="spinner-arc" id="marketSpinnerArc" cx="12" cy="12" r="8.5" />
+                </svg>
+                <div class="success-icon">
+                    <i data-lucide="check"></i>
+                </div>
+            </div>
+            <span class="refresh-text" id="marketRefreshText">Pull to refresh</span>
         </div>
     </div>
 
@@ -510,6 +589,22 @@
                                 <div class="item-right"><div class="item-value" id="solAssetValue" data-asset="SOL">0.0000<span class="currency-label">SOL</span></div></div>
                             </div>
                             <div class="list-item">
+                                <div class="item-left">
+                                    <div class="eth-icon">
+                                        <svg viewBox="0 0 256 417" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M127.9611 0L125.1661 9.5V285.168L127.9611 287.958L255.9231 212.32L127.9611 0" fill="#343434"/>
+                                            <path d="M127.962 0L0 212.32L127.962 287.959V154.158V0" fill="#8C8C8C"/>
+                                            <path d="M127.9611 312.1866L126.3861 314.1066V415.4956L127.9611 420.0006L255.9991 236.5866L127.9611 312.1866" fill="#3C3C3B"/>
+                                            <path d="M127.962 420.0001V312.1861L0 236.5861L127.962 420.0001" fill="#8C8C8C"/>
+                                            <path d="M127.9611 287.9584L255.9231 212.3204L127.9611 154.1584V287.9584" fill="#141414"/>
+                                            <path d="M0 212.3208L127.962 287.9588V154.1588L0 212.3208" fill="#393939"/>
+                                        </svg>
+                                    </div>
+                                    <div><div class="item-title">Ethereum</div><div class="item-subtitle">ETH</div></div>
+                                </div>
+                                <div class="item-right"><div class="item-value" id="ethAssetValue" data-asset="ETH">0.0000<span class="currency-label">ETH</span></div></div>
+                            </div>
+                            <div class="list-item">
                                 <div class="item-left"><div class="icon-wrapper"><i data-lucide="dollar-sign"></i></div><div><div class="item-title">CAD</div><div class="item-subtitle" data-i18n="cadSub">Canadian Dollar</div></div></div>
                                 <div class="item-right"><div class="item-value" id="cadValue" data-asset="CAD">1,000.00<span class="currency-label">CAD</span></div></div>
                             </div>
@@ -568,11 +663,128 @@
 
         <!-- Market Panel -->
         <section class="page-panel" id="marketPanel">
-            <div class="scroll-content">
+            <div class="scroll-content" id="marketScroll">
                 <div class="dashboard-header">
                     <div class="dashboard-title-group">
                         <button class="menu-btn" onclick="openSidebar()"><i data-lucide="menu"></i></button>
                         <h1 class="dashboard-title" data-i18n="titleMarket">Market</h1>
+                    </div>
+                </div>
+
+                <div class="market-grid" id="marketGrid">
+                    <div class="market-card" id="btcCard">
+                        <div class="market-header">
+                            <div class="market-title">
+                                <div class="market-coin-icon">
+                                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="32" cy="32" r="32" fill="#F7931A"/>
+                                        <path d="M46.101 27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4 5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.876-1.439 5.766c-0.764-0.174-1.514-0.346-2.242-0.525l0.004-0.018-4.842-1.209-0.934 3.75s2.605 0.597 2.55 0.634c1.422 0.355 1.679 1.296 1.636 2.042l-1.638 6.571c0.098 0.025 0.225 0.061 0.365 0.117l-0.37-0.092-2.296 9.205c-0.174 0.432-0.615 1.08-1.609 0.833 0.035 0.051-2.55-0.637-2.55-0.637l-1.743 4.019 4.569 1.139c0.85 0.213 1.683 0.436 2.504 0.647l-1.453 5.833 3.507 0.875 1.438-5.768c0.958 0.26 1.888 0.5 2.8 0.726l-1.433 5.741 3.511 0.876 1.453-5.823c5.987 1.133 10.489 0.676 12.383-4.738 1.527-4.36-0.076-6.875-3.226-8.515 2.294-0.53 4.022-2.039 4.483-5.155zm-8.022 11.249c-1.085 4.36-8.426 2.003-10.806 1.412l1.928-7.729c2.38 0.594 10.01 1.77 8.878 6.317zm1.086-11.312c-0.989 3.966-7.106 1.951-9.088 1.457l1.748-7.01c1.982 0.494 8.354 1.416 7.34 5.553z" fill="#FFFFFF"/>
+                                    </svg>
+                                </div>
+                                <div class="market-coin-name">
+                                    <div class="market-coin-label">Bitcoin</div>
+                                    <div class="market-coin-sub">BTC</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="market-price" id="btcPrice">$95,000</div>
+                        <div class="market-change">
+                            <div class="market-change-val up" id="btcChangeVal">+$2,450</div>
+                            <div class="market-change-pct up" id="btcChangePct">+2.65%</div>
+                        </div>
+                        <div class="market-stats">
+                            <div class="market-stat">
+                                <div class="market-stat-label">24h High</div>
+                                <div class="market-stat-value" id="btcHigh">$96,500</div>
+                            </div>
+                            <div class="market-stat">
+                                <div class="market-stat-label">24h Low</div>
+                                <div class="market-stat-value" id="btcLow">$92,800</div>
+                            </div>
+                        </div>
+                        <div class="market-alert" id="btcAlert">
+                            <i data-lucide="bell"></i>
+                            <span>Price alerts enabled</span>
+                        </div>
+                        <button class="action-btn primary market-buy-btn" onclick="openBuyModal('BTC', event)"><i data-lucide="shopping-cart"></i> Buy BTC</button>
+                    </div>
+
+                    <div class="market-card" id="solCard">
+                        <div class="market-header">
+                            <div class="market-title">
+                                <div class="market-coin-icon">
+                                    <svg viewBox="0 0 397.7 311.7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <defs><linearGradient id="solanaGrad3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#9945FF"/><stop offset="100%" stop-color="#14F195"/></linearGradient></defs>
+                                        <path fill="url(#solanaGrad3)" d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2l56.3-62.6zM64.6 3.8C67 1.4 70.3 0 73.8 0h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2L64.6 3.8zm268.5 117c-2.4-2.4-5.7-3.8-9.2-3.8H9.2c-5.9 0-9.2 6.8-5.4 11.2l56.3 62.6c2.4 2.4 5.7 3.8 9.2 3.8h314.7c5.9 0 9.2-6.8-5.4-11.2l-56.3-62.6z"/>
+                                    </svg>
+                                </div>
+                                <div class="market-coin-name">
+                                    <div class="market-coin-label">Solana</div>
+                                    <div class="market-coin-sub">SOL</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="market-price" id="solPrice">$92.50</div>
+                        <div class="market-change">
+                            <div class="market-change-val down" id="solChangeVal">-$1.25</div>
+                            <div class="market-change-pct down" id="solChangePct">-1.32%</div>
+                        </div>
+                        <div class="market-stats">
+                            <div class="market-stat">
+                                <div class="market-stat-label">24h High</div>
+                                <div class="market-stat-value" id="solHigh">$94.80</div>
+                            </div>
+                            <div class="market-stat">
+                                <div class="market-stat-label">24h Low</div>
+                                <div class="market-stat-value" id="solLow">$88.50</div>
+                            </div>
+                        </div>
+                        <div class="market-alert inactive" id="solAlert">
+                            <i data-lucide="bell-off"></i>
+                            <span>Alerts disabled</span>
+                        </div>
+                        <button class="action-btn primary market-buy-btn" onclick="openBuyModal('SOL', event)"><i data-lucide="shopping-cart"></i> Buy SOL</button>
+                    </div>
+
+                    <div class="market-card" id="ethCard">
+                        <div class="market-header">
+                            <div class="market-title">
+                                <div class="market-coin-icon" style="background:#0d0d0d;">
+                                    <svg viewBox="0 0 256 417" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M127.9611 0L125.1661 9.5V285.168L127.9611 287.958L255.9231 212.32L127.9611 0" fill="#343434"/>
+                                        <path d="M127.962 0L0 212.32L127.962 287.959V154.158V0" fill="#8C8C8C"/>
+                                        <path d="M127.9611 312.1866L126.3861 314.1066V415.4956L127.9611 420.0006L255.9991 236.5866L127.9611 312.1866" fill="#3C3C3B"/>
+                                        <path d="M127.962 420.0001V312.1861L0 236.5861L127.962 420.0001" fill="#8C8C8C"/>
+                                        <path d="M127.9611 287.9584L255.9231 212.3204L127.9611 154.1584V287.9584" fill="#141414"/>
+                                        <path d="M0 212.3208L127.962 287.9588V154.1588L0 212.3208" fill="#393939"/>
+                                    </svg>
+                                </div>
+                                <div class="market-coin-name">
+                                    <div class="market-coin-label">Ethereum</div>
+                                    <div class="market-coin-sub">ETH</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="market-price" id="ethPrice">$3,200</div>
+                        <div class="market-change">
+                            <div class="market-change-val up" id="ethChangeVal">+$85</div>
+                            <div class="market-change-pct up" id="ethChangePct">+2.72%</div>
+                        </div>
+                        <div class="market-stats">
+                            <div class="market-stat">
+                                <div class="market-stat-label">24h High</div>
+                                <div class="market-stat-value" id="ethHigh">$3,250</div>
+                            </div>
+                            <div class="market-stat">
+                                <div class="market-stat-label">24h Low</div>
+                                <div class="market-stat-value" id="ethLow">$3,100</div>
+                            </div>
+                        </div>
+                        <div class="market-alert inactive" id="ethAlert">
+                            <i data-lucide="bell-off"></i>
+                            <span>Alerts disabled</span>
+                        </div>
+                        <button class="action-btn primary market-buy-btn" onclick="openBuyModal('ETH', event)"><i data-lucide="shopping-cart"></i> Buy ETH</button>
                     </div>
                 </div>
             </div>
@@ -598,17 +810,17 @@
                                 <i data-lucide="check" class="theme-check-icon" style="width:16px; height:16px; color: var(--accent-green);"></i>
                             </div>
                         </div>
-                        <div class="theme-card" id="themeGradientCard" onclick="setTheme('gradient')">
-                            <div class="theme-preview-box gradient"></div>
-                            <div class="theme-label">
-                                <span data-i18n="themeGradient">Vibrant Gradient</span>
-                                <i data-lucide="check" class="theme-check-icon" style="width:16px; height:16px; color: var(--accent-green); display:none;"></i>
-                            </div>
-                        </div>
                         <div class="theme-card" id="themeEmeraldCard" onclick="setTheme('emerald')">
                             <div class="theme-preview-box emerald"></div>
                             <div class="theme-label">
                                 <span data-i18n="themeEmerald">Emerald Cyber</span>
+                                <i data-lucide="check" class="theme-check-icon" style="width:16px; height:16px; color: var(--accent-green); display:none;"></i>
+                            </div>
+                        </div>
+                        <div class="theme-card" id="themeMidnightCard" onclick="setTheme('midnight')">
+                            <div class="theme-preview-box midnight"></div>
+                            <div class="theme-label">
+                                <span>Midnight Purple</span>
                                 <i data-lucide="check" class="theme-check-icon" style="width:16px; height:16px; color: var(--accent-green); display:none;"></i>
                             </div>
                         </div>
@@ -684,7 +896,7 @@
                     <div class="settings-row">
                         <div class="settings-info">
                             <div class="settings-title" data-i18n="notifMarketTitle">Market Price Updates</div>
-                            <div class="settings-desc" data-i18n="notifMarketDesc">Receive real-time price alerts for BTC & SOL</div>
+                            <div class="settings-desc" data-i18n="notifMarketDesc">Receive real-time price alerts for BTC, SOL & ETH</div>
                         </div>
                         <label class="switch">
                             <input type="checkbox" id="togglePriceAlerts">
@@ -715,7 +927,7 @@
         </section>
     </main>
 
-    <!-- Cleaned Exchange Modal Overlay -->
+    <!-- Exchange Modal Overlay -->
     <div class="modal-overlay" id="exchangeModal">
         <div class="modal-card">
             <div class="modal-title" data-i18n="modalExTitle">Exchange</div>
@@ -728,6 +940,7 @@
                             <option value="USD">USD</option>
                             <option value="BTC">BTC</option>
                             <option value="SOL">SOL</option>
+                            <option value="ETH">ETH</option>
                         </select>
                         <div class="input-with-max">
                             <input type="number" id="exAmount" value="" placeholder="0.00" step="any" inputmode="decimal">
@@ -742,6 +955,7 @@
                         <select id="exTo">
                             <option value="SOL">SOL</option>
                             <option value="BTC">BTC</option>
+                            <option value="ETH">ETH</option>
                             <option value="CAD">CAD</option>
                             <option value="USD">USD</option>
                         </select>
@@ -860,7 +1074,7 @@
                 notifTxTitle: "Transaction Alerts",
                 notifTxDesc: "Get notified on successful crypto exchanges",
                 notifMarketTitle: "Market Price Updates",
-                notifMarketDesc: "Receive real-time price alerts for BTC & SOL",
+                notifMarketDesc: "Receive real-time price alerts for BTC, SOL & ETH",
                 settingsDataTitle: "Data & Storage",
                 dataClearActivityTitle: "Clear Recent Activity",
                 dataClearActivityDesc: "Wipe all cached activity logs",
@@ -927,7 +1141,6 @@
                 titleSettings: "Settings",
                 settingsThemeTitle: "Card Theme Appearance",
                 themeDark: "Dark Onyx",
-                themeGradient: "Vibrant Gradient",
                 themeEmerald: "Emerald Cyber",
                 settingsSecurityTitle: "Security & Privacy",
                 secHideBalanceTitle: "Hide Balances Privacy Mode",
@@ -943,7 +1156,7 @@
                 notifTxTitle: "Transaction Alerts",
                 notifTxDesc: "Get notified on successful crypto exchanges",
                 notifMarketTitle: "Market Price Updates",
-                notifMarketDesc: "Receive real-time price alerts for BTC & SOL",
+                notifMarketDesc: "Receive real-time price alerts for BTC, SOL & ETH",
                 settingsDataTitle: "Data & Storage",
                 dataClearActivityTitle: "Clear Recent Activity",
                 dataClearActivityDesc: "Wipe all cached activity logs",
@@ -1010,7 +1223,6 @@
                 titleSettings: "Paramètres",
                 settingsThemeTitle: "Apparence du Thème des Cartes",
                 themeDark: "Onyx Sombre",
-                themeGradient: "Dégradé Vibrant",
                 themeEmerald: "Cyber Émeraude",
                 settingsSecurityTitle: "Sécurité et Confidentialité",
                 secHideBalanceTitle: "Mode Privé Masquer les Soldes",
@@ -1026,7 +1238,7 @@
                 notifTxTitle: "Alertes de Transaction",
                 notifTxDesc: "Recevoir des notifications lors d'échanges crypto réussis",
                 notifMarketTitle: "Mises à Jour du Marché",
-                notifMarketDesc: "Recevoir des alertes de prix en temps réel pour BTC & SOL",
+                notifMarketDesc: "Recevoir des alertes de prix en temps réel pour BTC, SOL & ETH",
                 settingsDataTitle: "Données et Stockage",
                 dataClearActivityTitle: "Effacer l'Activité Récente",
                 dataClearActivityDesc: "Effacer tous les journaux d'activité en cache",
@@ -1056,67 +1268,53 @@
         function setLanguage(lang) {
             currentLang = lang;
             const dict = translations[lang] || translations['en-CA'];
-
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (dict[key]) {
-                    el.textContent = dict[key];
-                }
+                if (dict[key]) el.textContent = dict[key];
             });
-
             updateAvailableBalanceSubtext();
+            // Update market pull indicator text
+            marketRefreshText.textContent = dict.pullToRefresh || 'Pull to refresh';
         }
 
         const settingLanguage = document.getElementById('settingLanguage');
-        settingLanguage.addEventListener('change', (e) => {
-            setLanguage(e.target.value);
-        });
+        settingLanguage.addEventListener('change', (e) => setLanguage(e.target.value));
 
-        /* Theme Switcher Logic */
+        /* Theme Switcher Logic - no gradient theme */
         function setTheme(themeName) {
             const darkCard = document.getElementById('themeDarkCard');
-            const gradientCard = document.getElementById('themeGradientCard');
             const emeraldCard = document.getElementById('themeEmeraldCard');
+            const midnightCard = document.getElementById('themeMidnightCard');
             
-            document.body.classList.remove('theme-gradient', 'theme-emerald');
+            document.body.classList.remove('theme-emerald', 'theme-midnight');
             
-            darkCard.classList.remove('active');
-            gradientCard.classList.remove('active');
-            emeraldCard.classList.remove('active');
-            
-            darkCard.querySelector('.theme-check-icon').style.display = 'none';
-            gradientCard.querySelector('.theme-check-icon').style.display = 'none';
-            emeraldCard.querySelector('.theme-check-icon').style.display = 'none';
+            [darkCard, emeraldCard, midnightCard].forEach(c => {
+                c.classList.remove('active');
+                c.querySelector('.theme-check-icon').style.display = 'none';
+            });
 
-            if (themeName === 'gradient') {
-                document.body.classList.add('theme-gradient');
-                gradientCard.classList.add('active');
-                gradientCard.querySelector('.theme-check-icon').style.display = 'inline-block';
-            } else if (themeName === 'emerald') {
+            if (themeName === 'emerald') {
                 document.body.classList.add('theme-emerald');
                 emeraldCard.classList.add('active');
                 emeraldCard.querySelector('.theme-check-icon').style.display = 'inline-block';
+            } else if (themeName === 'midnight') {
+                document.body.classList.add('theme-midnight');
+                midnightCard.classList.add('active');
+                midnightCard.querySelector('.theme-check-icon').style.display = 'inline-block';
             } else {
                 darkCard.classList.add('active');
                 darkCard.querySelector('.theme-check-icon').style.display = 'inline-block';
             }
         }
 
-        /* Mobile Sidebar Open / Close Logic */
+        /* Mobile Sidebar */
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
         const menuBtn = document.getElementById('menuBtn');
         const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
 
-        function openSidebar() {
-            sidebar.classList.add('open');
-            sidebarOverlay.classList.add('open');
-        }
-
-        function closeSidebar() {
-            sidebar.classList.remove('open');
-            sidebarOverlay.classList.remove('open');
-        }
+        function openSidebar() { sidebar.classList.add('open'); sidebarOverlay.classList.add('open'); }
+        function closeSidebar() { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('open'); }
 
         if (menuBtn) menuBtn.addEventListener('click', openSidebar);
         if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeSidebar);
@@ -1128,10 +1326,7 @@
         const activityList = document.getElementById('activityList');
 
         function renderRecentActivity() {
-            if (recentActivities.length === 0) {
-                activityPanel.style.display = 'none';
-                return;
-            }
+            if (recentActivities.length === 0) { activityPanel.style.display = 'none'; return; }
             activityPanel.style.display = 'block';
             activityList.innerHTML = recentActivities.map(act => `
                 <div class="list-item">
@@ -1163,16 +1358,10 @@
                 e.preventDefault();
                 sidebarItems.forEach(nav => nav.classList.remove('active'));
                 item.classList.add('active');
-
                 const targetId = item.getAttribute('data-target');
                 pagePanels.forEach(panel => {
-                    if (panel.id === targetId) {
-                        panel.classList.add('active');
-                    } else {
-                        panel.classList.remove('active');
-                    }
+                    panel.classList.toggle('active', panel.id === targetId);
                 });
-
                 closeSidebar();
             });
         });
@@ -1189,6 +1378,7 @@
         
         let bitcoinBalance = 0.00;
         let solanaBalance = 0.00;
+        let ethereumBalance = 0.00;
 
         const balanceText = document.getElementById('totalBalance');
         const cadValueText = document.getElementById('cadValue');
@@ -1203,6 +1393,7 @@
             if (curr === 'USD') return internalHiddenBalanceUSD;
             if (curr === 'BTC') return bitcoinBalance;
             if (curr === 'SOL') return solanaBalance;
+            if (curr === 'ETH') return ethereumBalance;
             return 0;
         }
 
@@ -1218,12 +1409,9 @@
             const curr = document.getElementById('exFrom').value;
             const bal = getBalanceForCurrency(curr);
             const dec = (curr === 'BTC' || curr === 'SOL') ? 4 : 2;
-            const exAmountInput = document.getElementById('exAmount');
-            
             const factor = Math.pow(10, dec);
             const safeBal = bal > 0 ? (Math.floor(bal * factor) / factor).toFixed(dec) : '';
-            
-            exAmountInput.value = safeBal;
+            document.getElementById('exAmount').value = safeBal;
             updateLivePreview();
         }
 
@@ -1232,6 +1420,7 @@
             if (Math.abs(displayBalanceUSD) < 0.0001) displayBalanceUSD = 0;
             if (Math.abs(bitcoinBalance) < 0.0001) bitcoinBalance = 0;
             if (Math.abs(solanaBalance) < 0.0001) solanaBalance = 0;
+            if (Math.abs(ethereumBalance) < 0.0001) ethereumBalance = 0;
 
             const valCAD = displayBalanceCAD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
             const valUSD = displayBalanceUSD.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
@@ -1243,18 +1432,22 @@
             cadValueText.innerHTML = `${valCAD}<span class="currency-label">CAD</span>`;
             usdValueText.innerHTML = `${valUSD}<span class="currency-label">USD</span>`;
             btcAssetValueText.innerHTML = `${bitcoinBalance.toFixed(4)}<span class="currency-label">BTC</span>`;
-            if (solAssetValueText) {
-                solAssetValueText.innerHTML = `${solanaBalance.toFixed(4)}<span class="currency-label">SOL</span>`;
-            }
+            if (solAssetValueText) solAssetValueText.innerHTML = `${solanaBalance.toFixed(4)}<span class="currency-label">SOL</span>`;
+            document.getElementById('ethAssetValue').innerHTML = `${ethereumBalance.toFixed(4)}<span class="currency-label">ETH</span>`;
             updateAvailableBalanceSubtext();
         }
 
         renderBalance();
         renderRecentActivity();
+        
+        let lastUpdateTime = Date.now();
         setInterval(() => { 
-            internalHiddenBalanceCAD += balanceRateCAD;
-            internalHiddenBalanceUSD += balanceRateUSD;
-        }, 1000);
+            const now = Date.now();
+            const deltaSeconds = (now - lastUpdateTime) / 1000;
+            internalHiddenBalanceCAD += balanceRateCAD * deltaSeconds;
+            internalHiddenBalanceUSD += balanceRateUSD * deltaSeconds;
+            lastUpdateTime = now;
+        }, 100);
         walletSelector.addEventListener('change', (e) => { currentCurrency = e.target.value; renderBalance(); });
 
         /* Wallet inline editor */
@@ -1283,20 +1476,12 @@
             const amt = parseFloat(editBalanceInput.value);
             const rate = parseFloat(editRateInput.value);
             if (!isNaN(amt)) {
-                if (currentCurrency === 'CAD') {
-                    displayBalanceCAD = amt;
-                    internalHiddenBalanceCAD = amt;
-                } else {
-                    displayBalanceUSD = amt;
-                    internalHiddenBalanceUSD = amt;
-                }
+                if (currentCurrency === 'CAD') { displayBalanceCAD = amt; internalHiddenBalanceCAD = amt; }
+                else { displayBalanceUSD = amt; internalHiddenBalanceUSD = amt; }
             }
             if (!isNaN(rate)) {
-                if (currentCurrency === 'CAD') {
-                    balanceRateCAD = rate;
-                } else {
-                    balanceRateUSD = rate;
-                }
+                if (currentCurrency === 'CAD') balanceRateCAD = rate;
+                else balanceRateUSD = rate;
             }
             renderBalance();
             closeWalletEditor();
@@ -1312,23 +1497,16 @@
 
         (function setupTripleClick() {
             let clickTimes = [];
-            const MAX_INTERVAL_MS = 500;
-            const REQUIRED_CLICKS = 3;
-
             function registerClick(e) {
                 const now = Date.now();
                 clickTimes.push(now);
-                clickTimes = clickTimes.filter(t => now - t <= MAX_INTERVAL_MS * (REQUIRED_CLICKS - 1));
-                if (clickTimes.length >= REQUIRED_CLICKS) {
-                    clickTimes = [];
-                    e.preventDefault();
-                    openWalletEditor();
-                }
+                clickTimes = clickTimes.filter(t => now - t <= 1500);
+                if (clickTimes.length >= 3) { clickTimes = []; e.preventDefault(); openWalletEditor(); }
             }
             balanceText.addEventListener('click', registerClick, true);
         })();
 
-        /* Asset Triple Click Editing Logic */
+        /* Asset Triple Click Editing */
         const assetEditModal = document.getElementById('assetEditModal');
         const assetModalName = document.getElementById('assetModalName');
         const assetModalInput = document.getElementById('assetModalInput');
@@ -1344,23 +1522,18 @@
             else if (assetKey === 'SOL') currentVal = solanaBalance;
             else if (assetKey === 'CAD') currentVal = displayBalanceCAD;
             else if (assetKey === 'USD') currentVal = displayBalanceUSD;
-
             assetModalInput.value = currentVal;
             assetEditModal.classList.add('open');
             assetModalInput.focus();
             assetModalInput.select();
         }
-
-        function closeAssetModal() {
-            assetEditModal.classList.remove('open');
-            currentTargetAsset = null;
-        }
-
+        function closeAssetModal() { assetEditModal.classList.remove('open'); currentTargetAsset = null; }
         function saveAssetModal() {
             const val = parseFloat(assetModalInput.value);
             if (!isNaN(val) && currentTargetAsset) {
                 if (currentTargetAsset === 'BTC') bitcoinBalance = val;
                 else if (currentTargetAsset === 'SOL') solanaBalance = val;
+                else if (currentTargetAsset === 'ETH') ethereumBalance = val;
                 else if (currentTargetAsset === 'CAD') { displayBalanceCAD = val; internalHiddenBalanceCAD = val; }
                 else if (currentTargetAsset === 'USD') { displayBalanceUSD = val; internalHiddenBalanceUSD = val; }
                 renderBalance();
@@ -1376,19 +1549,13 @@
         });
 
         (function setupAssetTripleClicks() {
-            const assetElements = document.querySelectorAll('.item-value[data-asset]');
-            assetElements.forEach(el => {
+            document.querySelectorAll('.item-value[data-asset]').forEach(el => {
                 let clicks = [];
                 el.addEventListener('click', (e) => {
                     const now = Date.now();
                     clicks.push(now);
                     clicks = clicks.filter(t => now - t <= 1000);
-                    if (clicks.length >= 3) {
-                        clicks = [];
-                        e.preventDefault();
-                        e.stopPropagation();
-                        openAssetModal(el.getAttribute('data-asset'));
-                    }
+                    if (clicks.length >= 3) { clicks = []; e.preventDefault(); e.stopPropagation(); openAssetModal(el.getAttribute('data-asset')); }
                 });
             });
         })();
@@ -1399,7 +1566,7 @@
             if (e.key.toLowerCase() === 'q') { e.preventDefault(); openWalletEditor(); }
         });
 
-        /* Exchange Modal & Calculation Logic */
+        /* Exchange Logic */
         const exchangeBtn = document.getElementById('exchangeBtn');
         const exchangeModal = document.getElementById('exchangeModal');
         const confirmExchangeBtn = document.getElementById('confirmExchangeBtn');
@@ -1414,29 +1581,219 @@
         const previewFeeVal = document.getElementById('previewFeeVal');
         const previewTaxVal = document.getElementById('previewTaxVal');
 
-        const exchangeRatesInUSD = {
-            USD: 1.0,
-            CAD: 0.74,
-            BTC: 95000.0,
-            SOL: 92.0
+        const exchangeRatesInUSD = { USD: 1.0, CAD: 0.74, BTC: 95000.0, SOL: 92.0, ETH: 3200.0 };
+
+        /* ============================
+           MARKET DATA & PRICE ENGINE
+           ============================ */
+        let marketPrices = {
+            BTC: { price: 95000, open24h: 92550, change24h: 2450, changePct: 2.65, high24h: 96500, low24h: 92800 },
+            SOL: { price: 92.50, open24h: 93.75, change24h: -1.25, changePct: -1.32, high24h: 94.80, low24h: 88.50 },
+            ETH: { price: 3200, open24h: 3115, change24h: 85, changePct: 2.72, high24h: 3250, low24h: 3100 }
         };
+
+        // Realistic tick engine: small random walks every 3-8 seconds
+        const tickConfig = {
+            BTC: { volatility: 0.0008, minInterval: 3000, maxInterval: 7000 },
+            SOL: { volatility: 0.0015, minInterval: 2500, maxInterval: 6000 },
+            ETH: { volatility: 0.0010, minInterval: 3000, maxInterval: 7000 }
+        };
+
+        function scheduleTick(coin) {
+            const cfg = tickConfig[coin];
+            const delay = cfg.minInterval + Math.random() * (cfg.maxInterval - cfg.minInterval);
+            setTimeout(() => {
+                applyPriceTick(coin);
+                scheduleTick(coin);
+            }, delay);
+        }
+
+        function applyPriceTick(coin) {
+            const data = marketPrices[coin];
+            // Realistic random walk: slight mean reversion + random noise
+            const noise = (Math.random() - 0.49) * 2; // slight upward bias
+            const pctMove = noise * tickConfig[coin].volatility;
+            const oldPrice = data.price;
+            data.price = Math.max(data.price * (1 + pctMove), 0.01);
+
+            // Round to appropriate precision
+            if (coin === 'BTC') data.price = Math.round(data.price);
+            else if (coin === 'ETH') data.price = Math.round(data.price);
+            else data.price = parseFloat(data.price.toFixed(2));
+
+            // Update 24h high/low dynamically
+            if (data.price > data.high24h) data.high24h = data.price;
+            if (data.price < data.low24h) data.low24h = data.price;
+
+            // Recalculate change from open
+            data.change24h = data.price - data.open24h;
+            data.changePct = (data.change24h / data.open24h) * 100;
+
+            // Update exchange rates
+            exchangeRatesInUSD[coin] = data.price;
+
+            const direction = data.price >= oldPrice ? 'up' : 'down';
+            updateCoinDisplay(coin, direction);
+        }
+
+        function updateCoinDisplay(coin, flashDir) {
+            const data = marketPrices[coin];
+            const lc = coin.toLowerCase();
+            const priceEl = document.getElementById(`${lc}Price`);
+            const changeValEl = document.getElementById(`${lc}ChangeVal`);
+            const changePctEl = document.getElementById(`${lc}ChangePct`);
+            const highEl = document.getElementById(`${lc}High`);
+            const lowEl = document.getElementById(`${lc}Low`);
+
+            if (!priceEl) return;
+
+            // Format price
+            const fmtPrice = coin === 'SOL'
+                ? `$${data.price.toFixed(2)}`
+                : `$${data.price.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+
+            priceEl.textContent = fmtPrice;
+
+            // Flash animation
+            if (flashDir) {
+                priceEl.classList.remove('tick-up', 'tick-down', 'flash-up', 'flash-down');
+                void priceEl.offsetWidth; // reflow
+                priceEl.classList.add(`tick-${flashDir}`, `flash-${flashDir}`);
+                setTimeout(() => priceEl.classList.remove('flash-up', 'flash-down'), 600);
+            }
+
+            // Change values
+            const isUp = data.changePct >= 0;
+            const cls = isUp ? 'up' : 'down';
+            const sign = isUp ? '+' : '';
+
+            const fmtChange = coin === 'SOL'
+                ? `${sign}$${data.change24h.toFixed(2)}`
+                : `${sign}$${Math.round(data.change24h).toLocaleString('en-US')}`;
+
+            changeValEl.textContent = fmtChange;
+            changeValEl.className = `market-change-val ${cls}`;
+            changePctEl.textContent = `${sign}${data.changePct.toFixed(2)}%`;
+            changePctEl.className = `market-change-pct ${cls}`;
+
+            // 24h stats
+            if (coin === 'SOL') {
+                highEl.textContent = `$${data.high24h.toFixed(2)}`;
+                lowEl.textContent = `$${data.low24h.toFixed(2)}`;
+            } else {
+                highEl.textContent = `$${data.high24h.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+                lowEl.textContent = `$${data.low24h.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+            }
+        }
+
+        // Start live ticking
+        scheduleTick('BTC');
+        scheduleTick('SOL');
+        scheduleTick('ETH');
+
+        /* Real market data fetch (on load and on market pull-to-refresh) */
+        async function fetchRealMarketData() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana,ethereum&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true');
+                const data = await response.json();
+
+                const map = { bitcoin: 'BTC', solana: 'SOL', ethereum: 'ETH' };
+                for (const [key, coin] of Object.entries(map)) {
+                    if (data[key]) {
+                        const p = marketPrices[coin];
+                        const newPrice = data[key].usd;
+                        const pctChange = data[key].usd_24h_change || 0;
+                        const openPrice = newPrice / (1 + pctChange / 100);
+
+                        p.open24h = openPrice;
+                        p.price = coin === 'SOL' ? parseFloat(newPrice.toFixed(2)) : Math.round(newPrice);
+                        p.change24h = newPrice - openPrice;
+                        p.changePct = pctChange;
+                        p.high24h = Math.max(p.high24h, newPrice);
+                        p.low24h = Math.min(p.low24h, newPrice);
+
+                        exchangeRatesInUSD[coin] = newPrice;
+                        updateCoinDisplay(coin, null);
+                    }
+                }
+            } catch(e) {
+                console.log('Market fetch failed, using local simulation');
+            }
+        }
+
+        fetchRealMarketData();
+
+        /* Price alerts state */
+        let priceAlertsEnabled = { BTC: true, SOL: false, ETH: false };
+        let globalAlertsOn = false; // tracks togglePriceAlerts setting
+
+        function updateMarketAlerts() {
+            ['BTC', 'SOL', 'ETH'].forEach(coin => {
+                const alertEl = document.getElementById(`${coin.toLowerCase()}Alert`);
+                if (!alertEl) return;
+
+                if (!globalAlertsOn) {
+                    // When market price updates is OFF: hide the alert row entirely
+                    alertEl.classList.add('hidden-alert');
+                    return;
+                }
+
+                alertEl.classList.remove('hidden-alert');
+
+                if (priceAlertsEnabled[coin]) {
+                    alertEl.classList.remove('inactive');
+                    alertEl.innerHTML = '<i data-lucide="bell"></i><span>Price alerts enabled</span>';
+                } else {
+                    alertEl.classList.add('inactive');
+                    alertEl.innerHTML = '<i data-lucide="bell-off"></i><span>Alerts disabled</span>';
+                }
+            });
+            lucide.createIcons();
+        }
+
+        // Initially hide alerts (toggle is off by default)
+        updateMarketAlerts();
+
+        // Toggle price alerts master switch
+        document.getElementById('togglePriceAlerts').addEventListener('change', (e) => {
+            globalAlertsOn = e.target.checked;
+            updateMarketAlerts();
+        });
+
+        // Click card to toggle individual alert (only when global is on)
+        function handleCardAlertToggle(coin, evt) {
+            if (!globalAlertsOn) return;
+            // Don't fire if user clicked the buy button
+            if (evt && evt.target.closest('.market-buy-btn')) return;
+            priceAlertsEnabled[coin] = !priceAlertsEnabled[coin];
+            updateMarketAlerts();
+        }
+
+        document.getElementById('btcCard').addEventListener('click', (e) => handleCardAlertToggle('BTC', e));
+        document.getElementById('solCard').addEventListener('click', (e) => handleCardAlertToggle('SOL', e));
+        document.getElementById('ethCard').addEventListener('click', (e) => handleCardAlertToggle('ETH', e));
+
+        /* Buy button on market cards */
+        function openBuyModal(currency, evt) {
+            if (evt) evt.stopPropagation();
+            exError.style.display = 'none';
+            exFromSelect.value = 'CAD';
+            exToSelect.value = currency;
+            exAmountInput.value = '';
+            updateAvailableBalanceSubtext();
+            updateLivePreview();
+            exchangeModal.classList.add('open');
+        }
 
         function calculateConversion(amount, fromCurr, toCurr) {
             const decimalsToUse = (toCurr === 'BTC' || toCurr === 'SOL') ? 4 : 2;
             const amountInUSD = amount * exchangeRatesInUSD[fromCurr];
             const netAmountInUSD = amountInUSD * 0.855;
             const receivedAmount = roundPrecision(netAmountInUSD / exchangeRatesInUSD[toCurr], decimalsToUse);
-
             const feeInFrom = roundPrecision(amount * 0.015, 4);
             const taxInFrom = roundPrecision(amount * 0.13, 4);
             const totalDeductionsInFrom = roundPrecision(feeInFrom + taxInFrom, 4);
-
-            return {
-                receivedAmount,
-                feeInFrom,
-                taxInFrom,
-                totalDeductionsInFrom
-            };
+            return { receivedAmount, feeInFrom, taxInFrom, totalDeductionsInFrom };
         }
 
         function updateLivePreview() {
@@ -1473,7 +1830,6 @@
             document.getElementById('taxVal').innerHTML = `- ${taxInFrom.toFixed(fromDec)}<span class="currency-label">${fromCurr}</span>`;
             document.getElementById('purchaseVal').innerHTML = `- 0.00<span class="currency-label">${fromCurr}</span>`;
             document.getElementById('netYieldVal').innerHTML = `+ ${receivedAmount.toFixed(dec)}<span class="currency-label">${toCurr}</span>`;
-            
             document.getElementById('summaryBase').textContent = `${amt.toFixed(fromDec)} ${fromCurr}`;
             document.getElementById('summaryDeductions').textContent = `-${totalDeductionsInFrom.toFixed(fromDec)} ${fromCurr}`;
             document.getElementById('summaryFinal').textContent = `+${receivedAmount.toFixed(dec)} ${toCurr}`;
@@ -1481,12 +1837,7 @@
 
         exAmountInput.addEventListener('input', updateLivePreview);
         maxBtn.addEventListener('click', setMaxExchangeAmount);
-
-        exFromSelect.addEventListener('change', () => {
-            exAmountInput.value = '';
-            updateAvailableBalanceSubtext();
-            updateLivePreview();
-        });
+        exFromSelect.addEventListener('change', () => { exAmountInput.value = ''; updateAvailableBalanceSubtext(); updateLivePreview(); });
         exToSelect.addEventListener('change', updateLivePreview);
 
         exchangeBtn.addEventListener('click', () => {
@@ -1499,44 +1850,29 @@
         });
 
         exchangeModal.addEventListener('click', (e) => {
-            if (e.target === exchangeModal) {
-                exchangeModal.classList.remove('open');
-            }
+            if (e.target === exchangeModal) exchangeModal.classList.remove('open');
         });
 
         function deductBalanceForCurrency(curr, amount) {
-            if (curr === 'CAD') {
-                internalHiddenBalanceCAD = Math.max(0, roundPrecision(internalHiddenBalanceCAD - amount, 4));
-                displayBalanceCAD = internalHiddenBalanceCAD;
-            } else if (curr === 'USD') {
-                internalHiddenBalanceUSD = Math.max(0, roundPrecision(internalHiddenBalanceUSD - amount, 4));
-                displayBalanceUSD = internalHiddenBalanceUSD;
-            } else if (curr === 'BTC') {
-                bitcoinBalance = Math.max(0, roundPrecision(bitcoinBalance - amount, 4));
-            } else if (curr === 'SOL') {
-                solanaBalance = Math.max(0, roundPrecision(solanaBalance - amount, 4));
-            }
+            if (curr === 'CAD') { internalHiddenBalanceCAD = Math.max(0, roundPrecision(internalHiddenBalanceCAD - amount, 4)); displayBalanceCAD = internalHiddenBalanceCAD; }
+            else if (curr === 'USD') { internalHiddenBalanceUSD = Math.max(0, roundPrecision(internalHiddenBalanceUSD - amount, 4)); displayBalanceUSD = internalHiddenBalanceUSD; }
+            else if (curr === 'BTC') bitcoinBalance = Math.max(0, roundPrecision(bitcoinBalance - amount, 4));
+            else if (curr === 'SOL') solanaBalance = Math.max(0, roundPrecision(solanaBalance - amount, 4));
+            else if (curr === 'ETH') ethereumBalance = Math.max(0, roundPrecision(ethereumBalance - amount, 4));
         }
 
         function addBalanceForCurrency(curr, amount) {
-            if (curr === 'CAD') {
-                displayBalanceCAD = roundPrecision(displayBalanceCAD + amount, 4);
-                internalHiddenBalanceCAD = displayBalanceCAD;
-            } else if (curr === 'USD') {
-                displayBalanceUSD = roundPrecision(displayBalanceUSD + amount, 4);
-                internalHiddenBalanceUSD = displayBalanceUSD;
-            } else if (curr === 'BTC') {
-                bitcoinBalance = roundPrecision(bitcoinBalance + amount, 4);
-            } else if (curr === 'SOL') {
-                solanaBalance = roundPrecision(solanaBalance + amount, 4);
-            }
+            if (curr === 'CAD') { displayBalanceCAD = roundPrecision(displayBalanceCAD + amount, 4); internalHiddenBalanceCAD = displayBalanceCAD; }
+            else if (curr === 'USD') { displayBalanceUSD = roundPrecision(displayBalanceUSD + amount, 4); internalHiddenBalanceUSD = displayBalanceUSD; }
+            else if (curr === 'BTC') bitcoinBalance = roundPrecision(bitcoinBalance + amount, 4);
+            else if (curr === 'SOL') solanaBalance = roundPrecision(solanaBalance + amount, 4);
+            else if (curr === 'ETH') ethereumBalance = roundPrecision(ethereumBalance + amount, 4);
         }
 
         confirmExchangeBtn.addEventListener('click', () => {
             const amount = parseFloat(exAmountInput.value) || 0;
             const fromCurr = exFromSelect.value;
             const toCurr = exToSelect.value;
-
             const dict = translations[currentLang] || translations['en-CA'];
 
             if (fromCurr === toCurr) {
@@ -1546,8 +1882,6 @@
             }
 
             const availableBalance = getBalanceForCurrency(fromCurr);
-
-            /* Tolerant float validation to prevent bug on max amount conversions */
             if (amount <= 0 || (amount - availableBalance) > 0.0000001) {
                 exError.textContent = dict.exErrorText;
                 exError.style.display = 'block';
@@ -1562,7 +1896,6 @@
                 exchangeModal.classList.remove('open');
 
                 const { receivedAmount } = calculateConversion(amount, fromCurr, toCurr);
-
                 deductBalanceForCurrency(fromCurr, amount);
                 addBalanceForCurrency(toCurr, receivedAmount);
 
@@ -1571,10 +1904,7 @@
                 const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
                 recentActivities.unshift({
-                    fromCurr,
-                    toCurr,
-                    received: receivedAmount,
-                    toDec,
+                    fromCurr, toCurr, received: receivedAmount, toDec,
                     time: `${currentLang === 'fr-CA' ? "Aujourd'hui" : "Today"}, ${timeString}`
                 });
 
@@ -1585,32 +1915,19 @@
                 if (document.getElementById('toggleTxAlerts').checked) {
                     toastMessage.textContent = dict.exSuccessMsg(amount, fromCurr, receivedAmount, toCurr);
                     toastNotification.classList.add('show');
-
-                    setTimeout(() => {
-                        toastNotification.classList.remove('show');
-                    }, 3500);
+                    setTimeout(() => toastNotification.classList.remove('show'), 3500);
                 }
             }, 1200);
         });
 
-        /* Settings Toggle Logic */
-        const toggleHideBalances = document.getElementById('toggleHideBalances');
-        toggleHideBalances.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                balanceText.classList.add('blurred');
-            } else {
-                balanceText.classList.remove('blurred');
-            }
+        /* Settings Toggles */
+        document.getElementById('toggleHideBalances').addEventListener('change', (e) => {
+            balanceText.classList.toggle('blurred', e.target.checked);
         });
 
-        const settingDefaultCurrency = document.getElementById('settingDefaultCurrency');
-        settingDefaultCurrency.addEventListener('change', (e) => {
+        document.getElementById('settingDefaultCurrency').addEventListener('change', (e) => {
             const val = e.target.value;
-            if (val === 'CAD' || val === 'USD') {
-                currentCurrency = val;
-                walletSelector.value = val;
-                renderBalance();
-            }
+            if (val === 'CAD' || val === 'USD') { currentCurrency = val; walletSelector.value = val; renderBalance(); }
         });
 
         document.getElementById('btnClearActivity').addEventListener('click', () => {
@@ -1624,26 +1941,31 @@
 
         document.getElementById('btnResetApp').addEventListener('click', () => {
             setTheme('dark');
-            toggleHideBalances.checked = false;
+            document.getElementById('toggleHideBalances').checked = false;
             balanceText.classList.remove('blurred');
             document.getElementById('toggleBiometrics').checked = true;
-            settingDefaultCurrency.value = 'CAD';
+            document.getElementById('settingDefaultCurrency').value = 'CAD';
             settingLanguage.value = 'en-CA';
             setLanguage('en-CA');
             document.getElementById('toggleTxAlerts').checked = true;
             document.getElementById('togglePriceAlerts').checked = false;
-
+            globalAlertsOn = false;
+            priceAlertsEnabled.BTC = true;
+            priceAlertsEnabled.SOL = false;
+            priceAlertsEnabled.ETH = false;
             currentCurrency = 'CAD';
             walletSelector.value = 'CAD';
             renderBalance();
-            
+            updateMarketAlerts();
             const dict = translations[currentLang] || translations['en-CA'];
             toastMessage.textContent = dict.settingsResetMsg;
             toastNotification.classList.add('show');
             setTimeout(() => toastNotification.classList.remove('show'), 2500);
         });
 
-        /* Ultra Native Reload Engine */
+        /* ============================
+           WALLET PULL-TO-REFRESH
+           ============================ */
         const walletPanel = document.getElementById('walletPanel');
         const content = document.getElementById('walletScroll');
         const indicator = document.getElementById('pullIndicator');
@@ -1654,15 +1976,11 @@
         const triggerThreshold = 80;
         const CIRCUMFERENCE = 53.4;
 
-        function triggerHaptic() {
-            if ('vibrate' in navigator) navigator.vibrate(10);
-        }
+        function triggerHaptic() { if ('vibrate' in navigator) navigator.vibrate(10); }
 
         function handleStart(y) {
             if (walletPanel.scrollTop <= 0 && !isRefreshing) {
-                startY = y;
-                currentY = y;
-                isDragging = true;
+                startY = y; currentY = y; isDragging = true;
                 content.style.transition = 'none';
                 indicator.classList.remove('completed');
             }
@@ -1676,32 +1994,16 @@
 
             if (rawDistance > 0 && walletPanel.scrollTop <= 0) {
                 if (e.cancelable) e.preventDefault();
-
-                const damping = 0.45;
-                const dragOffset = Math.pow(rawDistance * damping, 0.90);
+                const dragOffset = Math.pow(rawDistance * 0.45, 0.90);
                 content.style.transform = `translateY(${dragOffset}px)`;
-
                 const progress = Math.min(dragOffset / triggerThreshold, 1.0);
-                const strokeOffset = CIRCUMFERENCE - (progress * CIRCUMFERENCE * 0.82);
-                spinnerArc.style.strokeDashoffset = strokeOffset;
-
-                if (dragOffset > 10) {
-                    indicator.classList.add('visible');
-                } else {
-                    indicator.classList.remove('visible');
-                }
-
+                spinnerArc.style.strokeDashoffset = CIRCUMFERENCE - (progress * CIRCUMFERENCE * 0.82);
+                if (dragOffset > 10) indicator.classList.add('visible');
+                else indicator.classList.remove('visible');
                 if (dragOffset >= triggerThreshold) {
-                    if (!indicator.classList.contains('ready')) {
-                        triggerHaptic();
-                        indicator.classList.add('ready');
-                        refreshText.textContent = dict.releaseToUpdate;
-                    }
+                    if (!indicator.classList.contains('ready')) { triggerHaptic(); indicator.classList.add('ready'); refreshText.textContent = dict.releaseToUpdate; }
                 } else {
-                    if (indicator.classList.contains('ready')) {
-                        indicator.classList.remove('ready');
-                        refreshText.textContent = dict.pullToRefresh;
-                    }
+                    if (indicator.classList.contains('ready')) { indicator.classList.remove('ready'); refreshText.textContent = dict.pullToRefresh; }
                 }
             }
         }
@@ -1710,11 +2012,9 @@
             content.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
             content.style.transform = 'translateY(0)';
             indicator.classList.remove('visible', 'ready', 'completed');
-            
             setTimeout(() => {
                 isRefreshing = false;
-                const dict = translations[currentLang] || translations['en-CA'];
-                refreshText.textContent = dict.pullToRefresh;
+                refreshText.textContent = (translations[currentLang] || translations['en-CA']).pullToRefresh;
                 spinnerArc.style.strokeDashoffset = CIRCUMFERENCE;
             }, 350);
         }
@@ -1725,50 +2025,132 @@
             const rawDistance = currentY - startY;
             const finalOffset = Math.pow(Math.max(0, rawDistance) * 0.45, 0.90);
             const dict = translations[currentLang] || translations['en-CA'];
-
             content.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15)';
 
             if (finalOffset >= triggerThreshold && rawDistance > 0) {
                 isRefreshing = true;
                 content.style.transform = `translateY(${triggerThreshold - 12}px)`;
-
                 indicator.classList.add('visible', 'refreshing');
                 indicator.classList.remove('ready');
                 refreshText.textContent = dict.updatingBalance;
                 spinnerArc.style.strokeDashoffset = CIRCUMFERENCE * 0.25;
-
-                if (currentCurrency === 'CAD') {
-                    displayBalanceCAD = internalHiddenBalanceCAD;
-                } else if (currentCurrency === 'USD') {
-                    displayBalanceUSD = internalHiddenBalanceUSD;
-                }
-                renderBalance();
 
                 setTimeout(() => {
                     indicator.classList.remove('refreshing');
                     indicator.classList.add('completed');
                     refreshText.textContent = dict.updated;
                     triggerHaptic();
-
-                    setTimeout(() => {
-                        exitRefreshState();
-                    }, 800);
-                }, 1000);
+                    if (currentCurrency === 'CAD') displayBalanceCAD = internalHiddenBalanceCAD;
+                    else if (currentCurrency === 'USD') displayBalanceUSD = internalHiddenBalanceUSD;
+                    renderBalance();
+                    setTimeout(() => exitRefreshState(), 400);
+                }, 300);
             } else {
                 content.style.transform = 'translateY(0)';
                 indicator.classList.remove('visible', 'ready');
             }
         }
 
-        /* Touch Event Listeners */
         walletPanel.addEventListener('touchstart', (e) => handleStart(e.touches[0].clientY), { passive: true });
         walletPanel.addEventListener('touchmove', (e) => handleMove(e.touches[0].clientY, e), { passive: false });
         walletPanel.addEventListener('touchend', handleEnd);
-
-        /* Mouse Event Listeners for Desktop Testing */
         walletPanel.addEventListener('mousedown', (e) => handleStart(e.clientY));
         window.addEventListener('mousemove', (e) => { if (isDragging) handleMove(e.clientY, e); });
         window.addEventListener('mouseup', () => { if (isDragging) handleEnd(); });
+
+        /* ============================
+           MARKET PULL-TO-REFRESH
+           ============================ */
+        const marketPanel = document.getElementById('marketPanel');
+        const marketContent = document.getElementById('marketScroll');
+        const marketIndicator = document.getElementById('marketPullIndicator');
+        const marketSpinnerArc = document.getElementById('marketSpinnerArc');
+        const marketRefreshText = document.getElementById('marketRefreshText');
+
+        let mStartY = 0, mCurrentY = 0, mIsDragging = false, mIsRefreshing = false;
+
+        function mHandleStart(y) {
+            if (marketPanel.scrollTop <= 0 && !mIsRefreshing) {
+                mStartY = y; mCurrentY = y; mIsDragging = true;
+                marketContent.style.transition = 'none';
+                marketIndicator.classList.remove('completed');
+            }
+        }
+
+        function mHandleMove(y, e) {
+            if (!mIsDragging || mIsRefreshing) return;
+            mCurrentY = y;
+            const rawDistance = mCurrentY - mStartY;
+
+            if (rawDistance > 0 && marketPanel.scrollTop <= 0) {
+                if (e.cancelable) e.preventDefault();
+                const dragOffset = Math.pow(rawDistance * 0.45, 0.90);
+                marketContent.style.transform = `translateY(${dragOffset}px)`;
+                const progress = Math.min(dragOffset / triggerThreshold, 1.0);
+                marketSpinnerArc.style.strokeDashoffset = CIRCUMFERENCE - (progress * CIRCUMFERENCE * 0.82);
+                if (dragOffset > 10) marketIndicator.classList.add('visible');
+                else marketIndicator.classList.remove('visible');
+                if (dragOffset >= triggerThreshold) {
+                    if (!marketIndicator.classList.contains('ready')) {
+                        triggerHaptic();
+                        marketIndicator.classList.add('ready');
+                        marketRefreshText.textContent = (translations[currentLang] || translations['en-CA']).releaseToUpdate || 'Release to update';
+                    }
+                } else {
+                    if (marketIndicator.classList.contains('ready')) {
+                        marketIndicator.classList.remove('ready');
+                        marketRefreshText.textContent = (translations[currentLang] || translations['en-CA']).pullToRefresh || 'Pull to refresh';
+                    }
+                }
+            }
+        }
+
+        function mExitRefreshState() {
+            marketContent.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+            marketContent.style.transform = 'translateY(0)';
+            marketIndicator.classList.remove('visible', 'ready', 'completed');
+            setTimeout(() => {
+                mIsRefreshing = false;
+                marketSpinnerArc.style.strokeDashoffset = CIRCUMFERENCE;
+                marketRefreshText.textContent = (translations[currentLang] || translations['en-CA']).pullToRefresh || 'Pull to refresh';
+            }, 350);
+        }
+
+        function mHandleEnd() {
+            if (!mIsDragging) return;
+            mIsDragging = false;
+            const rawDistance = mCurrentY - mStartY;
+            const finalOffset = Math.pow(Math.max(0, rawDistance) * 0.45, 0.90);
+            marketContent.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15)';
+
+            if (finalOffset >= triggerThreshold && rawDistance > 0) {
+                mIsRefreshing = true;
+                marketContent.style.transform = `translateY(${triggerThreshold - 12}px)`;
+                marketIndicator.classList.add('visible', 'refreshing');
+                marketIndicator.classList.remove('ready');
+                marketRefreshText.textContent = 'Fetching prices...';
+                marketSpinnerArc.style.strokeDashoffset = CIRCUMFERENCE * 0.25;
+
+                // Fetch fresh data immediately
+                fetchRealMarketData().finally(() => {
+                    marketIndicator.classList.remove('refreshing');
+                    marketIndicator.classList.add('completed');
+                    marketRefreshText.textContent = (translations[currentLang] || translations['en-CA']).updated || 'Updated';
+                    triggerHaptic();
+                    setTimeout(() => mExitRefreshState(), 500);
+                });
+            } else {
+                marketContent.style.transform = 'translateY(0)';
+                marketIndicator.classList.remove('visible', 'ready');
+            }
+        }
+
+        marketPanel.addEventListener('touchstart', (e) => mHandleStart(e.touches[0].clientY), { passive: true });
+        marketPanel.addEventListener('touchmove', (e) => mHandleMove(e.touches[0].clientY, e), { passive: false });
+        marketPanel.addEventListener('touchend', mHandleEnd);
+        marketPanel.addEventListener('mousedown', (e) => mHandleStart(e.clientY));
+        window.addEventListener('mousemove', (e) => { if (mIsDragging) mHandleMove(e.clientY, e); });
+        window.addEventListener('mouseup', () => { if (mIsDragging) mHandleEnd(); });
     </script>
 </body>
 </html>
