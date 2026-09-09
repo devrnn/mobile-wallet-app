@@ -138,10 +138,8 @@ color: #ffffff;
 flex-shrink: 0;
 position: relative;
 box-shadow:
-0 0 0 2px rgba(99, 102, 241, 0.3),
-0 4px 12px rgba(99, 102, 241, 0.4),
-inset 0 1px 0 rgba(255,255,255,0.25),
-inset 0 -1px 0 rgba(0,0,0,0.2);
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    inset 0 -1px 0 rgba(0,0,0,0.2);
 overflow: hidden;
 }
 .profile-avatar::before {
@@ -941,18 +939,18 @@ PERSONAL ACCOUNT MODAL
 <div class="market-ticker-bar" id="marketTickerBar">
 <div class="ticker-item selected" id="tickerBTC" onclick="selectMarketCoin('BTC')">
 <div class="ticker-symbol">BTC / CAD</div>
-<div class="ticker-price" id="tickerPriceBTC">$95,000</div>
-<div class="ticker-change up" id="tickerChangeBTC">+2.65%</div>
+<div class="ticker-price" id="tickerPriceBTC">$108,048.84</div>
+<div class="ticker-change up" id="tickerChangeBTC">+0.00%</div>
 </div>
 <div class="ticker-item" id="tickerSOL" onclick="selectMarketCoin('SOL')">
 <div class="ticker-symbol">SOL / CAD</div>
-<div class="ticker-price" id="tickerPriceSOL">$92.50</div>
-<div class="ticker-change down" id="tickerChangeSOL">-1.32%</div>
+<div class="ticker-price" id="tickerPriceSOL">$142.50</div>
+<div class="ticker-change up" id="tickerChangeSOL">+0.00%</div>
 </div>
 <div class="ticker-item" id="tickerETH" onclick="selectMarketCoin('ETH')">
 <div class="ticker-symbol">ETH / CAD</div>
-<div class="ticker-price" id="tickerPriceETH">$3,200</div>
-<div class="ticker-change up" id="tickerChangeETH">+2.72%</div>
+<div class="ticker-price" id="tickerPriceETH">$3,421.91</div>
+<div class="ticker-change up" id="tickerChangeETH">+0.00%</div>
 </div>
 </div>
 <div class="market-main-view">
@@ -1234,7 +1232,7 @@ PERSONAL ACCOUNT MODAL
 </div>
 </div>
 <div class="toast-notification" id="toastNotification">
-<i data-lucide="check-circle"></i>
+<i data-lucide="check-circle"></i>=
 <span id="toastMessage">Exchange completed successfully!</span>
 </div>
 <script>
@@ -1587,51 +1585,83 @@ window.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(
 MARKET DATA ENGINE
 ============================== */
 function randomizeMarketBase() {
-function jitter(base, pctRange) {
-return base * (1 + (Math.random()*2 - 1) * pctRange);
-}
-const btcPrice = Math.round(jitter(95000, 0.05));
-const btcChangePct = (Math.random()*8 - 4);
-const btcOpen = btcPrice / (1 + btcChangePct/100);
-const btcHigh = Math.max(btcPrice, btcOpen) * (1 + Math.random()*0.015);
-const btcLow = Math.min(btcPrice, btcOpen) * (1 - Math.random()*0.015);
-const solPrice = parseFloat(jitter(92.50, 0.06).toFixed(2));
-const solChangePct = (Math.random()*8 - 4);
-const solOpen = solPrice / (1 + solChangePct/100);
-const solHigh = Math.max(solPrice, solOpen) * (1 + Math.random()*0.02);
-const solLow = Math.min(solPrice, solOpen) * (1 - Math.random()*0.02);
-const ethPrice = Math.round(jitter(3200, 0.05));
-const ethChangePct = (Math.random()*8 - 4);
-const ethOpen = ethPrice / (1 + ethChangePct/100);
-const ethHigh = Math.max(ethPrice, ethOpen) * (1 + Math.random()*0.015);
-const ethLow = Math.min(ethPrice, ethOpen) * (1 - Math.random()*0.015);
-return {
-BTC:{price:btcPrice,open24h:btcOpen,change24h:btcPrice-btcOpen,changePct:btcChangePct,high24h:btcHigh,low24h:btcLow,volume24h:jitter(2400000000,0.3)},
-SOL:{price:solPrice,open24h:solOpen,change24h:solPrice-solOpen,changePct:solChangePct,high24h:solHigh,low24h:solLow,volume24h:jitter(1800000000,0.3)},
-ETH:{price:ethPrice,open24h:ethOpen,change24h:ethPrice-ethOpen,changePct:ethChangePct,high24h:ethHigh,low24h:ethLow,volume24h:jitter(5200000000,0.3)}
-};
+  const btcPrice = 108048.84;
+  const btcChangePct = 0;
+  const btcOpen = btcPrice;
+  const btcHigh = btcPrice;
+  const btcLow = btcPrice;
+
+  const solPrice = 142.50;
+  const solChangePct = 0;
+  const solOpen = solPrice;
+  const solHigh = solPrice;
+  const solLow = solPrice;
+
+  const ethPrice = 3421.91;
+  const ethChangePct = 0;
+  const ethOpen = ethPrice;
+  const ethHigh = ethPrice;
+  const ethLow = ethPrice;
+
+  return {
+    BTC:{
+      price:btcPrice,
+      open24h:btcOpen,
+      change24h:btcPrice-btcOpen,
+      changePct:btcChangePct,
+      high24h:btcHigh,
+      low24h:btcLow,
+      volume24h:2400000000
+    },
+
+    SOL:{
+      price:solPrice,
+      open24h:solOpen,
+      change24h:solPrice-solOpen,
+      changePct:solChangePct,
+      high24h:solHigh,
+      low24h:solLow,
+      volume24h:1800000000
+    },
+
+    ETH:{
+      price:ethPrice,
+      open24h:ethOpen,
+      change24h:ethPrice-ethOpen,
+      changePct:ethChangePct,
+      high24h:ethHigh,
+      low24h:ethLow,
+      volume24h:5200000000
+    }
+  };
 }
 let marketPrices = randomizeMarketBase();
 const tickConfig = {
-BTC:{volatility:0.0008,minInterval:3000,maxInterval:7000},
-SOL:{volatility:0.0015,minInterval:2500,maxInterval:6000},
-ETH:{volatility:0.0010,minInterval:3000,maxInterval:7000}
+  BTC:{minMove:2.75,maxMove:20.70,interval:5000},
+  ETH:{minMove:0.14,maxMove:0.83,interval:5000},
+  SOL:{minMove:0.01,maxMove:0.07,interval:5000}
 };
 let activeCoin = 'BTC';
 let recentTrades = [];
+let userTrades = [];
 let priceHistory = { BTC:[], SOL:[], ETH:[] };
 let chartTimeRange = '1D';
+
+priceHistory.BTC.push({t: Date.now(), p: marketPrices.BTC.price});
+priceHistory.SOL.push({t: Date.now(), p: marketPrices.SOL.price});
+priceHistory.ETH.push({t: Date.now(), p: marketPrices.ETH.price});
 function scheduleTick(coin) {
-const cfg = tickConfig[coin];
-const delay = cfg.minInterval + Math.random()*(cfg.maxInterval - cfg.minInterval);
-setTimeout(()=>{ applyPriceTick(coin); scheduleTick(coin); }, delay);
+  const cfg = tickConfig[coin];
+  setTimeout(()=>{ applyPriceTick(coin); scheduleTick(coin); }, cfg.interval);
 }
 function applyPriceTick(coin) {
 const data = marketPrices[coin];
-const noise = (Math.random()-0.49)*2;
-const pctMove = noise * tickConfig[coin].volatility;
+const cfg = tickConfig[coin];
 const oldPrice = data.price;
-data.price = Math.max(data.price*(1+pctMove), 0.01);
+const move = cfg.minMove + Math.random() * (cfg.maxMove - cfg.minMove);
+const moveDirection = Math.random() < 0.5 ? -1 : 1;
+
+data.price = Math.max(data.price + (move * moveDirection), 0.01);
 if (coin==='BTC') data.price = Math.round(data.price);
 else if (coin==='ETH') data.price = Math.round(data.price);
 else data.price = parseFloat(data.price.toFixed(2));
@@ -1639,7 +1669,6 @@ if (data.price > data.high24h) data.high24h = data.price;
 if (data.price < data.low24h) data.low24h = data.price;
 data.change24h = data.price - data.open24h;
 data.changePct = (data.change24h / data.open24h) * 100;
-exchangeRatesInUSD[coin] = data.price;
 const direction = data.price >= oldPrice ? 'up' : 'down';
 priceHistory[coin].push({t: Date.now(), p: data.price});
 if (priceHistory[coin].length > 300) priceHistory[coin].shift();
@@ -1792,39 +1821,146 @@ document.getElementById('macTotalVal').textContent = `${total.toFixed(2)} CAD`;
 }
 }
 function macSubmitOrder() {
-const amtInput = document.getElementById('macAmountInput').value;
-const amt = parseFloat(amtInput) || 0;
-if (amt <= 0) return;
-const btn = document.getElementById('macSubmitBtn');
-btn.style.opacity = '0.6';
-btn.style.pointerEvents = 'none';
-setTimeout(()=>{
-btn.style.opacity = '1';
-btn.style.pointerEvents = '';
-if (macCurrentTab==='buy') {
-const price = marketPrices[activeCoin].price;
-const received = amt / price;
-if (internalHiddenBalanceCAD < amt) { showToast('Insufficient CAD balance'); return; }
-deductBalanceForCurrency('CAD', amt);
-addBalanceForCurrency(activeCoin, received);
-renderBalance();
-showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);
-} else {
-const price = marketPrices[activeCoin].price;
-const received = amt * price;
-const bal = getBalanceForCurrency(activeCoin);
-if (bal < amt) { showToast(`Insufficient ${activeCoin} balance`); return; }
-deductBalanceForCurrency(activeCoin, amt);
-addBalanceForCurrency('CAD', received);
-renderBalance();
-showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);
+  const amtInput = document.getElementById('macAmountInput').value;
+  const amt = parseFloat(amtInput) || 0;
+  if (amt <= 0) return;
+
+  const btn = document.getElementById('macSubmitBtn');
+  btn.style.opacity = '0.6';
+  btn.style.pointerEvents = 'none';
+
+  setTimeout(()=>{
+    btn.style.opacity = '1';
+    btn.style.pointerEvents = '';
+
+    const price = marketPrices[activeCoin].price;
+
+    if (macCurrentTab === 'buy') {
+      const received = amt / price;
+
+      if (internalHiddenBalanceCAD < amt) {
+        showToast('Insufficient CAD balance');
+        return;
+      }
+
+      deductBalanceForCurrency('CAD', amt);
+      addBalanceForCurrency(activeCoin, received);
+
+      userTrades.unshift({
+        coin: activeCoin,
+        price: price,
+        size: received,
+        side: 'buy',
+        time: new Date()
+      });
+
+      if (userTrades.length > 20) userTrades.pop();
+
+      renderBalance();
+      updateOrderBook(activeCoin);
+
+      showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);
+
+    } else {
+      const received = amt * price;
+      const bal = getBalanceForCurrency(activeCoin);
+
+      if (bal < amt) {
+        showToast(`Insufficient ${activeCoin} balance`);
+        return;
+      }
+
+      deductBalanceForCurrency(activeCoin, amt);
+      addBalanceForCurrency('CAD', received);
+
+      userTrades.unshift({
+        coin: activeCoin,
+        price: price,
+        size: amt,
+        side: 'sell',
+        time: new Date()
+      });
+
+      if (userTrades.length > 20) userTrades.pop();
+
+      renderBalance();
+      updateOrderBook(activeCoin);
+
+      showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);
+    }
+
+    document.getElementById('macAmountInput').value = '';
+    document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));
+    updateMacTotal();
+
+  }, 700);
 }
-document.getElementById('macAmountInput').value = '';
-document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));
-updateMacTotal();
-}, 700);
+function getChartHistory(coin) {
+  const now = Date.now();
+  const liveHistory = priceHistory[coin] || [];
+
+  if (chartTimeRange === '1H') {
+    return liveHistory.filter(p => p.t >= now - 60 * 60 * 1000);
+  }
+
+  if (chartTimeRange === '1D') {
+    return liveHistory.filter(p => p.t >= now - 24 * 60 * 60 * 1000);
+  }
+
+  if (chartTimeRange === '1W') {
+    return liveHistory.filter(p => p.t >= now - 7 * 24 * 60 * 60 * 1000);
+  }
+
+  if (chartTimeRange === '1M') {
+    return liveHistory.filter(p => p.t >= now - 30 * 24 * 60 * 60 * 1000);
+  }
+
+  if (chartTimeRange === '1Y') {
+    return getYearHistory(coin);
+  }
+
+  return liveHistory;
 }
-/* CHART DRAWING */
+
+function getYearHistory(coin) {
+  const now = Date.now();
+
+  const historical = {
+    BTC: [
+      32000, 35000, 41000, 47000,
+      38000, 20000, 19000, 16500,
+      23000, 27000, 26000, 34000,
+      42000, 60000, 58000, 68000,
+      85000, 90000, 88000, 82000,
+      68000, 66000, 74500, 78500, 78370
+    ],
+
+    ETH: [
+      1300, 2100, 2500, 3700,
+      2600, 1000, 1300, 1200,
+      1500, 1800, 1600, 1800,
+      2200, 3000, 2400, 2600,
+      3100, 3300, 2800, 2500,
+      2100, 2000, 2350, 2460, 2500
+    ],
+
+    SOL: [
+      3, 30, 30, 170,
+      80, 30, 32, 10,
+      20, 17, 19, 38,
+      100, 130, 130, 165,
+      180, 200, 160, 140,
+      110, 95, 120, 115, 104.50
+    ]
+  };
+
+  const values = historical[coin] || [];
+
+  return values.map((price, index) => ({
+    t: now - (values.length - index) * 30 * 24 * 60 * 60 * 1000,
+    p: price
+  }));
+}
 function drawChart(coin) {
 const canvas = document.getElementById('marketCanvas');
 if (!canvas) return;
@@ -1837,7 +1973,7 @@ ctx.scale(dpr, dpr);
 const w = rect.width;
 const h = rect.height;
 ctx.clearRect(0, 0, w, h);
-const history = priceHistory[coin];
+let history = getChartHistory(coin);
 if (history.length < 2) {
 ctx.beginPath();
 ctx.strokeStyle = 'rgba(255,255,255,0.08)';
@@ -1929,20 +2065,6 @@ setMacTab(macCurrentTab);
 updateMarketAlerts();
 drawChart(coin);
 }
-/* Seed initial price history */
-(function seedPriceHistory() {
-const now = Date.now();
-['BTC','SOL','ETH'].forEach(coin => {
-const data = marketPrices[coin];
-let p = data.open24h;
-for (let i = 60; i >= 0; i--) {
-const noise = (Math.random()-0.49) * 2 * tickConfig[coin].volatility;
-p = Math.max(p*(1+noise), 0.01);
-priceHistory[coin].push({ t: now - i*60000, p: parseFloat(p.toFixed(coin==='SOL'?2:0)) });
-}
-priceHistory[coin].push({ t: now, p: data.price });
-});
-})();
 scheduleTick('BTC'); scheduleTick('SOL'); scheduleTick('ETH');
 /* Fetch real prices */
 async function fetchRealMarketData() {
@@ -1970,7 +2092,6 @@ updateTickerBar(coin);
 if (activeCoin) { updateMainView(activeCoin, null); updateOrderBook(activeCoin); drawChart(activeCoin); }
 } catch(e) { console.log('Market fetch failed, using local simulation'); }
 }
-fetchRealMarketData();
 /* ==============================
 PRICE ALERTS
 (moved above "Initialize market view" —
@@ -2243,7 +2364,4 @@ setTimeout(()=>drawChart(activeCoin), 100);
 </script>
 </body>
 </html>
-
-
-
 
