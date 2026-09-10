@@ -39,7 +39,15 @@ body.theme-midnight {
 }
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; user-select: none; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; background-color: var(--bg-main); }
-body { color: var(--text-main); display: flex; height: 100vh; width: 100vw; overflow: hidden; position: relative; }
+body {
+  color: var(--text-main);
+  display: flex;
+  height: 100dvh;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
 /* ==============================
 SIDEBAR
 ============================== */
@@ -67,10 +75,77 @@ transition: opacity 0.28s ease;
 }
 .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
 @media (max-width: 768px) {
-.sidebar { position: fixed; top: 0; bottom: 0; left: 0; transform: translateX(-100%); box-shadow: 20px 0 40px rgba(0,0,0,0.8); }
-.sidebar.open { transform: translateX(0); }
-.menu-btn { display: flex !important; }
-.sidebar-close-btn { display: flex !important; }
+  @media (max-width: 768px) {
+  body {
+    height: 100dvh;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: min(290px, 86vw);
+    transform: translateX(-100%);
+    box-shadow: 20px 0 40px rgba(0,0,0,0.8);
+    padding-top: calc(20px + env(safe-area-inset-top));
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .menu-btn {
+    display: flex !important;
+  }
+
+  .sidebar-close-btn {
+    display: flex !important;
+  }
+
+  .main-dashboard {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .page-panel {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .scroll-content {
+    padding:
+      calc(20px + env(safe-area-inset-top))
+      16px
+      calc(32px + env(safe-area-inset-bottom))
+      16px;
+  }
+
+  .dashboard-header {
+    margin-bottom: 20px;
+  }
+
+  .dashboard-title {
+    font-size: 22px;
+  }
+
+  .balance-card {
+    padding: 22px;
+    min-height: 210px;
+    border-radius: 20px;
+  }
+
+  .main-balance {
+    font-size: clamp(30px, 9vw, 42px);
+  }
+
+  .top-row-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
 }
 .sidebar-top { flex: 1; overflow: hidden; }
 .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
