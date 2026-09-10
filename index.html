@@ -1637,9 +1637,9 @@ function randomizeMarketBase() {
 }
 let marketPrices = randomizeMarketBase();
 const tickConfig = {
- BTC:{minMove:2.75,maxMove:20.70,interval:5000},
- ETH:{minMove:0.14,maxMove:0.83,interval:5000},
- SOL:{minMove:0.01,maxMove:0.07,interval:5000}
+BTC:{minMove:2.75,maxMove:20.70,interval:1000},
+ETH:{minMove:0.14,maxMove:0.83,interval:1000},
+SOL:{minMove:0.01,maxMove:0.07,interval:1000}
 };
 let activeCoin = 'BTC';
 setTimeout(() => {
@@ -1660,8 +1660,8 @@ function initCandles() {
 
  for (let i = 59; i >= 0; i--) {
  const base = price * (1 + (Math.random() - 0.5) * 0.04);
- const open = base;
- const close = base * (1 + (Math.random() - 0.5) * 0.012);
+ const open = i === 59 ? base : candles[candles.length - 1].c;
+ const close = open * (1 + (Math.random() - 0.5) * 0.012);
  const high = Math.max(open, close) * (1 + Math.random() * 0.008);
  const low = Math.min(open, close) * (1 - Math.random() * 0.008);
 
@@ -1707,36 +1707,64 @@ priceHistory[coin].push({t: Date.now(), p: data.price});
 const now = Date.now();
 let candles = candleHistory[coin];
 
+if (!candles) {
+ candles = [];
+ candleHistory[coin] = candles;
+}
+
 if (!candles.length) {
  candles.push({
- t: now,
- o: oldPrice,
- h: Math.max(oldPrice, data.price),
- l: Math.min(oldPrice, data.price),
- c: data.price
+  t: now,
+  o: oldPrice,
+  h: Math.max(oldPrice, data.price),
+  l: Math.min(oldPrice, data.price),
+  c: data.price
  });
+
  candleStartTimes[coin] = now;
 }
 
-const currentCandle = candles[candles.length - 1];
+let currentCandle = candles[candles.length - 1];
 
-if (now - candleStartTimes[coin] >= 60000) {
- candles.push({
- t: now,
- o: currentCandle.c,
- h: data.price,
- l: data.price,
- c: data.price
- });
+if (now - candleStartTimes[coin] >= 5000) {
+
+ const previousClose = currentCandle.c;
+
+ currentCandle = {
+
+  t: now,
+
+  o: previousClose,
+
+  h: data.price,
+
+  l: data.price,
+
+  c: data.price
+
+ };
+
+ candles.push(currentCandle);
+
  candleStartTimes[coin] = now;
+
 } else {
+
  currentCandle.h = Math.max(currentCandle.h, data.price);
+
  currentCandle.l = Math.min(currentCandle.l, data.price);
+
  currentCandle.c = data.price;
+
 }
 
-if (candles.length > 300) candles.shift();
-if (priceHistory[coin].length > 300) priceHistory[coin].shift();
+if (candles.length > 300) {
+ candles.shift();
+}
+
+if (priceHistory[coin].length > 300) {
+ priceHistory[coin].shift();
+}
 recentTrades.unshift({ price: data.price, size: parseFloat((Math.random()*2+0.01).toFixed(4)), side: direction==='up'?'buy':'sell', time: new Date() });
 if (recentTrades.length > 30) recentTrades.pop();
 updateTickerBar(coin);
@@ -2026,7 +2054,21 @@ function getYearHistory(coin) {
  p: price
  }));
 }
+let chartOffsetX = 0;
+let chartOffsetY = 0;
+let chartZoom = 1;
+let chartAutoFit = true;
+
+let chartDragging = false;
+let chartDragMode = null;
+let chartLastX = 0;
+let chartLastY = 0;
+
+let chartPriceScale = 1;
+let chartTimeScale = 1;
+
 function drawChart(coin) {
+
  const canvas = document.getElementById('marketCanvas');
  if (!canvas) return;
 
@@ -2052,27 +2094,36 @@ function drawChart(coin) {
  const chartTop = 12;
  const chartBottom = h - 20;
 
- const visibleCandles = candles.slice(-60);
+ const visibleCandles = candles.slice(-40);
 
- let minP = Math.min(...visibleCandles.map(c => c.l));
- let maxP = Math.max(...visibleCandles.map(c => c.h));
+let minP = Math.min(...visibleCandles.map(c => c.l));
+let maxP = Math.max(...visibleCandles.map(c => c.h));
 
- const priceRange = maxP - minP || 1;
- minP -= priceRange * 0.08;
- maxP += priceRange * 0.08;
+const actualRange = maxP - minP;
+const centerPrice = (maxP + minP) / 2;
+const minimumRange = centerPrice * 0.01;
+const priceRange = Math.max(actualRange, minimumRange) * chartPriceScale;
 
- const toY = price => {
- return chartBottom -
- ((price - minP) / (maxP - minP)) *
- (chartBottom - chartTop);
- };
+if (chartAutoFit) {
+  minP = centerPrice - priceRange / 2;
+  maxP = centerPrice + priceRange / 2;
+} else {
+  const manualCenter = centerPrice + chartOffsetY;
+  minP = manualCenter - priceRange / 2;
+  maxP = manualCenter + priceRange / 2;
+}
+const toY = price => {
+  return chartBottom -
+    ((price - minP) / (maxP - minP)) *
+    (chartBottom - chartTop);
+};
 
- const candleWidth = Math.max(
- 4,
- Math.min(14, (w - pad * 2) / visibleCandles.length * 0.65)
- );
+const spacing = ((w - pad * 2) / visibleCandles.length) * chartZoom * chartTimeScale;
 
- const spacing = (w - pad * 2) / visibleCandles.length;
+const candleWidth = Math.max(
+  6,
+  Math.min(12, spacing * 0.65)
+);
 
  /* grid lines */
  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
@@ -2089,7 +2140,7 @@ function drawChart(coin) {
 
  /* candles */
  visibleCandles.forEach((candle, index) => {
- const x = pad + spacing * index + spacing / 2;
+const x = pad + spacing * index + spacing / 2 + (chartOffsetX * spacing);
 
  const openY = toY(candle.o);
  const closeY = toY(candle.c);
@@ -2116,7 +2167,8 @@ function drawChart(coin) {
 
  /* body */
  const bodyTop = Math.min(openY, closeY);
- const bodyHeight = Math.max(2, Math.abs(closeY - openY));
+ const bodyBottom = Math.max(openY, closeY);
+ const bodyHeight = Math.max(2, bodyBottom - bodyTop);
 
  ctx.fillRect(
  x - candleWidth / 2,
@@ -2145,11 +2197,237 @@ function drawChart(coin) {
  }
 }
 function setTimeRange(range, btn) {
+  
 chartTimeRange = range;
 document.querySelectorAll('.tr-btn').forEach(b=>b.classList.remove('active'));
 btn.classList.add('active');
 drawChart(activeCoin);
 }
+/* ==============================
+   CHART INTERACTION
+============================== */
+
+const marketCanvas = document.getElementById('marketCanvas');
+
+let chartStartX = 0;
+let chartStartY = 0;
+let chartStartOffsetX = 0;
+let chartStartOffsetY = 0;
+
+marketCanvas.addEventListener('mousedown', e => {
+
+  const rect = marketCanvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  /* right side = price scale */
+  if (x > rect.width - 55) {
+
+    chartDragging = true;
+    chartDragMode = 'price';
+
+    chartLastY = e.clientY;
+
+    marketCanvas.style.cursor = 'ns-resize';
+
+    e.preventDefault();
+    return;
+  }
+
+  /* bottom = time scale */
+  if (y > rect.height - 35) {
+
+    chartDragging = true;
+    chartDragMode = 'time';
+
+    chartLastX = e.clientX;
+
+    marketCanvas.style.cursor = 'ew-resize';
+
+    e.preventDefault();
+    return;
+  }
+
+  /* normal chart drag */
+  chartDragging = true;
+  chartDragMode = 'chart';
+
+  chartStartX = e.clientX;
+  chartStartY = e.clientY;
+
+  chartStartOffsetX = chartOffsetX;
+  chartStartOffsetY = chartOffsetY;
+
+  chartAutoFit = false;
+
+  marketCanvas.style.cursor = 'grabbing';
+
+  e.preventDefault();
+
+});
+
+
+window.addEventListener('mousemove', e => {
+
+  if (!chartDragging) return;
+
+  /* price scale */
+  if (chartDragMode === 'price') {
+
+    const dy = e.clientY - chartLastY;
+
+    chartLastY = e.clientY;
+
+    chartPriceScale *= Math.exp(dy * 0.005);
+
+    chartPriceScale = Math.max(
+      0.2,
+      Math.min(chartPriceScale, 5)
+    );
+
+    chartAutoFit = false;
+
+    drawChart(activeCoin);
+
+    return;
+  }
+
+  /* time scale */
+  if (chartDragMode === 'time') {
+
+    const dx = e.clientX - chartLastX;
+
+    chartLastX = e.clientX;
+
+    chartTimeScale *= Math.exp(-dx * 0.005);
+
+    chartTimeScale = Math.max(
+      0.25,
+      Math.min(chartTimeScale, 4)
+    );
+
+    drawChart(activeCoin);
+
+    return;
+  }
+
+  /* normal chart movement */
+
+  const currentX = e.clientX;
+  const currentY = e.clientY;
+
+  const dx = currentX - chartStartX;
+  const dy = currentY - chartStartY;
+
+  const rect = marketCanvas.getBoundingClientRect();
+
+  const candleCount = Math.max(40, 1);
+
+  const baseSpacing =
+    (rect.width - 36) / candleCount;
+
+  const actualSpacing =
+    baseSpacing * chartZoom * chartTimeScale;
+
+  /* convert pixels into candle movement */
+  const candleShift =
+    dx / Math.max(actualSpacing, 1);
+
+  chartOffsetX =
+    chartStartOffsetX + candleShift;
+
+  chartOffsetY =
+    chartStartOffsetY + dy;
+
+  drawChart(activeCoin);
+
+});
+
+
+window.addEventListener('mouseup', () => {
+
+  if (!chartDragging) return;
+
+  chartDragging = false;
+  chartDragMode = null;
+
+  marketCanvas.style.cursor = 'grab';
+
+  drawChart(activeCoin);
+
+});
+
+
+/* ==============================
+   CURSOR ANCHORED ZOOM
+============================== */
+
+marketCanvas.addEventListener('wheel', e => {
+
+  e.preventDefault();
+
+  const rect = marketCanvas.getBoundingClientRect();
+
+  const mouseX =
+    e.clientX - rect.left;
+
+  const oldZoom = chartZoom;
+
+  if (e.deltaY < 0) {
+
+    chartZoom *= 1.12;
+
+  } else {
+
+    chartZoom /= 1.12;
+
+  }
+
+  chartZoom = Math.max(
+    0.25,
+    Math.min(chartZoom, 20)
+  );
+
+  const zoomRatio =
+    chartZoom / oldZoom;
+
+  /*
+    keep the point underneath
+    the mouse in the same place
+  */
+
+  chartOffsetX =
+    mouseX -
+    (mouseX - chartOffsetX) *
+    zoomRatio;
+
+  drawChart(activeCoin);
+
+}, { passive: false });
+
+
+/* reset chart when changing time range */
+
+const originalSetTimeRange = setTimeRange;
+
+setTimeRange = function(range, btn) {
+
+  chartAutoFit = true;
+
+  chartOffsetY = 0;
+  chartOffsetX = 0;
+
+  chartZoom = 1;
+  chartPriceScale = 1;
+  chartTimeScale = 1;
+
+  originalSetTimeRange(range, btn);
+
+};
+
+
+marketCanvas.style.cursor = 'grab';
+
 /* SELECT COIN IN MARKET */
 function selectMarketCoin(coin) {
 activeCoin = coin;
@@ -2476,5 +2754,3 @@ setTimeout(()=>drawChart(activeCoin), 100);
 </script>
 </body>
 </html>
-
-
