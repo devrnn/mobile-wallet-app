@@ -843,6 +843,9 @@ PERSONAL ACCOUNT MODAL
   width: 100%;
   height: 100%;
   z-index: 1000;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  isolation: isolate;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -864,7 +867,13 @@ PERSONAL ACCOUNT MODAL
   height: 230px;
   border-radius: 50%;
   overflow: hidden;
+  -webkit-overflow-scrolling: touch;
   background: #0d1b42;
+  isolation: isolate;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   box-shadow:
     0 0 30px rgba(56, 189, 248, .18),
     0 0 70px rgba(37, 99, 235, .14),
@@ -1021,6 +1030,49 @@ PERSONAL ACCOUNT MODAL
   pointer-events: none;
   z-index: 8;
   animation: edgePulse 3.5s ease-in-out infinite;
+}
+
+/* iOS/Safari compositor fix: keep the animated blob on its own GPU layer. */
+@supports (-webkit-touch-callout: none) {
+  .intro {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  .orb {
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    mask-image: radial-gradient(white, black);
+  }
+
+  .orb::before {
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .liquid,
+  .liquid2,
+  .reflection,
+  .wLight,
+  .highlight,
+  .innerShade {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+@media (max-width: 768px) {
+  .intro {
+    width: 100vw;
+    height: 100dvh;
+    min-height: 100vh;
+  }
+
+  .orb {
+    width: min(230px, 58vw);
+    height: min(230px, 58vw);
+  }
 }
 
 @keyframes orbMorph {
