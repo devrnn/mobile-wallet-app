@@ -858,6 +858,10 @@ PERSONAL ACCOUNT MODAL
     cubic-bezier(.76, 0, .24, 1)
     6.8s
     forwards;
+  pointer-events: auto;
+}
+
+.intro.intro-finished {
   pointer-events: none;
 }
 
@@ -884,10 +888,11 @@ PERSONAL ACCOUNT MODAL
     cubic-bezier(.16, 1, .3, 1)
     forwards,
     orbMorph
-    7s
-    ease-in-out
-    1.8s
-    infinite;
+    6.4s
+    cubic-bezier(.37, .02, .2, 1)
+    1.35s
+    1
+    both;
 }
 
 .liquid {
@@ -903,7 +908,7 @@ PERSONAL ACCOUNT MODAL
     radial-gradient(ellipse at 20% 78%, #06b6d4 0%, transparent 40%),
     radial-gradient(ellipse at 48% 48%, #0879c9 0%, transparent 58%);
   filter: blur(13px);
-  animation: liquidMove 12s linear infinite;
+  animation: liquidMove 13.5s cubic-bezier(.45,0,.55,1) infinite;
 }
 
 .liquid2 {
@@ -919,7 +924,7 @@ PERSONAL ACCOUNT MODAL
     radial-gradient(ellipse at 45% 45%, rgba(59, 130, 246, .5), transparent 50%);
   filter: blur(27px);
   mix-blend-mode: screen;
-  animation: liquidMove2 16s linear infinite;
+  animation: liquidMove2 17.75s cubic-bezier(.45,0,.55,1) infinite;
 }
 
 .reflection {
@@ -936,7 +941,7 @@ PERSONAL ACCOUNT MODAL
       transparent 65%);
   filter: blur(12px);
   opacity: .7;
-  animation: reflectionMove 10s linear infinite;
+  animation: reflectionMove 11.5s cubic-bezier(.45,0,.55,1) infinite;
 }
 
 .wLight {
@@ -981,7 +986,7 @@ PERSONAL ACCOUNT MODAL
   mix-blend-mode: screen;
   pointer-events: none;
   z-index: 5;
-  animation: highlightSweep 5.5s ease-in-out 2.2s infinite;
+  animation: highlightSweep 6.8s cubic-bezier(.37,.02,.2,1) 1.8s infinite;
 }
 
 .innerShade {
@@ -1073,15 +1078,46 @@ PERSONAL ACCOUNT MODAL
     width: min(230px, 58vw);
     height: min(230px, 58vw);
   }
+
+  /* Keep the same orb look on phones, but reduce the heavy glow/blur. */
+  .liquid,
+  .liquid2 {
+    filter: blur(18px);
+    -webkit-filter: blur(18px);
+  }
+
+  .reflection {
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+  }
+
+  .wLight,
+  .highlight {
+    filter: blur(3px);
+    -webkit-filter: blur(3px);
+  }
 }
 
 @keyframes orbMorph {
-  0% { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; transform: scale(1) rotate(0deg); }
-  20% { border-radius: 46% 54% 56% 44% / 52% 43% 57% 48%; transform: scale(1.025) rotate(2deg); }
-  40% { border-radius: 55% 45% 46% 54% / 43% 57% 47% 53%; transform: scale(.985) rotate(-2deg); }
-  60% { border-radius: 44% 56% 52% 48% / 57% 44% 56% 43%; transform: scale(1.035) rotate(2deg); }
-  80% { border-radius: 53% 47% 44% 56% / 46% 54% 57% 43%; transform: scale(.99) rotate(-2deg); }
-  100% { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; transform: scale(1) rotate(0deg); }
+  /* Subtle, intentional shape changes — no constant wobbling or spinning. */
+  0% {
+    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+  }
+  22% {
+    border-radius: 48% 52% 54% 46% / 52% 47% 53% 48%;
+  }
+  45% {
+    border-radius: 53% 47% 48% 52% / 47% 54% 46% 53%;
+  }
+  68% {
+    border-radius: 46% 54% 52% 48% / 53% 46% 54% 47%;
+  }
+  84% {
+    border-radius: 51% 49% 55% 45% / 48% 55% 45% 52%;
+  }
+  100% {
+    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+  }
 }
 
 @keyframes orbEntrance {
@@ -3351,3 +3387,16 @@ setTimeout(()=>drawChart(activeCoin), 100);
 </script>
 </body>
 </html>
+<script>
+// Keep the intro as a real interaction shield while it is visible.
+// Once its fade-out animation finishes, let the wallet underneath receive touches again.
+(() => {
+  const intro = document.querySelector('.intro');
+  if (!intro) return;
+  intro.addEventListener('animationend', (event) => {
+    if (event.animationName === 'introOutro') {
+      intro.classList.add('intro-finished');
+    }
+  }, { once: true });
+})();
+</script>
