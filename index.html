@@ -858,10 +858,6 @@ PERSONAL ACCOUNT MODAL
     cubic-bezier(.76, 0, .24, 1)
     6.8s
     forwards;
-  pointer-events: auto;
-}
-
-.intro.intro-finished {
   pointer-events: none;
 }
 
@@ -1099,24 +1095,41 @@ PERSONAL ACCOUNT MODAL
 }
 
 @keyframes orbMorph {
-  /* Subtle, intentional shape changes — no constant wobbling or spinning. */
   0% {
     border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+    transform: scale(1) rotate(0deg);
   }
-  22% {
-    border-radius: 48% 52% 54% 46% / 52% 47% 53% 48%;
+  12% {
+    border-radius: 48% 52% 58% 42% / 54% 45% 55% 46%;
+    transform: scale(1.018) rotate(1deg);
   }
-  45% {
-    border-radius: 53% 47% 48% 52% / 47% 54% 46% 53%;
+  25% {
+    border-radius: 42% 58% 51% 49% / 58% 44% 56% 42%;
+    transform: scale(.994) rotate(-1.2deg);
   }
-  68% {
-    border-radius: 46% 54% 52% 48% / 53% 46% 54% 47%;
+  39% {
+    border-radius: 57% 43% 45% 55% / 47% 59% 41% 53%;
+    transform: scale(1.026) rotate(1.8deg);
   }
-  84% {
-    border-radius: 51% 49% 55% 45% / 48% 55% 45% 52%;
+  53% {
+    border-radius: 61% 39% 52% 48% / 43% 56% 44% 57%;
+    transform: scale(1.005) rotate(-1deg);
+  }
+  67% {
+    border-radius: 47% 53% 62% 38% / 58% 42% 55% 45%;
+    transform: scale(1.032) rotate(1.4deg);
+  }
+  81% {
+    border-radius: 55% 45% 43% 57% / 48% 61% 39% 52%;
+    transform: scale(.997) rotate(-1.6deg);
+  }
+  92% {
+    border-radius: 51% 49% 57% 43% / 55% 46% 54% 45%;
+    transform: scale(1.014) rotate(.8deg);
   }
   100% {
-    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+    border-radius: 53% 47% 49% 51% / 47% 56% 44% 53%;
+    transform: scale(1) rotate(0deg);
   }
 }
 
@@ -3387,16 +3400,3 @@ setTimeout(()=>drawChart(activeCoin), 100);
 </script>
 </body>
 </html>
-<script>
-// Keep the intro as a real interaction shield while it is visible.
-// Once its fade-out animation finishes, let the wallet underneath receive touches again.
-(() => {
-  const intro = document.querySelector('.intro');
-  if (!intro) return;
-  intro.addEventListener('animationend', (event) => {
-    if (event.animationName === 'introOutro') {
-      intro.classList.add('intro-finished');
-    }
-  }, { once: true });
-})();
-</script>
