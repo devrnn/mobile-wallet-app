@@ -833,9 +833,303 @@ PERSONAL ACCOUNT MODAL
 .account-email-edit-row.open { display: flex; }
 .account-email-edit-row input { flex: 1; background: var(--bg-input); border: 1px solid var(--border-hover); border-radius: 10px; padding: 9px 12px; color: #fff; font-size: 13px; font-weight: 600; outline: none; min-width: 0; }
 .account-email-edit-row button { background: #ffffff; color: #0a0a0c; border: none; padding: 9px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; flex-shrink: 0; }
+
+/* =========================
+   WALLET INTRO — ORIGINAL ORB
+========================= */
+.intro {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at center, #10182d 0%, #050711 65%, #02030a 100%);
+  animation:
+    introOutro
+    1.4s
+    cubic-bezier(.76, 0, .24, 1)
+    6.8s
+    forwards;
+  pointer-events: none;
+}
+
+.orb {
+  position: relative;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #0d1b42;
+  box-shadow:
+    0 0 30px rgba(56, 189, 248, .18),
+    0 0 70px rgba(37, 99, 235, .14),
+    0 0 120px rgba(6, 182, 212, .08);
+  animation:
+    orbEntrance
+    1.8s
+    cubic-bezier(.16, 1, .3, 1)
+    forwards,
+    orbMorph
+    7s
+    ease-in-out
+    1.8s
+    infinite;
+}
+
+.liquid {
+  position: absolute;
+  width: 155%;
+  height: 155%;
+  left: -27.5%;
+  top: -27.5%;
+  background:
+    radial-gradient(ellipse at 18% 20%, #a5e8ff 0%, transparent 27%),
+    radial-gradient(ellipse at 78% 18%, #2563eb 0%, transparent 35%),
+    radial-gradient(ellipse at 82% 72%, #6366f1 0%, transparent 37%),
+    radial-gradient(ellipse at 20% 78%, #06b6d4 0%, transparent 40%),
+    radial-gradient(ellipse at 48% 48%, #0879c9 0%, transparent 58%);
+  filter: blur(13px);
+  animation: liquidMove 12s linear infinite;
+}
+
+.liquid2 {
+  position: absolute;
+  width: 145%;
+  height: 145%;
+  left: -22.5%;
+  top: -22.5%;
+  background:
+    radial-gradient(ellipse at 65% 15%, rgba(186, 230, 253, .8), transparent 27%),
+    radial-gradient(ellipse at 15% 55%, rgba(34, 211, 238, .75), transparent 34%),
+    radial-gradient(ellipse at 78% 78%, rgba(99, 102, 241, .75), transparent 35%),
+    radial-gradient(ellipse at 45% 45%, rgba(59, 130, 246, .5), transparent 50%);
+  filter: blur(27px);
+  mix-blend-mode: screen;
+  animation: liquidMove2 16s linear infinite;
+}
+
+.reflection {
+  position: absolute;
+  width: 75%;
+  height: 75%;
+  left: -20%;
+  top: -20%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle,
+      rgba(255, 255, 255, .3) 0%,
+      rgba(255, 255, 255, .1) 25%,
+      transparent 65%);
+  filter: blur(12px);
+  opacity: .7;
+  animation: reflectionMove 10s linear infinite;
+}
+
+.wLight {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(.8);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle,
+      rgba(255, 255, 255, .13) 0%,
+      rgba(255, 255, 255, .055) 25%,
+      rgba(255, 255, 255, .018) 45%,
+      transparent 72%);
+  filter: blur(15px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+  animation:
+    wLightEntrance 1.5s ease-out 1.4s forwards,
+    wLightMove 4.5s ease-in-out 2.9s infinite;
+}
+
+.highlight {
+  position: absolute;
+  width: 55%;
+  height: 180%;
+  left: -80%;
+  top: -40%;
+  transform: rotate(18deg);
+  background:
+    linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, .025) 35%,
+      rgba(255, 255, 255, .12) 50%,
+      rgba(255, 255, 255, .025) 65%,
+      transparent 100%);
+  filter: blur(10px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 5;
+  animation: highlightSweep 5.5s ease-in-out 2.2s infinite;
+}
+
+.innerShade {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 50% 42%,
+      transparent 35%,
+      rgba(0, 0, 0, .04) 60%,
+      rgba(0, 0, 0, .2) 100%);
+  pointer-events: none;
+  z-index: 6;
+}
+
+.w {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 108px;
+  font-weight: 800;
+  letter-spacing: -10px;
+  color: #ffffff;
+  transform: translateX(-5px) scale(.88);
+  opacity: 0;
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, .95),
+    0 0 7px rgba(255, 255, 255, .28),
+    0 0 16px rgba(255, 255, 255, .10);
+  animation:
+    wEntrance 1.5s cubic-bezier(.16, 1, .3, 1) 1.15s forwards,
+    wFloat 4s ease-in-out 2.8s infinite;
+}
+
+.orb::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, .08);
+  box-shadow: inset 0 0 18px rgba(255, 255, 255, .06);
+  pointer-events: none;
+  z-index: 8;
+  animation: edgePulse 3.5s ease-in-out infinite;
+}
+
+@keyframes orbMorph {
+  0% { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; transform: scale(1) rotate(0deg); }
+  20% { border-radius: 46% 54% 56% 44% / 52% 43% 57% 48%; transform: scale(1.025) rotate(2deg); }
+  40% { border-radius: 55% 45% 46% 54% / 43% 57% 47% 53%; transform: scale(.985) rotate(-2deg); }
+  60% { border-radius: 44% 56% 52% 48% / 57% 44% 56% 43%; transform: scale(1.035) rotate(2deg); }
+  80% { border-radius: 53% 47% 44% 56% / 46% 54% 57% 43%; transform: scale(.99) rotate(-2deg); }
+  100% { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes orbEntrance {
+  0% { opacity: 0; transform: scale(.72) translateY(18px); filter: blur(12px); }
+  55% { opacity: 1; transform: scale(1.035) translateY(-2px); filter: blur(0); }
+  75% { transform: scale(.985) translateY(0); }
+  100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+}
+
+@keyframes liquidMove {
+  0% { transform: translate(-4%, -5%) rotate(0deg) scale(1); }
+  25% { transform: translate(7%, -7%) rotate(90deg) scale(1.08); }
+  50% { transform: translate(9%, 6%) rotate(180deg) scale(1.14); }
+  75% { transform: translate(-6%, 10%) rotate(270deg) scale(1.08); }
+  100% { transform: translate(-4%, -5%) rotate(360deg) scale(1); }
+}
+
+@keyframes liquidMove2 {
+  0% { transform: translate(7%, -5%) rotate(0deg) scale(1); }
+  25% { transform: translate(-8%, 5%) rotate(-90deg) scale(1.08); }
+  50% { transform: translate(5%, 10%) rotate(-180deg) scale(1.16); }
+  75% { transform: translate(-4%, -2%) rotate(-270deg) scale(1.08); }
+  100% { transform: translate(7%, -5%) rotate(-360deg) scale(1); }
+}
+
+@keyframes reflectionMove {
+  0% { transform: translate(0, 0) scale(1); opacity: .7; }
+  25% { transform: translate(22px, 16px) scale(.9); opacity: .55; }
+  50% { transform: translate(45px, 32px) scale(.78); opacity: .35; }
+  75% { transform: translate(22px, 16px) scale(.9); opacity: .55; }
+  100% { transform: translate(0, 0) scale(1); opacity: .7; }
+}
+
+@keyframes wEntrance {
+  0% { opacity: 0; transform: translateX(-5px) scale(.7); filter: blur(8px); }
+  65% { opacity: 1; transform: translateX(-5px) scale(1.035); filter: blur(0); }
+  100% { opacity: 1; transform: translateX(-5px) scale(1); filter: blur(0); }
+}
+
+@keyframes wFloat {
+  0% {
+    transform: translateX(-5px) translateY(0) scale(1);
+    text-shadow: 0 0 2px rgba(255,255,255,.95), 0 0 7px rgba(255,255,255,.28), 0 0 16px rgba(255,255,255,.10);
+  }
+  50% {
+    transform: translateX(-5px) translateY(-2px) scale(1.012);
+    text-shadow: 0 0 3px rgba(255,255,255,1), 0 0 9px rgba(255,255,255,.34), 0 0 20px rgba(255,255,255,.13);
+  }
+  100% {
+    transform: translateX(-5px) translateY(0) scale(1);
+    text-shadow: 0 0 2px rgba(255,255,255,.95), 0 0 7px rgba(255,255,255,.28), 0 0 16px rgba(255,255,255,.10);
+  }
+}
+
+@keyframes wLightEntrance {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.45); }
+  100% { opacity: .5; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes wLightMove {
+  0% { opacity: .35; transform: translate(-50%, -50%) scale(.9); }
+  50% { opacity: .7; transform: translate(-50%, -50%) scale(1.08); }
+  100% { opacity: .35; transform: translate(-50%, -50%) scale(.9); }
+}
+
+@keyframes highlightSweep {
+  0% { left: -80%; opacity: 0; }
+  15% { opacity: 0; }
+  30% { opacity: .75; }
+  55% { opacity: .35; }
+  75% { opacity: 0; }
+  100% { left: 140%; opacity: 0; }
+}
+
+@keyframes edgePulse {
+  0%, 100% { opacity: .35; }
+  50% { opacity: .8; }
+}
+
+@keyframes introOutro {
+  0% { opacity: 1; transform: scale(1); filter: blur(0); }
+  72% { opacity: 1; transform: scale(1); filter: blur(0); }
+  100% { opacity: 0; transform: scale(.72); filter: blur(10px); }
+}
 </style>
 </head>
 <body>
+<!-- Original animated W orb intro -->
+<div class="intro" aria-hidden="true">
+  <div class="orb">
+    <div class="liquid"></div>
+    <div class="liquid2"></div>
+    <div class="reflection"></div>
+    <div class="wLight"></div>
+    <div class="highlight"></div>
+    <div class="innerShade"></div>
+    <div class="w">W</div>
+  </div>
+</div>
+
 <!-- Wallet Pull-to-Refresh Indicator -->
 <div class="pull-indicator" id="pullIndicator">
 <div class="refresh-capsule">
