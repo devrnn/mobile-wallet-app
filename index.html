@@ -375,6 +375,19 @@ will-change: transform;
 .edit-btn:active { transform: translateY(1px) scale(0.98); }
 .edit-btn.save { background: #ffffff; color: #0a0a0c; border-color: transparent; }
 .edit-btn.save:hover { background: #f0f0f0; }
+
+.activity-swipe-row { position: relative; overflow: hidden; border-radius: 12px; margin: 0 -12px; touch-action: pan-y; --swipe-progress: 0; }
+.activity-delete-action { position: absolute; inset: 0; display: flex; align-items: center; justify-content: flex-start; padding-left: 25px; color: #fff; border-radius: 12px; overflow: hidden; opacity: 0; background: linear-gradient(110deg, #8f1021 0%, #d51f3b 42%, #ff3b55 72%, #ff6478 100%); box-shadow: inset -40px 0 55px rgba(255,70,90,.08); transform: scaleX(.985); transform-origin: left center; transition: opacity .18s ease, transform .24s cubic-bezier(.22,1,.36,1); pointer-events: none; }
+.activity-delete-action::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 18% 50%, rgba(255,255,255,.22), transparent 28%), linear-gradient(90deg, rgba(0,0,0,.18), transparent 60%); opacity: calc(.35 + var(--swipe-progress) * .65); }
+.activity-delete-action::after { content: ''; position: absolute; top: -30%; bottom: -30%; left: 0; width: 3px; border-radius: 50%; background: rgba(255,255,255,.72); box-shadow: 0 0 16px rgba(255,255,255,.55); opacity: calc(var(--swipe-progress) * .8); transform: translateX(calc(var(--swipe-progress) * 68px)); }
+.activity-delete-action i { position: relative; z-index: 1; width: 18px; height: 18px; stroke-width: 2.3; transform: translateX(calc(var(--swipe-progress) * 5px)) scale(calc(.92 + var(--swipe-progress) * .08)); opacity: calc(.7 + var(--swipe-progress) * .3); }
+.activity-swipe-content { position: relative; z-index: 1; background: var(--bg-card); will-change: transform; touch-action: pan-y; }
+.activity-swipe-row.revealed .activity-delete-action { opacity: 1; transform: scaleX(1); }
+.activity-swipe-row.swiping .activity-swipe-content { transition: none !important; }
+.activity-swipe-row:not(.swiping) .activity-swipe-content { transition: transform .34s cubic-bezier(.22,1,.36,1); }
+.activity-swipe-row.removing { pointer-events: none; }
+.activity-swipe-row.removing .activity-swipe-content { transform: translate3d(105%,0,0); opacity: 0; transition: transform .3s cubic-bezier(.22,1,.36,1), opacity .2s ease; }
+.activity-swipe-row.removing .activity-delete-action { opacity: 0; transition: opacity .18s ease; }
 .activity-panel { background-color: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-subtle); padding: 24px; margin-bottom: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); display: none; }
 .asset-list { background-color: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-subtle); padding: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); margin-bottom: 24px; }
 .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
@@ -462,6 +475,11 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
 .cost-row:last-child { border-bottom: none; }
 .cost-label { color: var(--text-muted); }
 .cost-val { color: #fff; font-variant-numeric: tabular-nums; }
+.profit-summary-card { background:linear-gradient(135deg,rgba(52,211,153,.10),rgba(255,255,255,.025)); border:1px solid rgba(52,211,153,.18); border-radius:20px; padding:22px; margin-top:4px; box-shadow:0 12px 32px -18px rgba(0,0,0,.55); }
+.profit-summary-label { color:var(--text-muted); font-size:12px; font-weight:700; letter-spacing:.1px; }
+.profit-summary-value { margin-top:7px; color:var(--accent-green); font-size:30px; line-height:1.05; font-weight:850; font-variant-numeric:tabular-nums; letter-spacing:-1px; }
+.profit-summary-value span { font-size:13px; font-weight:700; letter-spacing:0; margin-left:3px; }
+.profit-summary-sub { margin-top:8px; color:var(--text-muted); font-size:11px; }
 .exchange-transactions { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 18px; margin-top: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,.55); }
 .transactions-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; color:#fff; font-size:13px; font-weight:800; letter-spacing:-.1px; }
 .transactions-count { min-width:24px; padding:4px 8px; border-radius:999px; background:rgba(255,255,255,.06); border:1px solid var(--border-subtle); color:var(--text-muted); font-size:11px; text-align:center; }
@@ -1284,7 +1302,7 @@ overflow: hidden;
 </div>
 <div class="sidebar-group">
 <a href="#" class="sidebar-item active" data-target="walletPanel"><i data-lucide="wallet"></i><span data-i18n="navOverview">Overview</span></a>
-<a href="#" class="sidebar-item" data-target="exchangePanel"><i data-lucide="arrow-left-right"></i><span data-i18n="navExchange">Profits &amp; Gains</span></a>
+<a href="#" class="sidebar-item" data-target="exchangePanel"><i data-lucide="arrow-left-right"></i><span data-i18n="navExchange">Profits &amp; Loss</span></a>
 <a href="#" class="sidebar-item" data-target="marketPanel"><i data-lucide="line-chart"></i><span data-i18n="navMarket">Market</span></a>
 <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span data-i18n="navSettings">Settings</span></a>
 </div>
@@ -1378,9 +1396,14 @@ overflow: hidden;
 <div class="dashboard-header">
 <div class="dashboard-title-group">
 <button class="menu-btn" onclick="openSidebar()"><i data-lucide="menu"></i></button>
-<h1 class="dashboard-title" data-i18n="titleExchangePanel">Profits &amp; Gains</h1>
+<h1 class="dashboard-title" data-i18n="titleExchangePanel">Profits &amp; Loss</h1>
 </div>
 
+</div>
+<div class="profit-summary-card">
+<div class="profit-summary-label">Total profit &amp; loss</div>
+<div class="profit-summary-value" id="totalProfitGains">+$0.00 <span>CAD</span></div>
+<div class="profit-summary-sub">Realized profit or loss from completed crypto sales and swaps</div>
 </div>
 <div class="activity-panel" id="exchangeDetailsPanel" style="display:none;">
 <div class="panel-header"><span class="panel-title" data-i18n="conversionFeesTitle">Conversion Fees & Tax</span></div>
@@ -1719,11 +1742,11 @@ lucide.createIcons();
 const translations = {
 'en-CA': {
 pullToRefresh:"Pull to refresh",updatingBalance:"Updating balance...",updated:"Updated",releaseToUpdate:"Release to update",
-menuLabel:"Menu",navOverview:"Overview",navExchange:"Profits & Gains",navMarket:"Market",navSettings:"Settings",
+menuLabel:"Menu",navOverview:"Overview",navExchange:"Profits & Loss",navMarket:"Market",navSettings:"Settings",
 titleWallet:"Wallet",totalBalanceTitle:"Total Balance",btnExchange:"Exchange",btnTransfer:"Transfer",
 editWalletPrefix:"Edit",editWalletSuffix:"Wallet",editLabelBalance:"Balance",editLabelRate:"Rate",btnCancel:"Cancel",btnSave:"Save",
 recentActivityTitle:"Recent Activity",assetsTitle:"Assets",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
-titleExchangePanel:"Profits & Gains",conversionFeesTitle:"Conversion Fees & Tax",
+titleExchangePanel:"Profits & Loss",conversionFeesTitle:"Conversion Fees & Tax",
 exSentTitle:"Amount Sent",exSentSub:"Exchange Base Amount",
 exFeeTitle:"Capital Gain (CRA 50% Inclusion)",exFeeSub:"Only 50% of your profit is taxable — the other half is yours tax-free",
 exTaxTitle:"Marginal Tax on Taxable Gain",exTaxSub:"Applied to the 50% inclusion amount only",
@@ -1750,11 +1773,11 @@ exSuccessMsg:(amt,from,rec,to)=>`${amt.toFixed(2)} ${from} exchanged to ${rec.to
 },
 'en-US': {
 pullToRefresh:"Pull to refresh",updatingBalance:"Updating balance...",updated:"Updated",releaseToUpdate:"Release to update",
-menuLabel:"Menu",navOverview:"Overview",navExchange:"Profits & Gains",navMarket:"Market",navSettings:"Settings",
+menuLabel:"Menu",navOverview:"Overview",navExchange:"Profits & Loss",navMarket:"Market",navSettings:"Settings",
 titleWallet:"Wallet",totalBalanceTitle:"Total Balance",btnExchange:"Exchange",btnTransfer:"Transfer",
 editWalletPrefix:"Edit",editWalletSuffix:"Wallet",editLabelBalance:"Balance",editLabelRate:"Rate",btnCancel:"Cancel",btnSave:"Save",
 recentActivityTitle:"Recent Activity",assetsTitle:"Assets",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
-titleExchangePanel:"Profits & Gains",conversionFeesTitle:"Conversion Fees & Tax",
+titleExchangePanel:"Profits & Loss",conversionFeesTitle:"Conversion Fees & Tax",
 exSentTitle:"Amount Sent",exSentSub:"Exchange Base Amount",
 exFeeTitle:"Capital Gain (CRA 50% Inclusion)",exFeeSub:"Only 50% of your profit is taxable",
 exTaxTitle:"Marginal Tax on Taxable Gain",exTaxSub:"Applied to the 50% inclusion amount only",
@@ -1781,11 +1804,11 @@ exSuccessMsg:(amt,from,rec,to)=>`${amt.toFixed(2)} ${from} exchanged to ${rec.to
 },
 'fr-CA': {
 pullToRefresh:"Tirer pour actualiser",updatingBalance:"Mise à jour du solde...",updated:"Mis à jour",releaseToUpdate:"Relâcher pour mettre à jour",
-menuLabel:"Menu",navOverview:"Aperçu",navExchange:"Profits et gains",navMarket:"Marché",navSettings:"Paramètres",
+menuLabel:"Menu",navOverview:"Aperçu",navExchange:"Profits et pertes",navMarket:"Marché",navSettings:"Paramètres",
 titleWallet:"Portefeuille",totalBalanceTitle:"Solde Total",btnExchange:"Échanger",btnTransfer:"Transférer",
 editWalletPrefix:"Modifier le portefeuille",editWalletSuffix:"",editLabelBalance:"Solde",editLabelRate:"Taux",btnCancel:"Annuler",btnSave:"Enregistrer",
 recentActivityTitle:"Activité Récente",assetsTitle:"Actifs",cadSub:"Dollar canadien",usdSub:"Dollar américain",
-titleExchangePanel:"Profits et gains",conversionFeesTitle:"Frais de Conversion et Taxes",
+titleExchangePanel:"Profits et pertes",conversionFeesTitle:"Frais de Conversion et Taxes",
 exSentTitle:"Montant Envoyé",exSentSub:"Montant de base de l'échange",
 exFeeTitle:"Gain en Capital (Inclusion 50% ARC)",exFeeSub:"Seulement 50% du profit est imposable — l'autre moitié est libre d'impôt",
 exTaxTitle:"Impôt Marginal sur le Gain Imposable",exTaxSub:"Appliqué au montant d'inclusion de 50% seulement",
@@ -1901,13 +1924,59 @@ accountEmailEditRow.classList.remove('open');
 accountEmailSaveBtn.addEventListener('click', saveAccountEmail);
 accountEmailInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveAccountEmail(); } if (e.key === 'Escape') { e.preventDefault(); accountEmailEditRow.classList.remove('open'); } });
 let recentActivities = [];
+const costBasisLots = {BTC: [], SOL: [], ETH: []};
+let costBasisInitialized = false;
+function cadPriceForCurrency(curr) {
+  if (curr === 'CAD') return 1;
+  if (curr === 'USD') return 1 / (exchangeRatesInUSD.CAD || 0.74);
+  return marketPrices && marketPrices[curr] && Number.isFinite(marketPrices[curr].price) ? marketPrices[curr].price : 0;
+}
+function initializeCostBasis() {
+  if (costBasisInitialized) return;
+  if (solanaBalance > 0) {
+    const price = cadPriceForCurrency('SOL');
+    costBasisLots.SOL.push({qty: solanaBalance, costCad: solanaBalance * price});
+  }
+  costBasisInitialized = true;
+}
+function addCostBasisLot(curr, qty, costCad) {
+  if (!costBasisLots[curr] || qty <= 0) return;
+  costBasisLots[curr].push({qty, costCad: Math.max(0, costCad)});
+}
+function consumeCostBasis(curr, qty) {
+  if (!costBasisLots[curr] || qty <= 0) return 0;
+  let remaining = qty, basis = 0;
+  while (remaining > 1e-10 && costBasisLots[curr].length) {
+    const lot = costBasisLots[curr][0];
+    const take = Math.min(remaining, lot.qty);
+    const unitCost = lot.costCad / lot.qty;
+    basis += unitCost * take;
+    lot.qty -= take;
+    lot.costCad -= unitCost * take;
+    remaining -= take;
+    if (lot.qty <= 1e-10) costBasisLots[curr].shift();
+  }
+  return basis;
+}
+function recordRealizedPnl(fromCurr, toCurr, amount, receivedAmount) {
+  initializeCostBasis();
+  const cryptoFrom = ['BTC','SOL','ETH'].includes(fromCurr);
+  const cryptoTo = ['BTC','SOL','ETH'].includes(toCurr);
+  const proceedsCad = receivedAmount * cadPriceForCurrency(toCurr);
+  const costBasisCad = cryptoFrom ? consumeCostBasis(fromCurr, amount) : 0;
+  const gainCad = cryptoFrom ? proceedsCad - costBasisCad : 0;
+  if (cryptoTo) addCostBasisLot(toCurr, receivedAmount, proceedsCad);
+  return {gainCad, costBasisCad, proceedsCad};
+}
 const activityPanel = document.getElementById('activityPanel');
 const activityList = document.getElementById('activityList');
 function renderRecentActivity() {
 if (recentActivities.length === 0) { activityPanel.style.display = 'none'; return; }
 activityPanel.style.display = 'block';
-activityList.innerHTML = recentActivities.map(act => `
-<div class="list-item">
+activityList.innerHTML = recentActivities.map((act, index) => `
+<div class="activity-swipe-row" data-activity-id="${act.id}">
+<div class="activity-delete-action" aria-hidden="true"><i data-lucide="trash-2"></i></div>
+<div class="activity-swipe-content list-item">
 <div class="item-left">
 <div class="icon-wrapper"><i data-lucide="arrow-left-right"></i></div>
 <div>
@@ -1917,8 +1986,76 @@ activityList.innerHTML = recentActivities.map(act => `
 </div>
 <div class="item-right"><div class="item-value pos">+${act.received.toFixed(act.toDec)}<span class="currency-label">${act.toCurr}</span></div></div>
 </div>
+</div>
 `).join('');
 lucide.createIcons();
+setupActivitySwipes();
+}
+function setupActivitySwipes() {
+  activityList.querySelectorAll('.activity-swipe-row').forEach(row => {
+    const content = row.querySelector('.activity-swipe-content');
+    let startX = 0, startY = 0, startOffset = 0, currentX = 0, dragging = false, horizontal = false;
+    const maxReveal = 78;
+    const deleteThreshold = Math.min(190, Math.max(150, row.offsetWidth * 0.48));
+    const setX = x => {
+      currentX = Math.max(0, Math.min(x, row.offsetWidth * .92));
+      const progress = Math.min(currentX / deleteThreshold, 1);
+      content.style.transform = `translate3d(${currentX}px,0,0)`;
+      row.style.setProperty('--swipe-progress', progress.toFixed(3));
+      row.classList.toggle('revealed', currentX > 8);
+    };
+    const finish = () => {
+      if (!dragging) return;
+      row.classList.remove('swiping');
+      if (currentX >= deleteThreshold) {
+        row.classList.add('removing');
+        const id = row.dataset.activityId;
+        setTimeout(() => {
+          recentActivities = recentActivities.filter(act => String(act.id) !== String(id));
+          renderRecentActivity();
+        }, 300);
+      } else {
+        setX(currentX >= maxReveal * .5 ? maxReveal : 0);
+      }
+      dragging = false;
+      horizontal = false;
+    };
+    row.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      startX = e.clientX;
+      startY = e.clientY;
+      startOffset = currentX > 0 ? currentX : (row.classList.contains('revealed') ? maxReveal : 0);
+      dragging = true;
+      horizontal = false;
+      row.classList.add('swiping');
+      try { row.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+    row.addEventListener('pointermove', e => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (!horizontal) {
+        if (Math.abs(dy) > 8 && Math.abs(dy) > Math.abs(dx)) {
+          dragging = false;
+          row.classList.remove('swiping');
+          return;
+        }
+        if (Math.abs(dx) > 6) horizontal = true;
+      }
+      if (horizontal) {
+        setX(startOffset + dx);
+        if (e.cancelable) e.preventDefault();
+      }
+    });
+    row.addEventListener('pointerup', finish);
+    row.addEventListener('pointercancel', () => {
+      if (!dragging) return;
+      dragging = false;
+      horizontal = false;
+      row.classList.remove('swiping');
+      setX(0);
+    });
+  });
 }
 function roundPrecision(val, decimals=4) { return Number(Math.round(val+'e'+decimals)+'e-'+decimals); }
 const sidebarItems = document.querySelectorAll('.sidebar-item');
@@ -2076,6 +2213,10 @@ async function fetchLiveMarketPrices(){
   exchangeRatesInUSD.BTC=marketPrices.BTC.price/cadPerUsd;
   exchangeRatesInUSD.SOL=marketPrices.SOL.price/cadPerUsd;
   exchangeRatesInUSD.ETH=marketPrices.ETH.price/cadPerUsd;
+  if (!recentActivities.length && costBasisLots.SOL.length === 1) {
+    costBasisLots.SOL[0].qty = solanaBalance;
+    costBasisLots.SOL[0].costCad = solanaBalance * marketPrices.SOL.price;
+  }
   updateTickerBar('BTC');updateTickerBar('SOL');updateTickerBar('ETH');
   updateMainView(activeCoin);updateOrderBook(activeCoin);updateMacTotal();renderBalance();
   document.documentElement.dataset.marketStatus='live';
@@ -2268,6 +2409,7 @@ selectMarketCoin('BTC');
 setMacTab('buy');
 const MARGINAL_TAX_RATE = 0.33; // applied to the 50% taxable inclusion only
 const exchangeRatesInUSD = {USD:1.0,CAD:0.74,BTC:marketPrices.BTC.price,SOL:marketPrices.SOL.price,ETH:marketPrices.ETH.price};
+initializeCostBasis();
 function showToast(message, duration=3500) { toastMessage.textContent=message; toastNotification.classList.add('show'); setTimeout(()=>toastNotification.classList.remove('show'),duration); }
 function calculateConversion(amount, fromCurr, toCurr) {
 const decimalsToUse = (toCurr==='BTC'||toCurr==='SOL') ? 4 : 2;
@@ -2275,7 +2417,8 @@ const fromDec = (fromCurr==='BTC'||fromCurr==='SOL') ? 4 : 2;
 const amountInUSD = amount * exchangeRatesInUSD[fromCurr];
 const toValueInUSD = amountInUSD / exchangeRatesInUSD[toCurr];
 const costBasisInUSD = amountInUSD;
-const profitInUSD = Math.max(0, amountInUSD - costBasisInUSD * 0.8);
+const isPurchase = (fromCurr === 'CAD' || fromCurr === 'USD') && (toCurr === 'BTC' || toCurr === 'SOL' || toCurr === 'ETH');
+const profitInUSD = isPurchase ? 0 : 0;
 const taxableGainUSD = profitInUSD * 0.5;
 const taxOwedUSD = taxableGainUSD * MARGINAL_TAX_RATE;
 const taxInFrom = roundPrecision(taxOwedUSD / exchangeRatesInUSD[fromCurr], 6);
@@ -2284,7 +2427,7 @@ const netAmountInFrom = amount - taxInFrom;
 const netInUSD = netAmountInFrom * exchangeRatesInUSD[fromCurr];
 const receivedAmount = roundPrecision(netInUSD / exchangeRatesInUSD[toCurr], decimalsToUse);
 const totalDeductionsInFrom = roundPrecision(taxInFrom, fromDec);
-return { receivedAmount, feeInFrom: inclusionAmountInFrom, taxInFrom, totalDeductionsInFrom };
+return { receivedAmount, feeInFrom: inclusionAmountInFrom, taxInFrom, totalDeductionsInFrom, profitInFrom: roundPrecision(profitInUSD / exchangeRatesInUSD[fromCurr], 6) };
 }
 function updateLivePreview() {
 const amount = parseFloat(document.getElementById('exAmount').value) || 0;
@@ -2306,9 +2449,13 @@ document.getElementById('livePreviewVal').textContent=`${receivedAmount.toFixed(
 function renderExchangeTransactions(){
  const list=document.getElementById('exchangeTransactionsList');
  const count=document.getElementById('transactionsCount');
+ const totalEl=document.getElementById('totalProfitGains');
  if(!list)return;
  const txs=(recentActivities||[]).filter(t=>t&&t.fromCurr&&t.toCurr);
  if(count)count.textContent=txs.length;
+ let totalCad=0;
+ txs.forEach(t=>{ totalCad += typeof t.gainCad === 'number' ? t.gainCad : 0; });
+ if(totalEl){ const sign=totalCad>=0?'+':'-'; totalEl.innerHTML=`${sign}$${Math.abs(totalCad).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})} <span>CAD</span>`; }
  if(!txs.length){list.innerHTML='<div class="tx-empty">No transactions yet. Your completed exchanges will appear here.</div>';return;}
  list.innerHTML=txs.slice(0,30).map((t,i)=>{
   const fromDec=(t.fromCurr==='BTC'||t.fromCurr==='SOL')?4:2;
@@ -2316,17 +2463,22 @@ function renderExchangeTransactions(){
   const rate=typeof t.rate==='number'?t.rate:(t.amount?t.received/t.amount:0);
   const fee=typeof t.fee==='number'?t.fee:0;
   const tax=typeof t.tax==='number'?t.tax:0;
-  return `<div class="tx-card" data-tx-index="${i}"><div class="tx-summary"><div class="tx-main"><div class="tx-title">${t.amount.toFixed(fromDec)} ${t.fromCurr} → ${t.received.toFixed(toDec)} ${t.toCurr}</div><div class="tx-time">${t.time||'Completed'}</div></div><div class="tx-result"><div class="tx-result-value">+${t.received.toFixed(toDec)} ${t.toCurr}</div><div class="tx-result-label">Tap for details</div></div></div><div class="tx-details"><div class="tx-detail-row"><span>Amount sent</span><span>${t.amount.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Amount received</span><span>${t.received.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Exchange rate</span><span>1 ${t.fromCurr} = ${rate.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Capital gain inclusion</span><span>${fee.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Tax</span><span>${tax.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Status</span><span>Completed</span></div></div></div>`;
+  const gainCad=typeof t.gainCad==='number'?t.gainCad:0;
+  const basisCad=typeof t.costBasisCad==='number'?t.costBasisCad:0;
+  const proceedsCad=typeof t.proceedsCad==='number'?t.proceedsCad:0;
+  const pnlClass=gainCad>=0?'pos':'neg';
+  return `<div class="tx-card" data-tx-index="${i}"><div class="tx-summary"><div class="tx-main"><div class="tx-title">${t.amount.toFixed(fromDec)} ${t.fromCurr} → ${t.received.toFixed(toDec)} ${t.toCurr}</div><div class="tx-time">${t.time||'Completed'}</div></div><div class="tx-result"><div class="tx-result-value ${pnlClass}">${gainCad >= 0 ? '+' : '-'}$${Math.abs(gainCad).toFixed(2)} CAD</div><div class="tx-result-label">Profit / loss · Tap for details</div></div></div><div class="tx-details"><div class="tx-detail-row"><span>Amount sent</span><span>${t.amount.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Amount received</span><span>${t.received.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Exchange rate</span><span>1 ${t.fromCurr} = ${rate.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Profit / loss</span><span class="${pnlClass}">${gainCad >= 0 ? '+' : '-'}$${Math.abs(gainCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Cost basis</span><span>$${basisCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Proceeds / fair value</span><span>$${proceedsCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Capital gain inclusion</span><span>${fee.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Tax</span><span>${tax.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Status</span><span>Completed</span></div></div></div>`;
  }).join('');
  list.querySelectorAll('.tx-card').forEach(card=>card.addEventListener('click',()=>card.classList.toggle('open')));
 }
+
 function updateConversionPage(amt, fromCurr, toCurr) {
 const {receivedAmount, feeInFrom, taxInFrom, totalDeductionsInFrom} = calculateConversion(amt, fromCurr, toCurr);
 const dec = (toCurr==='BTC'||toCurr==='SOL') ? 4 : 2;
 const fromDec = (fromCurr==='BTC'||fromCurr==='SOL') ? 4 : 2;
-document.getElementById('exchangeDetailsPanel').style.display='block';
+document.getElementById('exchangeDetailsPanel').style.display='none';
 document.getElementById('emptyExchangeState').style.display='none';
-document.getElementById('costCard').style.display='block';
+document.getElementById('costCard').style.display='none';
 document.getElementById('baseSentVal').innerHTML=`- ${amt.toFixed(fromDec)}<span class="currency-label">${fromCurr}</span>`;
 document.getElementById('feeVal').innerHTML=`- ${feeInFrom.toFixed(fromDec)}<span class="currency-label">${fromCurr}</span>`;
 document.getElementById('taxVal').innerHTML=`- ${taxInFrom.toFixed(fromDec)}<span class="currency-label">${fromCurr}</span>`;
@@ -2394,7 +2546,14 @@ addBalanceForCurrency(toCurr,receivedAmount);
 const toDec=(toCurr==='BTC'||toCurr==='SOL')?4:2;
 const now=new Date();
 const timeString=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-recentActivities.unshift({id:Date.now()+Math.random(),amount,fromCurr,toCurr,received:receivedAmount,toDec,time:`${currentLang==='fr-CA'?"Aujourd'hui":"Today"}, ${timeString}`,timestamp:now.toISOString(),rate:amount?receivedAmount/amount:0,fee:calculateConversion(amount,fromCurr,toCurr).feeInFrom,tax:calculateConversion(amount,fromCurr,toCurr).taxInFrom});
+const conversionDetails=calculateConversion(amount,fromCurr,toCurr);
+  const pnl=recordRealizedPnl(fromCurr,toCurr,amount,receivedAmount);
+  const taxableGainCad=Math.max(0,pnl.gainCad)*0.5;
+  const taxCad=taxableGainCad*MARGINAL_TAX_RATE;
+  const fromCadRate=cadPriceForCurrency(fromCurr)||1;
+  const inclusionInFrom=taxableGainCad/fromCadRate;
+  const taxInFrom=taxCad/fromCadRate;
+  recentActivities.unshift({id:Date.now()+Math.random(),amount,fromCurr,toCurr,received:receivedAmount,toDec,time:`${currentLang==='fr-CA'?"Aujourd'hui":"Today"}, ${timeString}`,timestamp:now.toISOString(),rate:amount?receivedAmount/amount:0,fee:inclusionInFrom,gain:fromCadRate?pnl.gainCad/fromCadRate:0,tax:taxInFrom,gainCad:pnl.gainCad,costBasisCad:pnl.costBasisCad,proceedsCad:pnl.proceedsCad,taxableGainCad,taxCad});
 renderRecentActivity();
 renderExchangeTransactions();
 updateConversionPage(amount,fromCurr,toCurr);
