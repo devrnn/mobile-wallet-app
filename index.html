@@ -48,9 +48,6 @@ body {
   overflow: hidden;
   position: relative;
 }
-/* ==============================
-SIDEBAR
-============================== */
 .sidebar {
 width: 240px;
 background-color: var(--bg-sidebar);
@@ -75,12 +72,10 @@ transition: opacity 0.28s ease;
 }
 .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
 @media (max-width: 768px) {
-  @media (max-width: 768px) {
   body {
     height: 100dvh;
     min-height: 100vh;
   }
-
   .sidebar {
     position: fixed;
     top: 0;
@@ -92,29 +87,23 @@ transition: opacity 0.28s ease;
     padding-top: calc(20px + env(safe-area-inset-top));
     padding-bottom: env(safe-area-inset-bottom);
   }
-
   .sidebar.open {
     transform: translateX(0);
   }
-
   .menu-btn {
     display: flex !important;
   }
-
   .sidebar-close-btn {
     display: flex !important;
   }
-
   .main-dashboard {
     width: 100%;
     min-width: 0;
   }
-
   .page-panel {
     width: 100%;
     min-width: 0;
   }
-
   .scroll-content {
     padding:
       calc(20px + env(safe-area-inset-top))
@@ -122,30 +111,24 @@ transition: opacity 0.28s ease;
       calc(32px + env(safe-area-inset-bottom))
       16px;
   }
-
   .dashboard-header {
     margin-bottom: 20px;
   }
-
   .dashboard-title {
     font-size: 22px;
   }
-
   .balance-card {
     padding: 22px;
     min-height: 210px;
     border-radius: 20px;
   }
-
   .main-balance {
     font-size: clamp(30px, 9vw, 42px);
   }
-
   .top-row-grid {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-}
 }
 .sidebar-top { flex: 1; overflow: hidden; }
 .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
@@ -172,12 +155,8 @@ will-change: transform;
 .sidebar-item:hover i { transform: scale(1.12); }
 .sidebar-item:active { transform: translateX(1px) scale(0.98); }
 .sidebar-item.active { background-color: #151518; color: #ffffff; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), 0 4px 12px rgba(0,0,0,0.4); font-weight: 600; }
-/* ==============================
-SIDEBAR PROFILE SECTION
-============================== */
 .sidebar-profile {
 border-top: 1px solid var(--border-subtle);
-padding: 16px 0 calc(20px + env(safe-area-inset-bottom)) 0;
 display: flex;
 align-items: center;
 gap: 11px;
@@ -256,9 +235,6 @@ filter: brightness(0.62) saturate(1.05) contrast(1.05);
 .profile-tag { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 1px; }
 .profile-chevron { color: var(--text-muted); flex-shrink: 0; opacity: 0.5; }
 .profile-chevron i { width: 14px; height: 14px; }
-/* ==============================
-MENU BUTTON
-============================== */
 .menu-btn {
 display: none;
 background: rgba(255,255,255,0.04);
@@ -273,9 +249,6 @@ transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s cubi
 .menu-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--border-hover); }
 .menu-btn:active { transform: scale(0.93); }
 .menu-btn i { width: 18px; height: 18px; }
-/* ==============================
-PULL TO REFRESH
-============================== */
 .pull-indicator {
 position: absolute;
 top: max(18px, calc(env(safe-area-inset-top) + 6px));
@@ -293,13 +266,13 @@ transform: translateX(-50%) translateY(0) scale(1);
 }
 .refresh-capsule {
 display: flex; align-items: center; gap: 11px;
-min-height: 44px;
-padding: 7px 15px 7px 8px;
-background: rgba(20,20,24,0.82);
-backdrop-filter: blur(28px) saturate(180%);
--webkit-backdrop-filter: blur(28px) saturate(180%);
-border: 1px solid rgba(255,255,255,0.14);
-border-radius: 15px;
+min-height: 46px;
+padding: 7px 16px 7px 8px;
+background: linear-gradient(180deg,rgba(31,31,37,0.95),rgba(17,17,21,0.92));
+backdrop-filter: blur(24px) saturate(170%);
+-webkit-backdrop-filter: blur(24px) saturate(170%);
+border: 1px solid rgba(255,255,255,0.16);
+border-radius: 16px;
 box-shadow: 0 14px 35px rgba(0,0,0,0.42), 0 4px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.08);
 transition: background 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -329,9 +302,6 @@ flex-shrink: 0;
 .pull-indicator.completed .spinner-box { background: rgba(52,211,153,0.09); border-color: rgba(52,211,153,0.18); }
 @keyframes iosSpin { 0%{transform:rotate(-90deg)} 100%{transform:rotate(270deg)} }
 .refresh-text { font-size: 12px; font-weight: 650; color: rgba(255,255,255,0.88); letter-spacing: -0.12px; white-space: nowrap; line-height: 1; }
-/* ==============================
-PAGE PANELS
-============================== */
 .main-dashboard { flex: 1; height: 100%; overflow: hidden; background-color: var(--bg-main); position: relative; }
 .page-panel { width: 100%; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; position: relative; display: none; }
 .page-panel.active { display: block; }
@@ -347,9 +317,6 @@ to { opacity: 1; transform: translateY(0); }
 .dashboard-title { font-size: 24px; font-weight: 800; letter-spacing: -0.6px; color: #f4f4f6; }
 .top-row-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 24px; }
 @media (min-width: 900px) { .top-row-grid { grid-template-columns: 1.4fr 1fr; gap: 28px; margin-bottom: 28px; } }
-/* ==============================
-BALANCE CARD
-============================== */
 .balance-card {
 background: var(--card-gradient);
 border-radius: 24px;
@@ -393,9 +360,6 @@ will-change: transform;
 .action-btn:hover i { transform: scale(1.15); }
 .action-btn.primary { background: #ffffff; color: #000000; border: 1px solid #ffffff; }
 .action-btn.primary:hover { background: #e8e8e8; border-color: #e8e8e8; }
-/* ==============================
-EDIT PANEL OVERLAY
-============================== */
 .edit-panel { position: absolute; inset: 0; border-radius: 24px; background: rgba(12,12,15,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 28px; opacity: 0; pointer-events: none; transform: scale(0.94) translateY(6px); transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1), transform 0.28s cubic-bezier(0.22, 1, 0.36, 1); z-index: 10; border: 1px solid var(--border-hover); }
 .edit-panel.open { opacity: 1; pointer-events: auto; transform: scale(1) translateY(0); }
 .edit-panel-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; color: var(--text-muted); margin-bottom: 2px; display: flex; align-items: center; gap: 7px; }
@@ -411,9 +375,30 @@ EDIT PANEL OVERLAY
 .edit-btn:active { transform: translateY(1px) scale(0.98); }
 .edit-btn.save { background: #ffffff; color: #0a0a0c; border-color: transparent; }
 .edit-btn.save:hover { background: #f0f0f0; }
-/* ==============================
-PANELS (ACTIVITY, ASSETS)
-============================== */
+.profits-refresh-btn {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  background: rgba(255,255,255,.045);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: transform .2s ease, color .2s ease, background .2s ease, border-color .2s ease;
+}
+.profits-refresh-btn:hover {
+  color: #fff;
+  background: rgba(255,255,255,.08);
+  border-color: var(--border-hover);
+}
+.profits-refresh-btn:active { transform: scale(.94); }
+.profits-refresh-btn.refreshing svg { animation: profitsRefreshSpin .75s linear infinite; }
+@keyframes profitsRefreshSpin { to { transform: rotate(360deg); } }
+@media (max-width: 768px) {
+  .profits-refresh-btn { width: 36px; height: 36px; }
+}
 .activity-panel { background-color: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-subtle); padding: 24px; margin-bottom: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); display: none; }
 .asset-list { background-color: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-subtle); padding: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); margin-bottom: 24px; }
 .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
@@ -441,9 +426,6 @@ PANELS (ACTIVITY, ASSETS)
 .item-value.neg { color: var(--accent-red); }
 .item-value.pos { color: var(--accent-green); }
 .currency-label { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 500; margin-left: 4px; }
-/* ==============================
-SETTINGS
-============================== */
 .theme-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 14px; }
 .theme-card { background: var(--bg-card); border: 2px solid var(--border-subtle); border-radius: 16px; padding: 18px; cursor: pointer; transition: border-color 0.22s ease, transform 0.22s cubic-bezier(0.22,1,0.36,1); display: flex; flex-direction: column; gap: 12px; }
 .theme-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
@@ -467,9 +449,6 @@ SETTINGS
 .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: var(--text-muted); transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1), background 0.28s ease; border-radius: 50%; }
 input:checked + .slider { background-color: #ffffff; border-color: #ffffff; }
 input:checked + .slider:before { transform: translateX(20px); background-color: #000000; }
-/* ==============================
-EXCHANGE MODAL
-============================== */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.28s cubic-bezier(0.22,1,0.36,1); }
 .modal-overlay.open { opacity: 1; pointer-events: auto; }
 .modal-card { background: var(--bg-card); border: 1px solid var(--border-hover); border-radius: 24px; width: 90%; max-width: 380px; padding: 26px; box-shadow: 0 24px 60px rgba(0,0,0,0.8); position: relative; transform: scale(0.92) translateY(16px); transition: transform 0.38s cubic-bezier(0.22,1,0.36,1); }
@@ -508,9 +487,6 @@ EXCHANGE MODAL
 .cost-label { color: var(--text-muted); }
 .cost-val { color: #fff; font-variant-numeric: tabular-nums; }
 .empty-exchange-state { text-align: center; color: var(--text-muted); font-size: 13.5px; padding: 40px 0; font-weight: 500; }
-/* ==============================
-MARKET PANEL - REALISTIC LOOK
-============================== */
 .market-ticker-bar {
 display: flex;
 gap: 0;
@@ -734,6 +710,14 @@ border-bottom: 1px solid var(--border-subtle);
 }
 .ob-mid-price { font-size: 14px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; }
 .ob-mid-arrow { width: 14px; height: 14px; }
+.ob-user-orders { padding:4px 0; border-bottom:1px solid var(--border-subtle); }
+.ob-user-row { display:grid; grid-template-columns:1.2fr 1fr 1fr; align-items:center; padding:7px 20px; background:rgba(255,255,255,0.025); border-left:2px solid var(--accent-green); }
+.ob-user-row.sell { border-left-color:var(--accent-red); }
+.ob-user-name { font-size:11px; font-weight:800; color:#fff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ob-user-price { font-size:11px; color:var(--text-muted); text-align:right; font-variant-numeric:tabular-nums; }
+.ob-user-side { font-size:10px; font-weight:800; text-align:right; text-transform:uppercase; }
+.ob-user-side.buy { color:var(--accent-green); }
+.ob-user-side.sell { color:var(--accent-red); }
 .market-action-card {
 background: var(--bg-card);
 border: 1px solid var(--border-subtle);
@@ -811,9 +795,6 @@ overflow: hidden;
 @keyframes tickDownAnim { 0%{transform:translateY(0)} 35%{transform:translateY(4px)} 100%{transform:translateY(0)} }
 .tick-up { animation: tickUpAnim 0.32s cubic-bezier(0.22,1,0.36,1); }
 .tick-down { animation: tickDownAnim 0.32s cubic-bezier(0.22,1,0.36,1); }
-/* ==============================
-PERSONAL ACCOUNT MODAL
-============================== */
 .account-modal-card { max-width: 400px; }
 .account-header-block { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 22px; }
 .account-avatar-lg { width: 76px; height: 76px; border-radius: 50%; overflow: hidden; position: relative; box-shadow: 0 0 0 3px rgba(255,255,255,0.08), 0 8px 20px rgba(0,0,0,0.5); }
@@ -833,10 +814,62 @@ PERSONAL ACCOUNT MODAL
 .account-email-edit-row.open { display: flex; }
 .account-email-edit-row input { flex: 1; background: var(--bg-input); border: 1px solid var(--border-hover); border-radius: 10px; padding: 9px 12px; color: #fff; font-size: 13px; font-weight: 600; outline: none; min-width: 0; }
 .account-email-edit-row button { background: #ffffff; color: #0a0a0c; border: none; padding: 9px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; flex-shrink: 0; }
-
-/* =========================
-   WALLET INTRO — ORIGINAL ORB
-========================= */
+.intro-welcome {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 145px);
+  transform: translate(-50%, 16px) scale(.97);
+  width: max-content;
+  max-width: calc(100vw - 40px);
+  padding: 11px 20px 12px;
+  text-align: center;
+  z-index: 20;
+  opacity: 0;
+  color: rgba(255,255,255,.88);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -.55px;
+  background: linear-gradient(180deg, rgba(255,255,255,.105), rgba(255,255,255,.045));
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  box-shadow: 0 12px 38px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.10);
+  backdrop-filter: blur(18px) saturate(130%);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+  text-shadow: 0 2px 18px rgba(56,189,248,.22);
+  animation: welcomeEntrance 1.1s cubic-bezier(.16,1,.3,1) 2.35s forwards, welcomeExit .65s cubic-bezier(.76,0,.24,1) 6.05s forwards;
+}
+.intro-welcome::before {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.32), transparent);
+  opacity: .7;
+}
+.intro-welcome span {
+  display: inline-block;
+  margin-left: 7px;
+  color: #fff;
+  font-weight: 850;
+  letter-spacing: -.7px;
+  background: linear-gradient(135deg, #fff 15%, #b9efff 55%, #8ed8ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+@keyframes welcomeEntrance {
+  0% { opacity: 0; transform: translate(-50%, 18px) scale(.96); filter: blur(8px); }
+  100% { opacity: 1; transform: translate(-50%, 0) scale(1); filter: blur(0); }
+}
+@keyframes welcomeExit {
+  0% { opacity: 1; transform: translate(-50%, 0) scale(1); filter: blur(0); }
+  100% { opacity: 0; transform: translate(-50%, -7px) scale(.98); filter: blur(6px); }
+}
 .intro {
   position: fixed;
   inset: 0;
@@ -858,9 +891,11 @@ PERSONAL ACCOUNT MODAL
     cubic-bezier(.76, 0, .24, 1)
     6.8s
     forwards;
-  pointer-events: none;
+  pointer-events: auto;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
-
 .orb {
   position: relative;
   width: 230px;
@@ -890,7 +925,6 @@ PERSONAL ACCOUNT MODAL
     1
     both;
 }
-
 .liquid {
   position: absolute;
   width: 155%;
@@ -906,7 +940,6 @@ PERSONAL ACCOUNT MODAL
   filter: blur(13px);
   animation: liquidMove 13.5s cubic-bezier(.45,0,.55,1) infinite;
 }
-
 .liquid2 {
   position: absolute;
   width: 145%;
@@ -922,7 +955,6 @@ PERSONAL ACCOUNT MODAL
   mix-blend-mode: screen;
   animation: liquidMove2 17.75s cubic-bezier(.45,0,.55,1) infinite;
 }
-
 .reflection {
   position: absolute;
   width: 75%;
@@ -939,7 +971,6 @@ PERSONAL ACCOUNT MODAL
   opacity: .7;
   animation: reflectionMove 11.5s cubic-bezier(.45,0,.55,1) infinite;
 }
-
 .wLight {
   position: absolute;
   width: 120px;
@@ -963,8 +994,7 @@ PERSONAL ACCOUNT MODAL
     wLightEntrance 1.5s ease-out 1.4s forwards,
     wLightMove 4.5s ease-in-out 2.9s infinite;
 }
-
-.highlight {
+.orb .highlight {
   position: absolute;
   width: 55%;
   height: 180%;
@@ -984,7 +1014,6 @@ PERSONAL ACCOUNT MODAL
   z-index: 5;
   animation: highlightSweep 6.8s cubic-bezier(.37,.02,.2,1) 1.8s infinite;
 }
-
 .innerShade {
   position: absolute;
   inset: 0;
@@ -997,7 +1026,6 @@ PERSONAL ACCOUNT MODAL
   pointer-events: none;
   z-index: 6;
 }
-
 .w {
   position: absolute;
   inset: 0;
@@ -1020,7 +1048,6 @@ PERSONAL ACCOUNT MODAL
     wEntrance 1.5s cubic-bezier(.16, 1, .3, 1) 1.15s forwards,
     wFloat 4s ease-in-out 2.8s infinite;
 }
-
 .orb::before {
   content: "";
   position: absolute;
@@ -1032,29 +1059,24 @@ PERSONAL ACCOUNT MODAL
   z-index: 8;
   animation: edgePulse 3.5s ease-in-out infinite;
 }
-
-/* iOS/Safari compositor fix: keep the animated blob on its own GPU layer. */
 @supports (-webkit-touch-callout: none) {
   .intro {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
-
   .orb {
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     mask-image: radial-gradient(white, black);
   }
-
   .orb::before {
     inset: 0;
     border-radius: inherit;
   }
-
   .liquid,
   .liquid2,
   .reflection,
   .wLight,
-  .highlight,
+  .orb .highlight,
   .innerShade {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
@@ -1062,38 +1084,37 @@ PERSONAL ACCOUNT MODAL
     -webkit-backface-visibility: hidden;
   }
 }
-
 @media (max-width: 768px) {
   .intro {
     width: 100vw;
     height: 100dvh;
     min-height: 100vh;
   }
-
   .orb {
     width: min(230px, 58vw);
     height: min(230px, 58vw);
   }
-
-  /* Keep the same orb look on phones, but reduce the heavy glow/blur. */
+  .intro-welcome {
+    top: calc(50% + min(145px, 37vw));
+    font-size: 15px;
+    padding: 10px 16px 11px;
+  }
+  
   .liquid,
   .liquid2 {
     filter: blur(18px);
     -webkit-filter: blur(18px);
   }
-
   .reflection {
     filter: blur(8px);
     -webkit-filter: blur(8px);
   }
-
   .wLight,
-  .highlight {
+  .orb .highlight {
     filter: blur(3px);
     -webkit-filter: blur(3px);
   }
 }
-
 @keyframes orbMorph {
   0% {
     border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
@@ -1132,14 +1153,12 @@ PERSONAL ACCOUNT MODAL
     transform: scale(1) rotate(0deg);
   }
 }
-
 @keyframes orbEntrance {
   0% { opacity: 0; transform: scale(.72) translateY(18px); filter: blur(12px); }
   55% { opacity: 1; transform: scale(1.035) translateY(-2px); filter: blur(0); }
   75% { transform: scale(.985) translateY(0); }
   100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
 }
-
 @keyframes liquidMove {
   0% { transform: translate(-4%, -5%) rotate(0deg) scale(1); }
   25% { transform: translate(7%, -7%) rotate(90deg) scale(1.08); }
@@ -1147,7 +1166,6 @@ PERSONAL ACCOUNT MODAL
   75% { transform: translate(-6%, 10%) rotate(270deg) scale(1.08); }
   100% { transform: translate(-4%, -5%) rotate(360deg) scale(1); }
 }
-
 @keyframes liquidMove2 {
   0% { transform: translate(7%, -5%) rotate(0deg) scale(1); }
   25% { transform: translate(-8%, 5%) rotate(-90deg) scale(1.08); }
@@ -1155,7 +1173,6 @@ PERSONAL ACCOUNT MODAL
   75% { transform: translate(-4%, -2%) rotate(-270deg) scale(1.08); }
   100% { transform: translate(7%, -5%) rotate(-360deg) scale(1); }
 }
-
 @keyframes reflectionMove {
   0% { transform: translate(0, 0) scale(1); opacity: .7; }
   25% { transform: translate(22px, 16px) scale(.9); opacity: .55; }
@@ -1163,13 +1180,11 @@ PERSONAL ACCOUNT MODAL
   75% { transform: translate(22px, 16px) scale(.9); opacity: .55; }
   100% { transform: translate(0, 0) scale(1); opacity: .7; }
 }
-
 @keyframes wEntrance {
   0% { opacity: 0; transform: translateX(-5px) scale(.7); filter: blur(8px); }
   65% { opacity: 1; transform: translateX(-5px) scale(1.035); filter: blur(0); }
   100% { opacity: 1; transform: translateX(-5px) scale(1); filter: blur(0); }
 }
-
 @keyframes wFloat {
   0% {
     transform: translateX(-5px) translateY(0) scale(1);
@@ -1184,18 +1199,15 @@ PERSONAL ACCOUNT MODAL
     text-shadow: 0 0 2px rgba(255,255,255,.95), 0 0 7px rgba(255,255,255,.28), 0 0 16px rgba(255,255,255,.10);
   }
 }
-
 @keyframes wLightEntrance {
   0% { opacity: 0; transform: translate(-50%, -50%) scale(.45); }
   100% { opacity: .5; transform: translate(-50%, -50%) scale(1); }
 }
-
 @keyframes wLightMove {
   0% { opacity: .35; transform: translate(-50%, -50%) scale(.9); }
   50% { opacity: .7; transform: translate(-50%, -50%) scale(1.08); }
   100% { opacity: .35; transform: translate(-50%, -50%) scale(.9); }
 }
-
 @keyframes highlightSweep {
   0% { left: -80%; opacity: 0; }
   15% { opacity: 0; }
@@ -1204,12 +1216,10 @@ PERSONAL ACCOUNT MODAL
   75% { opacity: 0; }
   100% { left: 140%; opacity: 0; }
 }
-
 @keyframes edgePulse {
   0%, 100% { opacity: .35; }
   50% { opacity: .8; }
 }
-
 @keyframes introOutro {
   0% { opacity: 1; transform: scale(1); filter: blur(0); }
   72% { opacity: 1; transform: scale(1); filter: blur(0); }
@@ -1218,7 +1228,6 @@ PERSONAL ACCOUNT MODAL
 </style>
 </head>
 <body>
-<!-- Original animated W orb intro -->
 <div class="intro" aria-hidden="true">
   <div class="orb">
     <div class="liquid"></div>
@@ -1229,9 +1238,30 @@ PERSONAL ACCOUNT MODAL
     <div class="innerShade"></div>
     <div class="w">W</div>
   </div>
+  <div class="intro-welcome">Welcome back<span>3sa</span></div>
 </div>
-
-<!-- Wallet Pull-to-Refresh Indicator -->
+<script>
+(function lockIntroInteraction(){
+  const intro = document.querySelector('.intro');
+  if (!intro) return;
+  const lock = () => {
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+  };
+  const unlock = () => {
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    document.body.style.touchAction = '';
+    intro.style.pointerEvents = 'none';
+  };
+  lock();
+  intro.addEventListener('animationend', e => {
+    if (e.animationName === 'introOutro') unlock();
+  });
+  setTimeout(unlock, 8500);
+})();
+</script>
 <div class="pull-indicator" id="pullIndicator">
 <div class="refresh-capsule">
 <div class="spinner-box">
@@ -1241,7 +1271,6 @@ PERSONAL ACCOUNT MODAL
 <span class="refresh-text" id="refreshText" data-i18n="pullToRefresh">Pull to refresh</span>
 </div>
 </div>
-<!-- Market Pull-to-Refresh Indicator -->
 <div class="pull-indicator" id="marketPullIndicator">
 <div class="refresh-capsule">
 <div class="spinner-box">
@@ -1260,12 +1289,11 @@ PERSONAL ACCOUNT MODAL
 </div>
 <div class="sidebar-group">
 <a href="#" class="sidebar-item active" data-target="walletPanel"><i data-lucide="wallet"></i><span data-i18n="navOverview">Overview</span></a>
-<a href="#" class="sidebar-item" data-target="exchangePanel"><i data-lucide="arrow-left-right"></i><span data-i18n="navExchange">Exchange</span></a>
+<a href="#" class="sidebar-item" data-target="exchangePanel"><i data-lucide="arrow-left-right"></i><span data-i18n="navExchange">Profits &amp; Gains</span></a>
 <a href="#" class="sidebar-item" data-target="marketPanel"><i data-lucide="line-chart"></i><span data-i18n="navMarket">Market</span></a>
 <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span data-i18n="navSettings">Settings</span></a>
 </div>
 </div>
-<!-- Personal Account Section -->
 <div class="sidebar-profile" id="sidebarProfile">
 <div class="profile-avatar"><img id="profileAvatarImg" src="" alt="avatar"></div>
 <div class="profile-info">
@@ -1276,7 +1304,6 @@ PERSONAL ACCOUNT MODAL
 </div>
 </nav>
 <main class="main-dashboard" id="dashboardContainer">
-<!-- Overview Panel -->
 <section class="page-panel active" id="walletPanel">
 <div class="scroll-content" id="walletScroll">
 <div class="dashboard-header">
@@ -1351,14 +1378,16 @@ PERSONAL ACCOUNT MODAL
 </div>
 </div>
 </section>
-<!-- Exchange Panel -->
 <section class="page-panel" id="exchangePanel">
 <div class="scroll-content">
 <div class="dashboard-header">
 <div class="dashboard-title-group">
 <button class="menu-btn" onclick="openSidebar()"><i data-lucide="menu"></i></button>
-<h1 class="dashboard-title" data-i18n="titleExchangePanel">Exchange Breakdown & Costs</h1>
+<h1 class="dashboard-title" data-i18n="titleExchangePanel">Profits &amp; Gains</h1>
 </div>
+<button class="profits-refresh-btn" id="profitsRefreshBtn" type="button" aria-label="Refresh profits and gains" title="Refresh">
+<i data-lucide="refresh-cw"></i>
+</button>
 </div>
 <div class="activity-panel" id="exchangeDetailsPanel" style="display:none;">
 <div class="panel-header"><span class="panel-title" data-i18n="conversionFeesTitle">Conversion Fees & Tax</span></div>
@@ -1391,7 +1420,6 @@ PERSONAL ACCOUNT MODAL
 </div>
 </div>
 </section>
-<!-- Market Panel - Realistic Trading View -->
 <section class="page-panel" id="marketPanel">
 <div class="scroll-content" id="marketScroll">
 <div class="dashboard-header">
@@ -1405,7 +1433,6 @@ PERSONAL ACCOUNT MODAL
 <button class="market-alert-bell" id="ethAlertBell" onclick="toggleCoinAlert('ETH', event)" title="Toggle ETH price alerts" type="button" style="display:none;"><i data-lucide="bell-off"></i></button>
 </div>
 </div>
-<!-- Ticker Bar -->
 <div class="market-ticker-bar" id="marketTickerBar">
 <div class="ticker-item selected" id="tickerBTC" onclick="selectMarketCoin('BTC')">
 <div class="ticker-symbol">BTC / CAD</div>
@@ -1424,7 +1451,6 @@ PERSONAL ACCOUNT MODAL
 </div>
 </div>
 <div class="market-main-view">
-<!-- Left: Chart Panel -->
 <div class="market-chart-panel">
 <div class="market-chart-header">
 <div class="market-chart-title-row">
@@ -1451,16 +1477,6 @@ PERSONAL ACCOUNT MODAL
 </div>
 </div>
 </div>
-<div class="chart-timerange">
-<button class="tr-btn" onclick="setTimeRange('1H', this)">1H</button>
-<button class="tr-btn active" onclick="setTimeRange('1D', this)">1D</button>
-<button class="tr-btn" onclick="setTimeRange('1W', this)">1W</button>
-<button class="tr-btn" onclick="setTimeRange('1M', this)">1M</button>
-<button class="tr-btn" onclick="setTimeRange('1Y', this)">1Y</button>
-</div>
-<div class="chart-canvas-area">
-<canvas class="market-canvas" id="marketCanvas"></canvas>
-</div>
 <div class="chart-stats-strip">
 <div class="css-stat">
 <div class="css-label">24h Open</div>
@@ -1480,7 +1496,6 @@ PERSONAL ACCOUNT MODAL
 </div>
 </div>
 </div>
-<!-- Right: Order Book + Action -->
 <div class="market-right-panel">
 <div class="orderbook-panel">
 <div class="orderbook-header">
@@ -1497,6 +1512,7 @@ PERSONAL ACCOUNT MODAL
 <span class="ob-mid-price" id="obMidPrice">$95,000.00</span>
 <i data-lucide="trending-up" class="ob-mid-arrow" id="obMidArrow" style="color:var(--accent-green);"></i>
 </div>
+<div class="ob-user-orders" id="obUserOrders" style="display:none;"></div>
 <div class="ob-bids" id="obBids"></div>
 </div>
 <div class="market-action-card">
@@ -1540,7 +1556,6 @@ PERSONAL ACCOUNT MODAL
 </div>
 </div>
 </section>
-<!-- Settings Panel -->
 <section class="page-panel" id="settingsPanel">
 <div class="scroll-content">
 <div class="dashboard-header">
@@ -1613,7 +1628,6 @@ PERSONAL ACCOUNT MODAL
 </div>
 </section>
 </main>
-<!-- Exchange Modal -->
 <div class="modal-overlay" id="exchangeModal">
 <div class="modal-card">
 <div class="modal-title" data-i18n="modalExTitle">Exchange</div>
@@ -1639,13 +1653,12 @@ PERSONAL ACCOUNT MODAL
 <div class="preview-box">
 <div class="preview-row"><span data-i18n="prevFeeLabel">Capital Gain (50% taxable)</span><span id="previewFeeVal">0.00 CAD</span></div>
 <div class="preview-row"><span data-i18n="prevTaxLabel">Marginal Tax (on taxable portion)</span><span id="previewTaxVal">0.00 CAD</span></div>
-<div class="preview-row highlight"><span data-i18n="prevReceiveLabel">Estimated Receive</span><span class="live-preview-val" id="livePreviewVal">0.0000 SOL</span></div>
+<div class="preview-row exchange-highlight"><span data-i18n="prevReceiveLabel">Estimated Receive</span><span class="live-preview-val" id="livePreviewVal">0.0000 SOL</span></div>
 </div>
 <div class="error-text" id="exError" data-i18n="exErrorText">Insufficient balance for this conversion.</div>
 <button class="modal-btn" id="confirmExchangeBtn"><span data-i18n="btnConfirmEx">Confirm Exchange</span></button>
 </div>
 </div>
-<!-- Asset Edit Modal -->
 <div class="modal-overlay" id="assetEditModal">
 <div class="modal-card">
 <div class="modal-title"><span data-i18n="assetModalEditPrefix">Edit</span> <span id="assetModalName">Asset</span> <span data-i18n="assetModalEditSuffix">Balance</span></div>
@@ -1659,7 +1672,6 @@ PERSONAL ACCOUNT MODAL
 </div>
 </div>
 </div>
-<!-- Personal Account Modal -->
 <div class="modal-overlay" id="personalAccountModal">
 <div class="modal-card account-modal-card">
 <div class="account-header-block">
@@ -1707,17 +1719,14 @@ PERSONAL ACCOUNT MODAL
 </div>
 <script>
 lucide.createIcons();
-/* ==============================
-LOCALIZATION
-============================== */
 const translations = {
 'en-CA': {
 pullToRefresh:"Pull to refresh",updatingBalance:"Updating balance...",updated:"Updated",releaseToUpdate:"Release to update",
-menuLabel:"Menu",navOverview:"Overview",navExchange:"Exchange",navMarket:"Market",navSettings:"Settings",
+menuLabel:"Menu",navOverview:"Overview",navExchange:"Profits & Gains",navMarket:"Market",navSettings:"Settings",
 titleWallet:"Wallet",totalBalanceTitle:"Total Balance",btnExchange:"Exchange",btnTransfer:"Transfer",
 editWalletPrefix:"Edit",editWalletSuffix:"Wallet",editLabelBalance:"Balance",editLabelRate:"Rate",btnCancel:"Cancel",btnSave:"Save",
 recentActivityTitle:"Recent Activity",assetsTitle:"Assets",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
-titleExchangePanel:"Exchange Breakdown & Costs",conversionFeesTitle:"Conversion Fees & Tax",
+titleExchangePanel:"Profits & Gains",conversionFeesTitle:"Conversion Fees & Tax",
 exSentTitle:"Amount Sent",exSentSub:"Exchange Base Amount",
 exFeeTitle:"Capital Gain (CRA 50% Inclusion)",exFeeSub:"Only 50% of your profit is taxable — the other half is yours tax-free",
 exTaxTitle:"Marginal Tax on Taxable Gain",exTaxSub:"Applied to the 50% inclusion amount only",
@@ -1744,11 +1753,11 @@ exSuccessMsg:(amt,from,rec,to)=>`${amt.toFixed(2)} ${from} exchanged to ${rec.to
 },
 'en-US': {
 pullToRefresh:"Pull to refresh",updatingBalance:"Updating balance...",updated:"Updated",releaseToUpdate:"Release to update",
-menuLabel:"Menu",navOverview:"Overview",navExchange:"Exchange",navMarket:"Market",navSettings:"Settings",
+menuLabel:"Menu",navOverview:"Overview",navExchange:"Profits & Gains",navMarket:"Market",navSettings:"Settings",
 titleWallet:"Wallet",totalBalanceTitle:"Total Balance",btnExchange:"Exchange",btnTransfer:"Transfer",
 editWalletPrefix:"Edit",editWalletSuffix:"Wallet",editLabelBalance:"Balance",editLabelRate:"Rate",btnCancel:"Cancel",btnSave:"Save",
 recentActivityTitle:"Recent Activity",assetsTitle:"Assets",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
-titleExchangePanel:"Exchange Breakdown & Costs",conversionFeesTitle:"Conversion Fees & Tax",
+titleExchangePanel:"Profits & Gains",conversionFeesTitle:"Conversion Fees & Tax",
 exSentTitle:"Amount Sent",exSentSub:"Exchange Base Amount",
 exFeeTitle:"Capital Gain (CRA 50% Inclusion)",exFeeSub:"Only 50% of your profit is taxable",
 exTaxTitle:"Marginal Tax on Taxable Gain",exTaxSub:"Applied to the 50% inclusion amount only",
@@ -1775,11 +1784,11 @@ exSuccessMsg:(amt,from,rec,to)=>`${amt.toFixed(2)} ${from} exchanged to ${rec.to
 },
 'fr-CA': {
 pullToRefresh:"Tirer pour actualiser",updatingBalance:"Mise à jour du solde...",updated:"Mis à jour",releaseToUpdate:"Relâcher pour mettre à jour",
-menuLabel:"Menu",navOverview:"Aperçu",navExchange:"Échange",navMarket:"Marché",navSettings:"Paramètres",
+menuLabel:"Menu",navOverview:"Aperçu",navExchange:"Profits et gains",navMarket:"Marché",navSettings:"Paramètres",
 titleWallet:"Portefeuille",totalBalanceTitle:"Solde Total",btnExchange:"Échanger",btnTransfer:"Transférer",
 editWalletPrefix:"Modifier le portefeuille",editWalletSuffix:"",editLabelBalance:"Solde",editLabelRate:"Taux",btnCancel:"Annuler",btnSave:"Enregistrer",
 recentActivityTitle:"Activité Récente",assetsTitle:"Actifs",cadSub:"Dollar canadien",usdSub:"Dollar américain",
-titleExchangePanel:"Détails et Frais d'Échange",conversionFeesTitle:"Frais de Conversion et Taxes",
+titleExchangePanel:"Profits et gains",conversionFeesTitle:"Frais de Conversion et Taxes",
 exSentTitle:"Montant Envoyé",exSentSub:"Montant de base de l'échange",
 exFeeTitle:"Gain en Capital (Inclusion 50% ARC)",exFeeSub:"Seulement 50% du profit est imposable — l'autre moitié est libre d'impôt",
 exTaxTitle:"Impôt Marginal sur le Gain Imposable",exTaxSub:"Appliqué au montant d'inclusion de 50% seulement",
@@ -1817,9 +1826,6 @@ updateAvailableBalanceSubtext();
 marketRefreshText.textContent = dict.pullToRefresh || 'Pull to refresh';
 }
 document.getElementById('settingLanguage').addEventListener('change', e => setLanguage(e.target.value));
-/* ==============================
-THEME
-============================== */
 function setTheme(themeName) {
 const darkCard = document.getElementById('themeDarkCard');
 const emeraldCard = document.getElementById('themeEmeraldCard');
@@ -1830,9 +1836,6 @@ if (themeName==='emerald') { document.body.classList.add('theme-emerald'); emera
 else if (themeName==='midnight') { document.body.classList.add('theme-midnight'); midnightCard.classList.add('active'); midnightCard.querySelector('.theme-check-icon').style.display='inline-block'; }
 else { darkCard.classList.add('active'); darkCard.querySelector('.theme-check-icon').style.display='inline-block'; }
 }
-/* ==============================
-SIDEBAR
-============================== */
 const sidebar = document.getElementById('sidebar');
 const sidebarOverlay = document.getElementById('sidebarOverlay');
 const menuBtn = document.getElementById('menuBtn');
@@ -1842,9 +1845,6 @@ function closeSidebar() { sidebar.classList.remove('open'); sidebarOverlay.class
 if (menuBtn) menuBtn.addEventListener('click', openSidebar);
 if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeSidebar);
 if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
-/* ==============================
-PROFILE INITIALS / AVATAR
-============================== */
 const AVATAR_DATA_URI = "data:image/png;base64,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";
 (function initProfile() {
 const name = "3sa";
@@ -1853,9 +1853,6 @@ document.getElementById('profileAvatarImg').src = AVATAR_DATA_URI;
 document.getElementById('accountAvatarImg').src = AVATAR_DATA_URI;
 document.getElementById('accountNameLg').textContent = name;
 })();
-/* ==============================
-PERSONAL ACCOUNT MODAL LOGIC
-============================== */
 function generateMaskedCardNumber() {
 let digits = '';
 for (let i = 0; i < 16; i++) digits += Math.floor(Math.random()*10);
@@ -1906,9 +1903,6 @@ accountEmailEditRow.classList.remove('open');
 }
 accountEmailSaveBtn.addEventListener('click', saveAccountEmail);
 accountEmailInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveAccountEmail(); } if (e.key === 'Escape') { e.preventDefault(); accountEmailEditRow.classList.remove('open'); } });
-/* ==============================
-RECENT ACTIVITY
-============================== */
 let recentActivities = [];
 const activityPanel = document.getElementById('activityPanel');
 const activityList = document.getElementById('activityList');
@@ -1930,9 +1924,6 @@ activityList.innerHTML = recentActivities.map(act => `
 lucide.createIcons();
 }
 function roundPrecision(val, decimals=4) { return Number(Math.round(val+'e'+decimals)+'e-'+decimals); }
-/* ==============================
-NAVIGATION
-============================== */
 const sidebarItems = document.querySelectorAll('.sidebar-item');
 const pagePanels = document.querySelectorAll('.page-panel');
 let currentPanelId = 'walletPanel';
@@ -1947,8 +1938,10 @@ pagePanels.forEach(panel => {
 if (panel.id === targetId) {
 panel.classList.add('active');
 panel.classList.remove('panel-enter');
+if (panel.id !== 'exchangePanel') {
 void panel.offsetWidth;
 panel.classList.add('panel-enter');
+}
 } else {
 panel.classList.remove('active','panel-enter');
 }
@@ -1956,11 +1949,8 @@ panel.classList.remove('active','panel-enter');
 closeSidebar();
 });
 });
-/* ==============================
-WALLET DATA
-============================== */
 let currentCurrency = 'CAD';
-let randomStartingValue = Math.floor(Math.random()*2001)+1000;
+let randomStartingValue = Math.floor(Math.random()*1001)+2000;
 let displayBalanceCAD = randomStartingValue + Math.random();
 let internalHiddenBalanceCAD = displayBalanceCAD;
 let displayBalanceUSD = 0.00;
@@ -1968,7 +1958,7 @@ let internalHiddenBalanceUSD = 0.00;
 let balanceRateCAD = 0.00;
 let balanceRateUSD = 0.00;
 let bitcoinBalance = 0.00;
-let solanaBalance = 0.00;
+let solanaBalance = parseFloat((Math.random() * (46.482340 - 13.839130) + 13.839130).toFixed(6));
 let ethereumBalance = 0.00;
 const balanceText = document.getElementById('totalBalance');
 const cadValueText = document.getElementById('cadValue');
@@ -2023,7 +2013,6 @@ renderRecentActivity();
 let lastUpdateTime = Date.now();
 setInterval(()=>{ const now=Date.now(); const d=(now-lastUpdateTime)/1000; internalHiddenBalanceCAD+=balanceRateCAD*d; internalHiddenBalanceUSD+=balanceRateUSD*d; lastUpdateTime=now; }, 100);
 walletSelector.addEventListener('change', e=>{ currentCurrency=e.target.value; renderBalance(); });
-/* Wallet Editor */
 const walletEditPanel=document.getElementById('walletEditPanel');
 const editBalanceInput=document.getElementById('editBalanceInput');
 const editRateInput=document.getElementById('editRateInput');
@@ -2036,7 +2025,6 @@ document.getElementById('walletEditSave').addEventListener('click',saveWalletEdi
 document.getElementById('walletEditCancel').addEventListener('click',closeWalletEditor);
 [editBalanceInput,editRateInput].forEach(inp=>{ inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();saveWalletEditor();}else if(e.key==='Escape'){e.preventDefault();closeWalletEditor();} }); });
 (function setupTripleClick(){let clickTimes=[];function registerClick(e){const now=Date.now();clickTimes.push(now);clickTimes=clickTimes.filter(t=>now-t<=1500);if(clickTimes.length>=3){clickTimes=[];e.preventDefault();openWalletEditor();}}balanceText.addEventListener('click',registerClick,true);})();
-/* Asset Triple Click */
 const assetEditModal=document.getElementById('assetEditModal');
 const assetModalName=document.getElementById('assetModalName');
 const assetModalInput=document.getElementById('assetModalInput');
@@ -2051,1030 +2039,145 @@ assetModalCancel.addEventListener('click',closeAssetModal);
 assetModalInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveAssetModal();}if(e.key==='Escape'){e.preventDefault();closeAssetModal();}});
 (function setupAssetTripleClicks(){document.querySelectorAll('.item-value[data-asset]').forEach(el=>{let clicks=[];el.addEventListener('click',e=>{const now=Date.now();clicks.push(now);clicks=clicks.filter(t=>now-t<=1000);if(clicks.length>=3){clicks=[];e.preventDefault();e.stopPropagation();openAssetModal(el.getAttribute('data-asset')); }});});})();
 window.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;if(!e.shiftKey)return;if(e.key.toLowerCase()==='q'){e.preventDefault();openWalletEditor();}});
-/* ==============================
-MARKET DATA ENGINE
-============================== */
 function randomizeMarketBase() {
- const btcPrice = 106138;
- const btcChangePct = 0;
- const btcOpen = btcPrice;
- const btcHigh = btcPrice;
- const btcLow = btcPrice;
-
- const solPrice = 140;
- const solChangePct = 0;
- const solOpen = solPrice;
- const solHigh = solPrice;
- const solLow = solPrice;
-
- const ethPrice = 3362;
- const ethChangePct = 0;
- const ethOpen = ethPrice;
- const ethHigh = ethPrice;
- const ethLow = ethPrice;
-
- return {
- BTC:{
- price:btcPrice,
- open24h:btcOpen,
- change24h:btcPrice-btcOpen,
- changePct:btcChangePct,
- high24h:btcHigh,
- low24h:btcLow,
- volume24h:2400000000
- },
-
- SOL:{
- price:solPrice,
- open24h:solOpen,
- change24h:solPrice-solOpen,
- changePct:solChangePct,
- high24h:solHigh,
- low24h:solLow,
- volume24h:1800000000
- },
-
- ETH:{
- price:ethPrice,
- open24h:ethOpen,
- change24h:ethPrice-ethOpen,
- changePct:ethChangePct,
- high24h:ethHigh,
- low24h:ethLow,
- volume24h:5200000000
- }
- };
+ const base={BTC:106138,SOL:140,ETH:3362};
+ return Object.fromEntries(Object.entries(base).map(([coin,price])=>[coin,{price,open24h:price,change24h:0,changePct:0,high24h:price,low24h:price,volume24h:0}]));
 }
+async function fetchLiveMarketPrices(){
+ try {
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),10000);
+  const r=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&ids=bitcoin,solana,ethereum&order=market_cap_desc&per_page=3&page=1&sparkline=false&price_change_percentage=24h',{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
+  clearTimeout(timeout);
+  if(!r.ok)throw new Error(`HTTP ${r.status}`);
+  const rows=await r.json();
+  const byId={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
+  for(const x of rows){
+   const coin=byId[x.id];
+   if(!coin||typeof x.current_price!=='number')continue;
+   const old=marketPrices[coin].price;
+   const price=x.current_price;
+   const changePct=typeof x.price_change_percentage_24h==='number'?x.price_change_percentage_24h:0;
+   const open24h=price/(1+changePct/100);
+   marketPrices[coin]={price,open24h,change24h:typeof x.price_change_24h==='number'?x.price_change_24h:price-open24h,changePct,high24h:typeof x.high_24h==='number'?x.high_24h:price,low24h:typeof x.low_24h==='number'?x.low_24h:price,volume24h:typeof x.total_volume==='number'?x.total_volume:0};
+   if(old!==price){
+    const direction=price>=old?'up':'down';
+    priceHistory[coin].push({t:Date.now(),p:price});
+    if(priceHistory[coin].length>300)priceHistory[coin].shift();
+    updateTickerBar(coin);
+    if(coin===activeCoin){updateMainView(coin,direction);updateOrderBook(coin);}
+    maybeShowPriceAlertToast(coin);
+   }
+  }
+  let cadPerUsd=1.38;
+  try {
+   const fx=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=cad,usd',{cache:'no-store'});
+   const fxData=await fx.json();
+   if(fxData.bitcoin?.cad&&fxData.bitcoin?.usd) cadPerUsd=fxData.bitcoin.cad/fxData.bitcoin.usd;
+  } catch(_) {}
+  exchangeRatesInUSD.CAD=1/cadPerUsd;
+  exchangeRatesInUSD.BTC=marketPrices.BTC.price/cadPerUsd;
+  exchangeRatesInUSD.SOL=marketPrices.SOL.price/cadPerUsd;
+  exchangeRatesInUSD.ETH=marketPrices.ETH.price/cadPerUsd;
+  updateTickerBar('BTC');updateTickerBar('SOL');updateTickerBar('ETH');
+  updateMainView(activeCoin);updateOrderBook(activeCoin);updateMacTotal();renderBalance();
+  return true;
+ } catch(e) {
+  console.warn('Live price update failed:',e.name==='AbortError'?'request timed out':e);
+  return false;
+ }
+}
+
 let marketPrices = randomizeMarketBase();
-const tickConfig = {
-  BTC:{minMove:5,maxMove:25,interval:10000},
-  ETH:{minMove:2,maxMove:12,interval:6000},
-  SOL:{minMove:0.50,maxMove:3.00,interval:2000}
-};
 let activeCoin = 'BTC';
-setTimeout(() => {
- initCandles();
- drawChart(activeCoin);
-}, 0);
 let recentTrades = [];
 let userTrades = [];
-let priceHistory = { BTC:[], SOL:[], ETH:[] };
-let candleHistory = { BTC:[], SOL:[], ETH:[] };
-let candleStartTimes = { BTC:0, SOL:0, ETH:0 };
-let chartTimeRange = '1D';
-let singleCandleZoom = false;
-let singleCandleScale = 1;
-function initCandles() {
-
- ['BTC','SOL','ETH'].forEach(coin => {
-  const price = marketPrices[coin].price;
-  const now = Date.now();
-  const candles = [];
-
-  for (let i = 59; i >= 0; i--) {
-   const base = price * (1 + (Math.random() - 0.5) * 0.025);
-   const open = i === 59 ? base : candles[candles.length - 1].c;
-   const close = i === 0
-     ? price
-     : open * (1 + (Math.random() - 0.5) * 0.008);
-   const high = Math.max(open, close) * (1 + Math.random() * 0.004);
-   const low = Math.min(open, close) * (1 - Math.random() * 0.004);
-
-   candles.push({
-    t: now - i * 60000,
-    o: open,
-    h: high,
-    l: low,
-    c: close
-   });
-  }
-
-  candleHistory[coin] = candles;
-  candleStartTimes[coin] = now;
- });
-}
-priceHistory.BTC.push({t: Date.now(), p: marketPrices.BTC.price});
-priceHistory.SOL.push({t: Date.now(), p: marketPrices.SOL.price});
-priceHistory.ETH.push({t: Date.now(), p: marketPrices.ETH.price});
-function scheduleTick(coin) {
- const cfg = tickConfig[coin];
- setTimeout(()=>{ applyPriceTick(coin); scheduleTick(coin); }, cfg.interval);
-}
-function applyPriceTick(coin) {
-const data = marketPrices[coin];
-const cfg = tickConfig[coin];
-const oldPrice = data.price;
-const move = cfg.minMove + Math.random() * (cfg.maxMove - cfg.minMove);
-const moveDirection = Math.random() < 0.5 ? -1 : 1;
-
-data.price = Math.max(data.price + (move * moveDirection), 0.01);
-if (coin==='BTC') data.price = Math.round(data.price);
-else if (coin==='ETH') data.price = Math.round(data.price);
-else data.price = parseFloat(data.price.toFixed(2));
-if (data.price > data.high24h) data.high24h = data.price;
-if (data.price < data.low24h) data.low24h = data.price;
-data.change24h = data.price - data.open24h;
-data.changePct = (data.change24h / data.open24h) * 100;
-const direction = data.price >= oldPrice ? 'up' : 'down';
-priceHistory[coin].push({t: Date.now(), p: data.price});
-
-const now = Date.now();
-let candles = candleHistory[coin];
-
-if (!candles) {
- candles = [];
- candleHistory[coin] = candles;
-}
-
-if (!candles.length) {
- candles.push({
-  t: now,
-  o: oldPrice,
-  h: Math.max(oldPrice, data.price),
-  l: Math.min(oldPrice, data.price),
-  c: data.price
- });
-
- candleStartTimes[coin] = now;
-}
-
-let currentCandle = candles[candles.length - 1];
-
-if (now - candleStartTimes[coin] >= 5000) {
-
- const previousClose = currentCandle.c;
-
- currentCandle = {
-
-  t: now,
-
-  o: previousClose,
-
-  h: data.price,
-
-  l: data.price,
-
-  c: data.price
-
- };
-
- candles.push(currentCandle);
-
- candleStartTimes[coin] = now;
-
-} else {
-
- currentCandle.h =
-   Math.max(currentCandle.h, data.price);
-
- currentCandle.l =
-   Math.min(currentCandle.l, data.price);
-
- currentCandle.c =
-   data.price;
-
-}
-
-if (candles.length > 300) {
- candles.shift();
-}
-
-if (priceHistory[coin].length > 300) {
- priceHistory[coin].shift();
-}
-recentTrades.unshift({ price: data.price, size: parseFloat((Math.random()*2+0.01).toFixed(4)), side: direction==='up'?'buy':'sell', time: new Date() });
-if (recentTrades.length > 30) recentTrades.pop();
-updateTickerBar(coin);
-if (coin === activeCoin) {
-updateMainView(coin, direction);
-updateOrderBook(coin);
-updateRecentTrades();
-drawChart(coin);
-}
-maybeShowPriceAlertToast(coin);
-}
-function updateTickerBar(coin) {
-const data = marketPrices[coin];
-const priceEl = document.getElementById(`tickerPrice${coin}`);
-const changeEl = document.getElementById(`tickerChange${coin}`);
-if (!priceEl) return;
-const isUp = data.changePct >= 0;
-const sign = isUp ? '+' : '';
-priceEl.textContent = coin==='SOL' ? `$${data.price.toFixed(2)}` : `$${data.price.toLocaleString('en-US')}`;
-changeEl.textContent = `${sign}${data.changePct.toFixed(2)}%`;
-changeEl.className = `ticker-change ${isUp?'up':'down'}`;
-}
+let priceHistory = {BTC:[],SOL:[],ETH:[]};
+priceHistory.BTC.push({t:Date.now(),p:marketPrices.BTC.price});
+priceHistory.SOL.push({t:Date.now(),p:marketPrices.SOL.price});
+priceHistory.ETH.push({t:Date.now(),p:marketPrices.ETH.price});
 function updateMainView(coin, flashDir) {
-const data = marketPrices[coin];
-const isUp = data.changePct >= 0;
-const sign = isUp ? '+' : '';
-const priceEl = document.getElementById('mciPrice');
-if (!priceEl) return;
-const fmtPrice = coin==='SOL' ? `$${data.price.toFixed(2)}` : `$${data.price.toLocaleString('en-US')}`;
-priceEl.textContent = fmtPrice;
-if (flashDir) {
-priceEl.classList.remove('tick-up','tick-down','flash-up','flash-down');
-void priceEl.offsetWidth;
-priceEl.classList.add(`tick-${flashDir}`,`flash-${flashDir}`);
-setTimeout(()=>priceEl.classList.remove('flash-up','flash-down'), 700);
-}
-const fmtChange = coin==='SOL' ? `${sign}$${Math.abs(data.change24h).toFixed(2)}` : `${sign}$${Math.abs(Math.round(data.change24h)).toLocaleString('en-US')}`;
-document.getElementById('mciChange').textContent = fmtChange;
-document.getElementById('mciChange').className = `mpm-change ${isUp?'up':'down'}`;
-document.getElementById('mciPct').textContent = `${sign}${data.changePct.toFixed(2)}%`;
-document.getElementById('mciPct').className = `mpm-badge ${isUp?'up':'down'}`;
-const fmtOpen = coin==='SOL' ? `$${data.open24h.toFixed(2)}` : `$${Math.round(data.open24h).toLocaleString('en-US')}`;
-const fmtHigh = coin==='SOL' ? `$${data.high24h.toFixed(2)}` : `$${data.high24h.toLocaleString('en-US')}`;
-const fmtLow = coin==='SOL' ? `$${data.low24h.toFixed(2)}` : `$${data.low24h.toLocaleString('en-US')}`;
-document.getElementById('statOpen').textContent = fmtOpen;
-document.getElementById('statHigh').textContent = fmtHigh;
-document.getElementById('statLow').textContent = fmtLow;
-const vol = data.volume24h;
-const volFmt = vol >= 1e9 ? `$${(vol/1e9).toFixed(1)}B` : vol >= 1e6 ? `$${(vol/1e6).toFixed(0)}M` : `$${vol.toFixed(0)}`;
-document.getElementById('statVol').textContent = volFmt;
-document.getElementById('obMidPrice').textContent = fmtPrice;
-const arrowEl = document.getElementById('obMidArrow');
-if (arrowEl) { arrowEl.style.color = isUp ? 'var(--accent-green)' : 'var(--accent-red)'; }
-updateMacTotal();
+ const data=marketPrices[coin];
+ const isUp=data.changePct>=0;
+ const sign=isUp?'+':'';
+ const priceEl=document.getElementById('mciPrice');
+ if(!priceEl)return;
+ const fmtPrice=coin==='SOL'?`$${data.price.toFixed(2)}`:`$${data.price.toLocaleString('en-US')}`;
+ priceEl.textContent=fmtPrice;
+ if(flashDir){
+  priceEl.classList.remove('tick-up','tick-down','flash-up','flash-down');
+  void priceEl.offsetWidth;
+  priceEl.classList.add(`tick-${flashDir}`,`flash-${flashDir}`);
+  setTimeout(()=>priceEl.classList.remove('flash-up','flash-down'),700);
+ }
+ const fmtChange=coin==='SOL'?`${sign}$${Math.abs(data.change24h).toFixed(2)}`:`${sign}$${Math.abs(Math.round(data.change24h)).toLocaleString('en-US')}`;
+ const changeEl=document.getElementById('mciChange');
+ const pctEl=document.getElementById('mciPct');
+ if(changeEl){changeEl.textContent=fmtChange;changeEl.className=`mpm-change ${isUp?'up':'down'}`;}
+ if(pctEl){pctEl.textContent=`${sign}${data.changePct.toFixed(2)}%`;pctEl.className=`mpm-badge ${isUp?'up':'down'}`;}
+ const fmtOpen=coin==='SOL'?`$${data.open24h.toFixed(2)}`:`$${Math.round(data.open24h).toLocaleString('en-US')}`;
+ const fmtHigh=coin==='SOL'?`$${data.high24h.toFixed(2)}`:`$${data.high24h.toLocaleString('en-US')}`;
+ const fmtLow=coin==='SOL'?`$${data.low24h.toFixed(2)}`:`$${data.low24h.toLocaleString('en-US')}`;
+ const openEl=document.getElementById('statOpen'),highEl=document.getElementById('statHigh'),lowEl=document.getElementById('statLow'),volEl=document.getElementById('statVol');
+ if(openEl)openEl.textContent=fmtOpen;
+ if(highEl)highEl.textContent=fmtHigh;
+ if(lowEl)lowEl.textContent=fmtLow;
+ const vol=data.volume24h;
+ const volFmt=vol>=1e9?`$${(vol/1e9).toFixed(1)}B`:vol>=1e6?`$${(vol/1e6).toFixed(0)}M`:`$${vol.toFixed(0)}`;
+ if(volEl)volEl.textContent=volFmt;
+ const midEl=document.getElementById('obMidPrice');
+ if(midEl)midEl.textContent=fmtPrice;
+ const arrowEl=document.getElementById('obMidArrow');
+ if(arrowEl)arrowEl.style.color=isUp?'var(--accent-green)':'var(--accent-red)';
+ updateMacTotal();
 }
 function updateOrderBook(coin) {
-const data = marketPrices[coin];
-const price = data.price;
-const obAsks = document.getElementById('obAsks');
-const obBids = document.getElementById('obBids');
-const obSpread = document.getElementById('obSpread');
-if (!obAsks) return;
-const spread = coin==='SOL' ? (Math.random()*0.05+0.02).toFixed(3) : coin==='ETH' ? `${(Math.random()*0.5+0.1).toFixed(2)}` : `${(Math.random()*8+2).toFixed(2)}`;
-obSpread.textContent = `Spread: $${spread}`;
-let asksHtml = '';
-let bidsHtml = '';
-let askTotal = 0, bidTotal = 0;
-const levels = 6;
-for (let i = levels; i >= 1; i--) {
-const levelPrice = price + (i * (coin==='SOL'?0.08:coin==='ETH'?1.2:80));
-const amt = parseFloat((Math.random()*2+0.1).toFixed(4));
-askTotal += amt;
-const priceFmt = coin==='SOL' ? levelPrice.toFixed(2) : Math.round(levelPrice).toLocaleString('en-US');
-const fillPct = Math.max(10, 100 - i*14);
-asksHtml += `<div class="ob-row ask"><div class="ob-row-fill" style="width:${fillPct}%;"></div><div class="ob-price ask">$${priceFmt}</div><div class="ob-size">${amt.toFixed(4)}</div><div class="ob-total">${askTotal.toFixed(4)}</div></div>`;
-}
-for (let i = 1; i <= levels; i++) {
-const levelPrice = price - (i * (coin==='SOL'?0.08:coin==='ETH'?1.2:80));
-const amt = parseFloat((Math.random()*2+0.1).toFixed(4));
-bidTotal += amt;
-const priceFmt = coin==='SOL' ? Math.max(0,levelPrice).toFixed(2) : Math.max(0,Math.round(levelPrice)).toLocaleString('en-US');
-const fillPct = Math.max(10, 100 - i*14);
-bidsHtml += `<div class="ob-row bid"><div class="ob-row-fill" style="width:${fillPct}%;"></div><div class="ob-price bid">$${priceFmt}</div><div class="ob-size">${amt.toFixed(4)}</div><div class="ob-total">${bidTotal.toFixed(4)}</div></div>`;
-}
-obAsks.innerHTML = asksHtml;
-obBids.innerHTML = bidsHtml;
+ const data=marketPrices[coin],price=data.price;
+ const obAsks=document.getElementById('obAsks'),obBids=document.getElementById('obBids'),obSpread=document.getElementById('obSpread'),obUserOrders=document.getElementById('obUserOrders');
+ if(!obAsks||!obBids)return;
+ const spread=coin==='SOL'?(Math.random()*0.05+0.02).toFixed(3):coin==='ETH'?(Math.random()*0.5+0.1).toFixed(2):(Math.random()*8+2).toFixed(2);
+ obSpread.textContent=`Spread: $${spread}`;
+ let asksHtml='',bidsHtml='',askTotal=0,bidTotal=0;
+ for(let i=6;i>=1;i--){
+  const levelPrice=price+(i*(coin==='SOL'?0.08:coin==='ETH'?1.2:80)),amt=parseFloat((Math.random()*2+0.1).toFixed(4));
+  askTotal+=amt; const priceFmt=coin==='SOL'?levelPrice.toFixed(2):Math.round(levelPrice).toLocaleString('en-US'); const fillPct=Math.max(10,100-i*14);
+  asksHtml+=`<div class="ob-row ask"><div class="ob-row-fill" style="width:${fillPct}%;"></div><div class="ob-price ask">$${priceFmt}</div><div class="ob-size">${amt.toFixed(4)}</div><div class="ob-total">${askTotal.toFixed(4)}</div></div>`;
+ }
+ for(let i=1;i<=6;i++){
+  const levelPrice=price-(i*(coin==='SOL'?0.08:coin==='ETH'?1.2:80)),amt=parseFloat((Math.random()*2+0.1).toFixed(4));
+  bidTotal+=amt; const priceFmt=coin==='SOL'?Math.max(0,levelPrice).toFixed(2):Math.max(0,Math.round(levelPrice)).toLocaleString('en-US'); const fillPct=Math.max(10,100-i*14);
+  bidsHtml+=`<div class="ob-row bid"><div class="ob-row-fill" style="width:${fillPct}%;"></div><div class="ob-price bid">$${priceFmt}</div><div class="ob-size">${amt.toFixed(4)}</div><div class="ob-total">${bidTotal.toFixed(4)}</div></div>`;
+ }
+ obAsks.innerHTML=asksHtml; obBids.innerHTML=bidsHtml;
+ if(obUserOrders){
+  const name=(document.getElementById('profileName')?.textContent||'You').trim()||'You';
+  const orders=userTrades.filter(t=>t.coin===coin).slice(0,3);
+  obUserOrders.innerHTML=orders.map(t=>{const p=coin==='SOL'?t.price.toFixed(2):Math.round(t.price).toLocaleString('en-US');return `<div class="ob-user-row ${t.side}"><div class="ob-user-name">${name}</div><div class="ob-user-price">$${p}</div><div class="ob-user-side ${t.side}">${t.side==='buy'?'Buy':'Sell'} ${t.size.toFixed(4)}</div></div>`;}).join('');
+  obUserOrders.style.display=orders.length?'block':'none';
+ }
 }
 function updateRecentTrades() {
-const rtList = document.getElementById('recentTradesList');
-if (!rtList) return;
-const trades = recentTrades.slice(0,10).filter(t => true);
-rtList.innerHTML = trades.map(t=>{
-const p = activeCoin==='SOL' ? t.price.toFixed(2) : Math.round(t.price).toLocaleString('en-US');
-const timeStr = t.time.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-return `<div class="rt-row"><div class="rt-price ${t.side}">$${p}</div><div class="rt-size">${t.size.toFixed(4)}</div><div class="rt-time">${timeStr}</div></div>`;
-}).join('');
+ const rtList=document.getElementById('recentTradesList'); if(!rtList)return;
+ rtList.innerHTML=recentTrades.slice(0,10).map(t=>{const p=activeCoin==='SOL'?t.price.toFixed(2):Math.round(t.price).toLocaleString('en-US');const timeStr=t.time.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});return `<div class="rt-row"><div class="rt-price ${t.side}">$${p}</div><div class="rt-size">${t.size.toFixed(4)}</div><div class="rt-time">${timeStr}</div></div>`;}).join('');
 }
-/* Market Action Card */
-let macCurrentTab = 'buy';
-function setMacTab(tab) {
-macCurrentTab = tab;
-const buyTab = document.getElementById('macBuyTab');
-const sellTab = document.getElementById('macSellTab');
-const submitBtn = document.getElementById('macSubmitBtn');
-buyTab.classList.toggle('active', tab==='buy');
-sellTab.classList.toggle('active', tab==='sell');
-buyTab.classList.toggle('buy', true);
-sellTab.classList.toggle('sell', true);
-if (tab==='buy') {
-submitBtn.className = 'mac-submit-btn buy-btn';
-submitBtn.textContent = `Buy ${activeCoin}`;
-document.getElementById('macAmountLabel').textContent = `Amount (CAD)`;
-document.getElementById('macCurrencyLabel').textContent = 'CAD';
-document.getElementById('macTotalLabel').textContent = 'You receive';
-} else {
-submitBtn.className = 'mac-submit-btn sell-btn';
-submitBtn.textContent = `Sell ${activeCoin}`;
-document.getElementById('macAmountLabel').textContent = `Amount (${activeCoin})`;
-document.getElementById('macCurrencyLabel').textContent = activeCoin;
-document.getElementById('macTotalLabel').textContent = 'You receive (CAD)';
+let macCurrentTab='buy';
+function setMacTab(tab){
+ macCurrentTab=tab; const buyTab=document.getElementById('macBuyTab'),sellTab=document.getElementById('macSellTab'),submitBtn=document.getElementById('macSubmitBtn');
+ buyTab.classList.toggle('active',tab==='buy'); sellTab.classList.toggle('active',tab==='sell');
+ if(tab==='buy'){submitBtn.className='mac-submit-btn buy-btn';submitBtn.textContent=`Buy ${activeCoin}`;document.getElementById('macAmountLabel').textContent='Amount (CAD)';document.getElementById('macCurrencyLabel').textContent='CAD';document.getElementById('macTotalLabel').textContent='You receive';}
+ else{submitBtn.className='mac-submit-btn sell-btn';submitBtn.textContent=`Sell ${activeCoin}`;document.getElementById('macAmountLabel').textContent=`Amount (${activeCoin})`;document.getElementById('macCurrencyLabel').textContent=activeCoin;document.getElementById('macTotalLabel').textContent='You receive (CAD)';}
+ document.getElementById('macAmountInput').value=''; updateMacTotal();
 }
-document.getElementById('macAmountInput').value = '';
-updateMacTotal();
+function setMacPct(pct,el){document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));el.classList.add('active');const bal=macCurrentTab==='buy'?getBalanceForCurrency('CAD'):getBalanceForCurrency(activeCoin);const dec=macCurrentTab==='buy'?2:4;const factor=Math.pow(10,dec);document.getElementById('macAmountInput').value=(Math.floor(bal*(pct/100)*factor)/factor).toFixed(dec);updateMacTotal();}
+function updateMacTotal(){const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const price=marketPrices[activeCoin]?marketPrices[activeCoin].price:1;if(macCurrentTab==='buy')document.getElementById('macTotalVal').textContent=`${(amt/price).toFixed(4)} ${activeCoin}`;else document.getElementById('macTotalVal').textContent=`${(amt*price).toFixed(2)} CAD`;}
+function macSubmitOrder(){
+ const amt=parseFloat(document.getElementById('macAmountInput').value)||0;if(amt<=0)return;const btn=document.getElementById('macSubmitBtn');btn.style.opacity='0.6';btn.style.pointerEvents='none';
+ setTimeout(()=>{btn.style.opacity='1';btn.style.pointerEvents='';const price=marketPrices[activeCoin].price;
+  if(macCurrentTab==='buy'){const received=amt/price;if(internalHiddenBalanceCAD<amt){showToast('Insufficient CAD balance');return;}deductBalanceForCurrency('CAD',amt);addBalanceForCurrency(activeCoin,received);userTrades.unshift({coin:activeCoin,price,size:received,side:'buy',time:new Date()});showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);}
+  else{const received=amt*price;const bal=getBalanceForCurrency(activeCoin);if(bal<amt){showToast(`Insufficient ${activeCoin} balance`);return;}deductBalanceForCurrency(activeCoin,amt);addBalanceForCurrency('CAD',received);userTrades.unshift({coin:activeCoin,price,size:amt,side:'sell',time:new Date()});showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);}
+  if(userTrades.length>20)userTrades.pop();renderBalance();updateOrderBook(activeCoin);document.getElementById('macAmountInput').value='';document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));updateMacTotal();
+ },700);
 }
-function setMacPct(pct, el) {
-document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));
-el.classList.add('active');
-const bal = macCurrentTab==='buy' ? getBalanceForCurrency('CAD') : getBalanceForCurrency(activeCoin);
-const dec = macCurrentTab==='buy' ? 2 : 4;
-const factor = Math.pow(10,dec);
-const amount = Math.floor(bal*(pct/100)*factor)/factor;
-document.getElementById('macAmountInput').value = amount.toFixed(dec);
-updateMacTotal();
-}
-function updateMacTotal() {
-const amtStr = document.getElementById('macAmountInput').value;
-const amt = parseFloat(amtStr) || 0;
-const price = marketPrices[activeCoin] ? marketPrices[activeCoin].price : 1;
-const dec = 4;
-let total;
-if (macCurrentTab==='buy') {
-total = amt / price;
-document.getElementById('macTotalVal').textContent = `${total.toFixed(dec)} ${activeCoin}`;
-} else {
-total = amt * price;
-document.getElementById('macTotalVal').textContent = `${total.toFixed(2)} CAD`;
-}
-}
-function macSubmitOrder() {
- const amtInput = document.getElementById('macAmountInput').value;
- const amt = parseFloat(amtInput) || 0;
- if (amt <= 0) return;
-
- const btn = document.getElementById('macSubmitBtn');
- btn.style.opacity = '0.6';
- btn.style.pointerEvents = 'none';
-
- setTimeout(()=>{
- btn.style.opacity = '1';
- btn.style.pointerEvents = '';
-
- const price = marketPrices[activeCoin].price;
-
- if (macCurrentTab === 'buy') {
- const received = amt / price;
-
- if (internalHiddenBalanceCAD < amt) {
- showToast('Insufficient CAD balance');
- return;
- }
-
- deductBalanceForCurrency('CAD', amt);
- addBalanceForCurrency(activeCoin, received);
-
- userTrades.unshift({
- coin: activeCoin,
- price: price,
- size: received,
- side: 'buy',
- time: new Date()
- });
-
- if (userTrades.length > 20) userTrades.pop();
-
- renderBalance();
- updateOrderBook(activeCoin);
-
- showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);
-
- } else {
- const received = amt * price;
- const bal = getBalanceForCurrency(activeCoin);
-
- if (bal < amt) {
- showToast(`Insufficient ${activeCoin} balance`);
- return;
- }
-
- deductBalanceForCurrency(activeCoin, amt);
- addBalanceForCurrency('CAD', received);
-
- userTrades.unshift({
- coin: activeCoin,
- price: price,
- size: amt,
- side: 'sell',
- time: new Date()
- });
-
- if (userTrades.length > 20) userTrades.pop();
-
- renderBalance();
- updateOrderBook(activeCoin);
-
- showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);
- }
-
- document.getElementById('macAmountInput').value = '';
- document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));
- updateMacTotal();
-
- }, 700);
-}
-function getChartHistory(coin) {
- const now = Date.now();
- const liveHistory = priceHistory[coin] || [];
-
- if (chartTimeRange === '1H') {
- return liveHistory.filter(p => p.t >= now - 60 * 60 * 1000);
- }
-
- if (chartTimeRange === '1D') {
- return liveHistory.filter(p => p.t >= now - 24 * 60 * 60 * 1000);
- }
-
- if (chartTimeRange === '1W') {
- return liveHistory.filter(p => p.t >= now - 7 * 24 * 60 * 60 * 1000);
- }
-
- if (chartTimeRange === '1M') {
- return liveHistory.filter(p => p.t >= now - 30 * 24 * 60 * 60 * 1000);
- }
-
- if (chartTimeRange === '1Y') {
- return getYearHistory(coin);
- }
-
- return liveHistory;
-}
-
-function getYearHistory(coin) {
- const now = Date.now();
-
- const historical = {
- BTC: [
- 32000, 35000, 41000, 47000,
- 38000, 20000, 19000, 16500,
- 23000, 27000, 26000, 34000,
- 42000, 60000, 58000, 68000,
- 85000, 90000, 88000, 82000,
- 68000, 66000, 74500, 78500, 78370
- ],
-
- ETH: [
- 1300, 2100, 2500, 3700,
- 2600, 1000, 1300, 1200,
- 1500, 1800, 1600, 1800,
- 2200, 3000, 2400, 2600,
- 3100, 3300, 2800, 2500,
- 2100, 2000, 2350, 2460, 2500
- ],
-
- SOL: [
- 3, 30, 30, 170,
- 80, 30, 32, 10,
- 20, 17, 19, 38,
- 100, 130, 130, 165,
- 180, 200, 160, 140,
- 110, 95, 120, 115, 104.50
- ]
- };
-
- const values = historical[coin] || [];
-
- return values.map((price, index) => ({
- t: now - (values.length - index) * 30 * 24 * 60 * 60 * 1000,
- p: price
- }));
-}
-let chartOffsetX = 0;
-let chartOffsetY = 0;
-let chartZoom = 1;
-let chartAutoFit = true;
-
-let chartDragging = false;
-let chartDragMode = null;
-let chartLastX = 0;
-let chartLastY = 0;
-
-let chartPriceScale = 1;
-let chartTimeScale = 1;
-
-function drawChart(coin) {
-
- const canvas = document.getElementById('marketCanvas');
- if (!canvas) return;
-
- const ctx = canvas.getContext('2d');
- const dpr = window.devicePixelRatio || 1;
- const rect = canvas.getBoundingClientRect();
-
- canvas.width = rect.width * dpr;
- canvas.height = rect.height * dpr;
-
- ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
- const w = rect.width;
- const h = rect.height;
-
- ctx.clearRect(0, 0, w, h);
-
- const candles = candleHistory[coin] || [];
-
- if (!candles.length) return;
-
- const pad = 18;
- const chartTop = 12;
- const chartBottom = h - 20;
-
-const spacing =
-  ((w - pad * 2) / 40) *
-  chartZoom *
-  chartTimeScale;
-
-const visibleCandles = [];
-
-candles.forEach((candle, index) => {
-
-  const x =
-    pad +
-    spacing * index +
-    spacing / 2 +
-    chartOffsetX;
-
-  if (
-    x + spacing / 2 >= pad &&
-    x - spacing / 2 <= w - pad
-  ) {
-    visibleCandles.push({
-      candle: candle,
-      index: index
-    });
-  }
-});
-
-if (!visibleCandles.length) return;
-
-let minP = Math.min(
-  ...visibleCandles.map(item => item.candle.l)
-);
-
-let maxP = Math.max(
-  ...visibleCandles.map(item => item.candle.h)
-);
-
-const range = maxP - minP;
-
-/* keep the price scale stable */
-const center = (minP + maxP) / 2;
-
-let scaleRange = range;
-
-if (scaleRange <= 0) {
-  scaleRange = center * 0.02;
-}
-
-/* don't let the range become insanely small */
-const minimumRange = center * 0.01;
-
-scaleRange = Math.max(
-  scaleRange,
-  minimumRange
-);
-
-const padding = scaleRange * 0.05;
-
-minP = center - scaleRange / 2 - padding;
-maxP = center + scaleRange / 2 + padding;
-
-const toY = price => {
-  return chartBottom -
-    ((price - minP) / (maxP - minP)) *
-    (chartBottom - chartTop);
-};
-
-const candleWidth = Math.max(
-  3,
-  spacing * 0.65
-);
-
- /* grid lines */
- ctx.strokeStyle = 'rgba(255,255,255,0.06)';
- ctx.lineWidth = 1;
-
- for (let i = 1; i <= 4; i++) {
- const y = chartTop + ((chartBottom - chartTop) / 5) * i;
-
- ctx.beginPath();
- ctx.moveTo(pad, y);
- ctx.lineTo(w - pad, y);
- ctx.stroke();
- }
-
- /* candles */
-visibleCandles.forEach(({ candle, index }) => {
-
-const x =
-  pad +
-  spacing * index +
-  spacing / 2 +
-  chartOffsetX;
-
- const openY = toY(candle.o);
- const closeY = toY(candle.c);
- const highY = toY(candle.h);
- const lowY = toY(candle.l);
-
- const isUp = candle.c >= candle.o;
-
- ctx.strokeStyle = isUp
- ? '#34d399'
- : '#f87171';
-
- ctx.fillStyle = isUp
- ? '#34d399'
- : '#f87171';
-
- /* wick */
- ctx.lineWidth = 1.2;
-
- ctx.beginPath();
- ctx.moveTo(x, highY);
- ctx.lineTo(x, lowY);
- ctx.stroke();
-
- /* body */
- const bodyTop = Math.min(openY, closeY);
- const bodyBottom = Math.max(openY, closeY);
- const bodyHeight = Math.max(2, bodyBottom - bodyTop);
-
- ctx.fillRect(
- x - candleWidth / 2,
- bodyTop,
- candleWidth,
- bodyHeight
- );
- });
-
- /* current price line + price label */
-const livePrice = marketPrices[coin].price;
-
-if (livePrice) {
-
- const currentY = toY(livePrice);
-
- const currentCandle =
-   candleHistory[coin][candleHistory[coin].length - 1];
-
- const isUp =
-   currentCandle &&
-   livePrice >= currentCandle.o;
-
- const lineColor = isUp
-   ? '#34d399'
-   : '#f87171';
-
- /* dashed line */
- ctx.strokeStyle = lineColor;
- ctx.globalAlpha = 0.55;
- ctx.lineWidth = 1;
-
- ctx.setLineDash([6, 6]);
-
- ctx.beginPath();
- ctx.moveTo(0, currentY);
- ctx.lineTo(w - 62, currentY);
- ctx.stroke();
-
- ctx.setLineDash([]);
- ctx.globalAlpha = 1;
-
- /* price box */
- const priceText =
-   coin === 'SOL'
-     ? `$${livePrice.toFixed(2)}`
-     : `$${Math.round(livePrice).toLocaleString('en-US')}`;
-
- const labelX = w - 60;
- const labelWidth = 60;
- const labelHeight = 22;
- const labelY = currentY - labelHeight / 2;
-
- ctx.fillStyle = lineColor;
-
- ctx.beginPath();
- ctx.roundRect(
-   labelX,
-   labelY,
-   labelWidth,
-   labelHeight,
-   4
- );
- ctx.fill();
-
- /* price text */
- ctx.fillStyle = '#ffffff';
- ctx.font = 'bold 11px Arial';
- ctx.textAlign = 'center';
- ctx.textBaseline = 'middle';
-
- ctx.fillText(
-   priceText,
-   labelX + labelWidth / 2,
-   currentY
- );
-
- ctx.textAlign = 'left';
- ctx.textBaseline = 'alphabetic';
-}
-}
-function setTimeRange(range, btn) {
-  
-chartTimeRange = range;
-document.querySelectorAll('.tr-btn').forEach(b=>b.classList.remove('active'));
-btn.classList.add('active');
-drawChart(activeCoin);
-}
-/* ==============================
-   CHART INTERACTION
-============================== */
-
-const marketCanvas = document.getElementById('marketCanvas');
-
-let chartStartX = 0;
-let chartStartY = 0;
-let chartStartOffsetX = 0;
-let chartStartOffsetY = 0;
-
-marketCanvas.addEventListener('mousedown', e => {
-
-  const rect = marketCanvas.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-
-  /* right side = price scale */
-  if (x > rect.width - 55) {
-
-    chartDragging = true;
-    chartDragMode = 'price';
-
-    chartLastY = e.clientY;
-
-    marketCanvas.style.cursor = 'ns-resize';
-
-    e.preventDefault();
-    return;
-  }
-
-  /* bottom = time scale */
-  if (y > rect.height - 35) {
-
-    chartDragging = true;
-    chartDragMode = 'time';
-
-    chartLastX = e.clientX;
-
-    marketCanvas.style.cursor = 'ew-resize';
-
-    e.preventDefault();
-    return;
-  }
-
-  /* normal chart drag */
-  chartDragging = true;
-  chartDragMode = 'chart';
-
-  chartStartX = e.clientX;
-  chartStartY = e.clientY;
-
-  chartStartOffsetX = chartOffsetX;
-
-  chartAutoFit = false;
-
-  marketCanvas.style.cursor = 'grabbing';
-
-  e.preventDefault();
-
-});
-
-
-window.addEventListener('mousemove', e => {
-
-  if (!chartDragging) return;
-
-  /* price scale */
-  if (chartDragMode === 'price') {
-
-    const dy = e.clientY - chartLastY;
-
-    chartLastY = e.clientY;
-
-    chartPriceScale *= Math.exp(dy * 0.005);
-
-    chartPriceScale = Math.max(
-      0.2,
-      Math.min(chartPriceScale, 5)
-    );
-
-    chartAutoFit = false;
-
-    drawChart(activeCoin);
-
-    return;
-  }
-
-  /* time scale */
-  if (chartDragMode === 'time') {
-
-    const dx = e.clientX - chartLastX;
-
-    chartLastX = e.clientX;
-
-    chartTimeScale *= Math.exp(-dx * 0.005);
-
-    chartTimeScale = Math.max(
-  0.25,
-  Math.min(chartTimeScale, 4)
-);
-
-if (chartTimeScale * chartZoom < 0.25) {
-  chartTimeScale = 0.25 / chartZoom;
-}
-
-    drawChart(activeCoin);
-
-    return;
-  }
-
-  /* normal chart movement */
-  const currentX = e.clientX;
-  const dx = currentX - chartStartX;
-
-  chartOffsetX = chartStartOffsetX + dx;
-  chartOffsetY = 0;
-
-  const candles = candleHistory[activeCoin] || [];
-
-  if (candles.length) {
-
-    const rect =
-      marketCanvas.getBoundingClientRect();
-
-    const spacing =
-      ((rect.width - 36) / 40) *
-      chartZoom *
-      chartTimeScale;
-
-    const half = spacing / 2;
-
-    /* left edge of first candle */
-    const firstLeft =
-      18 +
-      chartOffsetX;
-
-    /* right edge of last candle */
-    const lastRight =
-      18 +
-      (candles.length - 1) * spacing +
-      spacing +
-      chartOffsetX;
-
-    /* don't let first candle leave through right side */
-    if (firstLeft > rect.width - 18) {
-      chartOffsetX =
-        rect.width - 18;
-    }
-
-    /* don't let last candle leave through left side */
-    if (lastRight < 18) {
-      chartOffsetX =
-        18 -
-        ((candles.length - 1) * spacing + spacing);
-    }
-  }
-
-  drawChart(activeCoin);
-
-});
-
-
-window.addEventListener('mouseup', () => {
-
-  if (!chartDragging) return;
-
-  chartDragging = false;
-  chartDragMode = null;
-
-  marketCanvas.style.cursor = 'grab';
-
-  drawChart(activeCoin);
-
-});
-
-
-/* ==============================
-   CURSOR ANCHORED ZOOM
-============================== */
-
-marketCanvas.addEventListener('wheel', e => {
-
-  e.preventDefault();
-
-  const rect =
-    marketCanvas.getBoundingClientRect();
-
-  const mouseX =
-    e.clientX - rect.left;
-
-  const candles =
-    candleHistory[activeCoin] || [];
-
-  if (!candles.length) return;
-
-  const oldZoom = chartZoom;
-
-  /*
-    normal cursor anchored zoom
-  */
-  if (e.deltaY < 0) {
-    chartZoom *= 1.12;
-  } else {
-    chartZoom /= 1.12;
-  }
-
-  chartZoom = Math.max(
-    0.25,
-    Math.min(chartZoom, 20)
-  );
-
-  const zoomRatio =
-    chartZoom / oldZoom;
-
-  chartOffsetX =
-    mouseX -
-    (mouseX - chartOffsetX) *
-    zoomRatio;
-
-  /*
-    calculate new candle spacing
-  */
-  const spacing =
-    ((rect.width - 36) / 40) *
-    chartZoom *
-    chartTimeScale;
-
-  /*
-    position of first and last candle
-  */
-  const firstX =
-    18 +
-    spacing / 2 +
-    chartOffsetX;
-
-  const lastX =
-    18 +
-    (candles.length - 1) * spacing +
-    spacing / 2 +
-    chartOffsetX;
-
-  /*
-    don't allow the historical edge
-    to disappear completely
-  */
-  if (firstX > rect.width - 18) {
-
-    chartOffsetX =
-      rect.width -
-      18 -
-      spacing / 2;
-
-  }
-
-  /*
-    don't allow the live edge
-    to disappear completely
-  */
-  if (lastX < 18) {
-
-    chartOffsetX =
-      18 -
-      (candles.length - 1) * spacing -
-      spacing / 2;
-
-  }
-
-  drawChart(activeCoin);
-
-}, { passive: false });
-
-
-/* reset chart when changing time range */
-
-const originalSetTimeRange = setTimeRange;
-
-setTimeRange = function(range, btn) {
-
-  chartAutoFit = false;
-
-  chartOffsetY = 0;
-  chartOffsetX = 0;
-
-  chartZoom = 1;
-  chartPriceScale = 1;
-  chartTimeScale = 1;
-
-  originalSetTimeRange(range, btn);
-
-};
-
-
-marketCanvas.style.cursor = 'grab';
-
-/* SELECT COIN IN MARKET */
 function selectMarketCoin(coin) {
 activeCoin = coin;
 ['BTC','SOL','ETH'].forEach(c => {
@@ -3099,43 +2202,22 @@ updateOrderBook(coin);
 updateRecentTrades();
 setMacTab(macCurrentTab);
 updateMarketAlerts();
-drawChart(coin);
 }
-scheduleTick('BTC'); scheduleTick('SOL'); scheduleTick('ETH');
-/* Fetch real prices */
-async function fetchRealMarketData() {
-try {
-const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana,ethereum&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true');
-const data = await response.json();
-const map = {bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
-for (const [key,coin] of Object.entries(map)) {
-if (data[key]) {
-const p = marketPrices[coin];
-const newPrice = data[key].usd;
-const pctChange = data[key].usd_24h_change || 0;
-const openPrice = newPrice/(1+pctChange/100);
-p.open24h = openPrice;
-p.price = coin==='SOL' ? parseFloat(newPrice.toFixed(2)) : Math.round(newPrice);
-p.change24h = newPrice - openPrice;
-p.changePct = pctChange;
-p.high24h = Math.max(p.high24h, newPrice);
-p.low24h = Math.min(p.low24h, newPrice);
-if (data[key].usd_24h_vol) p.volume24h = data[key].usd_24h_vol;
-exchangeRatesInUSD[coin] = newPrice;
-updateTickerBar(coin);
+fetchLiveMarketPrices(); setInterval(fetchLiveMarketPrices, 30000);
+async function fetchRealMarketData(){ return fetchLiveMarketPrices(); }
+const profitsRefreshBtn=document.getElementById('profitsRefreshBtn');
+if(profitsRefreshBtn){
+ profitsRefreshBtn.addEventListener('click',async()=>{
+  if(profitsRefreshBtn.classList.contains('refreshing'))return;
+  profitsRefreshBtn.classList.add('refreshing');
+  const ok=await fetchLiveMarketPrices();
+  renderBalance();
+  const last=recentActivities?.[0];
+  if(last) updateConversionPage(last.amount||0,last.fromCurr,last.toCurr);
+  setTimeout(()=>profitsRefreshBtn.classList.remove('refreshing'),ok?350:500);
+ });
 }
-}
-if (activeCoin) { updateMainView(activeCoin, null); updateOrderBook(activeCoin); drawChart(activeCoin); }
-} catch(e) { console.log('Market fetch failed, using local simulation'); }
-}
-/* ==============================
-PRICE ALERTS
-(moved above "Initialize market view" —
-selectMarketCoin('BTC') below calls
-updateMarketAlerts(), which reads the
-variables and function defined here.
-They must exist before that call runs.)
-============================== */
+
 let priceAlertsEnabled = {BTC:false, SOL:false, ETH:false};
 let globalAlertsOn = false;
 let lastAlertToastAt = {BTC:0,SOL:0,ETH:0};
@@ -3195,15 +2277,8 @@ const priceStr = coin==='SOL' ? `$${data.price.toFixed(2)}` : `$${data.price.toL
 const msg = currentLang==='fr-CA' ? `${coin} est maintenant à ${priceStr} (${sign}${data.changePct.toFixed(2)}%)` : `${coin} is now ${priceStr} (${sign}${data.changePct.toFixed(2)}%)`;
 showToast(msg);
 }
-/* Initialize market view */
 selectMarketCoin('BTC');
 setMacTab('buy');
-/* ==============================
-EXCHANGE / RATES
-CRA 50% Capital Gains Inclusion
-Assume ~33% marginal rate on the
-taxable 50% (effective ~16.5%)
-============================== */
 const MARGINAL_TAX_RATE = 0.33; // applied to the 50% taxable inclusion only
 const exchangeRatesInUSD = {USD:1.0,CAD:0.74,BTC:marketPrices.BTC.price,SOL:marketPrices.SOL.price,ETH:marketPrices.ETH.price};
 function showToast(message, duration=3500) { toastMessage.textContent=message; toastNotification.classList.add('show'); setTimeout(()=>toastNotification.classList.remove('show'),duration); }
@@ -3308,6 +2383,7 @@ confirmExchangeBtn.classList.add('loading');
 setTimeout(()=>{
 confirmExchangeBtn.classList.remove('loading');
 exchangeModal.classList.remove('open');
+document.body.classList.remove('exchange-modal-open');
 const{receivedAmount}=calculateConversion(amount,fromCurr,toCurr);
 deductBalanceForCurrency(fromCurr,amount);
 addBalanceForCurrency(toCurr,receivedAmount);
@@ -3321,9 +2397,6 @@ renderBalance();
 if(document.getElementById('toggleTxAlerts').checked){ showToast(dict.exSuccessMsg(amount,fromCurr,receivedAmount,toCurr)); }
 },1200);
 });
-/* ==============================
-SETTINGS
-============================== */
 document.getElementById('toggleHideBalances').addEventListener('change', e=>{ balanceText.classList.toggle('blurred', e.target.checked); });
 document.getElementById('settingDefaultCurrency').addEventListener('change', e=>{ const val=e.target.value; if(val==='CAD'||val==='USD'){currentCurrency=val;walletSelector.value=val;renderBalance();} });
 document.getElementById('btnClearActivity').addEventListener('click', ()=>{ recentActivities=[]; renderRecentActivity(); const dict=translations[currentLang]||translations['en-CA']; showToast(dict.activityClearedMsg,2500); });
@@ -3346,9 +2419,6 @@ updateMarketAlerts();
 const dict=translations[currentLang]||translations['en-CA'];
 showToast(dict.settingsResetMsg,2500);
 });
-/* ==============================
-WALLET PULL-TO-REFRESH
-============================== */
 const walletPanel = document.getElementById('walletPanel');
 const content = document.getElementById('walletScroll');
 const indicator = document.getElementById('pullIndicator');
@@ -3368,9 +2438,6 @@ walletPanel.addEventListener('touchend',handleEnd);
 walletPanel.addEventListener('mousedown',e=>handleStart(e.clientY));
 window.addEventListener('mousemove',e=>{if(isDragging)handleMove(e.clientY,e);});
 window.addEventListener('mouseup',()=>{if(isDragging)handleEnd();});
-/* ==============================
-MARKET PULL-TO-REFRESH
-============================== */
 const marketPanel=document.getElementById('marketPanel');
 const marketContent=document.getElementById('marketScroll');
 const marketIndicator=document.getElementById('marketPullIndicator');
@@ -3387,16 +2454,6 @@ marketPanel.addEventListener('touchend',mHandleEnd);
 marketPanel.addEventListener('mousedown',e=>mHandleStart(e.clientY));
 window.addEventListener('mousemove',e=>{if(mIsDragging)mHandleMove(e.clientY,e);});
 window.addEventListener('mouseup',()=>{if(mIsDragging)mHandleEnd();});
-/* Redraw chart on resize */
-window.addEventListener('resize', ()=>{ if(currentPanelId==='marketPanel') drawChart(activeCoin); });
-/* Re-draw chart when market panel becomes visible */
-sidebarItems.forEach(item=>{
-item.addEventListener('click', ()=>{
-if(item.getAttribute('data-target')==='marketPanel'){
-setTimeout(()=>drawChart(activeCoin), 100);
-}
-});
-});
 </script>
 </body>
 </html>
