@@ -376,18 +376,23 @@ will-change: transform;
 .edit-btn.save { background: #ffffff; color: #0a0a0c; border-color: transparent; }
 .edit-btn.save:hover { background: #f0f0f0; }
 
-.activity-swipe-row { position: relative; overflow: hidden; border-radius: 12px; margin: 0 -12px; touch-action: pan-y; --swipe-progress: 0; }
-.activity-delete-action { position: absolute; inset: 0; display: flex; align-items: center; justify-content: flex-start; padding-left: 25px; color: #fff; border-radius: 12px; overflow: hidden; opacity: 0; background: linear-gradient(110deg, #8f1021 0%, #d51f3b 42%, #ff3b55 72%, #ff6478 100%); box-shadow: inset -40px 0 55px rgba(255,70,90,.08); transform: scaleX(.985); transform-origin: left center; transition: opacity .18s ease, transform .24s cubic-bezier(.22,1,.36,1); pointer-events: none; }
-.activity-delete-action::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 18% 50%, rgba(255,255,255,.22), transparent 28%), linear-gradient(90deg, rgba(0,0,0,.18), transparent 60%); opacity: calc(.35 + var(--swipe-progress) * .65); }
-.activity-delete-action::after { content: ''; position: absolute; top: -30%; bottom: -30%; left: 0; width: 3px; border-radius: 50%; background: rgba(255,255,255,.72); box-shadow: 0 0 16px rgba(255,255,255,.55); opacity: calc(var(--swipe-progress) * .8); transform: translateX(calc(var(--swipe-progress) * 68px)); }
-.activity-delete-action i { position: relative; z-index: 1; width: 18px; height: 18px; stroke-width: 2.3; transform: translateX(calc(var(--swipe-progress) * 5px)) scale(calc(.92 + var(--swipe-progress) * .08)); opacity: calc(.7 + var(--swipe-progress) * .3); }
-.activity-swipe-content { position: relative; z-index: 1; background: var(--bg-card); will-change: transform; touch-action: pan-y; }
-.activity-swipe-row.revealed .activity-delete-action { opacity: 1; transform: scaleX(1); }
+ .activity-swipe-row { position: relative; overflow: hidden; border-radius: 14px; margin: 0 -12px; touch-action: pan-y; isolation: isolate; }
+.activity-delete-action { position: absolute; inset: 0 auto 0 0; width: 92px; display: flex; align-items: center; justify-content: center; background: linear-gradient(105deg, #b91c1c 0%, #ef4444 72%, #f87171 100%); color: #fff; border: 0; padding: 0; border-radius: 14px 0 0 14px; opacity: 0; transform: translateX(-12px); transition: opacity .2s ease, transform .34s cubic-bezier(.22,1,.36,1); pointer-events: none; cursor: pointer; }
+.activity-delete-action::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.1), rgba(255,255,255,0)); transform: translateX(-100%); transition: transform .5s ease; pointer-events: none; }
+.activity-delete-icon { position: relative; z-index: 1; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.2); box-shadow: 0 6px 18px rgba(0,0,0,.18), inset 0 1px rgba(255,255,255,.12); transform: scale(.72) rotate(-8deg); transition: transform .34s cubic-bezier(.34,1.56,.64,1), background .18s ease; }
+.activity-delete-icon i { width: 18px; height: 18px; stroke-width: 2.25; }
+.activity-swipe-content { position: relative; z-index: 1; background: var(--bg-card); will-change: transform; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.activity-swipe-row.revealed .activity-delete-action { opacity: 1; transform: translateX(0); pointer-events: auto; }
+.activity-swipe-row.revealed .activity-delete-action::after { transform: translateX(100%); }
+.activity-swipe-row.revealed .activity-delete-icon { transform: scale(1) rotate(0); }
+.activity-delete-action:active .activity-delete-icon { transform: scale(.9); background: rgba(255,255,255,.22); }
 .activity-swipe-row.swiping .activity-swipe-content { transition: none !important; }
-.activity-swipe-row:not(.swiping) .activity-swipe-content { transition: transform .34s cubic-bezier(.22,1,.36,1); }
+.activity-swipe-row:not(.swiping) .activity-swipe-content { transition: transform .36s cubic-bezier(.22,1,.36,1); }
 .activity-swipe-row.removing { pointer-events: none; }
-.activity-swipe-row.removing .activity-swipe-content { transform: translate3d(105%,0,0); opacity: 0; transition: transform .3s cubic-bezier(.22,1,.36,1), opacity .2s ease; }
-.activity-swipe-row.removing .activity-delete-action { opacity: 0; transition: opacity .18s ease; }
+.activity-swipe-row.removing .activity-swipe-content { transform: translate3d(110%,0,0); opacity: 0; transition: transform .38s cubic-bezier(.22,1,.36,1), opacity .22s ease; }
+.activity-swipe-row.removing .activity-delete-action { opacity: 0; transform: translateX(-16px); transition-duration: .18s; }
+.activity-swipe-row.removing { animation: activityRowCollapse .38s cubic-bezier(.22,1,.36,1) .18s both; }
+@keyframes activityRowCollapse { from { margin-bottom: 0; max-height: 72px; opacity: 1; } to { margin-bottom: -72px; max-height: 0; opacity: 0; } }
 .activity-panel { background-color: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-subtle); padding: 24px; margin-bottom: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); display: none; }
 .asset-list { background-color: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-subtle); padding: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); margin-bottom: 24px; }
 .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
@@ -1975,7 +1980,7 @@ if (recentActivities.length === 0) { activityPanel.style.display = 'none'; retur
 activityPanel.style.display = 'block';
 activityList.innerHTML = recentActivities.map((act, index) => `
 <div class="activity-swipe-row" data-activity-id="${act.id}">
-<div class="activity-delete-action" aria-hidden="true"><i data-lucide="trash-2"></i></div>
+<button class="activity-delete-action" type="button" aria-label="Delete activity"><span class="activity-delete-icon"><i data-lucide="trash-2"></i></span></button>
 <div class="activity-swipe-content list-item">
 <div class="item-left">
 <div class="icon-wrapper"><i data-lucide="arrow-left-right"></i></div>
@@ -1994,42 +1999,59 @@ setupActivitySwipes();
 function setupActivitySwipes() {
   activityList.querySelectorAll('.activity-swipe-row').forEach(row => {
     const content = row.querySelector('.activity-swipe-content');
-    let startX = 0, startY = 0, startOffset = 0, currentX = 0, dragging = false, horizontal = false;
-    const maxReveal = 78;
-    const deleteThreshold = Math.min(190, Math.max(150, row.offsetWidth * 0.48));
+    const deleteAction = row.querySelector('.activity-delete-action');
+    if (!content || !deleteAction) return;
+
+    let startX = 0, startY = 0, startOffset = 0, currentX = 0;
+    let dragging = false, horizontal = false, moved = false;
+    const maxReveal = 92;
+    const deleteThreshold = Math.max(145, Math.min(190, window.innerWidth * 0.46));
+
     const setX = x => {
-      currentX = Math.max(0, Math.min(x, row.offsetWidth * .92));
-      const progress = Math.min(currentX / deleteThreshold, 1);
+      const max = window.innerWidth * 0.92;
+      const raw = Math.max(0, x);
+      const value = raw > maxReveal ? maxReveal + (raw - maxReveal) * 0.72 : raw;
+      currentX = Math.min(value, max);
       content.style.transform = `translate3d(${currentX}px,0,0)`;
-      row.style.setProperty('--swipe-progress', progress.toFixed(3));
-      row.classList.toggle('revealed', currentX > 8);
+      row.classList.toggle('revealed', currentX >= 42);
+      const progress = Math.min(currentX / maxReveal, 1);
+      deleteAction.style.opacity = Math.min(1, progress * 1.35);
     };
-    const finish = () => {
+
+    const deleteRow = () => {
+      if (row.classList.contains('removing')) return;
+      row.classList.add('removing');
+      const id = row.dataset.activityId;
+      setTimeout(() => {
+        recentActivities = recentActivities.filter(act => String(act.id) !== String(id));
+        renderRecentActivity();
+      }, 380);
+    };
+
+    const closeOrDelete = () => {
       if (!dragging) return;
-      row.classList.remove('swiping');
-      if (currentX >= deleteThreshold) {
-        row.classList.add('removing');
-        const id = row.dataset.activityId;
-        setTimeout(() => {
-          recentActivities = recentActivities.filter(act => String(act.id) !== String(id));
-          renderRecentActivity();
-        }, 300);
-      } else {
-        setX(currentX >= maxReveal * .5 ? maxReveal : 0);
-      }
       dragging = false;
+      row.classList.remove('swiping');
+      if (currentX >= deleteThreshold) deleteRow();
+      else setX(currentX >= maxReveal * 0.52 ? maxReveal : 0);
       horizontal = false;
+      moved = false;
     };
+
     row.addEventListener('pointerdown', e => {
+      if (row.classList.contains('removing')) return;
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       startX = e.clientX;
       startY = e.clientY;
-      startOffset = currentX > 0 ? currentX : (row.classList.contains('revealed') ? maxReveal : 0);
+      startOffset = currentX >= 42 ? maxReveal : 0;
+      currentX = startOffset;
       dragging = true;
       horizontal = false;
+      moved = false;
       row.classList.add('swiping');
       try { row.setPointerCapture(e.pointerId); } catch (_) {}
     });
+
     row.addEventListener('pointermove', e => {
       if (!dragging) return;
       const dx = e.clientX - startX;
@@ -2040,23 +2062,32 @@ function setupActivitySwipes() {
           row.classList.remove('swiping');
           return;
         }
-        if (Math.abs(dx) > 6) horizontal = true;
+        if (Math.abs(dx) > 6) { horizontal = true; moved = true; }
       }
       if (horizontal) {
         setX(startOffset + dx);
         if (e.cancelable) e.preventDefault();
       }
     });
-    row.addEventListener('pointerup', finish);
+
+    row.addEventListener('pointerup', closeOrDelete);
     row.addEventListener('pointercancel', () => {
       if (!dragging) return;
       dragging = false;
       horizontal = false;
+      moved = false;
       row.classList.remove('swiping');
       setX(0);
     });
+
+    deleteAction.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!moved && currentX >= 42) deleteRow();
+    });
   });
 }
+
 function roundPrecision(val, decimals=4) { return Number(Math.round(val+'e'+decimals)+'e-'+decimals); }
 const sidebarItems = document.querySelectorAll('.sidebar-item');
 const pagePanels = document.querySelectorAll('.page-panel');
