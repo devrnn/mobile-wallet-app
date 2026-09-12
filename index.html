@@ -1461,18 +1461,18 @@ overflow: hidden;
 <div class="market-ticker-bar" id="marketTickerBar">
 <div class="ticker-item selected" id="tickerBTC" onclick="selectMarketCoin('BTC')">
 <div class="ticker-symbol">BTC / CAD</div>
-<div class="ticker-price" id="tickerPriceBTC">$108,048.84</div>
-<div class="ticker-change up" id="tickerChangeBTC">+0.00%</div>
+<div class="ticker-price" id="tickerPriceBTC">Live price unavailable</div>
+<div class="ticker-change up" id="tickerChangeBTC">—</div>
 </div>
 <div class="ticker-item" id="tickerSOL" onclick="selectMarketCoin('SOL')">
 <div class="ticker-symbol">SOL / CAD</div>
-<div class="ticker-price" id="tickerPriceSOL">$142.50</div>
-<div class="ticker-change up" id="tickerChangeSOL">+0.00%</div>
+<div class="ticker-price" id="tickerPriceSOL">Live price unavailable</div>
+<div class="ticker-change up" id="tickerChangeSOL">—</div>
 </div>
 <div class="ticker-item" id="tickerETH" onclick="selectMarketCoin('ETH')">
 <div class="ticker-symbol">ETH / CAD</div>
-<div class="ticker-price" id="tickerPriceETH">$3,421.91</div>
-<div class="ticker-change up" id="tickerChangeETH">+0.00%</div>
+<div class="ticker-price" id="tickerPriceETH">Live price unavailable</div>
+<div class="ticker-change up" id="tickerChangeETH">—</div>
 </div>
 </div>
 <div class="market-main-view">
@@ -1493,10 +1493,10 @@ overflow: hidden;
 </button>
 </div>
 <div>
-<div class="market-live-price" id="mciPrice">$95,000</div>
+<div class="market-live-price" id="mciPrice">Live price unavailable</div>
 <div class="market-price-meta">
-<div class="mpm-change up" id="mciChange">+$2,450</div>
-<div class="mpm-badge up" id="mciPct">+2.65%</div>
+<div class="mpm-change up" id="mciChange">—</div>
+<div class="mpm-badge up" id="mciPct">—</div>
 <div class="mpm-divider"></div>
 <div class="mpm-period">24h</div>
 </div>
@@ -1505,19 +1505,19 @@ overflow: hidden;
 <div class="chart-stats-strip">
 <div class="css-stat">
 <div class="css-label">24h Open</div>
-<div class="css-value" id="statOpen">$92,550</div>
+<div class="css-value" id="statOpen">—</div>
 </div>
 <div class="css-stat">
 <div class="css-label">24h High</div>
-<div class="css-value" id="statHigh" style="color:var(--accent-green);">$96,500</div>
+<div class="css-value" id="statHigh" style="color:var(--accent-green);">—</div>
 </div>
 <div class="css-stat">
 <div class="css-label">24h Low</div>
-<div class="css-value" id="statLow" style="color:var(--accent-red);">$92,800</div>
+<div class="css-value" id="statLow" style="color:var(--accent-red);">—</div>
 </div>
 <div class="css-stat">
 <div class="css-label">Volume</div>
-<div class="css-value" id="statVol">$2.4B</div>
+<div class="css-value" id="statVol">—</div>
 </div>
 </div>
 </div>
@@ -1525,7 +1525,7 @@ overflow: hidden;
 <div class="orderbook-panel">
 <div class="orderbook-header">
 <span class="ob-title">Order Book</span>
-<span class="ob-spread-badge" id="obSpread">Spread: $12.50</span>
+<span class="ob-spread-badge" id="obSpread">Spread: —</span>
 </div>
 <div class="orderbook-cols">
 <div class="ob-col-label">Price</div>
@@ -1534,7 +1534,7 @@ overflow: hidden;
 </div>
 <div class="ob-asks" id="obAsks"></div>
 <div class="ob-mid-row">
-<span class="ob-mid-price" id="obMidPrice">$95,000.00</span>
+<span class="ob-mid-price" id="obMidPrice">—</span>
 <i data-lucide="trending-up" class="ob-mid-arrow" id="obMidArrow" style="color:var(--accent-green);"></i>
 </div>
 <div class="ob-user-orders" id="obUserOrders" style="display:none;"></div>
@@ -2209,51 +2209,72 @@ function randomizeMarketBase() {
  return {BTC:{...empty},SOL:{...empty},ETH:{...empty}};
 }
 
+function updateTickerBar(coin){
+ const data=marketPrices?.[coin];
+ const priceEl=document.getElementById(`tickerPrice${coin}`);
+ const changeEl=document.getElementById(`tickerChange${coin}`);
+ if(!priceEl||!changeEl)return;
+ if(!data||!Number.isFinite(data.price)){
+  priceEl.textContent='Live price unavailable';
+  changeEl.textContent='—';
+  changeEl.className='ticker-change';
+  return;
+ }
+ const price=coin==='SOL'?`$${data.price.toFixed(2)}`:`$${data.price.toLocaleString('en-US',{maximumFractionDigits:0})}`;
+ const pct=Number(data.changePct)||0;
+ const sign=pct>0?'+':'';
+ priceEl.textContent=price;
+ changeEl.textContent=`${sign}${pct.toFixed(2)}%`;
+ changeEl.className=`ticker-change ${pct>=0?'up':'down'}`;
+}
+
 async function fetchLiveMarketPrices(){
  const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),10000);
+ const timeout=setTimeout(()=>controller.abort(),12000);
  try {
-  // Use the spot-price endpoint first. It is lighter than the markets endpoint
-  // and avoids keeping fake seed prices in the UI when a request fails.
-  const spotUrl='https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana,ethereum&vs_currencies=cad&include_24hr_change=true&include_24hr_vol=true&_='+Date.now();
-  const spotResponse=await fetch(spotUrl,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
-  if(!spotResponse.ok)throw new Error(`HTTP ${spotResponse.status}`);
-  const spot=await spotResponse.json();
+  const url='https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&ids=bitcoin,solana,ethereum&order=market_cap_desc&per_page=3&page=1&sparkline=false&price_change_percentage=24h&_='+Date.now();
+  const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
+  if(!response.ok)throw new Error(`HTTP ${response.status}`);
+  const rows=await response.json();
   const ids={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
-  let updated=0;
-
-  for(const [id,coin] of Object.entries(ids)){
-   const x=spot[id];
-   const price=Number(x?.cad);
-   if(!Number.isFinite(price)||price<=0)continue;
-   const changePct=Number.isFinite(Number(x?.cad_24h_change))?Number(x.cad_24h_change):0;
+  const next={};
+  for(const row of rows){
+   const coin=ids[row?.id];
+   const price=Number(row?.current_price);
+   if(!coin||!Number.isFinite(price)||price<=0)continue;
+   const changePct=Number(row?.price_change_percentage_24h);
+   const pct=Number.isFinite(changePct)?changePct:0;
    const previous=marketPrices[coin]?.price;
-   const old=Number.isFinite(previous)?previous:price;
-   const open24h=Math.abs(1+changePct/100)>0.000001?price/(1+changePct/100):price;
-   marketPrices[coin]={
+   const open24h=Number.isFinite(Number(row?.price_change_24h)) ? price-Number(row.price_change_24h) : (Math.abs(1+pct/100)>0.000001 ? price/(1+pct/100) : price);
+   next[coin]={
     price,
-    open24h,
-    change24h:price-open24h,
-    changePct,
-    high24h:Number.isFinite(marketPrices[coin]?.high24h)?marketPrices[coin].high24h:price,
-    low24h:Number.isFinite(marketPrices[coin]?.low24h)?marketPrices[coin].low24h:price,
-    volume24h:Number.isFinite(Number(x?.cad_24h_vol))?Number(x.cad_24h_vol):0
+    open24h:Number.isFinite(open24h)&&open24h>0?open24h:price,
+    change24h:Number.isFinite(Number(row?.price_change_24h))?Number(row.price_change_24h):price-(Number.isFinite(open24h)?open24h:price),
+    changePct:pct,
+    high24h:Number.isFinite(Number(row?.high_24h))?Number(row.high_24h):price,
+    low24h:Number.isFinite(Number(row?.low_24h))?Number(row.low_24h):price,
+    volume24h:Number.isFinite(Number(row?.total_volume))?Number(row.total_volume):0
    };
-   updated++;
+  }
+  if(Object.keys(next).length!==3)throw new Error(`Incomplete live market response (${Object.keys(next).length}/3)`);
 
-   if(previous!==null && Number.isFinite(previous) && previous!==price){
-    const direction=price>=old?'up':'down';
-    priceHistory[coin].push({t:Date.now(),p:price});
+  for(const coin of ['BTC','SOL','ETH']){
+   const data=next[coin];
+   const previous=marketPrices[coin]?.price;
+   marketPrices[coin]=data;
+   if(!Number.isFinite(previous)){
+    priceHistory[coin]=[{t:Date.now(),p:data.price}];
+   }else if(previous!==data.price){
+    const direction=data.price>=previous?'up':'down';
+    priceHistory[coin].push({t:Date.now(),p:data.price});
     if(priceHistory[coin].length>300)priceHistory[coin].shift();
     updateTickerBar(coin);
-    if(coin===activeCoin){updateMainView(coin,direction);updateOrderBook(coin);}
+    if(coin===activeCoin)updateMainView(coin,direction);
     maybeShowPriceAlertToast(coin);
    }
   }
 
-  if(updated!==3)throw new Error(`Incomplete live price response (${updated}/3)`);
-
-  // Keep conversion rates in sync with the same live CAD spot prices.
+  // Keep every conversion using the same live CAD quotes shown in Market.
   const cadPerUsd=1.38;
   exchangeRatesInUSD.CAD=1/cadPerUsd;
   exchangeRatesInUSD.BTC=marketPrices.BTC.price/cadPerUsd;
@@ -2265,9 +2286,7 @@ async function fetchLiveMarketPrices(){
    costBasisLots.SOL[0].costCad=solanaBalance*marketPrices.SOL.price;
   }
 
-  updateTickerBar('BTC');
-  updateTickerBar('SOL');
-  updateTickerBar('ETH');
+  ['BTC','SOL','ETH'].forEach(updateTickerBar);
   updateMainView(activeCoin);
   updateOrderBook(activeCoin);
   updateMacTotal();
@@ -2277,14 +2296,11 @@ async function fetchLiveMarketPrices(){
  } catch(e) {
   document.documentElement.dataset.marketStatus='offline';
   console.warn('Live price update failed:',e.name==='AbortError'?'request timed out':e);
-  // Never replace a real price with a fake starting value. If we have already
-  // received live data, keep the last real quote until the next successful poll.
   return false;
  } finally {
   clearTimeout(timeout);
  }
 }
-
 let marketPrices = randomizeMarketBase();
 let activeCoin = 'BTC';
 let recentTrades = [];
