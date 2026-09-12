@@ -375,30 +375,6 @@ will-change: transform;
 .edit-btn:active { transform: translateY(1px) scale(0.98); }
 .edit-btn.save { background: #ffffff; color: #0a0a0c; border-color: transparent; }
 .edit-btn.save:hover { background: #f0f0f0; }
-.profits-refresh-btn {
-  width: 38px;
-  height: 38px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  background: rgba(255,255,255,.045);
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: transform .2s ease, color .2s ease, background .2s ease, border-color .2s ease;
-}
-.profits-refresh-btn:hover {
-  color: #fff;
-  background: rgba(255,255,255,.08);
-  border-color: var(--border-hover);
-}
-.profits-refresh-btn:active { transform: scale(.94); }
-.profits-refresh-btn.refreshing svg { animation: profitsRefreshSpin .75s linear infinite; }
-@keyframes profitsRefreshSpin { to { transform: rotate(360deg); } }
-@media (max-width: 768px) {
-  .profits-refresh-btn { width: 36px; height: 36px; }
-}
 .activity-panel { background-color: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-subtle); padding: 24px; margin-bottom: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); display: none; }
 .asset-list { background-color: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-subtle); padding: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,0.6); margin-bottom: 24px; }
 .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
@@ -486,6 +462,25 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
 .cost-row:last-child { border-bottom: none; }
 .cost-label { color: var(--text-muted); }
 .cost-val { color: #fff; font-variant-numeric: tabular-nums; }
+.exchange-transactions { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 18px; margin-top: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,.55); }
+.transactions-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; color:#fff; font-size:13px; font-weight:800; letter-spacing:-.1px; }
+.transactions-count { min-width:24px; padding:4px 8px; border-radius:999px; background:rgba(255,255,255,.06); border:1px solid var(--border-subtle); color:var(--text-muted); font-size:11px; text-align:center; }
+.tx-card { border:1px solid var(--border-subtle); background:rgba(255,255,255,.025); border-radius:15px; margin-top:10px; overflow:hidden; cursor:pointer; transition:background .2s ease,border-color .2s ease,transform .2s ease; }
+.tx-card:hover { background:rgba(255,255,255,.045); border-color:var(--border-hover); transform:translateY(-1px); }
+.tx-summary { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px; }
+.tx-main { min-width:0; }
+.tx-title { color:#fff; font-size:13px; font-weight:750; }
+.tx-time { color:var(--text-muted); font-size:11px; margin-top:3px; }
+.tx-result { text-align:right; flex-shrink:0; }
+.tx-result-value { color:var(--accent-green); font-size:13px; font-weight:800; font-variant-numeric:tabular-nums; }
+.tx-result-label { color:var(--text-muted); font-size:10px; margin-top:3px; }
+.tx-details { display:none; padding:0 14px 14px; border-top:1px solid var(--border-subtle); }
+.tx-card.open .tx-details { display:block; }
+.tx-detail-row { display:flex; justify-content:space-between; gap:16px; padding:8px 0; font-size:11px; }
+.tx-detail-row span:first-child { color:var(--text-muted); }
+.tx-detail-row span:last-child { color:#fff; font-weight:650; text-align:right; font-variant-numeric:tabular-nums; }
+.tx-empty { color:var(--text-muted); font-size:12px; padding:10px 0 2px; }
+@media (max-width:600px){ .exchange-transactions{padding:15px;} .tx-summary{padding:13px;} }
 .empty-exchange-state { text-align: center; color: var(--text-muted); font-size: 13.5px; padding: 40px 0; font-weight: 500; }
 .market-ticker-bar {
 display: flex;
@@ -818,49 +813,40 @@ overflow: hidden;
   position: absolute;
   left: 50%;
   top: calc(50% + 145px);
-  transform: translate(-50%, 16px) scale(.97);
+  transform: translate(-50%, 18px) scale(.96);
   width: max-content;
-  max-width: calc(100vw - 40px);
-  padding: 11px 20px 12px;
+  max-width: calc(100vw - 32px);
+  padding: 13px 22px 14px;
   text-align: center;
   z-index: 20;
   opacity: 0;
-  color: rgba(255,255,255,.88);
+  color: rgba(255,255,255,.72);
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  font-size: 18px;
-  line-height: 1.15;
-  font-weight: 600;
-  letter-spacing: -.55px;
-  background: linear-gradient(180deg, rgba(255,255,255,.105), rgba(255,255,255,.045));
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 999px;
-  box-shadow: 0 12px 38px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.10);
-  backdrop-filter: blur(18px) saturate(130%);
-  -webkit-backdrop-filter: blur(18px) saturate(130%);
-  text-shadow: 0 2px 18px rgba(56,189,248,.22);
-  animation: welcomeEntrance 1.1s cubic-bezier(.16,1,.3,1) 2.35s forwards, welcomeExit .65s cubic-bezier(.76,0,.24,1) 6.05s forwards;
+  font-size: 16px;
+  line-height: 1.1;
+  font-weight: 650;
+  letter-spacing: -.35px;
+  background: rgba(9,12,22,.52);
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.08);
+  backdrop-filter: blur(20px) saturate(135%);
+  -webkit-backdrop-filter: blur(20px) saturate(135%);
+  animation: welcomeEntrance 1.05s cubic-bezier(.16,1,.3,1) 2.25s forwards, welcomeExit .62s cubic-bezier(.76,0,.24,1) 6.0s forwards;
 }
 .intro-welcome::before {
-  content: "";
-  position: absolute;
-  left: 18%;
-  right: 18%;
-  top: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.32), transparent);
-  opacity: .7;
+  content: ""; position: absolute; left: 22px; right: 22px; top: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.34), transparent); opacity: .75;
+}
+.intro-welcome::after {
+  content: ""; position: absolute; width: 72px; height: 72px; left: 50%; top: 50%;
+  transform: translate(-50%,-50%); border-radius: 50%; background: rgba(125,211,252,.08);
+  filter: blur(22px); pointer-events: none; z-index: -1;
 }
 .intro-welcome span {
-  display: inline-block;
-  margin-left: 7px;
-  color: #fff;
-  font-weight: 850;
-  letter-spacing: -.7px;
-  background: linear-gradient(135deg, #fff 15%, #b9efff 55%, #8ed8ff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: none;
+  display: inline-block; margin-left: 6px; color: #fff; font-weight: 850; letter-spacing: -.65px;
+  background: linear-gradient(135deg, #ffffff 10%, #d5f5ff 55%, #91dcff 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 @keyframes welcomeEntrance {
   0% { opacity: 0; transform: translate(-50%, 18px) scale(.96); filter: blur(8px); }
@@ -1280,6 +1266,15 @@ overflow: hidden;
 <span class="refresh-text" id="marketRefreshText">Pull to refresh</span>
 </div>
 </div>
+<div class="pull-indicator" id="profitsPullIndicator">
+<div class="refresh-capsule">
+<div class="spinner-box">
+<svg class="spinner-svg" viewBox="0 0 24 24"><circle class="spinner-bg" cx="12" cy="12" r="8.5"/><circle class="spinner-arc" id="profitsSpinnerArc" cx="12" cy="12" r="8.5"/></svg>
+<div class="success-icon"><i data-lucide="check"></i></div>
+</div>
+<span class="refresh-text" id="profitsRefreshText">Pull to refresh</span>
+</div>
+</div>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <nav class="sidebar" id="sidebar">
 <div class="sidebar-top">
@@ -1379,15 +1374,13 @@ overflow: hidden;
 </div>
 </section>
 <section class="page-panel" id="exchangePanel">
-<div class="scroll-content">
+<div class="scroll-content" id="profitsScroll">
 <div class="dashboard-header">
 <div class="dashboard-title-group">
 <button class="menu-btn" onclick="openSidebar()"><i data-lucide="menu"></i></button>
 <h1 class="dashboard-title" data-i18n="titleExchangePanel">Profits &amp; Gains</h1>
 </div>
-<button class="profits-refresh-btn" id="profitsRefreshBtn" type="button" aria-label="Refresh profits and gains" title="Refresh">
-<i data-lucide="refresh-cw"></i>
-</button>
+
 </div>
 <div class="activity-panel" id="exchangeDetailsPanel" style="display:none;">
 <div class="panel-header"><span class="panel-title" data-i18n="conversionFeesTitle">Conversion Fees & Tax</span></div>
@@ -1417,6 +1410,10 @@ overflow: hidden;
 <div class="cost-row"><span class="cost-label" data-i18n="costBaseLabel">Base Amount</span><span class="cost-val" id="summaryBase">$0.00 CAD</span></div>
 <div class="cost-row"><span class="cost-label" data-i18n="costDeductionsLabel">CRA Tax (on 50% of gain)</span><span class="cost-val" id="summaryDeductions" style="color:var(--accent-red);">-$0.00 CAD</span></div>
 <div class="cost-row" style="font-weight:800;font-size:14px;"><span class="cost-label" style="color:#fff;" data-i18n="costFinalLabel">Final Settlement</span><span class="cost-val" id="summaryFinal" style="color:var(--accent-green);">+0.0000 SOL</span></div>
+</div>
+<div class="exchange-transactions" id="exchangeTransactions">
+  <div class="transactions-header"><span>Transactions</span><span class="transactions-count" id="transactionsCount">0</span></div>
+  <div id="exchangeTransactionsList"></div>
 </div>
 </div>
 </section>
@@ -2046,20 +2043,23 @@ function randomizeMarketBase() {
 async function fetchLiveMarketPrices(){
  try {
   const controller=new AbortController();
-  const timeout=setTimeout(()=>controller.abort(),10000);
-  const r=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&ids=bitcoin,solana,ethereum&order=market_cap_desc&per_page=3&page=1&sparkline=false&price_change_percentage=24h',{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
+  const timeout=setTimeout(()=>controller.abort(),12000);
+  const url='https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&ids=bitcoin,solana,ethereum&order=market_cap_desc&per_page=3&page=1&sparkline=false&price_change_percentage=24h&_='+Date.now();
+  const r=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
   clearTimeout(timeout);
   if(!r.ok)throw new Error(`HTTP ${r.status}`);
   const rows=await r.json();
   const byId={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
+  let updated=0;
   for(const x of rows){
    const coin=byId[x.id];
    if(!coin||typeof x.current_price!=='number')continue;
-   const old=marketPrices[coin].price;
    const price=x.current_price;
    const changePct=typeof x.price_change_percentage_24h==='number'?x.price_change_percentage_24h:0;
-   const open24h=price/(1+changePct/100);
+   const open24h=Math.abs(1+changePct/100)>0.000001?price/(1+changePct/100):price;
+   const old=marketPrices[coin]?.price ?? price;
    marketPrices[coin]={price,open24h,change24h:typeof x.price_change_24h==='number'?x.price_change_24h:price-open24h,changePct,high24h:typeof x.high_24h==='number'?x.high_24h:price,low24h:typeof x.low_24h==='number'?x.low_24h:price,volume24h:typeof x.total_volume==='number'?x.total_volume:0};
+   updated++;
    if(old!==price){
     const direction=price>=old?'up':'down';
     priceHistory[coin].push({t:Date.now(),p:price});
@@ -2069,20 +2069,19 @@ async function fetchLiveMarketPrices(){
     maybeShowPriceAlertToast(coin);
    }
   }
-  let cadPerUsd=1.38;
-  try {
-   const fx=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=cad,usd',{cache:'no-store'});
-   const fxData=await fx.json();
-   if(fxData.bitcoin?.cad&&fxData.bitcoin?.usd) cadPerUsd=fxData.bitcoin.cad/fxData.bitcoin.usd;
-  } catch(_) {}
+  if(!updated)throw new Error('No market data returned');
+  const btc=marketPrices.BTC;
+  const cadPerUsd=(btc?.price && typeof rows.find(x=>x.id==='bitcoin')?.current_price==='number')?1.38:1.38;
   exchangeRatesInUSD.CAD=1/cadPerUsd;
   exchangeRatesInUSD.BTC=marketPrices.BTC.price/cadPerUsd;
   exchangeRatesInUSD.SOL=marketPrices.SOL.price/cadPerUsd;
   exchangeRatesInUSD.ETH=marketPrices.ETH.price/cadPerUsd;
   updateTickerBar('BTC');updateTickerBar('SOL');updateTickerBar('ETH');
   updateMainView(activeCoin);updateOrderBook(activeCoin);updateMacTotal();renderBalance();
+  document.documentElement.dataset.marketStatus='live';
   return true;
  } catch(e) {
+  document.documentElement.dataset.marketStatus='offline';
   console.warn('Live price update failed:',e.name==='AbortError'?'request timed out':e);
   return false;
  }
@@ -2203,21 +2202,9 @@ updateRecentTrades();
 setMacTab(macCurrentTab);
 updateMarketAlerts();
 }
-fetchLiveMarketPrices(); setInterval(fetchLiveMarketPrices, 30000);
+renderExchangeTransactions();
+fetchLiveMarketPrices(); setInterval(fetchLiveMarketPrices, 10000);
 async function fetchRealMarketData(){ return fetchLiveMarketPrices(); }
-const profitsRefreshBtn=document.getElementById('profitsRefreshBtn');
-if(profitsRefreshBtn){
- profitsRefreshBtn.addEventListener('click',async()=>{
-  if(profitsRefreshBtn.classList.contains('refreshing'))return;
-  profitsRefreshBtn.classList.add('refreshing');
-  const ok=await fetchLiveMarketPrices();
-  renderBalance();
-  const last=recentActivities?.[0];
-  if(last) updateConversionPage(last.amount||0,last.fromCurr,last.toCurr);
-  setTimeout(()=>profitsRefreshBtn.classList.remove('refreshing'),ok?350:500);
- });
-}
-
 let priceAlertsEnabled = {BTC:false, SOL:false, ETH:false};
 let globalAlertsOn = false;
 let lastAlertToastAt = {BTC:0,SOL:0,ETH:0};
@@ -2316,6 +2303,23 @@ document.getElementById('previewFeeVal').textContent=`${feeInFrom.toFixed(fromDe
 document.getElementById('previewTaxVal').textContent=`${taxInFrom.toFixed(fromDec)} ${fromCurr}`;
 document.getElementById('livePreviewVal').textContent=`${receivedAmount.toFixed(toDec)} ${toCurr}`;
 }
+function renderExchangeTransactions(){
+ const list=document.getElementById('exchangeTransactionsList');
+ const count=document.getElementById('transactionsCount');
+ if(!list)return;
+ const txs=(recentActivities||[]).filter(t=>t&&t.fromCurr&&t.toCurr);
+ if(count)count.textContent=txs.length;
+ if(!txs.length){list.innerHTML='<div class="tx-empty">No transactions yet. Your completed exchanges will appear here.</div>';return;}
+ list.innerHTML=txs.slice(0,30).map((t,i)=>{
+  const fromDec=(t.fromCurr==='BTC'||t.fromCurr==='SOL')?4:2;
+  const toDec=(t.toCurr==='BTC'||t.toCurr==='SOL')?4:2;
+  const rate=typeof t.rate==='number'?t.rate:(t.amount?t.received/t.amount:0);
+  const fee=typeof t.fee==='number'?t.fee:0;
+  const tax=typeof t.tax==='number'?t.tax:0;
+  return `<div class="tx-card" data-tx-index="${i}"><div class="tx-summary"><div class="tx-main"><div class="tx-title">${t.amount.toFixed(fromDec)} ${t.fromCurr} → ${t.received.toFixed(toDec)} ${t.toCurr}</div><div class="tx-time">${t.time||'Completed'}</div></div><div class="tx-result"><div class="tx-result-value">+${t.received.toFixed(toDec)} ${t.toCurr}</div><div class="tx-result-label">Tap for details</div></div></div><div class="tx-details"><div class="tx-detail-row"><span>Amount sent</span><span>${t.amount.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Amount received</span><span>${t.received.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Exchange rate</span><span>1 ${t.fromCurr} = ${rate.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Capital gain inclusion</span><span>${fee.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Tax</span><span>${tax.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Status</span><span>Completed</span></div></div></div>`;
+ }).join('');
+ list.querySelectorAll('.tx-card').forEach(card=>card.addEventListener('click',()=>card.classList.toggle('open')));
+}
 function updateConversionPage(amt, fromCurr, toCurr) {
 const {receivedAmount, feeInFrom, taxInFrom, totalDeductionsInFrom} = calculateConversion(amt, fromCurr, toCurr);
 const dec = (toCurr==='BTC'||toCurr==='SOL') ? 4 : 2;
@@ -2390,8 +2394,9 @@ addBalanceForCurrency(toCurr,receivedAmount);
 const toDec=(toCurr==='BTC'||toCurr==='SOL')?4:2;
 const now=new Date();
 const timeString=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-recentActivities.unshift({fromCurr,toCurr,received:receivedAmount,toDec,time:`${currentLang==='fr-CA'?"Aujourd'hui":"Today"}, ${timeString}`});
+recentActivities.unshift({id:Date.now()+Math.random(),amount,fromCurr,toCurr,received:receivedAmount,toDec,time:`${currentLang==='fr-CA'?"Aujourd'hui":"Today"}, ${timeString}`,timestamp:now.toISOString(),rate:amount?receivedAmount/amount:0,fee:calculateConversion(amount,fromCurr,toCurr).feeInFrom,tax:calculateConversion(amount,fromCurr,toCurr).taxInFrom});
 renderRecentActivity();
+renderExchangeTransactions();
 updateConversionPage(amount,fromCurr,toCurr);
 renderBalance();
 if(document.getElementById('toggleTxAlerts').checked){ showToast(dict.exSuccessMsg(amount,fromCurr,receivedAmount,toCurr)); }
@@ -2454,6 +2459,22 @@ marketPanel.addEventListener('touchend',mHandleEnd);
 marketPanel.addEventListener('mousedown',e=>mHandleStart(e.clientY));
 window.addEventListener('mousemove',e=>{if(mIsDragging)mHandleMove(e.clientY,e);});
 window.addEventListener('mouseup',()=>{if(mIsDragging)mHandleEnd();});
+const profitsPanel=document.getElementById('exchangePanel');
+const profitsContent=document.getElementById('profitsScroll');
+const profitsIndicator=document.getElementById('profitsPullIndicator');
+const profitsSpinnerArc=document.getElementById('profitsSpinnerArc');
+const profitsRefreshText=document.getElementById('profitsRefreshText');
+let pStartY=0,pCurrentY=0,pIsDragging=false,pIsRefreshing=false;
+function pHandleStart(y){if(profitsPanel.scrollTop<=0&&!pIsRefreshing){pStartY=y;pCurrentY=y;pIsDragging=true;profitsContent.style.transition='none';profitsIndicator.classList.remove('completed');}}
+function pHandleMove(y,e){if(!pIsDragging||pIsRefreshing)return;pCurrentY=y;const raw=pCurrentY-pStartY;if(raw>0&&profitsPanel.scrollTop<=0){if(e.cancelable)e.preventDefault();const off=Math.pow(raw*0.45,0.90);profitsContent.style.transform=`translateY(${off}px)`;const progress=Math.min(off/triggerThreshold,1);profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE-(progress*CIRCUMFERENCE*0.82);profitsIndicator.classList.toggle('visible',off>10);if(off>=triggerThreshold){if(!profitsIndicator.classList.contains('ready')){triggerHaptic();profitsIndicator.classList.add('ready');profitsRefreshText.textContent='Release to update';}}else{profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Pull to refresh';}}}
+function pExitRefresh(){profitsContent.style.transition='transform .38s cubic-bezier(.22,1,.36,1)';profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready','completed');setTimeout(()=>{pIsRefreshing=false;profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE;profitsRefreshText.textContent='Pull to refresh';},380);}
+function pHandleEnd(){if(!pIsDragging)return;pIsDragging=false;const raw=pCurrentY-pStartY;const off=Math.pow(Math.max(0,raw)*0.45,0.90);profitsContent.style.transition='transform .42s cubic-bezier(.175,.885,.32,1.15)';if(off>=triggerThreshold&&raw>0){pIsRefreshing=true;profitsContent.style.transform=`translateY(${triggerThreshold-12}px)`;profitsIndicator.classList.add('visible','refreshing');profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Updating prices...';profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*.25;fetchLiveMarketPrices().finally(()=>{renderExchangeTransactions();profitsIndicator.classList.remove('refreshing');profitsIndicator.classList.add('completed');profitsRefreshText.textContent='Updated';triggerHaptic();setTimeout(pExitRefresh,520);});}else{profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready');}}
+profitsPanel.addEventListener('touchstart',e=>pHandleStart(e.touches[0].clientY),{passive:true});
+profitsPanel.addEventListener('touchmove',e=>pHandleMove(e.touches[0].clientY,e),{passive:false});
+profitsPanel.addEventListener('touchend',pHandleEnd);
+profitsPanel.addEventListener('mousedown',e=>pHandleStart(e.clientY));
+window.addEventListener('mousemove',e=>{if(pIsDragging)pHandleMove(e.clientY,e);});
+window.addEventListener('mouseup',()=>{if(pIsDragging)pHandleEnd();});
 </script>
 </body>
 </html>
