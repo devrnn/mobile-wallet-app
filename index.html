@@ -2295,29 +2295,41 @@ function updateTickerBar(coin){
 }
 
 let lastMarketDetailsFetch=0;
-const MARKET_PRICE_POLL_MS=60000;
+const MARKET_PRICE_POLL_MS=30000;
 const MARKET_DETAILS_POLL_MS=60000;
 const COINS=['BTC','SOL','ETH'];
-const CMC_IDS={BTC:1,SOL:5426,ETH:1027};
 const EMPTY_MARKET={price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null,lastUpdatedAt:0};
+
+async function fetchJson(url, timeoutMs=10000){
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),timeoutMs);
+ try{
+  const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
+  if(!response.ok)throw new Error(`HTTP ${response.status}`);
+  return await response.json();
+ }finally{clearTimeout(timeout);}
+}
 
 let marketPollTimer=null;
 let marketFetchInFlight=false;
 let marketLastSuccessfulFetch=0;
-let marketLastUpdateAt={BTC:0,SOL:0,ETH:0};
 let marketFailureCount=0;
 
-const MARKET_STALE_AFTER_MS=180000;
+const MARKET_STALE_AFTER_MS=120000;
 const MARKET_RETRY_BASE_MS=5000;
 const MARKET_RETRY_MAX_MS=30000;
-const CMC_PRICE_URL='https://pro-api.coinmarketcap.com/public-api/v3/cryptocurrency/quotes/latest';
+const COINBASE_SPOT_URL='https://api.coinbase.com/v2/prices';
 const USD_CAD_RATE_URL='https://api.frankfurter.dev/v2/rate/usd/cad';
 
 async function fetchLiveUsdCadRate(){
  const controller=new AbortController();
  const timeout=setTimeout(()=>controller.abort(),10000);
  try{
-  const response=await fetch(`${USD_CAD_RATE_URL}?_=${Date.now()}`,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
+  const response=await fetch(`${USD_CAD_RATE_URL}?_=${Date.now()}`,{
+   cache:'no-store',
+   signal:controller.signal,
+   headers:{Accept:'application/json'}
+  });
   if(!response.ok)throw new Error(`USD/CAD HTTP ${response.status}`);
   const json=await response.json();
   const rate=Number(json?.rate);
@@ -2342,15 +2354,18 @@ function syncCryptoUsdRates(){
 }
 
 function emptyMarketData(){
- return {price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null,lastUpdatedAt:0};
+ return {...EMPTY_MARKET};
 }
 
 function updateMarketFreshness(){
  const now=Date.now();
  for(const coin of COINS){
   const data=marketPrices[coin];
-  if(!data||!Number.isFinite(data.price)){updateTickerBar(coin);continue;}
-  if(!Number.isFinite(data.lastUpdatedAt)||now-data.lastUpdatedAt>MARKET_STALE_AFTER_MS){
+  if(!data || !Number.isFinite(data.price)){
+   updateTickerBar(coin);
+   continue;
+  }
+  if(!Number.isFinite(data.lastUpdatedAt) || now-data.lastUpdatedAt>MARKET_STALE_AFTER_MS){
    marketPrices[coin]={...emptyMarketData()};
    priceHistory[coin]=[];
   }
@@ -2367,8 +2382,13 @@ function applyLiveMarketData(coin,data){
  if(!data||!Number.isFinite(data.price)||data.price<=0)return false;
  const previous=marketPrices[coin]?.price;
  const previousData=marketPrices[coin]||emptyMarketData();
- marketPrices[coin]={...previousData,...data,price:data.price,lastUpdatedAt:Number.isFinite(data.lastUpdatedAt)?data.lastUpdatedAt:Date.now()};
- marketLastUpdateAt[coin]=marketPrices[coin].lastUpdatedAt;
+ marketPrices[coin]={
+  ...previousData,
+  ...data,
+  price:data.price,
+  lastUpdatedAt:Number.isFinite(data.lastUpdatedAt)?data.lastUpdatedAt:Date.now()
+ };
+ if(!Array.isArray(priceHistory[coin]))priceHistory[coin]=[];
  if(!Number.isFinite(previous)){
   priceHistory[coin]=[{t:marketPrices[coin].lastUpdatedAt,p:data.price}];
  }else if(previous!==data.price){
@@ -2402,46 +2422,42 @@ function scheduleNextMarketFetch(delay=MARKET_PRICE_POLL_MS){
 async function fetchLiveMarketPrices(){
  if(marketFetchInFlight)return false;
  marketFetchInFlight=true;
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),10000);
  try{
-  // CoinMarketCap Keyless Public API. No fake, cached, or generated prices.
-  // BTC=1, SOL=5426, ETH=1027. Quotes are requested directly in CAD.
-  const url=`${CMC_PRICE_URL}?id=1%2C5426%2C1027&convert=CAD&_=${Date.now()}`;
-  const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
-  if(!response.ok)throw new Error(`CoinMarketCap HTTP ${response.status}`);
-  const json=await response.json();
-  if(String(json?.status?.error_code)!=='0')throw new Error(json?.status?.error_message||'CoinMarketCap returned an API error');
+  let usdCad=Number(exchangeRatesInUSD?.CAD);
+  if(!Number.isFinite(usdCad)||usdCad<=0){
+   const fxReady=await fetchLiveUsdCadRate();
+   usdCad=Number(exchangeRatesInUSD?.CAD);
+   if(!fxReady||!Number.isFinite(usdCad)||usdCad<=0)throw new Error('Live USD/CAD rate unavailable');
+  }
+
+  const symbols={BTC:'BTC-USD',SOL:'SOL-USD',ETH:'ETH-USD'};
+  const results=await Promise.all(Object.entries(symbols).map(async([coin,pair])=>{
+   const json=await fetchJson(`${COINBASE_SPOT_URL}/${pair}/spot?_=${Date.now()}`,10000);
+   const usd=Number(json?.data?.amount);
+   if(!Number.isFinite(usd)||usd<=0)throw new Error(`Invalid Coinbase ${pair} price`);
+   return [coin,usd];
+  }));
 
   let received=0;
-  for(const coin of COINS){
-   const row=json?.data?.[String(CMC_IDS[coin])];
-   const quote=row?.quote?.CAD;
-   const price=Number(quote?.price);
-   const changePct=Number(quote?.percent_change_24h);
-   const volume=Number(quote?.volume_24h);
-   const lastUpdated=Date.parse(quote?.last_updated||row?.last_updated||'');
+  for(const [coin,usd] of results){
+   const price=usd/usdCad;
    if(!Number.isFinite(price)||price<=0)continue;
-
    const previous=marketPrices[coin]||emptyMarketData();
-   const open=Number.isFinite(changePct)&&changePct>-100?price/(1+changePct/100):previous.open24h;
    applyLiveMarketData(coin,{
     price,
-    changePct:Number.isFinite(changePct)?changePct:previous.changePct,
-    change24h:Number.isFinite(open)&&open>0?price-open:previous.change24h,
-    open24h:Number.isFinite(open)&&open>0?open:previous.open24h,
+    changePct:previous.changePct,
+    change24h:previous.change24h,
+    open24h:previous.open24h,
     high24h:previous.high24h,
     low24h:previous.low24h,
-    volume24h:Number.isFinite(volume)&&volume>=0?volume:previous.volume24h,
-    lastUpdatedAt:Number.isFinite(lastUpdated)&&lastUpdated>0?lastUpdated:Date.now()
+    volume24h:previous.volume24h,
+    lastUpdatedAt:Date.now()
    });
-
-   const usdCad=Number(exchangeRatesInUSD?.CAD);
-   if(Number.isFinite(usdCad)&&usdCad>0)exchangeRatesInUSD[coin]=price*usdCad;
+   exchangeRatesInUSD[coin]=usd;
    received++;
   }
 
-  if(received===0)throw new Error('CoinMarketCap returned no usable live prices');
+  if(received!==COINS.length)throw new Error(`Incomplete Coinbase response (${received}/${COINS.length})`);
   marketLastSuccessfulFetch=Date.now();
   marketFailureCount=0;
   document.documentElement.dataset.marketStatus='live';
@@ -2450,25 +2466,21 @@ async function fetchLiveMarketPrices(){
   return true;
  }catch(e){
   marketFailureCount++;
-  console.warn('CoinMarketCap live market price update failed:',e.name==='AbortError'?'request timed out':e);
+  console.warn('Live Coinbase price update failed:',e.name==='AbortError'?'request timed out':e);
   updateMarketFreshness();
   const retryDelay=Math.min(MARKET_RETRY_MAX_MS,MARKET_RETRY_BASE_MS*Math.pow(2,Math.min(marketFailureCount-1,3)));
   scheduleNextMarketFetch(retryDelay);
   return false;
  }finally{
-  clearTimeout(timeout);
   marketFetchInFlight=false;
  }
 }
-
-let marketDetailsInFlight=false;
-let marketDetailsLastFetched=0;
 
 async function fetchMarketDetails(){
  return true;
 }
 
-async function fetchRealMarketData(){ return fetchLiveMarketPrices(); }
+async function fetchRealMarketData(){return fetchLiveMarketPrices();}
 
 let marketPrices = {BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData()};
 let activeCoin = 'BTC';
@@ -2482,14 +2494,11 @@ function updateMainView(coin, flashDir) {
  if(!data||!Number.isFinite(data.price)){
   if(priceEl)priceEl.textContent='Live price unavailable';
   const changeEl=document.getElementById('mciChange'); if(changeEl)changeEl.textContent='Waiting for live market data…';
-  const pctEl=document.getElementById('mciPct'); if(pctEl)pctEl.textContent='—';
-  ['statOpen','statHigh','statLow','statVol','obMidPrice'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
+  ['mciOpen','mciHigh','mciLow','mciVolume','obMidPrice'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
   updateMacTotal();
   return;
  }
- const changePct=Number(data.changePct);
- const change24h=Number(data.change24h);
- const isUp=Number.isFinite(changePct)?changePct>=0:true;
+ const isUp=data.changePct>=0;
  const sign=isUp?'+':'';
  if(!priceEl)return;
  const fmtPrice=coin==='SOL'?`$${data.price.toFixed(2)}`:`$${data.price.toLocaleString('en-US')}`;
@@ -2500,32 +2509,21 @@ function updateMainView(coin, flashDir) {
   priceEl.classList.add(`tick-${flashDir}`,`flash-${flashDir}`);
   setTimeout(()=>priceEl.classList.remove('flash-up','flash-down'),700);
  }
+ const fmtChange=coin==='SOL'?`${sign}$${Math.abs(data.change24h).toFixed(2)}`:`${sign}$${Math.abs(Math.round(data.change24h)).toLocaleString('en-US')}`;
  const changeEl=document.getElementById('mciChange');
  const pctEl=document.getElementById('mciPct');
- if(changeEl){
-  changeEl.textContent=Number.isFinite(change24h)
-   ? (coin==='SOL'?`${sign}$${Math.abs(change24h).toFixed(2)}`:`${sign}$${Math.abs(Math.round(change24h)).toLocaleString('en-US')}`)
-   : '—';
-  changeEl.className=`mpm-change ${isUp?'up':'down'}`;
- }
- if(pctEl){
-  pctEl.textContent=Number.isFinite(changePct)?`${sign}${changePct.toFixed(2)}%`:'—';
-  pctEl.className=`mpm-badge ${isUp?'up':'down'}`;
- }
- const formatStat=(value)=>{
-  if(!Number.isFinite(value)||value<=0)return '—';
-  return coin==='SOL'?`$${value.toFixed(2)}`:`$${Math.round(value).toLocaleString('en-US')}`;
- };
+ if(changeEl){changeEl.textContent=fmtChange;changeEl.className=`mpm-change ${isUp?'up':'down'}`;}
+ if(pctEl){pctEl.textContent=`${sign}${data.changePct.toFixed(2)}%`;pctEl.className=`mpm-badge ${isUp?'up':'down'}`;}
+ const fmtOpen=coin==='SOL'?`$${data.open24h.toFixed(2)}`:`$${Math.round(data.open24h).toLocaleString('en-US')}`;
+ const fmtHigh=coin==='SOL'?`$${data.high24h.toFixed(2)}`:`$${data.high24h.toLocaleString('en-US')}`;
+ const fmtLow=coin==='SOL'?`$${data.low24h.toFixed(2)}`:`$${data.low24h.toLocaleString('en-US')}`;
  const openEl=document.getElementById('statOpen'),highEl=document.getElementById('statHigh'),lowEl=document.getElementById('statLow'),volEl=document.getElementById('statVol');
- if(openEl)openEl.textContent=formatStat(Number(data.open24h));
- if(highEl)highEl.textContent=formatStat(Number(data.high24h));
- if(lowEl)lowEl.textContent=formatStat(Number(data.low24h));
- const vol=Number(data.volume24h);
- if(volEl){
-  volEl.textContent=Number.isFinite(vol)&&vol>=0
-   ? (vol>=1e9?`$${(vol/1e9).toFixed(1)}B`:vol>=1e6?`$${(vol/1e6).toFixed(0)}M`:`$${vol.toFixed(0)}`)
-   : '—';
- }
+ if(openEl)openEl.textContent=fmtOpen;
+ if(highEl)highEl.textContent=fmtHigh;
+ if(lowEl)lowEl.textContent=fmtLow;
+ const vol=data.volume24h;
+ const volFmt=vol>=1e9?`$${(vol/1e9).toFixed(1)}B`:vol>=1e6?`$${(vol/1e6).toFixed(0)}M`:`$${vol.toFixed(0)}`;
+ if(volEl)volEl.textContent=volFmt;
  const midEl=document.getElementById('obMidPrice');
  if(midEl)midEl.textContent=fmtPrice;
  const arrowEl=document.getElementById('obMidArrow');
