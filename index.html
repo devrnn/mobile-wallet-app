@@ -2423,13 +2423,47 @@ async function fetchLiveMarketPrices(){
  if(marketFetchInFlight)return false;
  marketFetchInFlight=true;
  try{
+  // Primary provider: CoinGecko returns CAD prices plus real 24h market data directly.
+  // No generated/fallback prices are used. If it fails, we fall back to Coinbase spot.
+  const cgUrl='https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana,ethereum&vs_currencies=cad&include_24hr_change=true&include_24hr_vol=true&include_24hr_high=true&include_24hr_low=true&_='+Date.now();
+  let cg=null;
+  try{
+   cg=await fetchJson(cgUrl,12000);
+  }catch(cgError){
+   console.warn('CoinGecko live market request failed, trying Coinbase:',cgError);
+  }
+
+  if(cg?.bitcoin?.cad>0 && cg?.solana?.cad>0 && cg?.ethereum?.cad>0){
+   const map={BTC:'bitcoin',SOL:'solana',ETH:'ethereum'};
+   for(const coin of COINS){
+    const d=cg[map[coin]];
+    const price=Number(d.cad);
+    const changePct=Number(d.cad_24h_change);
+    const high24h=Number(d.cad_24h_high);
+    const low24h=Number(d.cad_24h_low);
+    const volume24h=Number(d.cad_24h_vol);
+    const change24h=Number.isFinite(changePct)?price*(changePct/100):null;
+    const open24h=Number.isFinite(changePct)&&Math.abs(100+changePct)>0?price/(1+changePct/100):null;
+    applyLiveMarketData(coin,{price,changePct,change24h,open24h,high24h,low24h,volume24h,lastUpdatedAt:Date.now()});
+    exchangeRatesInUSD[coin]=exchangeRatesInUSD[coin]||0;
+   }
+   // CAD is the native quote currency here, so no FX conversion is required.
+   exchangeRatesInUSD.CAD=exchangeRatesInUSD.CAD>0?exchangeRatesInUSD.CAD:1;
+   marketLastSuccessfulFetch=Date.now();
+   marketFailureCount=0;
+   document.documentElement.dataset.marketStatus='live';
+   refreshMarketUI();
+   scheduleNextMarketFetch(MARKET_PRICE_POLL_MS);
+   return true;
+  }
+
+  // Fallback provider: Coinbase spot prices + live USD/CAD FX.
   let usdCad=Number(exchangeRatesInUSD?.CAD);
   if(!Number.isFinite(usdCad)||usdCad<=0){
    const fxReady=await fetchLiveUsdCadRate();
    usdCad=Number(exchangeRatesInUSD?.CAD);
    if(!fxReady||!Number.isFinite(usdCad)||usdCad<=0)throw new Error('Live USD/CAD rate unavailable');
   }
-
   const symbols={BTC:'BTC-USD',SOL:'SOL-USD',ETH:'ETH-USD'};
   const results=await Promise.all(Object.entries(symbols).map(async([coin,pair])=>{
    const json=await fetchJson(`${COINBASE_SPOT_URL}/${pair}/spot?_=${Date.now()}`,10000);
@@ -2437,27 +2471,16 @@ async function fetchLiveMarketPrices(){
    if(!Number.isFinite(usd)||usd<=0)throw new Error(`Invalid Coinbase ${pair} price`);
    return [coin,usd];
   }));
-
   let received=0;
   for(const [coin,usd] of results){
    const price=usd/usdCad;
    if(!Number.isFinite(price)||price<=0)continue;
    const previous=marketPrices[coin]||emptyMarketData();
-   applyLiveMarketData(coin,{
-    price,
-    changePct:previous.changePct,
-    change24h:previous.change24h,
-    open24h:previous.open24h,
-    high24h:previous.high24h,
-    low24h:previous.low24h,
-    volume24h:previous.volume24h,
-    lastUpdatedAt:Date.now()
-   });
+   applyLiveMarketData(coin,{price,changePct:previous.changePct,change24h:previous.change24h,open24h:previous.open24h,high24h:previous.high24h,low24h:previous.low24h,volume24h:previous.volume24h,lastUpdatedAt:Date.now()});
    exchangeRatesInUSD[coin]=usd;
    received++;
   }
-
-  if(received!==COINS.length)throw new Error(`Incomplete Coinbase response (${received}/${COINS.length})`);
+  if(received!==COINS.length)throw new Error(`Incomplete live response (${received}/${COINS.length})`);
   marketLastSuccessfulFetch=Date.now();
   marketFailureCount=0;
   document.documentElement.dataset.marketStatus='live';
@@ -2466,7 +2489,7 @@ async function fetchLiveMarketPrices(){
   return true;
  }catch(e){
   marketFailureCount++;
-  console.warn('Live Coinbase price update failed:',e.name==='AbortError'?'request timed out':e);
+  console.warn('All live market providers failed:',e.name==='AbortError'?'request timed out':e);
   updateMarketFreshness();
   const retryDelay=Math.min(MARKET_RETRY_MAX_MS,MARKET_RETRY_BASE_MS*Math.pow(2,Math.min(marketFailureCount-1,3)));
   scheduleNextMarketFetch(retryDelay);
@@ -2475,7 +2498,6 @@ async function fetchLiveMarketPrices(){
   marketFetchInFlight=false;
  }
 }
-
 async function fetchMarketDetails(){
  return true;
 }
