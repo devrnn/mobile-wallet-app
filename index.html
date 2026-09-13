@@ -2339,6 +2339,7 @@ function applyLiveCoinPrice(coin, price, changePct, change24h){
 let marketPollTimer = null;
 let marketFetchInFlight = false;
 let marketLastSuccessfulFetch = 0;
+let marketLastUpdateAt = {BTC:0,SOL:0,ETH:0};
 let marketFailureCount = 0;
 
 const MARKET_STALE_AFTER_MS = 90000;
@@ -2461,60 +2462,79 @@ async function fetchLiveMarketPrices(){
  const controller=new AbortController();
  const timeout=setTimeout(()=>controller.abort(),10000);
  try{
-  // Coinbase public spot prices are real exchange prices and require no API key.
-  // We fetch USD prices, then convert them to CAD using the live USD/CAD rate already fetched.
-  const symbols={BTC:'BTC-USD',SOL:'SOL-USD',ETH:'ETH-USD'};
-  const results=await Promise.all(Object.entries(symbols).map(async ([coin,pair])=>{
-   const response=await fetch(`https://api.coinbase.com/v2/prices/${pair}/spot`,{
-    cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}
-   });
-   if(!response.ok)throw new Error(`Coinbase ${pair} HTTP ${response.status}`);
-   const json=await response.json();
-   const usd=Number(json?.data?.amount);
-   if(!Number.isFinite(usd)||usd<=0)throw new Error(`Invalid Coinbase ${pair} price`);
-   return [coin,usd];
-  }));
+  // Primary source: CoinGecko's public market endpoint returns the actual current
+  // CAD quote directly. No generated, cached, or hard-coded price is used.
+  const url=`${MARKET_PRICE_URL}?ids=bitcoin%2Csolana%2Cethereum&vs_currencies=cad&include_24hr_change=true&_=${Date.now()}`;
+  let rows;
+  try{
+   const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
+   if(!response.ok)throw new Error(`CoinGecko price HTTP ${response.status}`);
+   rows=await response.json();
+  }catch(primaryError){
+   // Fallback source: Coinbase CAD spot pairs. This is still a live exchange quote.
+   // If a pair is unavailable, that coin stays unavailable instead of being fabricated.
+   console.warn('CoinGecko live price request failed, trying Coinbase:',primaryError);
+   const pairs={BTC:'BTC-CAD',SOL:'SOL-CAD',ETH:'ETH-CAD'};
+   const fallback=await Promise.allSettled(Object.entries(pairs).map(async ([coin,pair])=>{
+    const response=await fetch(`https://api.coinbase.com/v2/prices/${pair}/spot?_=${Date.now()}`,{
+     cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}
+    });
+    if(!response.ok)throw new Error(`Coinbase ${pair} HTTP ${response.status}`);
+    const json=await response.json();
+    const cad=Number(json?.data?.amount);
+    if(!Number.isFinite(cad)||cad<=0)throw new Error(`Invalid Coinbase ${pair} price`);
+    return [coin,cad];
+   }));
 
-  let usdCad=Number(exchangeRatesInUSD?.CAD);
-  if(!Number.isFinite(usdCad)||usdCad<=0){
-   const fxReady=await fetchLiveUsdCadRate();
-   usdCad=Number(exchangeRatesInUSD?.CAD);
-   if(!fxReady||!Number.isFinite(usdCad)||usdCad<=0){
-    throw new Error('Live USD/CAD rate unavailable');
+   let received=0;
+   fallback.forEach(result=>{
+    if(result.status!=='fulfilled')return;
+    const [coin,price]=result.value;
+    applyLiveMarketData(coin,{price,lastUpdatedAt:Date.now()});
+    received++;
+   });
+   if(received===0)throw new Error('No live market provider returned a usable price');
+  }
+
+  if(rows){
+   const ids={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
+   let received=0;
+   for(const [id,coin] of Object.entries(ids)){
+    const row=rows?.[id];
+    const price=Number(row?.cad);
+    const changePct=Number(row?.cad_24h_change);
+    if(!Number.isFinite(price)||price<=0)continue;
+    const previous=marketPrices[coin]||emptyMarketData();
+    const open=Number.isFinite(changePct)&&changePct>-100
+      ? price/(1+changePct/100)
+      : previous.open24h;
+    applyLiveMarketData(coin,{
+     price,
+     changePct:Number.isFinite(changePct)?changePct:previous.changePct,
+     change24h:Number.isFinite(open)&&open>0?price-open:previous.change24h,
+     open24h:Number.isFinite(open)&&open>0?open:previous.open24h,
+     high24h:previous.high24h,
+     low24h:previous.low24h,
+     volume24h:previous.volume24h,
+     lastUpdatedAt:Date.now()
+    });
+    exchangeRatesInUSD[coin]=Number(exchangeRatesInUSD.CAD)>0?price*Number(exchangeRatesInUSD.CAD):exchangeRatesInUSD[coin];
+    received++;
    }
+   if(received===0)throw new Error('CoinGecko returned no usable live prices');
   }
 
-  let received=0;
-  for(const [coin,usd] of results){
-   const price=usd/usdCad;
-   if(!Number.isFinite(price)||price<=0)continue;
-   const previousData=marketPrices[coin]||emptyMarketData();
-   applyLiveMarketData(coin,{
-    price,
-    changePct:previousData.changePct,
-    change24h:previousData.change24h,
-    open24h:previousData.open24h,
-    high24h:previousData.high24h,
-    low24h:previousData.low24h,
-    volume24h:previousData.volume24h,
-    lastUpdatedAt:Date.now()
-   });
-   exchangeRatesInUSD[coin]=usd;
-   received++;
-  }
-
-  if(received!==3)throw new Error(`Incomplete live Coinbase response (${received}/3)`);
   marketLastSuccessfulFetch=Date.now();
   marketFailureCount=0;
   document.documentElement.dataset.marketStatus='live';
   refreshMarketUI();
+  // Details are supplemental only. A failure here must never hide a valid live price.
+  fetchMarketDetails();
   scheduleNextMarketFetch(MARKET_PRICE_POLL_MS);
   return true;
  }catch(e){
   marketFailureCount++;
-  console.warn('Live Coinbase CAD price update failed:',e.name==='AbortError'?'request timed out':e);
-  // Never fabricate a price. If the live request cannot be completed, the UI will
-  // remain/return to "Live price unavailable" once the last real quote is stale.
+  console.warn('Live market price update failed:',e.name==='AbortError'?'request timed out':e);
   updateMarketFreshness();
   const retryDelay=Math.min(MARKET_RETRY_MAX_MS,MARKET_RETRY_BASE_MS*Math.pow(2,Math.min(marketFailureCount-1,3)));
   scheduleNextMarketFetch(retryDelay);
@@ -2524,7 +2544,6 @@ async function fetchLiveMarketPrices(){
   marketFetchInFlight=false;
  }
 }
-
 let marketDetailsInFlight=false;
 let marketDetailsLastFetched=0;
 
@@ -2565,7 +2584,7 @@ async function fetchMarketDetails(){
    received++;
   }
 
-  if(received===3){
+  if(received>0){
    marketDetailsLastFetched=Date.now();
    refreshMarketUI();
    return true;
@@ -2594,11 +2613,14 @@ function updateMainView(coin, flashDir) {
  if(!data||!Number.isFinite(data.price)){
   if(priceEl)priceEl.textContent='Live price unavailable';
   const changeEl=document.getElementById('mciChange'); if(changeEl)changeEl.textContent='Waiting for live market data…';
-  ['mciOpen','mciHigh','mciLow','mciVolume','obMidPrice'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
+  const pctEl=document.getElementById('mciPct'); if(pctEl)pctEl.textContent='—';
+  ['statOpen','statHigh','statLow','statVol','obMidPrice'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
   updateMacTotal();
   return;
  }
- const isUp=data.changePct>=0;
+ const changePct=Number(data.changePct);
+ const change24h=Number(data.change24h);
+ const isUp=Number.isFinite(changePct)?changePct>=0:true;
  const sign=isUp?'+':'';
  if(!priceEl)return;
  const fmtPrice=coin==='SOL'?`$${data.price.toFixed(2)}`:`$${data.price.toLocaleString('en-US')}`;
@@ -2609,21 +2631,32 @@ function updateMainView(coin, flashDir) {
   priceEl.classList.add(`tick-${flashDir}`,`flash-${flashDir}`);
   setTimeout(()=>priceEl.classList.remove('flash-up','flash-down'),700);
  }
- const fmtChange=coin==='SOL'?`${sign}$${Math.abs(data.change24h).toFixed(2)}`:`${sign}$${Math.abs(Math.round(data.change24h)).toLocaleString('en-US')}`;
  const changeEl=document.getElementById('mciChange');
  const pctEl=document.getElementById('mciPct');
- if(changeEl){changeEl.textContent=fmtChange;changeEl.className=`mpm-change ${isUp?'up':'down'}`;}
- if(pctEl){pctEl.textContent=`${sign}${data.changePct.toFixed(2)}%`;pctEl.className=`mpm-badge ${isUp?'up':'down'}`;}
- const fmtOpen=coin==='SOL'?`$${data.open24h.toFixed(2)}`:`$${Math.round(data.open24h).toLocaleString('en-US')}`;
- const fmtHigh=coin==='SOL'?`$${data.high24h.toFixed(2)}`:`$${data.high24h.toLocaleString('en-US')}`;
- const fmtLow=coin==='SOL'?`$${data.low24h.toFixed(2)}`:`$${data.low24h.toLocaleString('en-US')}`;
+ if(changeEl){
+  changeEl.textContent=Number.isFinite(change24h)
+   ? (coin==='SOL'?`${sign}$${Math.abs(change24h).toFixed(2)}`:`${sign}$${Math.abs(Math.round(change24h)).toLocaleString('en-US')}`)
+   : '—';
+  changeEl.className=`mpm-change ${isUp?'up':'down'}`;
+ }
+ if(pctEl){
+  pctEl.textContent=Number.isFinite(changePct)?`${sign}${changePct.toFixed(2)}%`:'—';
+  pctEl.className=`mpm-badge ${isUp?'up':'down'}`;
+ }
+ const formatStat=(value)=>{
+  if(!Number.isFinite(value)||value<=0)return '—';
+  return coin==='SOL'?`$${value.toFixed(2)}`:`$${Math.round(value).toLocaleString('en-US')}`;
+ };
  const openEl=document.getElementById('statOpen'),highEl=document.getElementById('statHigh'),lowEl=document.getElementById('statLow'),volEl=document.getElementById('statVol');
- if(openEl)openEl.textContent=fmtOpen;
- if(highEl)highEl.textContent=fmtHigh;
- if(lowEl)lowEl.textContent=fmtLow;
- const vol=data.volume24h;
- const volFmt=vol>=1e9?`$${(vol/1e9).toFixed(1)}B`:vol>=1e6?`$${(vol/1e6).toFixed(0)}M`:`$${vol.toFixed(0)}`;
- if(volEl)volEl.textContent=volFmt;
+ if(openEl)openEl.textContent=formatStat(Number(data.open24h));
+ if(highEl)highEl.textContent=formatStat(Number(data.high24h));
+ if(lowEl)lowEl.textContent=formatStat(Number(data.low24h));
+ const vol=Number(data.volume24h);
+ if(volEl){
+  volEl.textContent=Number.isFinite(vol)&&vol>=0
+   ? (vol>=1e9?`$${(vol/1e9).toFixed(1)}B`:vol>=1e6?`$${(vol/1e6).toFixed(0)}M`:`$${vol.toFixed(0)}`)
+   : '—';
+ }
  const midEl=document.getElementById('obMidPrice');
  if(midEl)midEl.textContent=fmtPrice;
  const arrowEl=document.getElementById('obMidArrow');
@@ -2767,13 +2800,8 @@ selectMarketCoin('BTC');
 setMacTab('buy');
 const MARGINAL_TAX_RATE = 0.33; // applied to the 50% taxable inclusion only
 const exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
-fetchLiveUsdCadRate().then(ok=>{
- if(ok){
-  fetchLiveMarketPrices();
- }else{
-  scheduleNextMarketFetch(5000);
- }
-});
+fetchLiveUsdCadRate();
+fetchLiveMarketPrices();
 initializeCostBasis();
 function showToast(message, duration=3500) { toastMessage.textContent=message; toastNotification.classList.add('show'); setTimeout(()=>toastNotification.classList.remove('show'),duration); }
 function calculateConversion(amount, fromCurr, toCurr) {
