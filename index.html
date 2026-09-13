@@ -1998,7 +1998,7 @@ const costBasisLots = {BTC: [], SOL: [], ETH: []};
 let costBasisInitialized = false;
 function cadPriceForCurrency(curr) {
   if (curr === 'CAD') return 1;
-  if (curr === 'USD') return 1 / (exchangeRatesInUSD.CAD || 0.74);
+  if (curr === 'USD') return exchangeRatesInUSD.CAD > 0 ? 1 / exchangeRatesInUSD.CAD : 0;
   return marketPrices && marketPrices[curr] && Number.isFinite(marketPrices[curr].price) ? marketPrices[curr].price : 0;
 }
 function initializeCostBasis() {
@@ -2293,118 +2293,297 @@ function updateTickerBar(coin){
  changeEl.className=`ticker-change ${pct>=0?'up':'down'}`;
 }
 
-async function fetchLiveMarketPrices(){
+let lastMarketDetailsFetch=0;
+const MARKET_PRICE_POLL_MS=12000;
+const MARKET_DETAILS_POLL_MS=60000;
+const COINS=['BTC','SOL','ETH'];
+const COINGECKO_IDS={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
+const EMPTY_MARKET={price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null};
+
+async function fetchJson(url, timeoutMs=9000){
  const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),12000);
- try {
-  const url='https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&ids=bitcoin,solana,ethereum&order=market_cap_desc&per_page=3&page=1&sparkline=false&price_change_percentage=24h&_='+Date.now();
+ const timeout=setTimeout(()=>controller.abort(),timeoutMs);
+ try{
   const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
   if(!response.ok)throw new Error(`HTTP ${response.status}`);
-  const rows=await response.json();
-  const ids={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
-  const next={};
-  for(const row of rows){
-   const coin=ids[row?.id];
-   const price=Number(row?.current_price);
-   if(!coin||!Number.isFinite(price)||price<=0)continue;
-   const changePct=Number(row?.price_change_percentage_24h);
-   const pct=Number.isFinite(changePct)?changePct:0;
-   const previous=marketPrices[coin]?.price;
-   const open24h=Number.isFinite(Number(row?.price_change_24h)) ? price-Number(row.price_change_24h) : (Math.abs(1+pct/100)>0.000001 ? price/(1+pct/100) : price);
-   next[coin]={
-    price,
-    open24h:Number.isFinite(open24h)&&open24h>0?open24h:price,
-    change24h:Number.isFinite(Number(row?.price_change_24h))?Number(row.price_change_24h):price-(Number.isFinite(open24h)?open24h:price),
-    changePct:pct,
-    high24h:Number.isFinite(Number(row?.high_24h))?Number(row.high_24h):price,
-    low24h:Number.isFinite(Number(row?.low_24h))?Number(row.low_24h):price,
-    volume24h:Number.isFinite(Number(row?.total_volume))?Number(row.total_volume):0
-   };
-  }
-  if(Object.keys(next).length!==3)throw new Error(`Incomplete live market response (${Object.keys(next).length}/3)`);
-
-  for(const coin of ['BTC','SOL','ETH']){
-   const data=next[coin];
-   const previous=marketPrices[coin]?.price;
-   marketPrices[coin]=data;
-   if(!Number.isFinite(previous)){
-    priceHistory[coin]=[{t:Date.now(),p:data.price}];
-   }else if(previous!==data.price){
-    const direction=data.price>=previous?'up':'down';
-    priceHistory[coin].push({t:Date.now(),p:data.price});
-    if(priceHistory[coin].length>300)priceHistory[coin].shift();
-    updateTickerBar(coin);
-    if(coin===activeCoin)updateMainView(coin,direction);
-    maybeShowPriceAlertToast(coin);
-   }
-  }
-
-  // Keep every conversion using the same live CAD quotes shown in Market.
-  const cadPerUsd=1.38;
-  exchangeRatesInUSD.CAD=1/cadPerUsd;
-  exchangeRatesInUSD.BTC=marketPrices.BTC.price/cadPerUsd;
-  exchangeRatesInUSD.SOL=marketPrices.SOL.price/cadPerUsd;
-  exchangeRatesInUSD.ETH=marketPrices.ETH.price/cadPerUsd;
-
-  if(!recentActivities.length && costBasisLots.SOL.length===1){
-   costBasisLots.SOL[0].qty=solanaBalance;
-   costBasisLots.SOL[0].costCad=solanaBalance*marketPrices.SOL.price;
-  }
-
-  ['BTC','SOL','ETH'].forEach(updateTickerBar);
-  updateMainView(activeCoin);
-  updateOrderBook(activeCoin);
-  updateMacTotal();
-  renderBalance();
-  renderExchangeTransactions();
-  const exchangeModalEl=document.getElementById('exchangeModal');
-  if(exchangeModalEl?.classList.contains('open')) updateLivePreview();
-  document.documentElement.dataset.marketStatus='live';
-  return true;
- } catch(e) {
-  document.documentElement.dataset.marketStatus='offline';
-  for(const coin of ['BTC','SOL','ETH']){
-   marketPrices[coin]={price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null};
-   priceHistory[coin]=[];
-   updateTickerBar(coin);
-  }
-  updateMainView(activeCoin);
-  updateOrderBook(activeCoin);
-  updateMacTotal();
-  console.warn('Live price update failed:',e.name==='AbortError'?'request timed out':e);
-  return false;
- } finally {
-  clearTimeout(timeout);
- }
-}
-let liveUsdCadRate=null;
-let liveFxLastUpdated=0;
-async function fetchLiveUsdCadRate(){
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),10000);
- try{
-  const response=await fetch('https://api.frankfurter.dev/v2/rate/usd/cad',{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
-  if(!response.ok)throw new Error(`FX HTTP ${response.status}`);
-  const data=await response.json();
-  const rate=Number(data?.rate);
-  if(!Number.isFinite(rate)||rate<=0)throw new Error('Invalid USD/CAD rate');
-  liveUsdCadRate=rate;
-  liveFxLastUpdated=Date.now();
-  if(typeof exchangeRatesInUSD!=='undefined'){
-   exchangeRatesInUSD.CAD=1/rate;
-   for(const coin of ['BTC','SOL','ETH']){
-    const cad=marketPrices?.[coin]?.price;
-    exchangeRatesInUSD[coin]=Number.isFinite(cad)?cad/rate:0;
-   }
-  }
-  return true;
- }catch(e){
-  console.warn('Live USD/CAD update failed:',e.name==='AbortError'?'request timed out':e);
-  return false;
+  return await response.json();
  }finally{clearTimeout(timeout);}
 }
 
-let marketPrices = randomizeMarketBase();
+function applyLiveCoinPrice(coin, price, changePct, change24h){
+ if(!Number.isFinite(price)||price<=0)return false;
+ const previous=marketPrices[coin]?.price;
+ const old=marketPrices[coin]||{...EMPTY_MARKET};
+ const next={
+  ...old,
+  price,
+  changePct:Number.isFinite(changePct)?changePct:old.changePct,
+  change24h:Number.isFinite(change24h)?change24h:old.change24h
+ };
+ marketPrices[coin]=next;
+ if(!Number.isFinite(previous)){
+  priceHistory[coin]=[{t:Date.now(),p:price}];
+ }else if(previous!==price){
+  const direction=price>=previous?'up':'down';
+  priceHistory[coin].push({t:Date.now(),p:price});
+  if(priceHistory[coin].length>300)priceHistory[coin].shift();
+  updateTickerBar(coin);
+  if(coin===activeCoin)updateMainView(coin,direction);
+  maybeShowPriceAlertToast(coin);
+ }
+ updateTickerBar(coin);
+ return true;
+}
+
+let marketPollTimer = null;
+let marketFetchInFlight = false;
+let marketLastSuccessfulFetch = 0;
+let marketFailureCount = 0;
+
+const MARKET_STALE_AFTER_MS = 90000;
+const MARKET_RETRY_BASE_MS = 5000;
+const MARKET_RETRY_MAX_MS = 30000;
+const MARKET_PRICE_URL = 'https://api.coingecko.com/api/v3/simple/price';
+const MARKET_DETAILS_URL = 'https://api.coingecko.com/api/v3/coins/markets';
+const USD_CAD_RATE_URL = 'https://api.frankfurter.dev/v2/rate/usd/cad';
+
+async function fetchLiveUsdCadRate(){
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),10000);
+  try{
+    const response=await fetch(`${USD_CAD_RATE_URL}?_=${Date.now()}`,{
+      cache:'no-store',
+      signal:controller.signal,
+      headers:{Accept:'application/json'}
+    });
+    if(!response.ok)throw new Error(`USD/CAD HTTP ${response.status}`);
+    const json=await response.json();
+    const rate=Number(json?.rate);
+    if(!Number.isFinite(rate)||rate<=0)throw new Error('Invalid USD/CAD rate');
+
+    // exchangeRatesInUSD stores the USD value of one unit of each currency.
+    // USD is always 1, so CAD is the inverse of USD/CAD.
+    exchangeRatesInUSD.CAD=1/rate;
+    syncCryptoUsdRates();
+    if(typeof updateLivePreview==='function')updateLivePreview();
+    return true;
+  }catch(e){
+    console.warn('Live USD/CAD rate update failed:',e.name==='AbortError'?'request timed out':e);
+    return false;
+  }finally{
+    clearTimeout(timeout);
+  }
+}
+
+function syncCryptoUsdRates(){
+  const usdCad=Number(exchangeRatesInUSD?.CAD);
+  if(!Number.isFinite(usdCad)||usdCad<=0)return;
+  for(const coin of ['BTC','SOL','ETH']){
+    const cad=Number(marketPrices?.[coin]?.price);
+    if(Number.isFinite(cad)&&cad>0){
+      exchangeRatesInUSD[coin]=cad*usdCad;
+    }
+  }
+}
+
+function emptyMarketData(){
+ return {price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null,lastUpdatedAt:0};
+}
+
+function updateMarketFreshness(){
+ const now=Date.now();
+ const staleAfter=MARKET_STALE_AFTER_MS;
+ for(const coin of ['BTC','SOL','ETH']){
+  const data=marketPrices[coin];
+  if(!data || !Number.isFinite(data.price)){
+   updateTickerBar(coin);
+   continue;
+  }
+  if(!Number.isFinite(data.lastUpdatedAt) || now-data.lastUpdatedAt>staleAfter){
+   marketPrices[coin]={...emptyMarketData()};
+   priceHistory[coin]=[];
+  }
+  updateTickerBar(coin);
+ }
+ const anyLive=Object.values(marketPrices).some(d=>d && Number.isFinite(d.price));
+ document.documentElement.dataset.marketStatus=anyLive?'live':'offline';
+ updateMainView(activeCoin);
+ updateOrderBook(activeCoin);
+ updateMacTotal();
+}
+
+function applyLiveMarketData(coin, data){
+ if(!data || !Number.isFinite(data.price) || data.price<=0)return false;
+ const previous=marketPrices[coin]?.price;
+ const previousData=marketPrices[coin]||emptyMarketData();
+ marketPrices[coin]={
+  ...previousData,
+  ...data,
+  price:data.price,
+  lastUpdatedAt:Number.isFinite(data.lastUpdatedAt)?data.lastUpdatedAt:Date.now()
+ };
+ marketLastUpdateAt[coin]=marketPrices[coin].lastUpdatedAt;
+
+ if(!Number.isFinite(previous)){
+  priceHistory[coin]=[{t:marketPrices[coin].lastUpdatedAt,p:data.price}];
+ }else if(previous!==data.price){
+  const direction=data.price>=previous?'up':'down';
+  priceHistory[coin].push({t:marketPrices[coin].lastUpdatedAt,p:data.price});
+  if(priceHistory[coin].length>300)priceHistory[coin].shift();
+  updateTickerBar(coin);
+  if(coin===activeCoin)updateMainView(coin,direction);
+  maybeShowPriceAlertToast(coin);
+ }
+ updateTickerBar(coin);
+ return true;
+}
+
+function refreshMarketUI(){
+ ['BTC','SOL','ETH'].forEach(updateTickerBar);
+ updateMainView(activeCoin);
+ updateOrderBook(activeCoin);
+ updateMacTotal();
+ renderBalance();
+ renderExchangeTransactions();
+ const exchangeModalEl=document.getElementById('exchangeModal');
+ if(exchangeModalEl?.classList.contains('open') && typeof updateLivePreview==='function') updateLivePreview();
+}
+
+function scheduleNextMarketFetch(delay=MARKET_PRICE_POLL_MS){
+ clearTimeout(marketPollTimer);
+ marketPollTimer=setTimeout(()=>fetchLiveMarketPrices(),delay);
+}
+
+async function fetchLiveMarketPrices(){
+ if(marketFetchInFlight)return false;
+ marketFetchInFlight=true;
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),10000);
+ try{
+  const url=`${MARKET_PRICE_URL}?vs_currencies=cad&ids=bitcoin%2Csolana%2Cethereum&include_24hr_change=true&include_last_updated_at=true&_=${Date.now()}`;
+  const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
+  if(!response.ok)throw new Error(`CoinGecko HTTP ${response.status}`);
+  const json=await response.json();
+  const map={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
+  let received=0;
+
+  for(const [id,coin] of Object.entries(map)){
+   const row=json?.[id];
+   const price=Number(row?.cad);
+   if(!Number.isFinite(price)||price<=0)continue;
+
+   const changePct=Number(row?.cad_24h_change);
+   const pct=Number.isFinite(changePct)?changePct:null;
+   const previousData=marketPrices[coin]||emptyMarketData();
+   const open24h=Number.isFinite(pct)&&Math.abs(1+pct/100)>0.000001
+    ? price/(1+pct/100)
+    : previousData.open24h;
+   const change24h=Number.isFinite(pct)&&Number.isFinite(open24h)
+    ? price-open24h
+    : previousData.change24h;
+   const providerUpdated=Number(row?.last_updated_at)*1000;
+   const updatedAt=Number.isFinite(providerUpdated)&&providerUpdated>0?providerUpdated:Date.now();
+
+   if(applyLiveMarketData(coin,{
+    price,
+    open24h:Number.isFinite(open24h)&&open24h>0?open24h:null,
+    change24h:Number.isFinite(change24h)?change24h:null,
+    changePct:pct,
+    high24h:previousData.high24h,
+    low24h:previousData.low24h,
+    volume24h:previousData.volume24h,
+    lastUpdatedAt:updatedAt
+   }))received++;
+  }
+
+  if(received!==3)throw new Error(`Incomplete CoinGecko live response (${received}/3)`);
+
+  marketLastSuccessfulFetch=Date.now();
+  marketFailureCount=0;
+  document.documentElement.dataset.marketStatus='live';
+  refreshMarketUI();
+
+  // Pull slower-changing market details separately so price updates stay efficient.
+  fetchMarketDetails().catch(()=>{});
+  scheduleNextMarketFetch(MARKET_PRICE_POLL_MS);
+  return true;
+ }catch(e){
+  marketFailureCount++;
+  console.warn('Live CoinGecko CAD price update failed:',e.name==='AbortError'?'request timed out':e);
+
+  // Do NOT invent or substitute a price. Keep the last real price briefly during
+  // transient network/API failures, then show the exact unavailable state.
+  updateMarketFreshness();
+  const retryDelay=Math.min(
+   MARKET_RETRY_MAX_MS,
+   MARKET_RETRY_BASE_MS*Math.pow(2,Math.min(marketFailureCount-1,3))
+  );
+  scheduleNextMarketFetch(retryDelay);
+  return false;
+ }finally{
+  clearTimeout(timeout);
+  marketFetchInFlight=false;
+ }
+}
+
+let marketDetailsInFlight=false;
+let marketDetailsLastFetched=0;
+
+async function fetchMarketDetails(){
+ if(marketDetailsInFlight)return false;
+ if(Date.now()-marketDetailsLastFetched<MARKET_DETAILS_POLL_MS)return true;
+ marketDetailsInFlight=true;
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),10000);
+ try{
+  const url=`${MARKET_DETAILS_URL}?vs_currency=cad&ids=bitcoin%2Csolana%2Cethereum&order=market_cap_desc&per_page=3&page=1&sparkline=false&price_change_percentage=24h&_=${Date.now()}`;
+  const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
+  if(!response.ok)throw new Error(`CoinGecko details HTTP ${response.status}`);
+  const rows=await response.json();
+  const map={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
+  let received=0;
+
+  for(const row of Array.isArray(rows)?rows:[]){
+   const coin=map[row?.id];
+   const current=marketPrices[coin];
+   if(!coin||!current||!Number.isFinite(current.price))continue;
+
+   const high=Number(row?.high_24h);
+   const low=Number(row?.low_24h);
+   const volume=Number(row?.total_volume);
+   const open=Number(row?.current_price)/(1+Number(row?.price_change_percentage_24h)/100);
+   const change=Number(row?.price_change_percentage_24h);
+
+   marketPrices[coin]={
+    ...current,
+    open24h:Number.isFinite(open)&&open>0?open:current.open24h,
+    change24h:Number.isFinite(change)?current.price-open:current.change24h,
+    changePct:Number.isFinite(change)?change:current.changePct,
+    high24h:Number.isFinite(high)&&high>0?high:current.high24h,
+    low24h:Number.isFinite(low)&&low>0?low:current.low24h,
+    volume24h:Number.isFinite(volume)&&volume>=0?volume:current.volume24h
+   };
+   received++;
+  }
+
+  if(received===3){
+   marketDetailsLastFetched=Date.now();
+   refreshMarketUI();
+   return true;
+  }
+  return false;
+ }catch(e){
+  console.warn('CoinGecko market details update failed:',e.name==='AbortError'?'request timed out':e);
+  return false;
+ }finally{
+  clearTimeout(timeout);
+  marketDetailsInFlight=false;
+ }
+}
+
+async function fetchRealMarketData(){ return fetchLiveMarketPrices(); }
+
+let marketPrices = {BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData()};
 let activeCoin = 'BTC';
 let recentTrades = [];
 let userTrades = [];
@@ -2518,10 +2697,9 @@ setMacTab(macCurrentTab);
 updateMarketAlerts();
 }
 renderExchangeTransactions();
-fetchLiveMarketPrices(); setInterval(fetchLiveMarketPrices, 15000);
-fetchLiveUsdCadRate();
+fetchLiveMarketPrices();
 setInterval(fetchLiveUsdCadRate, 3600000);
-async function fetchRealMarketData(){ return fetchLiveMarketPrices(); }
+setInterval(updateMarketFreshness, 15000);
 let priceAlertsEnabled = {BTC:false, SOL:false, ETH:false};
 let globalAlertsOn = false;
 let lastAlertToastAt = {BTC:0,SOL:0,ETH:0};
@@ -2585,6 +2763,7 @@ selectMarketCoin('BTC');
 setMacTab('buy');
 const MARGINAL_TAX_RATE = 0.33; // applied to the 50% taxable inclusion only
 const exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
+fetchLiveUsdCadRate();
 initializeCostBasis();
 function showToast(message, duration=3500) { toastMessage.textContent=message; toastNotification.classList.add('show'); setTimeout(()=>toastNotification.classList.remove('show'),duration); }
 function calculateConversion(amount, fromCurr, toCurr) {
