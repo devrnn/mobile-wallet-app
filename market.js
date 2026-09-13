@@ -1,48 +1,115 @@
+```javascript
 (() => {
   "use strict";
 
   /*
-   * LIVE MARKET BRIDGE
+   * MARKET.JS
    *
-   * This file deliberately does NOT create a second market engine.
-   * The existing wallet UI already contains the market/order-book logic.
-   * This file starts that logic only AFTER index.html has finished declaring
-   * all of its variables/functions.
+   * 1. Gets the latest real Coinbase price.
+   * 2. Uses that as the starting price.
+   * 3. Simulates small market movement afterward.
    *
-   * Real sources used by the existing engine:
-   *   - Coinbase spot prices / WebSocket
-   *   - Frankfurter USD/CAD FX
-   *
-   * No fake/generated prices are inserted.
+   * IMPORTANT:
+   * Only the initial price is real exchange data.
+   * Prices after that are simulated.
    */
 
-  // The existing index.html expects this helper when rendering volume.
-  // Define it before the live market fetch is started.
-  if (typeof window.formatVolume !== "function") {
-    window.formatVolume = function formatVolume(value) {
-      const n = Number(value);
+  const COINS = {
+    BTC: {
+      product: "BTC-USD",
+      name: "Bitcoin"
+    },
 
-      if (!Number.isFinite(n)) {
-        return "—";
-      }
+    ETH: {
+      product: "ETH-USD",
+      name: "Ethereum"
+    },
 
-      if (n >= 1e9) {
-        return "$" + (n / 1e9).toFixed(2) + "B";
-      }
+    SOL: {
+      product: "SOL-USD",
+      name: "Solana"
+    }
+  };
 
-      if (n >= 1e6) {
-        return "$" + (n / 1e6).toFixed(2) + "M";
-      }
+  const prices = {
+    BTC: null,
+    ETH: null,
+    SOL: null
+  };
 
-      if (n >= 1e3) {
-        return "$" + (n / 1e3).toFixed(2) + "K";
-      }
+  const realPrices = {
+    BTC: null,
+    ETH: null,
+    SOL: null
+  };
 
-      return "$" + n.toFixed(2);
-    };
+  const changes = {
+    BTC: 0,
+    ETH: 0,
+    SOL: 0
+  };
+
+  let activeCoin = "BTC";
+
+  let usdCad = 1.35;
+
+  let started = false;
+
+  /*
+   * ---------------------------------------------------------
+   * HELPERS
+   * ---------------------------------------------------------
+   */
+
+  function num(value) {
+    const n = Number(value);
+
+    return Number.isFinite(n)
+      ? n
+      : null;
   }
 
-  function setConnectionLabel(text, live) {
+  function money(value) {
+    const n = num(value);
+
+    if (n === null) {
+      return "—";
+    }
+
+    return "$" + n.toLocaleString("en-CA", {
+      minimumFractionDigits: n < 100 ? 2 : 0,
+      maximumFractionDigits: n < 100 ? 2 : 2
+    });
+  }
+
+  function setText(ids, value) {
+    for (const id of ids) {
+      const element =
+        document.getElementById(id);
+
+      if (element) {
+        element.textContent = value;
+      }
+    }
+  }
+
+  function getCadPrice(coin) {
+    if (
+      prices[coin] === null
+    ) {
+      return null;
+    }
+
+    return prices[coin] * usdCad;
+  }
+
+  /*
+   * ---------------------------------------------------------
+   * STATUS
+   * ---------------------------------------------------------
+   */
+
+  function setStatus(text, live) {
     const ids = [
       "marketStatus",
       "liveMarketStatus",
@@ -50,128 +117,656 @@
     ];
 
     for (const id of ids) {
-      const el = document.getElementById(id);
-      if (!el) continue;
+      const element =
+        document.getElementById(id);
 
-      el.textContent = text;
-      el.classList.toggle("live", !!live);
-      el.classList.toggle("offline", !live);
+      if (!element) {
+        continue;
+      }
+
+      element.textContent = text;
+
+      element.classList.toggle(
+        "live",
+        live
+      );
+
+      element.classList.toggle(
+        "offline",
+        !live
+      );
     }
 
     document.documentElement.dataset.marketStatus =
       live ? "live" : "offline";
   }
 
-  function fail(message, error) {
-    setConnectionLabel("OFFLINE", false);
+  /*
+   * ---------------------------------------------------------
+   * REAL PRICE
+   * ---------------------------------------------------------
+   */
 
-    console.error(
-      "[LIVE MARKET]",
-      message,
-      error || ""
-    );
-  }
+  async function getRealPrice(coin) {
+    const product =
+      COINS[coin].product;
 
-  async function start() {
+    const url =
+      "https://api.exchange.coinbase.com/products/" +
+      product +
+      "/ticker?_=" +
+      Date.now();
+
     try {
-      console.log(
-        "[LIVE MARKET] Starting after page initialization..."
-      );
-
-      setConnectionLabel(
-        "CONNECTING…",
-        false
-      );
-
-      /*
-       * Existing engine functions are now fully initialized because this
-       * script is loaded immediately before </body>.
-       */
-
-      if (
-        typeof window.startLiveMarketEngine ===
-        "function"
-      ) {
-        try {
-          window.startLiveMarketEngine();
-        } catch (error) {
-          console.error(
-            "[LIVE MARKET] WebSocket engine failed:",
-            error
-          );
-        }
-      }
-
-      if (
-        typeof window.fetchLiveUsdCadRate ===
-        "function"
-      ) {
-        await window.fetchLiveUsdCadRate();
-      }
-
-      if (
-        typeof window.fetchLiveMarketPrices ===
-        "function"
-      ) {
-        const ok =
-          await window.fetchLiveMarketPrices();
-
-        if (ok === false) {
-          fail(
-            "The live price request did not return valid market data."
-          );
-          return;
-        }
-      } else {
-        fail(
-          "The wallet market engine was not found."
+      const response =
+        await fetch(
+          url,
+          {
+            cache: "no-store"
+          }
         );
-        return;
-      }
 
-      /*
-       * If the WebSocket engine updates the document status itself,
-       * leave that status alone. Otherwise mark it live after a
-       * successful real price fetch.
-       */
-      if (
-        document.documentElement.dataset.marketStatus !==
-        "live"
-      ) {
-        setConnectionLabel(
-          "LIVE",
-          true
+      if (!response.ok) {
+        throw new Error(
+          "Coinbase HTTP " +
+          response.status
         );
       }
 
+      const data =
+        await response.json();
+
+      const price =
+        num(data.price);
+
+      if (
+        price === null ||
+        price <= 0
+      ) {
+        throw new Error(
+          "Coinbase returned an invalid price"
+        );
+      }
+
+      realPrices[coin] =
+        price;
+
+      prices[coin] =
+        price;
+
       console.log(
-        "[LIVE MARKET] Live market startup complete."
+        "[MARKET] Real " +
+        coin +
+        " price:",
+        price
       );
+
+      return price;
 
     } catch (error) {
-      fail(
-        "Live market startup failed.",
+      console.error(
+        "[MARKET] Could not get real " +
+        coin +
+        " price:",
         error
+      );
+
+      return null;
+    }
+  }
+
+  /*
+   * ---------------------------------------------------------
+   * USD/CAD
+   * ---------------------------------------------------------
+   */
+
+  async function getUsdCad() {
+    try {
+      const response =
+        await fetch(
+          "https://api.frankfurter.dev/v2/rate/usd/cad?_=" +
+          Date.now(),
+          {
+            cache: "no-store"
+          }
+        );
+
+      if (!response.ok) {
+        throw new Error(
+          "FX HTTP " +
+          response.status
+        );
+      }
+
+      const data =
+        await response.json();
+
+      const rate =
+        num(data.rate);
+
+      if (
+        rate !== null &&
+        rate > 0
+      ) {
+        usdCad = rate;
+
+        console.log(
+          "[MARKET] USD/CAD:",
+          usdCad
+        );
+      }
+
+    } catch (error) {
+      /*
+       * If FX fails, use the last/default rate.
+       * Crypto prices are still obtained in USD.
+       */
+
+      console.warn(
+        "[MARKET] USD/CAD unavailable. Using:",
+        usdCad
       );
     }
   }
 
   /*
-   * Give the browser one task turn after all inline scripts have executed.
-   * This avoids the initialization-order problem that caused the earlier
-   * exchangeRatesInUSD/activeCoin errors.
+   * ---------------------------------------------------------
+   * RENDER
+   * ---------------------------------------------------------
    */
+
+  function renderCoin(coin) {
+    const usd =
+      prices[coin];
+
+    const cad =
+      getCadPrice(coin);
+
+    if (
+      usd === null ||
+      cad === null
+    ) {
+      return;
+    }
+
+    const percent =
+      changes[coin];
+
+    /*
+     * Main price.
+     */
+
+    if (
+      coin === activeCoin
+    ) {
+      setText(
+        [
+          "mciPrice",
+          "marketPrice",
+          "livePrice"
+        ],
+        money(cad)
+      );
+
+      setText(
+        [
+          "mciChange",
+          "tickerChange" + coin,
+          coin + "Change",
+          coin.toLowerCase() + "Change"
+        ],
+        (
+          percent >= 0
+            ? "+"
+            : ""
+        ) +
+        percent.toFixed(2) +
+        "%"
+      );
+
+      setText(
+        [
+          "mciPct"
+        ],
+        (
+          percent >= 0
+            ? "+"
+            : ""
+        ) +
+        percent.toFixed(2) +
+        "%"
+      );
+
+      setText(
+        [
+          "obMidPrice"
+        ],
+        money(cad)
+      );
+    }
+
+    /*
+     * Coin cards.
+     */
+
+    setText(
+      [
+        "tickerPrice" + coin,
+        coin + "Price",
+        coin.toLowerCase() + "Price"
+      ],
+      money(cad)
+    );
+
+    setText(
+      [
+        "tickerChange" + coin,
+        coin + "Change",
+        coin.toLowerCase() + "Change"
+      ],
+      (
+        percent >= 0
+          ? "+"
+          : ""
+      ) +
+      percent.toFixed(2) +
+      "%"
+    );
+
+    /*
+     * Compatibility with your existing page.
+     */
+
+    if (
+      window.marketPrices &&
+      typeof window.marketPrices ===
+        "object"
+    ) {
+      if (
+        !window.marketPrices[coin]
+      ) {
+        window.marketPrices[coin] = {};
+      }
+
+      window.marketPrices[coin].usdPrice =
+        usd;
+
+      window.marketPrices[coin].price =
+        cad;
+
+      window.marketPrices[coin].changePct =
+        percent;
+    }
+  }
+
+  function renderAll() {
+    for (
+      const coin of
+      Object.keys(COINS)
+    ) {
+      renderCoin(coin);
+    }
+  }
+
+  /*
+   * ---------------------------------------------------------
+   * SIMULATION
+   * ---------------------------------------------------------
+   */
+
+  function simulateCoin(coin) {
+    const current =
+      prices[coin];
+
+    const real =
+      realPrices[coin];
+
+    if (
+      current === null ||
+      real === null
+    ) {
+      return;
+    }
+
+    /*
+     * Small random movement.
+     *
+     * Most ticks move only a tiny amount.
+     * Occasionally there is a slightly larger move.
+     */
+
+    const random =
+      Math.random();
+
+    let movement;
+
+    if (random < 0.80) {
+      movement =
+        (
+          Math.random() -
+          0.5
+        ) * 0.0012;
+
+    } else if (random < 0.97) {
+      movement =
+        (
+          Math.random() -
+          0.5
+        ) * 0.003;
+
+    } else {
+      movement =
+        (
+          Math.random() -
+          0.5
+        ) * 0.006;
+    }
+
+    let next =
+      current *
+      (1 + movement);
+
+    /*
+     * Keep the simulation from drifting endlessly
+     * away from the real starting price.
+     *
+     * It can move naturally, but gradually gets pulled
+     * back toward the real starting price.
+     */
+
+    const distance =
+      (
+        next -
+        real
+      ) /
+      real;
+
+    if (
+      Math.abs(distance) >
+      0.05
+    ) {
+      next =
+        next -
+        (
+          next -
+          real
+        ) *
+        0.02;
+    }
+
+    if (
+      next <= 0
+    ) {
+      next =
+        current;
+    }
+
+    prices[coin] =
+      next;
+
+    /*
+     * Calculate simulated percentage change
+     * from the REAL starting price.
+     */
+
+    changes[coin] =
+      (
+        (
+          next -
+          real
+        ) /
+        real
+      ) *
+      100;
+
+    renderCoin(
+      coin
+    );
+  }
+
+  function simulateTick() {
+    for (
+      const coin of
+      Object.keys(COINS)
+    ) {
+      simulateCoin(
+        coin
+      );
+    }
+  }
+
+  /*
+   * ---------------------------------------------------------
+   * SELECT COIN
+   * ---------------------------------------------------------
+   */
+
+  function selectCoin(coin) {
+    if (
+      !COINS[coin]
+    ) {
+      return;
+    }
+
+    activeCoin =
+      coin;
+
+    renderAll();
+
+    console.log(
+      "[MARKET] Active coin:",
+      coin
+    );
+  }
+
+  /*
+   * ---------------------------------------------------------
+   * PUBLIC API
+   * ---------------------------------------------------------
+   */
+
+  window.LiveMarket = {
+    selectCoin,
+
+    getPrice(coin) {
+      return getCadPrice(
+        coin
+      );
+    },
+
+    getUsdPrice(coin) {
+      return prices[coin];
+    },
+
+    getRealStartingPrice(coin) {
+      return realPrices[coin];
+    },
+
+    getUsdCad() {
+      return usdCad;
+    },
+
+    isSimulated() {
+      return true;
+    }
+  };
+
+  /*
+   * ---------------------------------------------------------
+   * START
+   * ---------------------------------------------------------
+   */
+
+  async function start() {
+    if (started) {
+      return;
+    }
+
+    started = true;
+
+    console.log(
+      "[MARKET] Starting..."
+    );
+
+    setStatus(
+      "LOADING…",
+      false
+    );
+
+    /*
+     * Get FX and real prices.
+     */
+
+    await getUsdCad();
+
+    const results =
+      await Promise.all(
+        Object.keys(COINS)
+          .map(
+            coin =>
+              getRealPrice(
+                coin
+              )
+          )
+      );
+
+    /*
+     * Make sure at least one real price
+     * was obtained.
+     */
+
+    const gotRealPrice =
+      results.some(
+        price =>
+          price !== null
+      );
+
+    if (!gotRealPrice) {
+      setStatus(
+        "OFFLINE",
+        false
+      );
+
+      console.error(
+        "[MARKET] No real starting prices could be obtained."
+      );
+
+      return;
+    }
+
+    /*
+     * Render the real starting prices.
+     */
+
+    renderAll();
+
+    /*
+     * Explicitly tell the user that movement is simulated.
+     */
+
+    setStatus(
+      "SIMULATED",
+      true
+    );
+
+    console.log(
+      "[MARKET] Real starting prices loaded."
+    );
+
+    console.log(
+      "[MARKET] Prices are now simulated from those real prices."
+    );
+
+    /*
+     * Random market movement.
+     *
+     * Every 1–3 seconds.
+     */
+
+    function nextTick() {
+      simulateTick();
+
+      const delay =
+        1000 +
+        Math.random() *
+        2000;
+
+      setTimeout(
+        nextTick,
+        delay
+      );
+    }
+
+    nextTick();
+
+    /*
+     * Re-fetch real starting prices every 10 minutes.
+     *
+     * This gives the simulation a fresh real anchor
+     * without needing a WebSocket.
+     */
+
+    setInterval(
+      async () => {
+        console.log(
+          "[MARKET] Refreshing real anchor prices..."
+        );
+
+        await getUsdCad();
+
+        for (
+          const coin of
+          Object.keys(COINS)
+        ) {
+          const price =
+            await getRealPrice(
+              coin
+            );
+
+          if (
+            price !== null
+          ) {
+            /*
+             * Reset that coin's simulation
+             * to the newly fetched real price.
+             */
+
+            changes[coin] =
+              0;
+          }
+        }
+
+        renderAll();
+
+        setStatus(
+          "SIMULATED",
+          true
+        );
+
+      },
+      10 * 60 * 1000
+    );
+  }
+
+  /*
+   * Wait until the page is ready.
+   */
+
   if (
     document.readyState ===
     "loading"
   ) {
     document.addEventListener(
       "DOMContentLoaded",
-      () => setTimeout(start, 0),
-      { once: true }
+      start,
+      {
+        once: true
+      }
     );
   } else {
-    setTimeout(start, 0);
+    start();
   }
 
 })();
+```
