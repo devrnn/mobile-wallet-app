@@ -480,11 +480,25 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
 .cost-row:last-child { border-bottom: none; }
 .cost-label { color: var(--text-muted); }
 .cost-val { color: #fff; font-variant-numeric: tabular-nums; }
-.profit-summary-card { background:linear-gradient(135deg,rgba(52,211,153,.10),rgba(255,255,255,.025)); border:1px solid rgba(52,211,153,.18); border-radius:20px; padding:22px; margin-top:4px; box-shadow:0 12px 32px -18px rgba(0,0,0,.55); }
+.profit-summary-card { background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.018)); border:1px solid var(--border-subtle); border-radius:20px; padding:22px; margin-top:4px; box-shadow:0 12px 32px -18px rgba(0,0,0,.55); }
 .profit-summary-label { color:var(--text-muted); font-size:12px; font-weight:700; letter-spacing:.1px; }
-.profit-summary-value { margin-top:7px; color:var(--accent-green); font-size:30px; line-height:1.05; font-weight:850; font-variant-numeric:tabular-nums; letter-spacing:-1px; }
+.profit-summary-value { margin-top:7px; color:#fff; font-size:30px; line-height:1.05; font-weight:850; font-variant-numeric:tabular-nums; letter-spacing:-1px; transition:color .25s ease,transform .25s ease; }
+.profit-summary-value.pos { color:var(--accent-green); }
+.profit-summary-value.neg { color:var(--accent-red); }
+.profit-summary-value.zero { color:#fff; }
 .profit-summary-value span { font-size:13px; font-weight:700; letter-spacing:0; margin-left:3px; }
 .profit-summary-sub { margin-top:8px; color:var(--text-muted); font-size:11px; }
+.profit-period-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:12px; }
+.profit-period-card { position:relative; overflow:hidden; min-width:0; padding:16px 17px; border:1px solid var(--border-subtle); border-radius:17px; background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015)); box-shadow:0 10px 26px -20px rgba(0,0,0,.7); }
+.profit-period-card::after { content:""; position:absolute; width:72px; height:72px; right:-28px; bottom:-34px; border-radius:50%; background:rgba(255,255,255,.035); filter:blur(10px); pointer-events:none; }
+.profit-period-label { color:var(--text-muted); font-size:11px; font-weight:700; letter-spacing:.2px; text-transform:uppercase; }
+.profit-period-value { margin-top:8px; color:#fff; font-size:21px; line-height:1.05; font-weight:850; font-variant-numeric:tabular-nums; letter-spacing:-.6px; transition:color .25s ease; }
+.profit-period-value.pos { color:var(--accent-green); }
+.profit-period-value.neg { color:var(--accent-red); }
+.profit-period-value.zero { color:#fff; }
+.profit-period-value span { font-size:11px; margin-left:2px; letter-spacing:0; }
+.profit-period-sub { margin-top:6px; color:var(--text-muted); font-size:10px; }
+@media (max-width:600px){ .profit-period-grid{grid-template-columns:1fr 1fr;gap:9px;} .profit-period-card{padding:14px;} .profit-period-value{font-size:18px;} }
 .exchange-transactions { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 18px; margin-top: 24px; box-shadow: 0 12px 32px -16px rgba(0,0,0,.55); }
 .transactions-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; color:#fff; font-size:13px; font-weight:800; letter-spacing:-.1px; }
 .transactions-count { min-width:24px; padding:4px 8px; border-radius:999px; background:rgba(255,255,255,.06); border:1px solid var(--border-subtle); color:var(--text-muted); font-size:11px; text-align:center; }
@@ -496,6 +510,9 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
 .tx-time { color:var(--text-muted); font-size:11px; margin-top:3px; }
 .tx-result { text-align:right; flex-shrink:0; }
 .tx-result-value { color:var(--accent-green); font-size:13px; font-weight:800; font-variant-numeric:tabular-nums; }
+.tx-result-value.pos { color:var(--accent-green); }
+.tx-result-value.neg { color:var(--accent-red); }
+.tx-result-value.zero { color:#fff; }
 .tx-result-label { color:var(--text-muted); font-size:10px; margin-top:3px; }
 .tx-details { display:none; padding:0 14px 14px; border-top:1px solid var(--border-subtle); }
 .tx-card.open .tx-details { display:block; }
@@ -836,48 +853,75 @@ overflow: hidden;
   position: absolute;
   left: 50%;
   top: calc(50% + 145px);
-  transform: translate(-50%, 18px) scale(.96);
+  transform: translate(-50%, 18px) scale(.97);
   width: max-content;
-  max-width: calc(100vw - 32px);
-  padding: 13px 22px 14px;
+  max-width: calc(100vw - 36px);
+  padding: 12px 18px 13px;
   text-align: center;
   z-index: 20;
   opacity: 0;
-  color: rgba(255,255,255,.72);
+  color: rgba(255,255,255,.88);
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.1;
-  font-weight: 650;
-  letter-spacing: -.35px;
-  background: rgba(9,12,22,.52);
-  border: 1px solid rgba(255,255,255,.11);
-  border-radius: 18px;
-  box-shadow: 0 18px 50px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.08);
-  backdrop-filter: blur(20px) saturate(135%);
-  -webkit-backdrop-filter: blur(20px) saturate(135%);
-  animation: welcomeEntrance 1.05s cubic-bezier(.16,1,.3,1) 2.25s forwards, welcomeExit .62s cubic-bezier(.76,0,.24,1) 6.0s forwards;
+  background: linear-gradient(145deg, rgba(16,24,42,.68), rgba(5,9,20,.54));
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  box-shadow: 0 18px 45px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.10), 0 0 28px rgba(56,189,248,.06);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  animation: welcomeEntrance 1s cubic-bezier(.16,1,.3,1) 2.15s forwards, welcomeExit .58s cubic-bezier(.76,0,.24,1) 6.0s forwards;
 }
 .intro-welcome::before {
-  content: ""; position: absolute; left: 22px; right: 22px; top: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.34), transparent); opacity: .75;
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(191,236,255,.58), transparent);
+  opacity: .72;
 }
 .intro-welcome::after {
-  content: ""; position: absolute; width: 72px; height: 72px; left: 50%; top: 50%;
-  transform: translate(-50%,-50%); border-radius: 50%; background: rgba(125,211,252,.08);
-  filter: blur(22px); pointer-events: none; z-index: -1;
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,.07) 50%, transparent 80%);
+  transform: translateX(-120%);
+  animation: welcomeSheen 3.8s cubic-bezier(.45,0,.55,1) 3s infinite;
+  pointer-events: none;
 }
-.intro-welcome span {
-  display: inline-block; margin-left: 6px; color: #fff; font-weight: 850; letter-spacing: -.65px;
-  background: linear-gradient(135deg, #ffffff 10%, #d5f5ff 55%, #91dcff 100%);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+.intro-title {
+  position: relative;
+  z-index: 1;
+  color: rgba(255,255,255,.9);
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 650;
+  letter-spacing: -.32px;
+  white-space: nowrap;
+}
+.intro-title span {
+  display: inline-block;
+  margin-left: 3px;
+  font-weight: 800;
+  background: linear-gradient(135deg,#fff 8%,#d9f6ff 52%,#8fdcff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 @keyframes welcomeEntrance {
-  0% { opacity: 0; transform: translate(-50%, 18px) scale(.96); filter: blur(8px); }
-  100% { opacity: 1; transform: translate(-50%, 0) scale(1); filter: blur(0); }
+  0% { opacity:0; transform:translate(-50%,18px) scale(.94); filter:blur(7px); }
+  62% { opacity:1; transform:translate(-50%,-1px) scale(1.012); filter:blur(0); }
+  100% { opacity:1; transform:translate(-50%,0) scale(1); filter:blur(0); }
 }
 @keyframes welcomeExit {
-  0% { opacity: 1; transform: translate(-50%, 0) scale(1); filter: blur(0); }
-  100% { opacity: 0; transform: translate(-50%, -7px) scale(.98); filter: blur(6px); }
+  0% { opacity:1; transform:translate(-50%,0) scale(1); filter:blur(0); }
+  100% { opacity:0; transform:translate(-50%,-5px) scale(.985); filter:blur(5px); }
+}
+@keyframes welcomeSheen {
+  0%, 28% { transform:translateX(-120%); opacity:0; }
+  42% { opacity:.75; }
+  58%, 100% { transform:translateX(120%); opacity:0; }
 }
 .intro {
   position: fixed;
@@ -928,8 +972,8 @@ overflow: hidden;
     cubic-bezier(.16, 1, .3, 1)
     forwards,
     orbMorph
-    6.4s
-    cubic-bezier(.37, .02, .2, 1)
+    7.2s
+    cubic-bezier(.45, 0, .55, 1)
     1.35s
     1
     both;
@@ -1068,6 +1112,21 @@ overflow: hidden;
   z-index: 8;
   animation: edgePulse 3.5s ease-in-out infinite;
 }
+.orb::after {
+  content: "";
+  position: absolute;
+  inset: 7%;
+  border-radius: inherit;
+  border: 1px solid rgba(255,255,255,.045);
+  box-shadow: inset 0 0 28px rgba(125,211,252,.035);
+  pointer-events: none;
+  z-index: 7;
+  animation: orbBreath 4.8s ease-in-out 1.7s infinite;
+}
+@keyframes orbBreath {
+  0%,100% { opacity:.25; transform:scale(.985); }
+  50% { opacity:.7; transform:scale(1); }
+}
 @supports (-webkit-touch-callout: none) {
   .intro {
     -webkit-transform: translate3d(0, 0, 0);
@@ -1105,9 +1164,10 @@ overflow: hidden;
   }
   .intro-welcome {
     top: calc(50% + min(145px, 37vw));
-    font-size: 15px;
-    padding: 10px 16px 11px;
+    width: min(290px, calc(100vw - 36px));
+    padding: 13px 16px 14px;
   }
+  .intro-title { font-size:15.5px; }
   
   .liquid,
   .liquid2 {
@@ -1129,36 +1189,24 @@ overflow: hidden;
     border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
     transform: scale(1) rotate(0deg);
   }
-  12% {
-    border-radius: 48% 52% 58% 42% / 54% 45% 55% 46%;
-    transform: scale(1.018) rotate(1deg);
+  18% {
+    border-radius: 46% 54% 53% 47% / 51% 45% 55% 49%;
+    transform: scale(1.018) rotate(.7deg);
   }
-  25% {
-    border-radius: 42% 58% 51% 49% / 58% 44% 56% 42%;
-    transform: scale(.994) rotate(-1.2deg);
+  38% {
+    border-radius: 54% 46% 47% 53% / 44% 57% 43% 56%;
+    transform: scale(1.006) rotate(-.5deg);
   }
-  39% {
-    border-radius: 57% 43% 45% 55% / 47% 59% 41% 53%;
-    transform: scale(1.026) rotate(1.8deg);
+  57% {
+    border-radius: 48% 52% 58% 42% / 57% 46% 54% 43%;
+    transform: scale(1.022) rotate(.55deg);
   }
-  53% {
-    border-radius: 61% 39% 52% 48% / 43% 56% 44% 57%;
-    transform: scale(1.005) rotate(-1deg);
-  }
-  67% {
-    border-radius: 47% 53% 62% 38% / 58% 42% 55% 45%;
-    transform: scale(1.032) rotate(1.4deg);
-  }
-  81% {
-    border-radius: 55% 45% 43% 57% / 48% 61% 39% 52%;
-    transform: scale(.997) rotate(-1.6deg);
-  }
-  92% {
-    border-radius: 51% 49% 57% 43% / 55% 46% 54% 45%;
-    transform: scale(1.014) rotate(.8deg);
+  77% {
+    border-radius: 56% 44% 49% 51% / 46% 54% 45% 55%;
+    transform: scale(1.008) rotate(-.45deg);
   }
   100% {
-    border-radius: 53% 47% 49% 51% / 47% 56% 44% 53%;
+    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
     transform: scale(1) rotate(0deg);
   }
 }
@@ -1247,7 +1295,9 @@ overflow: hidden;
     <div class="innerShade"></div>
     <div class="w">W</div>
   </div>
-  <div class="intro-welcome">Welcome back<span>3sa</span></div>
+  <div class="intro-welcome">
+  <div class="intro-title">Welcome back <span>eisa</span></div>
+</div>
 </div>
 <script>
 (function lockIntroInteraction(){
@@ -1409,6 +1459,18 @@ overflow: hidden;
 <div class="profit-summary-label">Total profit &amp; loss</div>
 <div class="profit-summary-value" id="totalProfitGains">+$0.00 <span>CAD</span></div>
 <div class="profit-summary-sub">Realized profit or loss from completed crypto sales and swaps</div>
+</div>
+<div class="profit-period-grid">
+  <div class="profit-period-card">
+    <div class="profit-period-label">Daily profit &amp; loss</div>
+    <div class="profit-period-value zero" id="dailyProfitLoss">$0.00 <span>CAD</span></div>
+    <div class="profit-period-sub">Since midnight</div>
+  </div>
+  <div class="profit-period-card">
+    <div class="profit-period-label">Monthly profit &amp; loss</div>
+    <div class="profit-period-value zero" id="monthlyProfitLoss">$0.00 <span>CAD</span></div>
+    <div class="profit-period-sub">Since the start of this month</div>
+  </div>
 </div>
 <div class="activity-panel" id="exchangeDetailsPanel" style="display:none;">
 <div class="panel-header"><span class="panel-title" data-i18n="conversionFeesTitle">Conversion Fees & Tax</span></div>
@@ -2291,6 +2353,9 @@ async function fetchLiveMarketPrices(){
   updateOrderBook(activeCoin);
   updateMacTotal();
   renderBalance();
+  renderExchangeTransactions();
+  const exchangeModalEl=document.getElementById('exchangeModal');
+  if(exchangeModalEl?.classList.contains('open')) updateLivePreview();
   document.documentElement.dataset.marketStatus='live';
   return true;
  } catch(e) {
@@ -2532,6 +2597,21 @@ document.getElementById('previewFeeVal').textContent=`${feeInFrom.toFixed(fromDe
 document.getElementById('previewTaxVal').textContent=`${taxInFrom.toFixed(fromDec)} ${fromCurr}`;
 document.getElementById('livePreviewVal').textContent=`${receivedAmount.toFixed(toDec)} ${toCurr}`;
 }
+function formatProfitLossValue(value, compact=false){
+ const amount=Math.abs(Number(value)||0);
+ const epsilon=.005;
+ if(amount<epsilon) return {text:`$0.00 <span>CAD</span>`,className:'zero'};
+ const n=amount.toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
+ const negative=value<0;
+ return {text:`${negative?'-':'+'}$${n} <span>CAD</span>`,className:negative?'neg':'pos'};
+}
+function renderPeriodProfitLoss(id, value){
+ const el=document.getElementById(id);
+ if(!el)return;
+ const formatted=formatProfitLossValue(value);
+ el.className=`profit-period-value ${formatted.className}`;
+ el.innerHTML=formatted.text;
+}
 function renderExchangeTransactions(){
  const list=document.getElementById('exchangeTransactionsList');
  const count=document.getElementById('transactionsCount');
@@ -2539,9 +2619,27 @@ function renderExchangeTransactions(){
  if(!list)return;
  const txs=(recentActivities||[]).filter(t=>t&&t.fromCurr&&t.toCurr);
  if(count)count.textContent=txs.length;
- let totalCad=0;
- txs.forEach(t=>{ totalCad += typeof t.gainCad === 'number' ? t.gainCad : 0; });
- if(totalEl){ const sign=totalCad>=0?'+':'-'; totalEl.innerHTML=`${sign}$${Math.abs(totalCad).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})} <span>CAD</span>`; }
+ let totalCad=0,dailyCad=0,monthlyCad=0;
+ const now=Date.now();
+ const current=new Date(now);
+ const dayStart=new Date(current.getFullYear(),current.getMonth(),current.getDate()).getTime();
+ const monthStart=new Date(current.getFullYear(),current.getMonth(),1).getTime();
+ txs.forEach(t=>{
+   const gain=typeof t.gainCad==='number'&&Number.isFinite(t.gainCad)?t.gainCad:0;
+   totalCad+=gain;
+   const stamp=Date.parse(t.timestamp||'');
+   if(Number.isFinite(stamp)){
+     if(stamp>=dayStart)dailyCad+=gain;
+     if(stamp>=monthStart)monthlyCad+=gain;
+   }
+ });
+ if(totalEl){
+   const formatted=formatProfitLossValue(totalCad);
+   totalEl.className=`profit-summary-value ${formatted.className}`;
+   totalEl.innerHTML=formatted.text;
+ }
+ renderPeriodProfitLoss('dailyProfitLoss',dailyCad);
+ renderPeriodProfitLoss('monthlyProfitLoss',monthlyCad);
  if(!txs.length){list.innerHTML='<div class="tx-empty">No transactions yet. Your completed exchanges will appear here.</div>';return;}
  list.innerHTML=txs.slice(0,30).map((t,i)=>{
   const fromDec=(t.fromCurr==='BTC'||t.fromCurr==='SOL')?4:2;
@@ -2552,8 +2650,9 @@ function renderExchangeTransactions(){
   const gainCad=typeof t.gainCad==='number'?t.gainCad:0;
   const basisCad=typeof t.costBasisCad==='number'?t.costBasisCad:0;
   const proceedsCad=typeof t.proceedsCad==='number'?t.proceedsCad:0;
-  const pnlClass=gainCad>=0?'pos':'neg';
-  return `<div class="tx-card" data-tx-index="${i}"><div class="tx-summary"><div class="tx-main"><div class="tx-title">${t.amount.toFixed(fromDec)} ${t.fromCurr} → ${t.received.toFixed(toDec)} ${t.toCurr}</div><div class="tx-time">${t.time||'Completed'}</div></div><div class="tx-result"><div class="tx-result-value ${pnlClass}">${gainCad >= 0 ? '+' : '-'}$${Math.abs(gainCad).toFixed(2)} CAD</div><div class="tx-result-label">Profit / loss · Tap for details</div></div></div><div class="tx-details"><div class="tx-detail-row"><span>Amount sent</span><span>${t.amount.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Amount received</span><span>${t.received.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Exchange rate</span><span>1 ${t.fromCurr} = ${rate.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Profit / loss</span><span class="${pnlClass}">${gainCad >= 0 ? '+' : '-'}$${Math.abs(gainCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Cost basis</span><span>$${basisCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Proceeds / fair value</span><span>$${proceedsCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Capital gain inclusion</span><span>${fee.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Tax</span><span>${tax.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Status</span><span>Completed</span></div></div></div>`;
+  const pnlClass=Math.abs(gainCad)<0.005?'zero':gainCad>0?'pos':'neg';
+  const pnlPrefix=Math.abs(gainCad)<0.005?'':gainCad>0?'+':'-';
+  return `<div class="tx-card" data-tx-index="${i}"><div class="tx-summary"><div class="tx-main"><div class="tx-title">${t.amount.toFixed(fromDec)} ${t.fromCurr} → ${t.received.toFixed(toDec)} ${t.toCurr}</div><div class="tx-time">${t.time||'Completed'}</div></div><div class="tx-result"><div class="tx-result-value ${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</div><div class="tx-result-label">Profit / loss · Tap for details</div></div></div><div class="tx-details"><div class="tx-detail-row"><span>Amount sent</span><span>${t.amount.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Amount received</span><span>${t.received.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Exchange rate</span><span>1 ${t.fromCurr} = ${rate.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Profit / loss</span><span class="${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Cost basis</span><span>$${basisCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Proceeds / fair value</span><span>$${proceedsCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Capital gain inclusion</span><span>${fee.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Tax</span><span>${tax.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Status</span><span>Completed</span></div></div></div>`;
  }).join('');
  list.querySelectorAll('.tx-card').forEach(card=>card.addEventListener('click',()=>card.classList.toggle('open')));
 }
