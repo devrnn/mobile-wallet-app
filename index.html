@@ -2293,81 +2293,124 @@ function updateTickerBar(coin){
  changeEl.className=`ticker-change ${pct>=0?'up':'down'}`;
 }
 
+function setMarketDataFromRows(rows){
+ const ids={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
+ const next={};
+ for(const row of rows||[]){
+  const coin=ids[row?.id];
+  const price=Number(row?.current_price);
+  if(!coin||!Number.isFinite(price)||price<=0)continue;
+  const pct=Number(row?.price_change_percentage_24h);
+  const changePct=Number.isFinite(pct)?pct:0;
+  const open24h=price/(1+changePct/100);
+  next[coin]={price,open24h:Number.isFinite(open24h)&&open24h>0?open24h:price,change24h:price-(Number.isFinite(open24h)?open24h:price),changePct,high24h:Number(row?.high_24h)||price,low24h:Number(row?.low_24h)||price,volume24h:Number(row?.total_volume)||0};
+ }
+ if(Object.keys(next).length!==3)throw new Error('Incomplete fallback market response');
+ applyMarketPrices(next);
+}
+function applyMarketPrices(next){
+ for(const coin of ['BTC','SOL','ETH']){
+  const data=next[coin];
+  if(!data||!Number.isFinite(data.price))continue;
+  const previous=marketPrices[coin]?.price;
+  marketPrices[coin]=data;
+  if(!Number.isFinite(previous)) priceHistory[coin]=[{t:Date.now(),p:data.price}];
+  else if(previous!==data.price){
+   const direction=data.price>=previous?'up':'down';
+   priceHistory[coin].push({t:Date.now(),p:data.price});
+   if(priceHistory[coin].length>300)priceHistory[coin].shift();
+   updateTickerBar(coin);
+   if(coin===activeCoin)updateMainView(coin,direction);
+   maybeShowPriceAlertToast(coin);
+  }
+ }
+ const cadPerUsd=Number(exchangeRatesInUSD.CAD)>0?1/exchangeRatesInUSD.CAD:1.38;
+ exchangeRatesInUSD.BTC=marketPrices.BTC.price/cadPerUsd;
+ exchangeRatesInUSD.SOL=marketPrices.SOL.price/cadPerUsd;
+ exchangeRatesInUSD.ETH=marketPrices.ETH.price/cadPerUsd;
+ ['BTC','SOL','ETH'].forEach(updateTickerBar);
+ updateMainView(activeCoin);
+ updateOrderBook(activeCoin);
+ updateMacTotal();
+ renderBalance();
+ renderExchangeTransactions();
+ const exchangeModalEl=document.getElementById('exchangeModal');
+ if(exchangeModalEl?.classList.contains('open'))updateLivePreview();
+ document.documentElement.dataset.marketStatus='live';
+}
+let marketSocket=null;
+let marketSocketRetry=0;
+let marketSocketRetryTimer=null;
+let lastSocketTick=0;
+let fallbackMarketTimer=null;
+let cadFxTimer=null;
+function scheduleMarketSocketReconnect(){
+ clearTimeout(marketSocketRetryTimer);
+ const delay=Math.min(30000,1000*Math.pow(2,Math.min(marketSocketRetry,5)));
+ marketSocketRetry++;
+ marketSocketRetryTimer=setTimeout(connectMarketWebSocket,delay);
+}
+function connectMarketWebSocket(){
+ clearTimeout(marketSocketRetryTimer);
+ try{ if(marketSocket){marketSocket.onopen=null;marketSocket.onmessage=null;marketSocket.onerror=null;marketSocket.onclose=null;marketSocket.close();} }catch(_){ }
+ const ws=new WebSocket('wss://ws-feed.exchange.coinbase.com');
+ marketSocket=ws;
+ ws.onopen=()=>{
+  marketSocketRetry=0;
+  document.documentElement.dataset.marketStatus='live';
+  ws.send(JSON.stringify({type:'subscribe',product_ids:['BTC-USD','ETH-USD','SOL-USD'],channels:['ticker']}));
+ };
+ ws.onmessage=e=>{
+  try{
+   const msg=JSON.parse(e.data);
+   if(msg.type!=='ticker'||!msg.product_id)return;
+   const map={'BTC-USD':'BTC','ETH-USD':'ETH','SOL-USD':'SOL'};
+   const coin=map[msg.product_id];
+   const usd=Number(msg.price);
+   if(!coin||!Number.isFinite(usd)||usd<=0)return;
+   lastSocketTick=Date.now();
+   const cadPerUsd=Number(exchangeRatesInUSD.CAD)>0?1/exchangeRatesInUSD.CAD:1.38;
+   const price=usd*cadPerUsd;
+   const old=marketPrices[coin];
+   const previous=old?.price;
+   const open24h=old?.open24h||price;
+   const high24h=Math.max(old?.high24h||price,price);
+   const low24h=Math.min(old?.low24h||price,price);
+   const change24h=price-open24h;
+   const changePct=open24h>0?(change24h/open24h)*100:0;
+   applyMarketPrices({...marketPrices,[coin]:{price,open24h,change24h,changePct,high24h,low24h,volume24h:old?.volume24h||0}});
+   updateRecentTrades();
+  }catch(err){console.warn('Market WebSocket message error:',err);}
+ };
+ ws.onerror=()=>{document.documentElement.dataset.marketStatus='offline';try{ws.close();}catch(_){} };
+ ws.onclose=()=>{if(marketSocket===ws){document.documentElement.dataset.marketStatus='offline';scheduleMarketSocketReconnect();}};
+}
 async function fetchLiveMarketPrices(){
  const controller=new AbortController();
  const timeout=setTimeout(()=>controller.abort(),12000);
- try {
+ try{
   const url='https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&ids=bitcoin,solana,ethereum&order=market_cap_desc&per_page=3&page=1&sparkline=false&price_change_percentage=24h&_='+Date.now();
   const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
   if(!response.ok)throw new Error(`HTTP ${response.status}`);
   const rows=await response.json();
-  const ids={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
-  const next={};
-  for(const row of rows){
-   const coin=ids[row?.id];
-   const price=Number(row?.current_price);
-   if(!coin||!Number.isFinite(price)||price<=0)continue;
-   const changePct=Number(row?.price_change_percentage_24h);
-   const pct=Number.isFinite(changePct)?changePct:0;
-   const previous=marketPrices[coin]?.price;
-   const open24h=Number.isFinite(Number(row?.price_change_24h)) ? price-Number(row.price_change_24h) : (Math.abs(1+pct/100)>0.000001 ? price/(1+pct/100) : price);
-   next[coin]={
-    price,
-    open24h:Number.isFinite(open24h)&&open24h>0?open24h:price,
-    change24h:Number.isFinite(Number(row?.price_change_24h))?Number(row.price_change_24h):price-(Number.isFinite(open24h)?open24h:price),
-    changePct:pct,
-    high24h:Number.isFinite(Number(row?.high_24h))?Number(row.high_24h):price,
-    low24h:Number.isFinite(Number(row?.low_24h))?Number(row.low_24h):price,
-    volume24h:Number.isFinite(Number(row?.total_volume))?Number(row.total_volume):0
-   };
-  }
-  if(Object.keys(next).length!==3)throw new Error(`Incomplete live market response (${Object.keys(next).length}/3)`);
-
-  for(const coin of ['BTC','SOL','ETH']){
-   const data=next[coin];
-   const previous=marketPrices[coin]?.price;
-   marketPrices[coin]=data;
-   if(!Number.isFinite(previous)){
-    priceHistory[coin]=[{t:Date.now(),p:data.price}];
-   }else if(previous!==data.price){
-    const direction=data.price>=previous?'up':'down';
-    priceHistory[coin].push({t:Date.now(),p:data.price});
-    if(priceHistory[coin].length>300)priceHistory[coin].shift();
-    updateTickerBar(coin);
-    if(coin===activeCoin)updateMainView(coin,direction);
-    maybeShowPriceAlertToast(coin);
-   }
-  }
-
-  // Keep every conversion using the same live CAD quotes shown in Market.
-  const cadPerUsd=1.38;
-  exchangeRatesInUSD.CAD=1/cadPerUsd;
-  exchangeRatesInUSD.BTC=marketPrices.BTC.price/cadPerUsd;
-  exchangeRatesInUSD.SOL=marketPrices.SOL.price/cadPerUsd;
-  exchangeRatesInUSD.ETH=marketPrices.ETH.price/cadPerUsd;
-
-  if(!recentActivities.length && costBasisLots.SOL.length===1){
-   costBasisLots.SOL[0].qty=solanaBalance;
-   costBasisLots.SOL[0].costCad=solanaBalance*marketPrices.SOL.price;
-  }
-
-  ['BTC','SOL','ETH'].forEach(updateTickerBar);
-  updateMainView(activeCoin);
-  updateOrderBook(activeCoin);
-  updateMacTotal();
-  renderBalance();
-  renderExchangeTransactions();
-  const exchangeModalEl=document.getElementById('exchangeModal');
-  if(exchangeModalEl?.classList.contains('open')) updateLivePreview();
-  document.documentElement.dataset.marketStatus='live';
+  setMarketDataFromRows(rows);
   return true;
- } catch(e) {
+ }catch(e){
   document.documentElement.dataset.marketStatus='offline';
-  console.warn('Live price update failed:',e.name==='AbortError'?'request timed out':e);
+  console.warn('Fallback live price update failed:',e.name==='AbortError'?'request timed out':e);
   return false;
- } finally {
-  clearTimeout(timeout);
- }
+ }finally{clearTimeout(timeout);}
+}
+async function fetchRealMarketData(){return fetchLiveMarketPrices();}
+function startMarketData(){
+ fetchLiveMarketPrices();
+ connectMarketWebSocket();
+ clearInterval(fallbackMarketTimer);
+ fallbackMarketTimer=setInterval(()=>{
+  if(!marketSocket||marketSocket.readyState!==WebSocket.OPEN||Date.now()-lastSocketTick>15000)fetchLiveMarketPrices();
+ },15000);
+ clearInterval(cadFxTimer);
+ cadFxTimer=setInterval(fetchLiveMarketPrices,60000);
 }
 let marketPrices = randomizeMarketBase();
 let activeCoin = 'BTC';
@@ -2498,8 +2541,7 @@ setMacTab(macCurrentTab);
 updateMarketAlerts();
 }
 renderExchangeTransactions();
-fetchLiveMarketPrices(); setInterval(fetchLiveMarketPrices, 10000);
-async function fetchRealMarketData(){ return fetchLiveMarketPrices(); }
+startMarketData();
 let priceAlertsEnabled = {BTC:false, SOL:false, ETH:false};
 let globalAlertsOn = false;
 let lastAlertToastAt = {BTC:0,SOL:0,ETH:0};
