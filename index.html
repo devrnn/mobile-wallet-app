@@ -1273,6 +1273,7 @@ overflow: hidden;
 }
 
 </style>
+  <link rel="stylesheet" href="./market.css">
 </head>
 <body>
 <div class="intro" aria-hidden="true">
@@ -1807,10 +1808,6 @@ overflow: hidden;
 <span id="toastMessage">Exchange completed successfully!</span>
 </div>
 <script>
-/* Global market state must exist before ANY startup code can touch it. */
-var exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
-var activeCoin = 'BTC';
-
 lucide.createIcons();
 const translations = {
 'en-CA': {
@@ -2325,7 +2322,7 @@ const MARKET_RETRY_MAX_MS=30000;
 
 // Must be initialized before any market functions can run.
 // The page's exchange/conversion code uses this object during startup.
-/* exchangeRatesInUSD is initialized at the top of this script. */
+const exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
 
 const COINBASE_SPOT_URL='https://api.coinbase.com/v2/prices';
 const USD_CAD_RATE_URL='https://api.frankfurter.dev/v2/rate/usd/cad';
@@ -2383,7 +2380,7 @@ function emptyMarketData(){return {...EMPTY_MARKET};}
 
 // Market state: declared before any market UI function can run.
 let marketPrices={BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData()};
-/* activeCoin is initialized at the top of this script. */
+let activeCoin='BTC';
 let recentTrades=[];
 let userTrades=[];
 let priceHistory={BTC:[],SOL:[],ETH:[]};
@@ -3031,5 +3028,6 @@ profitsPanel.addEventListener('mousedown',e=>pHandleStart(e.clientY));
 window.addEventListener('mousemove',e=>{if(pIsDragging)pHandleMove(e.clientY,e);});
 window.addEventListener('mouseup',()=>{if(pIsDragging)pHandleEnd();});
 </script>
+  <script src="./market.js"></script>
 </body>
 </html>
