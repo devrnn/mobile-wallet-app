@@ -1,0 +1,108 @@
+/* ============================================================
+   LIVE MARKET
+   ============================================================ */
+
+#marketStatus,
+#liveMarketStatus,
+#marketConnectionStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+#marketStatus::before,
+#liveMarketStatus::before,
+#marketConnectionStatus::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #888;
+}
+
+#marketStatus.live::before,
+#liveMarketStatus.live::before,
+#marketConnectionStatus.live::before {
+    background: #20c997;
+    box-shadow: 0 0 8px rgba(32, 201, 151, .7);
+}
+
+#marketStatus.offline::before,
+#liveMarketStatus.offline::before,
+#marketConnectionStatus.offline::before {
+    background: #888;
+}
+
+.ob-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    padding: 5px 12px;
+    font-size: 11px;
+}
+
+.ob-row.ask .ob-price {
+    color: #ff5f56;
+}
+
+.ob-row.bid .ob-price {
+    color: #20c997;
+}
+
+.ob-price,
+.ob-size,
+.ob-total {
+    position: relative;
+    z-index: 2;
+}
+
+.rt-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    padding: 5px 12px;
+    font-size: 11px;
+}
+
+.rt-price.buy {
+    color: #20c997;
+}
+
+.rt-price.sell {
+    color: #ff5f56;
+}
+
+.market-tick-up {
+    animation: marketTickUp .5s ease;
+}
+
+.market-tick-down {
+    animation: marketTickDown .5s ease;
+}
+
+@keyframes marketTickUp {
+    0% {
+        opacity: .45;
+        transform: translateY(2px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes marketTickDown {
+    0% {
+        opacity: .45;
+        transform: translateY(-2px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
