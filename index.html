@@ -1291,9 +1291,6 @@ overflow: hidden;
 </div>
 </div>
 <script>
-// Live market shared state: initialized before any UI/event code can use it.
-var exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
-
 (function lockIntroInteraction(){
   const intro = document.querySelector('.intro');
   if (!intro) return;
@@ -2325,7 +2322,7 @@ const MARKET_RETRY_MAX_MS=30000;
 
 // Must be initialized before any market functions can run.
 // The page's exchange/conversion code uses this object during startup.
-
+const exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
 
 const COINBASE_SPOT_URL='https://api.coinbase.com/v2/prices';
 const USD_CAD_RATE_URL='https://api.frankfurter.dev/v2/rate/usd/cad';
@@ -2572,7 +2569,8 @@ function startLiveMarketEngine(){
  COINS.forEach(coin=>{resetOrderBook(coin);updateTickerBar(coin);});
  updateMainView(activeCoin);
  updateOrderBook(activeCoin);
-
+ fetchLiveUsdCadRate();
+ fetchLiveMarketPrices();
  connectMarketSocket();
  setInterval(fetchLiveUsdCadRate,5*60*1000);
  setInterval(updateMarketFreshness,5000);
@@ -2693,7 +2691,7 @@ updateMarketAlerts();
 renderExchangeTransactions();
 // HARD LIVE-PRICE LOCK: crypto prices start as unavailable and can ONLY be
 // populated by a successful live API response. No generated/cached/fallback price.
-
+startLiveMarketEngine();
 let priceAlertsEnabled = {BTC:false, SOL:false, ETH:false};
 let globalAlertsOn = false;
 let lastAlertToastAt = {BTC:0,SOL:0,ETH:0};
@@ -2756,7 +2754,8 @@ showToast(msg);
 selectMarketCoin('BTC');
 setMacTab('buy');
 const MARGINAL_TAX_RATE = 0.33; // applied to the 50% taxable inclusion only
-
+fetchLiveUsdCadRate();
+fetchLiveMarketPrices();
 initializeCostBasis();
 function showToast(message, duration=3500) { toastMessage.textContent=message; toastNotification.classList.add('show'); setTimeout(()=>toastNotification.classList.remove('show'),duration); }
 function calculateConversion(amount, fromCurr, toCurr) {
@@ -3029,6 +3028,5 @@ profitsPanel.addEventListener('mousedown',e=>pHandleStart(e.clientY));
 window.addEventListener('mousemove',e=>{if(pIsDragging)pHandleMove(e.clientY,e);});
 window.addEventListener('mouseup',()=>{if(pIsDragging)pHandleEnd();});
 </script>
-  <script src="./market.js"></script>
 </body>
 </html>
