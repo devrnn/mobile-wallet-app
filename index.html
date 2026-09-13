@@ -2269,10 +2269,6 @@ assetModalCancel.addEventListener('click',closeAssetModal);
 assetModalInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveAssetModal();}if(e.key==='Escape'){e.preventDefault();closeAssetModal();}});
 (function setupAssetTripleClicks(){document.querySelectorAll('.item-value[data-asset]').forEach(el=>{let clicks=[];el.addEventListener('click',e=>{const now=Date.now();clicks.push(now);clicks=clicks.filter(t=>now-t<=1000);if(clicks.length>=3){clicks=[];e.preventDefault();e.stopPropagation();openAssetModal(el.getAttribute('data-asset')); }});});})();
 window.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;if(!e.shiftKey)return;if(e.key.toLowerCase()==='q'){e.preventDefault();openWalletEditor();}});
-function randomizeMarketBase() {
- const empty={price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null};
- return {BTC:{...empty},SOL:{...empty},ETH:{...empty}};
-}
 
 function updateTickerBar(coin){
  const data=marketPrices?.[coin];
@@ -2286,11 +2282,16 @@ function updateTickerBar(coin){
   return;
  }
  const price=coin==='SOL'?`$${data.price.toFixed(2)}`:`$${data.price.toLocaleString('en-US',{maximumFractionDigits:0})}`;
- const pct=Number(data.changePct)||0;
- const sign=pct>0?'+':'';
+ const pct=Number(data.changePct);
  priceEl.textContent=price;
- changeEl.textContent=`${sign}${pct.toFixed(2)}%`;
- changeEl.className=`ticker-change ${pct>=0?'up':'down'}`;
+ if(Number.isFinite(pct)){
+  const sign=pct>0?'+':'';
+  changeEl.textContent=`${sign}${pct.toFixed(2)}%`;
+  changeEl.className=`ticker-change ${pct>=0?'up':'down'}`;
+ }else{
+  changeEl.textContent='—';
+  changeEl.className='ticker-change';
+ }
 }
 
 let lastMarketDetailsFetch=0;
@@ -2651,7 +2652,7 @@ function updateOrderBook(coin) {
 
 function updateRecentTrades() {
  const rtList=document.getElementById('recentTradesList'); if(!rtList)return;
- rtList.innerHTML=recentTrades.slice(0,10).map(t=>{const p=activeCoin==='SOL'?t.price.toFixed(2):Math.round(t.price).toLocaleString('en-US');const timeStr=t.time.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});return `<div class="rt-row"><div class="rt-price ${t.side}">$${p}</div><div class="rt-size">${t.size.toFixed(4)}</div><div class="rt-time">${timeStr}</div></div>`;}).join('');
+ rtList.innerHTML=recentTrades.filter(t=>Number.isFinite(t.price)&&t.price>0).slice(0,10).map(t=>{const p=activeCoin==='SOL'?t.price.toFixed(2):Math.round(t.price).toLocaleString('en-US');const timeStr=t.time.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});return `<div class="rt-row"><div class="rt-price ${t.side}">$${p}</div><div class="rt-size">${t.size.toFixed(4)}</div><div class="rt-time">${timeStr}</div></div>`;}).join('');
 }
 let macCurrentTab='buy';
 function setMacTab(tab){
@@ -2697,6 +2698,13 @@ setMacTab(macCurrentTab);
 updateMarketAlerts();
 }
 renderExchangeTransactions();
+// HARD LIVE-PRICE LOCK: crypto prices start as unavailable and can ONLY be
+// populated by a successful live API response. No generated/cached/fallback price.
+marketPrices = {BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData()};
+['BTC','SOL','ETH'].forEach(coin => updateTickerBar(coin));
+updateMainView('BTC');
+updateOrderBook('BTC');
+fetchLiveUsdCadRate();
 fetchLiveMarketPrices();
 setInterval(fetchLiveUsdCadRate, 3600000);
 setInterval(updateMarketFreshness, 15000);
