@@ -2520,12 +2520,18 @@ function seedFakeOrderBook(coin){
  updateOrderBook(coin);
 }
 
+const SIM_PRICE_RATE={BTC:10.86,ETH:0.35,SOL:0.014};
+const SIM_EVENTS_PER_SECOND={BTC:[5,10],ETH:[3,8],SOL:[2,5]};
+const SIM_ORDER_EVENTS_PER_SECOND={BTC:[100,140],ETH:[60,90],SOL:[40,65]};
 function fakeTrade(coin){
  const data=marketPrices[coin];
  if(!data||!Number.isFinite(data.price))return;
- const volatility=coin==='BTC'?0.00020:coin==='ETH'?0.00035:0.00065;
- const move=(Math.random()-.5)*volatility;
- const next=Math.max(0.01,data.price*(1+move));
+ /* Price movement target is the requested average absolute CAD movement per second.
+    Each event receives a fraction of that movement so the total stays stable. */
+ const avgEvents=(SIM_EVENTS_PER_SECOND[coin][0]+SIM_EVENTS_PER_SECOND[coin][1])/2;
+ const perEvent=SIM_PRICE_RATE[coin]/avgEvents;
+ const moveCad=(Math.random()<0.5?-1:1)*perEvent*(0.35+Math.random()*1.3);
+ const next=Math.max(0.01,data.price+moveCad);
  const previous=data.price;
  const open=data.open24h;
  const changePct=((next-open)/open)*100;
@@ -2544,28 +2550,66 @@ function fakeTrade(coin){
  updateTickerBar(coin);
 }
 
-function startFakeMarket(){
- clearTimeout(marketSimulationTimer);
- const tick=()=>{
-  for(const coin of COINS){
-   const events=1+Math.floor(Math.random()*3);
-   for(let i=0;i<events;i++)fakeTrade(coin);
-  }
-  marketSimulationTimer=setTimeout(tick,650+Math.random()*900);
- };
- tick();
+function updateFakeBookMicro(coin,count){
+ const book=orderBooks[coin],data=marketPrices[coin];
+ if(!book||!data||!Number.isFinite(data.price))return;
+ const midUsd=data.price/(Number(exchangeRatesInUSD.CAD)||1.386);
+ const tick=coin==='BTC'?0.5:coin==='ETH'?0.05:0.01;
+ for(let i=0;i<Math.min(count,30);i++){
+  const side=Math.random()<.5?'bids':'asks';
+  const map=book[side];
+  const level=1+Math.floor(Math.random()*14);
+  const price=midUsd+(side==='asks'?1:-1)*tick*level*(0.9+Math.random()*.2);
+  const size=(0.02+Math.random()*.55)*(coin==='BTC'?1:coin==='ETH'?4:20);
+  const decimals=coin==='BTC'?2:coin==='ETH'?2:3;
+  if(Math.random()<.22)map.delete(Number(price.toFixed(decimals)));
+  else map.set(Number(price.toFixed(decimals)),size);
+ }
+ if(coin===activeCoin) updateOrderBook(coin);
 }
 
-function startLiveMarketEngine(){
+function startFakeMarket(){
+ clearTimeout(marketSimulationTimer);
+ let last=performance.now();
+ const accumulator={BTC:0,ETH:0,SOL:0};
+ const tick=(now)=>{
+  const dt=Math.min(0.25,(now-last)/1000); last=now;
+  for(const coin of COINS){
+   const range=SIM_EVENTS_PER_SECOND[coin];
+   const rate=range[0]+Math.random()*(range[1]-range[0]);
+   accumulator[coin]+=rate*dt;
+   const events=Math.floor(accumulator[coin]);
+   accumulator[coin]-=events;
+   for(let i=0;i<events;i++)fakeTrade(coin);
+  }
+  marketSimulationTimer=requestAnimationFrame(tick);
+ };
+ marketSimulationTimer=requestAnimationFrame(tick);
+ /* High-frequency simulated order activity: update the book internally at the
+    requested rate, while DOM rendering is throttled by requestAnimationFrame. */
+ clearInterval(marketBookTimer);
+ let lastBook=performance.now(), bookAcc={BTC:0,ETH:0,SOL:0};
+ marketBookTimer=setInterval(()=>{
+  const now=performance.now(),dt=Math.min(.1,(now-lastBook)/1000);lastBook=now;
+  for(const coin of COINS){
+   const r=SIM_ORDER_EVENTS_PER_SECOND[coin];
+   const rate=r[0]+Math.random()*(r[1]-r[0]);
+   bookAcc[coin]+=rate*dt;
+   const n=Math.floor(bookAcc[coin]); bookAcc[coin]-=n;
+   if(n>0) updateFakeBookMicro(coin,n);
+  }
+ },50);
+}
+
+async function startLiveMarketEngine(){
  seedReferenceMarket();
  for(const coin of COINS)seedFakeOrderBook(coin);
  refreshMarketUI();
- document.documentElement.dataset.marketStatus='live';
+ document.documentElement.dataset.marketStatus='loading';
+ /* Get the real opening price once. After it succeeds, simulation takes over. */
+ await fetchLiveMarketPrices();
  startFakeMarket();
- clearInterval(marketBookTimer);
- marketBookTimer=setInterval(()=>{
-  for(const coin of COINS)seedFakeOrderBook(coin);
- },3000);
+ document.documentElement.dataset.marketStatus='live';
 }
 
 function updateMainView(coin,flashDir){
@@ -2641,7 +2685,15 @@ function selectMarketCoin(coin){
  const mciIcon=document.getElementById('mciIcon'),mciName=document.getElementById('mciName'),mciSymbol=document.getElementById('mciSymbol');
  const coinNames={BTC:'Bitcoin',SOL:'Solana',ETH:'Ethereum'};
  if(mciName)mciName.textContent=coinNames[coin]; if(mciSymbol)mciSymbol.textContent=`${coin} / CAD`;
- if(mciIcon){mciIcon.innerHTML='';}
+ if(mciIcon){
+  const logos={
+   BTC:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="32" fill="#F7931A"/><text x="32" y="43" text-anchor="middle" font-size="34" font-weight="700" fill="white">₿</text></svg>',
+   ETH:'<svg viewBox="0 0 256 417" aria-hidden="true"><path d="M128 0L4 209l124 74 124-74L128 0z" fill="#8a8a8a"/><path d="M128 0v283l124-74L128 0z" fill="#4b4b4b"/><path d="M4 236l124 181 124-181-124 73L4 236z" fill="#777"/><path d="M128 309v108l124-181-124 73z" fill="#444"/></svg>',
+   SOL:'<svg viewBox="0 0 397.7 311.7" aria-hidden="true"><defs><linearGradient id="mSolGrad" x1="0" x2="1"><stop offset="0" stop-color="#9945FF"/><stop offset="1" stop-color="#14F195"/></linearGradient></defs><path fill="url(#mSolGrad)" d="M64 8h320c12 0 18 14 9 23l-59 59H15c-12 0-18-14-9-23L64 8zm0 215h320c12 0 18 14 9 23l-59 59H15c-12 0-18-14-9-23l58-59zm261-108H5c-12 0-18-14-9-23l59-59h320c12 0 18 14 9 23l-58 59z"/></svg>'
+  };
+  mciIcon.innerHTML=logos[coin]||logos.BTC;
+  mciIcon.className=`mci-icon ${coin.toLowerCase()}-bg`;
+ }
  updateMainView(coin,null);updateOrderBook(coin);updateRecentTrades();setMacTab(macCurrentTab);updateMarketAlerts();
 }
 
