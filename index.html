@@ -1272,6 +1272,14 @@ overflow: hidden;
   100% { opacity: 0; transform: scale(.72); filter: blur(10px); }
 }
 
+
+/* Compact simulated market layout */
+.chart-stats-strip { display:none !important; }
+.market-right-panel { min-height:0 !important; }
+.orderbook-panel { min-height:0 !important; }
+.ob-asks, .ob-bids { min-height:0 !important; }
+.recent-trades-panel { max-height:260px; overflow:hidden; }
+.sim-flow-badge { margin-left:auto; font-size:10px; color:var(--text-muted); letter-spacing:.04em; text-transform:uppercase; }
 </style>
   <link rel="stylesheet" href="./market.css">
 </head>
@@ -1577,7 +1585,7 @@ overflow: hidden;
 <div class="market-right-panel">
 <div class="orderbook-panel">
 <div class="orderbook-header">
-<span class="ob-title">Order Book</span>
+<span class="ob-title">Order Book</span><span class="sim-flow-badge">Simulated</span>
 <span class="ob-spread-badge" id="obSpread">Spread: —</span>
 </div>
 <div class="orderbook-cols">
@@ -2444,36 +2452,52 @@ async function fetchLiveMarketPrices(){
  if(marketFetchInFlight)return false;
  marketFetchInFlight=true;
  try{
-  const url='https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana,ethereum&vs_currencies=cad&include_24hr_change=true&include_24hr_vol=true&include_24hr_high=true&include_24hr_low=true&_='+Date.now();
-  const cg=await fetchJson(url,12000);
-  const map={BTC:'bitcoin',SOL:'solana',ETH:'ethereum'};
+  // Get a real starting price once. After that, the client deliberately
+  // runs a local simulation so the UI remains active without pretending
+  // that simulated order flow is real exchange activity.
+  const usdCad=Number(exchangeRatesInUSD.CAD)||1;
+  const products={BTC:'BTC-USD',SOL:'SOL-USD',ETH:'ETH-USD'};
   let received=0;
   for(const coin of COINS){
-   const d=cg?.[map[coin]];
-   const price=Number(d?.cad);
-   if(!Number.isFinite(price)||price<=0)continue;
-   const changePct=Number(d?.cad_24h_change);
-   const high24h=Number(d?.cad_24h_high);
-   const low24h=Number(d?.cad_24h_low);
-   const volume24h=Number(d?.cad_24h_vol);
-   const change24h=Number.isFinite(changePct)?price*changePct/100:null;
-   const open24h=Number.isFinite(changePct)&&1+changePct/100>0?price/(1+changePct/100):null;
-   applyLiveMarketData(coin,{price,changePct,change24h,open24h,high24h,low24h,volume24h,lastUpdatedAt:Date.now()});
-   if(Number.isFinite(open24h)&&open24h>0)exchangeRatesInUSD[coin]=price/Number(exchangeRatesInUSD.CAD||1);
+   let usd=null;
+   try{
+    const spot=await fetchJson(`https://api.coinbase.com/v2/prices/${products[coin]}/spot?_=${Date.now()}`,10000);
+    usd=Number(spot?.data?.amount);
+   }catch(e){
+    console.warn('Coinbase starting price failed for',coin,e);
+   }
+   if(!Number.isFinite(usd)||usd<=0){
+    try{
+     const id={BTC:'bitcoin',SOL:'solana',ETH:'ethereum'}[coin];
+     const cg=await fetchJson(`https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd,cad&_=${Date.now()}`,10000);
+     usd=Number(cg?.[id]?.usd);
+    }catch(e){
+     console.warn('CoinGecko fallback failed for',coin,e);
+    }
+   }
+   if(!Number.isFinite(usd)||usd<=0)continue;
+   const cad=usd*(Number(exchangeRatesInUSD.CAD)||1);
+   const now=Date.now();
+   // Preserve a plausible 24h panel internally, but the visual 24h strip is hidden.
+   const drift=(Math.random()-.5)*0.04;
+   const open24h=cad/(1+drift);
+   const high24h=Math.max(cad,open24h)*(1+0.004+Math.random()*0.018);
+   const low24h=Math.min(cad,open24h)*(1-0.004-Math.random()*0.018);
+   const volume24h=coin==='BTC'?8e8+Math.random()*7e8:coin==='ETH'?3e8+Math.random()*4e8:5e7+Math.random()*1.5e8;
+   applyLiveMarketData(coin,{price:cad,usdPrice:usd,changePct:((cad-open24h)/open24h)*100,change24h:cad-open24h,open24h,high24h,low24h,volume24h,lastUpdatedAt:now,simulated:true});
+   exchangeRatesInUSD[coin]=usd;
    received++;
   }
-  if(received!==COINS.length)throw new Error(`Incomplete CoinGecko response (${received}/${COINS.length})`);
+  if(received!==COINS.length)throw new Error(`Could not get all starting prices (${received}/${COINS.length})`);
   marketLastSuccessfulFetch=Date.now();
   marketFailureCount=0;
   document.documentElement.dataset.marketStatus='live';
   refreshMarketUI();
-  scheduleNextMarketFetch(MARKET_PRICE_POLL_MS);
   return true;
  }catch(e){
   marketFailureCount++;
-  console.warn('Live market update failed:',e.name==='AbortError'?'request timed out':e);
+  console.error('Starting market price load failed:',e);
   updateMarketFreshness();
-  scheduleNextMarketFetch(Math.min(MARKET_RETRY_MAX_MS,MARKET_RETRY_BASE_MS*Math.pow(2,Math.min(marketFailureCount-1,5))));
   return false;
  }finally{marketFetchInFlight=false;}
 }
@@ -2564,16 +2588,82 @@ function scheduleMarketSocketReconnect(){
  marketSocketReconnectTimer=setTimeout(connectMarketSocket,delay);
 }
 
+let fakeMarketTimer=null;
+let fakeOrderRateTimer=null;
+const fakeFlow={BTC:0,SOL:0,ETH:0};
+
+function seedFakeOrderBook(coin){
+ const data=marketPrices[coin];
+ if(!data||!Number.isFinite(data.usdPrice))return;
+ const mid=Number(data.usdPrice);
+ const book=orderBooks[coin];
+ resetOrderBook(coin);
+ const tick=coin==='BTC'?0.5:coin==='ETH'?0.05:0.01;
+ for(let i=1;i<=12;i++){
+  const ask=mid+tick*i*(1+Math.random()*0.35);
+  const bid=mid-tick*i*(1+Math.random()*0.35);
+  const askSize=(Math.random()*0.45+0.02)*(coin==='BTC'?1:coin==='ETH'?3:12);
+  const bidSize=(Math.random()*0.45+0.02)*(coin==='BTC'?1:coin==='ETH'?3:12);
+  book.asks.set(Number(ask.toFixed(coin==='BTC'?2:coin==='ETH'?2:3)),askSize);
+  book.bids.set(Number(bid.toFixed(coin==='BTC'?2:coin==='ETH'?2:3)),bidSize);
+ }
+ book.initialized=true;
+ updateOrderBook(coin);
+}
+
+function fakeTrade(coin){
+ const data=marketPrices[coin];
+ if(!data||!Number.isFinite(data.price))return;
+ const move=(Math.random()-.5)*(coin==='BTC'?0.00055:coin==='ETH'?0.0007:0.001);
+ const next=Math.max(0.01,data.price*(1+move));
+ const previous=data.price;
+ const changePct=Number.isFinite(data.open24h)&&data.open24h>0?((next-data.open24h)/data.open24h)*100:0;
+ marketPrices[coin]={...data,price:next,usdPrice:next/(Number(exchangeRatesInUSD.CAD)||1),changePct,change24h:next-(data.open24h||next),high24h:Math.max(data.high24h||next,next),low24h:Math.min(data.low24h||next,next),lastUpdatedAt:Date.now(),simulated:true};
+ const direction=next>=previous?'up':'down';
+ priceHistory[coin].push({t:Date.now(),p:next});
+ if(priceHistory[coin].length>300)priceHistory[coin].shift();
+ fakeFlow[coin]+=1+Math.floor(Math.random()*4);
+ if(Math.random()<0.55){
+  recentTrades.unshift({coin,price:marketPrices[coin].usdPrice,size:(Math.random()*.4+.01)*(coin==='BTC'?1:coin==='ETH'?3:12),side:Math.random()<.5?'buy':'sell',time:new Date()});
+  if(recentTrades.length>100)recentTrades.length=100;
+ }
+ seedFakeOrderBook(coin);
+ if(coin===activeCoin){updateMainView(coin,direction);updateRecentTrades();}
+ updateTickerBar(coin);
+}
+
+function startFakeMarket(){
+ clearTimeout(fakeMarketTimer);
+ const tick=()=>{
+  for(const coin of COINS){
+   const events=1+Math.floor(Math.random()*3);
+   for(let i=0;i<events;i++)fakeTrade(coin);
+  }
+  fakeMarketTimer=setTimeout(tick,700+Math.random()*900);
+ };
+ tick();
+}
+
 function startLiveMarketEngine(){
  marketPrices={BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData()};
- COINS.forEach(coin=>{resetOrderBook(coin);updateTickerBar(coin);});
+ COINS.forEach(coin=>resetOrderBook(coin));
  updateMainView(activeCoin);
  updateOrderBook(activeCoin);
- fetchLiveUsdCadRate();
- fetchLiveMarketPrices();
- connectMarketSocket();
+ fetchLiveUsdCadRate().then(()=>fetchLiveMarketPrices()).then(ok=>{
+  if(!ok){document.documentElement.dataset.marketStatus='offline';return;}
+  for(const coin of COINS)seedFakeOrderBook(coin);
+  startFakeMarket();
+  document.documentElement.dataset.marketStatus='live';
+  const spread=document.getElementById('obSpread');
+  if(spread)spread.title='Simulated order flow';
+ });
  setInterval(fetchLiveUsdCadRate,5*60*1000);
- setInterval(updateMarketFreshness,5000);
+ setInterval(()=>{
+  for(const coin of COINS){
+   // Simulated order-flow counter. This is intentionally labeled as simulated.
+   fakeFlow[coin]=Math.max(0,Math.round(fakeFlow[coin]*0.5));
+  }
+ },1000);
 }
 
 function updateMainView(coin, flashDir) {
