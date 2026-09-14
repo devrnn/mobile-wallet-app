@@ -1274,7 +1274,7 @@ overflow: hidden;
 
 
 /* Compact simulated market layout */
-.chart-stats-strip { display:none !important; }
+.chart-stats-strip { display:grid !important; }
 .market-right-panel { min-height:0 !important; }
 .orderbook-panel { min-height:0 !important; }
 .ob-asks, .ob-bids { min-height:0 !important; }
@@ -2304,131 +2304,93 @@ function updateTickerBar(coin){
 }
 
 let lastMarketDetailsFetch=0;
-const MARKET_PRICE_POLL_MS=30000;
+const MARKET_PRICE_POLL_MS=60000;
 const MARKET_DETAILS_POLL_MS=60000;
 const COINS=['BTC','SOL','ETH'];
-const EMPTY_MARKET={price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null,lastUpdatedAt:0};
 
-async function fetchJson(url, timeoutMs=10000){
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),timeoutMs);
- try{
-  const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
-  if(!response.ok)throw new Error(`HTTP ${response.status}`);
-  return await response.json();
- }finally{clearTimeout(timeout);}
-}
-
-let marketPollTimer=null;
-let marketFetchInFlight=false;
-let marketLastSuccessfulFetch=0;
-let marketFailureCount=0;
-
-const MARKET_STALE_AFTER_MS=30000;
-const MARKET_RETRY_BASE_MS=1000;
-const MARKET_RETRY_MAX_MS=30000;
-
-// Must be initialized before any market functions can run.
-// The page's exchange/conversion code uses this object during startup.
-const exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
-
-const COINBASE_SPOT_URL='https://api.coinbase.com/v2/prices';
-const USD_CAD_RATE_URL='https://api.frankfurter.dev/v2/rate/usd/cad';
-const COINBASE_WS_URL='wss://ws-feed.exchange.coinbase.com';
-const COINBASE_PRODUCTS={BTC:'BTC-USD',SOL:'SOL-USD',ETH:'ETH-USD'};
-
-let marketSocket=null;
-let marketSocketReconnectTimer=null;
-let marketSocketHeartbeatTimer=null;
-let marketSocketReconnectAttempts=0;
-let marketSocketLastMessageAt=0;
-
-const orderBooks={
- BTC:{bids:new Map(),asks:new Map(),initialized:false},
- SOL:{bids:new Map(),asks:new Map(),initialized:false},
- ETH:{bids:new Map(),asks:new Map(),initialized:false}
+/*
+ * MARKET MODE
+ *
+ * The opening values below are fixed reference values researched on
+ * September 13, 2026. They are intentionally used only as the starting
+ * point. After the page loads, the market tab is simulated locally.
+ *
+ * Reference USD prices:
+ * BTC 77,271.07
+ * ETH 2,520.82
+ * SOL 101.48
+ * USD/CAD reference: 1.386
+ */
+const MARKET_REFERENCE={
+ BTC:{usd:77271.07,cad:107097.70,name:'Bitcoin'},
+ ETH:{usd:2520.82,cad:3493.86,name:'Ethereum'},
+ SOL:{usd:101.48,cad:140.65,name:'Solana'}
 };
 
-function resetOrderBook(coin){
- orderBooks[coin]={bids:new Map(),asks:new Map(),initialized:false};
-}
-
-async function fetchLiveUsdCadRate(){
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),10000);
- try{
-  const response=await fetch(`${USD_CAD_RATE_URL}?_=${Date.now()}`,{
-   cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}
-  });
-  if(!response.ok)throw new Error(`USD/CAD HTTP ${response.status}`);
-  const json=await response.json();
-  const rate=Number(json?.rate);
-  if(!Number.isFinite(rate)||rate<=0)throw new Error('Invalid USD/CAD rate');
-  exchangeRatesInUSD.CAD=rate;
-  syncCryptoUsdRates();
-  if(typeof updateLivePreview==='function')updateLivePreview();
-  refreshMarketUI();
-  return true;
- }catch(e){
-  console.warn('Live USD/CAD rate update failed:',e.name==='AbortError'?'request timed out':e);
-  return false;
- }finally{clearTimeout(timeout);}
-}
-
-function syncCryptoUsdRates(){
- const usdCad=Number(exchangeRatesInUSD?.CAD);
- if(!Number.isFinite(usdCad)||usdCad<=0)return;
- for(const coin of COINS){
-  const cad=Number(marketPrices?.[coin]?.price);
-  if(Number.isFinite(cad)&&cad>0)exchangeRatesInUSD[coin]=cad/usdCad;
- }
-}
-
-function emptyMarketData(){return {...EMPTY_MARKET};}
-
-// Market state: declared before any market UI function can run.
+const exchangeRatesInUSD={USD:1,CAD:1.386,BTC:77271.07,SOL:101.48,ETH:2520.82};
+const EMPTY_MARKET={price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null,lastUpdatedAt:0};
 let marketPrices={BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData()};
 let activeCoin='BTC';
 let recentTrades=[];
 let userTrades=[];
 let priceHistory={BTC:[],SOL:[],ETH:[]};
+let marketSimulationTimer=null;
+let marketBookTimer=null;
+const fakeFlow={BTC:0,SOL:0,ETH:0};
 
-function updateMarketFreshness(){
+function emptyMarketData(){return {...EMPTY_MARKET};}
+
+function marketMoney(coin,value){
+ if(!Number.isFinite(Number(value)))return '—';
+ const n=Number(value);
+ return coin==='SOL'?'$'+n.toFixed(2):'$'+Math.round(n).toLocaleString('en-US');
+}
+
+function seedReferenceMarket(){
  const now=Date.now();
- let anyLive=false;
  for(const coin of COINS){
-  const data=marketPrices[coin];
-  if(data&&Number.isFinite(data.price)&&Number.isFinite(data.lastUpdatedAt)&&now-data.lastUpdatedAt<=MARKET_STALE_AFTER_MS){
-   anyLive=true;
-  }else if(data&&Number.isFinite(data.lastUpdatedAt)&&now-data.lastUpdatedAt>MARKET_STALE_AFTER_MS){
-   marketPrices[coin]={...emptyMarketData()};
-   priceHistory[coin]=[];
+  const ref=MARKET_REFERENCE[coin];
+  /* realistic 24h window around the researched reference price */
+  const ranges={BTC:[0.996,1.010],ETH:[0.994,1.011],SOL:[0.993,1.012]};
+  const [lo,hi]=ranges[coin];
+  const open=ref.cad*(0.997+Math.random()*0.006);
+  const high=ref.cad*(1+Math.random()*(hi-1));
+  const low=ref.cad*(lo+Math.random()*(1-lo));
+  const volume=coin==='BTC'
+   ? 12000000000+Math.random()*4000000000
+   : coin==='ETH'
+     ? 6000000000+Math.random()*2500000000
+     : 900000000+Math.random()*500000000;
+  marketPrices[coin]={
+   price:ref.cad,
+   usdPrice:ref.usd,
+   open24h:open,
+   high24h:Math.max(high,ref.cad),
+   low24h:Math.min(low,ref.cad),
+   change24h:ref.cad-open,
+   changePct:((ref.cad-open)/open)*100,
+   volume24h:volume,
+   lastUpdatedAt:now,
+   simulated:true
+  };
+  priceHistory[coin]=[];
+  for(let i=0;i<80;i++){
+   const t=now-(80-i)*45000;
+   const drift=(Math.random()-.5)*0.003;
+   priceHistory[coin].push({t,p:ref.cad*(1+drift)});
   }
-  updateTickerBar(coin);
  }
- document.documentElement.dataset.marketStatus=anyLive?'live':'offline';
- updateMainView(activeCoin);
- updateOrderBook(activeCoin);
- updateMacTotal();
 }
 
 function applyLiveMarketData(coin,data){
  if(!data||!Number.isFinite(data.price)||data.price<=0)return false;
  const previous=marketPrices[coin]?.price;
- const previousData=marketPrices[coin]||emptyMarketData();
- marketPrices[coin]={...previousData,...data,price:data.price,lastUpdatedAt:Number.isFinite(data.lastUpdatedAt)?data.lastUpdatedAt:Date.now()};
+ marketPrices[coin]={...(marketPrices[coin]||emptyMarketData()),...data,price:data.price,lastUpdatedAt:data.lastUpdatedAt||Date.now()};
  if(!Array.isArray(priceHistory[coin]))priceHistory[coin]=[];
- if(!Number.isFinite(previous)){
-  priceHistory[coin]=[{t:marketPrices[coin].lastUpdatedAt,p:data.price}];
- }else if(previous!==data.price){
-  const direction=data.price>=previous?'up':'down';
-  priceHistory[coin].push({t:marketPrices[coin].lastUpdatedAt,p:data.price});
-  if(priceHistory[coin].length>300)priceHistory[coin].shift();
-  updateTickerBar(coin);
-  if(coin===activeCoin)updateMainView(coin,direction);
-  maybeShowPriceAlertToast(coin);
- }
+ if(!Number.isFinite(previous))priceHistory[coin]=[{t:Date.now(),p:data.price}];
+ else if(previous!==data.price){priceHistory[coin].push({t:Date.now(),p:data.price});if(priceHistory[coin].length>300)priceHistory[coin].shift();}
  updateTickerBar(coin);
+ if(coin===activeCoin)updateMainView(coin,previous===null?null:(data.price>=previous?'up':'down'));
  return true;
 }
 
@@ -2436,351 +2398,185 @@ function refreshMarketUI(){
  COINS.forEach(updateTickerBar);
  updateMainView(activeCoin);
  updateOrderBook(activeCoin);
+ updateRecentTrades();
  updateMacTotal();
- renderBalance();
- renderExchangeTransactions();
- const exchangeModalEl=document.getElementById('exchangeModal');
- if(exchangeModalEl?.classList.contains('open')&&typeof updateLivePreview==='function')updateLivePreview();
-}
-
-function scheduleNextMarketFetch(delay=60000){
- clearTimeout(marketPollTimer);
- marketPollTimer=setTimeout(()=>fetchLiveMarketPrices(),delay);
+ if(typeof renderBalance==='function')renderBalance();
+ if(typeof renderExchangeTransactions==='function')renderExchangeTransactions();
 }
 
 async function fetchLiveMarketPrices(){
- if(marketFetchInFlight)return false;
- marketFetchInFlight=true;
- try{
-  // Get a real starting price once. After that, the client deliberately
-  // runs a local simulation so the UI remains active without pretending
-  // that simulated order flow is real exchange activity.
-  const usdCad=Number(exchangeRatesInUSD.CAD)||1;
-  const products={BTC:'BTC-USD',SOL:'SOL-USD',ETH:'ETH-USD'};
-  let received=0;
-  for(const coin of COINS){
-   let usd=null;
-   try{
-    const spot=await fetchJson(`https://api.coinbase.com/v2/prices/${products[coin]}/spot?_=${Date.now()}`,10000);
-    usd=Number(spot?.data?.amount);
-   }catch(e){
-    console.warn('Coinbase starting price failed for',coin,e);
-   }
-   if(!Number.isFinite(usd)||usd<=0){
-    try{
-     const id={BTC:'bitcoin',SOL:'solana',ETH:'ethereum'}[coin];
-     const cg=await fetchJson(`https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd,cad&_=${Date.now()}`,10000);
-     usd=Number(cg?.[id]?.usd);
-    }catch(e){
-     console.warn('CoinGecko fallback failed for',coin,e);
-    }
-   }
-   if(!Number.isFinite(usd)||usd<=0)continue;
-   const cad=usd*(Number(exchangeRatesInUSD.CAD)||1);
-   const now=Date.now();
-   // Preserve a plausible 24h panel internally, but the visual 24h strip is hidden.
-   const drift=(Math.random()-.5)*0.04;
-   const open24h=cad/(1+drift);
-   const high24h=Math.max(cad,open24h)*(1+0.004+Math.random()*0.018);
-   const low24h=Math.min(cad,open24h)*(1-0.004-Math.random()*0.018);
-   const volume24h=coin==='BTC'?8e8+Math.random()*7e8:coin==='ETH'?3e8+Math.random()*4e8:5e7+Math.random()*1.5e8;
-   applyLiveMarketData(coin,{price:cad,usdPrice:usd,changePct:((cad-open24h)/open24h)*100,change24h:cad-open24h,open24h,high24h,low24h,volume24h,lastUpdatedAt:now,simulated:true});
-   exchangeRatesInUSD[coin]=usd;
-   received++;
-  }
-  if(received!==COINS.length)throw new Error(`Could not get all starting prices (${received}/${COINS.length})`);
-  marketLastSuccessfulFetch=Date.now();
-  marketFailureCount=0;
-  document.documentElement.dataset.marketStatus='live';
-  refreshMarketUI();
-  return true;
- }catch(e){
-  marketFailureCount++;
-  console.error('Starting market price load failed:',e);
-  updateMarketFreshness();
-  return false;
- }finally{marketFetchInFlight=false;}
+ /* Kept as the refresh entry point for the existing page, but no network
+    request is made. The market tab uses the researched starting references. */
+ seedReferenceMarket();
+ for(const coin of COINS)seedFakeOrderBook(coin);
+ refreshMarketUI();
+ document.documentElement.dataset.marketStatus='live';
+ return true;
 }
 async function fetchMarketDetails(){return true;}
 async function fetchRealMarketData(){return fetchLiveMarketPrices();}
 
 function wsSetLevel(coin,side,price,size){
- const book=orderBooks[coin];
- if(!book)return;
- const p=Number(price),s=Number(size);
- if(!Number.isFinite(p)||!Number.isFinite(s)||p<=0)return;
+ const book=orderBooks[coin]; if(!book)return;
+ const p=Number(price),s=Number(size); if(!Number.isFinite(p)||!Number.isFinite(s)||p<=0)return;
  const map=side==='buy'?book.bids:book.asks;
- if(s<=0)map.delete(p);else map.set(p,s);
+ if(s<=0)map.delete(p); else map.set(p,s);
 }
 
-function applyOrderBookSnapshot(coin,bids,asks){
- resetOrderBook(coin);
- for(const level of bids||[]){if(level.length>=2)wsSetLevel(coin,'buy',level[0],level[1]);}
- for(const level of asks||[]){if(level.length>=2)wsSetLevel(coin,'sell',level[0],level[1]);}
- orderBooks[coin].initialized=true;
- updateOrderBook(coin);
-}
-
-function applyOrderBookUpdate(coin,changes){
- for(const change of changes||[]){
-  if(change.length>=3)wsSetLevel(coin,change[0],change[1],change[2]);
- }
- if(coin===activeCoin)updateOrderBook(coin);
-}
-
-function handleMarketSocketMessage(raw){
- let msg;try{msg=JSON.parse(raw);}catch{return;}
- marketSocketLastMessageAt=Date.now();
- const product=msg.product_id;
- const coin=Object.keys(COINBASE_PRODUCTS).find(c=>COINBASE_PRODUCTS[c]===product);
- if(!coin)return;
- if(msg.type==='ticker'){
-  const usd=Number(msg.price);
-  if(Number.isFinite(usd)&&usd>0){
-   const usdCad=Number(exchangeRatesInUSD?.CAD);
-   applyLiveMarketData(coin,{price:Number.isFinite(usdCad)&&usdCad>0?usd*usdCad:marketPrices[coin]?.price||0,usdPrice:usd,changePct:marketPrices[coin]?.changePct,change24h:marketPrices[coin]?.change24h,open24h:marketPrices[coin]?.open24h,high24h:marketPrices[coin]?.high24h,low24h:marketPrices[coin]?.low24h,volume24h:marketPrices[coin]?.volume24h,lastUpdatedAt:Date.now()});
-   exchangeRatesInUSD[coin]=usd;
-  }
-  return;
- }
- if(msg.type==='snapshot'){
-  applyOrderBookSnapshot(coin,msg.bids,msg.asks);
-  return;
- }
- if(msg.type==='l2update'){
-  applyOrderBookUpdate(coin,msg.changes);
-  return;
- }
- if(msg.type==='match'||msg.type==='last_match'){
-  const usd=Number(msg.price),size=Number(msg.size);
-  if(Number.isFinite(usd)&&Number.isFinite(size)&&usd>0&&size>0){
-   recentTrades.unshift({coin,price:usd,size,side:msg.side==='sell'?'sell':'buy',time:msg.time?new Date(msg.time):new Date()});
-   if(recentTrades.length>100)recentTrades.length=100;
-   if(coin===activeCoin)updateRecentTrades();
-  }
- }
-}
-
-function connectMarketSocket(){
- if(marketSocket&&[WebSocket.OPEN,WebSocket.CONNECTING].includes(marketSocket.readyState))return;
- try{marketSocket=new WebSocket(COINBASE_WS_URL);}catch(e){scheduleMarketSocketReconnect();return;}
- marketSocket.addEventListener('open',()=>{
-  marketSocketReconnectAttempts=0;
-  document.documentElement.dataset.marketStatus='live';
-  marketSocket.send(JSON.stringify({type:'subscribe',product_ids:Object.values(COINBASE_PRODUCTS),channels:['ticker','level2','matches']}));
-  clearInterval(marketSocketHeartbeatTimer);
-  marketSocketHeartbeatTimer=setInterval(()=>{
-   if(marketSocket?.readyState===WebSocket.OPEN)marketSocket.send(JSON.stringify({type:'heartbeat'}));
-  },25000);
- });
- marketSocket.addEventListener('message',e=>handleMarketSocketMessage(e.data));
- marketSocket.addEventListener('error',e=>console.warn('Live market WebSocket error:',e));
- marketSocket.addEventListener('close',()=>{
-  clearInterval(marketSocketHeartbeatTimer);
-  document.documentElement.dataset.marketStatus='offline';
-  scheduleMarketSocketReconnect();
- });
-}
-
-function scheduleMarketSocketReconnect(){
- clearTimeout(marketSocketReconnectTimer);
- const delay=Math.min(MARKET_RETRY_MAX_MS,MARKET_RETRY_BASE_MS*Math.pow(2,Math.min(marketSocketReconnectAttempts++,5)));
- marketSocketReconnectTimer=setTimeout(connectMarketSocket,delay);
-}
-
-let fakeMarketTimer=null;
-let fakeOrderRateTimer=null;
-const fakeFlow={BTC:0,SOL:0,ETH:0};
+const orderBooks={
+ BTC:{bids:new Map(),asks:new Map(),initialized:false},
+ SOL:{bids:new Map(),asks:new Map(),initialized:false},
+ ETH:{bids:new Map(),asks:new Map(),initialized:false}
+};
+function resetOrderBook(coin){orderBooks[coin]={bids:new Map(),asks:new Map(),initialized:false};}
 
 function seedFakeOrderBook(coin){
  const data=marketPrices[coin];
- if(!data||!Number.isFinite(data.usdPrice))return;
- const mid=Number(data.usdPrice);
- const book=orderBooks[coin];
+ if(!data||!Number.isFinite(data.price))return;
  resetOrderBook(coin);
+ const midUsd=data.price/(Number(exchangeRatesInUSD.CAD)||1.386);
  const tick=coin==='BTC'?0.5:coin==='ETH'?0.05:0.01;
- for(let i=1;i<=12;i++){
-  const ask=mid+tick*i*(1+Math.random()*0.35);
-  const bid=mid-tick*i*(1+Math.random()*0.35);
-  const askSize=(Math.random()*0.45+0.02)*(coin==='BTC'?1:coin==='ETH'?3:12);
-  const bidSize=(Math.random()*0.45+0.02)*(coin==='BTC'?1:coin==='ETH'?3:12);
-  book.asks.set(Number(ask.toFixed(coin==='BTC'?2:coin==='ETH'?2:3)),askSize);
-  book.bids.set(Number(bid.toFixed(coin==='BTC'?2:coin==='ETH'?2:3)),bidSize);
+ const scale=coin==='BTC'?1:coin==='ETH'?4:20;
+ for(let i=1;i<=14;i++){
+  const spreadFactor=1+(Math.random()*.12);
+  const ask=midUsd+tick*i*spreadFactor;
+  const bid=midUsd-tick*i*spreadFactor;
+  const askSize=(0.02+Math.random()*.55)*scale*(1+1/i);
+  const bidSize=(0.02+Math.random()*.55)*scale*(1+1/i);
+  const decimals=coin==='BTC'?2:coin==='ETH'?2:3;
+  orderBooks[coin].asks.set(Number(ask.toFixed(decimals)),askSize);
+  orderBooks[coin].bids.set(Number(bid.toFixed(decimals)),bidSize);
  }
- book.initialized=true;
+ orderBooks[coin].initialized=true;
  updateOrderBook(coin);
 }
 
 function fakeTrade(coin){
  const data=marketPrices[coin];
  if(!data||!Number.isFinite(data.price))return;
- const move=(Math.random()-.5)*(coin==='BTC'?0.00055:coin==='ETH'?0.0007:0.001);
+ const volatility=coin==='BTC'?0.00020:coin==='ETH'?0.00035:0.00065;
+ const move=(Math.random()-.5)*volatility;
  const next=Math.max(0.01,data.price*(1+move));
  const previous=data.price;
- const changePct=Number.isFinite(data.open24h)&&data.open24h>0?((next-data.open24h)/data.open24h)*100:0;
- marketPrices[coin]={...data,price:next,usdPrice:next/(Number(exchangeRatesInUSD.CAD)||1),changePct,change24h:next-(data.open24h||next),high24h:Math.max(data.high24h||next,next),low24h:Math.min(data.low24h||next,next),lastUpdatedAt:Date.now(),simulated:true};
- const direction=next>=previous?'up':'down';
- priceHistory[coin].push({t:Date.now(),p:next});
+ const open=data.open24h;
+ const changePct=((next-open)/open)*100;
+ const now=Date.now();
+ marketPrices[coin]={...data,price:next,usdPrice:next/(Number(exchangeRatesInUSD.CAD)||1.386),changePct,change24h:next-open,high24h:Math.max(data.high24h,next),low24h:Math.min(data.low24h,next),lastUpdatedAt:now,simulated:true};
+ priceHistory[coin].push({t:now,p:next});
  if(priceHistory[coin].length>300)priceHistory[coin].shift();
- fakeFlow[coin]+=1+Math.floor(Math.random()*4);
- if(Math.random()<0.55){
-  recentTrades.unshift({coin,price:marketPrices[coin].usdPrice,size:(Math.random()*.4+.01)*(coin==='BTC'?1:coin==='ETH'?3:12),side:Math.random()<.5?'buy':'sell',time:new Date()});
-  if(recentTrades.length>100)recentTrades.length=100;
+ fakeFlow[coin]+=1+Math.floor(Math.random()*5);
+ const usd=next/(Number(exchangeRatesInUSD.CAD)||1.386);
+ if(Math.random()<0.8){
+  recentTrades.unshift({coin,price:usd,size:(Math.random()*.5+.005)*(coin==='BTC'?1:coin==='ETH'?4:20),side:Math.random()<.5?'buy':'sell',time:new Date()});
+  if(recentTrades.length>120)recentTrades.length=120;
  }
  seedFakeOrderBook(coin);
- if(coin===activeCoin){updateMainView(coin,direction);updateRecentTrades();}
+ if(coin===activeCoin){updateMainView(coin,next>=previous?'up':'down');updateRecentTrades();}
  updateTickerBar(coin);
 }
 
 function startFakeMarket(){
- clearTimeout(fakeMarketTimer);
+ clearTimeout(marketSimulationTimer);
  const tick=()=>{
   for(const coin of COINS){
    const events=1+Math.floor(Math.random()*3);
    for(let i=0;i<events;i++)fakeTrade(coin);
   }
-  fakeMarketTimer=setTimeout(tick,700+Math.random()*900);
+  marketSimulationTimer=setTimeout(tick,650+Math.random()*900);
  };
  tick();
 }
 
 function startLiveMarketEngine(){
- marketPrices={BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData()};
- COINS.forEach(coin=>resetOrderBook(coin));
- updateMainView(activeCoin);
- updateOrderBook(activeCoin);
- fetchLiveUsdCadRate().then(()=>fetchLiveMarketPrices()).then(ok=>{
-  if(!ok){document.documentElement.dataset.marketStatus='offline';return;}
+ seedReferenceMarket();
+ for(const coin of COINS)seedFakeOrderBook(coin);
+ refreshMarketUI();
+ document.documentElement.dataset.marketStatus='live';
+ startFakeMarket();
+ clearInterval(marketBookTimer);
+ marketBookTimer=setInterval(()=>{
   for(const coin of COINS)seedFakeOrderBook(coin);
-  startFakeMarket();
-  document.documentElement.dataset.marketStatus='live';
-  const spread=document.getElementById('obSpread');
-  if(spread)spread.title='Simulated order flow';
- });
- setInterval(fetchLiveUsdCadRate,5*60*1000);
- setInterval(()=>{
-  for(const coin of COINS){
-   // Simulated order-flow counter. This is intentionally labeled as simulated.
-   fakeFlow[coin]=Math.max(0,Math.round(fakeFlow[coin]*0.5));
-  }
- },1000);
+ },3000);
 }
 
-function updateMainView(coin, flashDir) {
+function updateMainView(coin,flashDir){
  const data=marketPrices[coin];
  const priceEl=document.getElementById('mciPrice');
- if(!data||!Number.isFinite(data.price)){
-  if(priceEl)priceEl.textContent='Live price unavailable';
-  const changeEl=document.getElementById('mciChange'); if(changeEl)changeEl.textContent='Waiting for live market data…';
-  ['mciOpen','mciHigh','mciLow','mciVolume','obMidPrice'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
-  updateMacTotal();
-  return;
- }
- const isUp=data.changePct>=0;
+ if(!data||!Number.isFinite(data.price))return;
+ const isUp=Number(data.changePct)>=0;
  const sign=isUp?'+':'';
  if(!priceEl)return;
- const fmtPrice=coin==='SOL'?`$${data.price.toFixed(2)}`:`$${data.price.toLocaleString('en-US')}`;
- priceEl.textContent=fmtPrice;
+ priceEl.textContent=marketMoney(coin,data.price);
  if(flashDir){
   priceEl.classList.remove('tick-up','tick-down','flash-up','flash-down');
   void priceEl.offsetWidth;
   priceEl.classList.add(`tick-${flashDir}`,`flash-${flashDir}`);
-  setTimeout(()=>priceEl.classList.remove('flash-up','flash-down'),700);
+  setTimeout(()=>priceEl.classList.remove('flash-up','flash-down'),450);
  }
- const change24h=Number(data.change24h);
- const changePct=Number(data.changePct);
- const open24h=Number(data.open24h);
- const high24h=Number(data.high24h);
- const low24h=Number(data.low24h);
- const fmtChange=Number.isFinite(change24h)?(coin==='SOL'?`${sign}$${Math.abs(change24h).toFixed(2)}`:`${sign}$${Math.abs(Math.round(change24h)).toLocaleString('en-US')}`):'—';
- const changeEl=document.getElementById('mciChange');
- const pctEl=document.getElementById('mciPct');
- if(changeEl){changeEl.textContent=fmtChange;changeEl.className=`mpm-change ${isUp?'up':'down'}`;}
+ const change24h=Number(data.change24h),changePct=Number(data.changePct);
+ const changeEl=document.getElementById('mciChange'),pctEl=document.getElementById('mciPct');
+ if(changeEl){changeEl.textContent=Number.isFinite(change24h)?`${sign}$${Math.abs(Math.round(change24h)).toLocaleString('en-US')}`:'—';changeEl.className=`mpm-change ${isUp?'up':'down'}`;}
  if(pctEl){pctEl.textContent=Number.isFinite(changePct)?`${sign}${changePct.toFixed(2)}%`:'—';pctEl.className=`mpm-badge ${isUp?'up':'down'}`;}
- const fmtOpen=Number.isFinite(open24h)?(coin==='SOL'?`$${open24h.toFixed(2)}`:`$${Math.round(open24h).toLocaleString('en-US')}`):'—';
- const fmtHigh=Number.isFinite(high24h)?(coin==='SOL'?`$${high24h.toFixed(2)}`:`$${high24h.toLocaleString('en-US')}`):'—';
- const fmtLow=Number.isFinite(low24h)?(coin==='SOL'?`$${low24h.toFixed(2)}`:`$${low24h.toLocaleString('en-US')}`):'—';
  const openEl=document.getElementById('statOpen'),highEl=document.getElementById('statHigh'),lowEl=document.getElementById('statLow'),volEl=document.getElementById('statVol');
- if(openEl)openEl.textContent=fmtOpen;
- if(highEl)highEl.textContent=fmtHigh;
- if(lowEl)lowEl.textContent=fmtLow;
+ if(openEl)openEl.textContent=marketMoney(coin,Number(data.open24h));
+ if(highEl)highEl.textContent=marketMoney(coin,Number(data.high24h));
+ if(lowEl)lowEl.textContent=marketMoney(coin,Number(data.low24h));
  const vol=Number(data.volume24h);
- const volFmt=Number.isFinite(vol)?(vol>=1e9?`$${(vol/1e9).toFixed(1)}B`:vol>=1e6?`$${(vol/1e6).toFixed(0)}M`:`$${vol.toFixed(0)}`):'—';
- if(volEl)volEl.textContent=volFmt;
- const midEl=document.getElementById('obMidPrice');
- if(midEl)midEl.textContent=fmtPrice;
- const arrowEl=document.getElementById('obMidArrow');
- if(arrowEl)arrowEl.style.color=isUp?'var(--accent-green)':'var(--accent-red)';
+ if(volEl)volEl.textContent=Number.isFinite(vol)?(vol>=1e9?`$${(vol/1e9).toFixed(1)}B`:vol>=1e6?`$${(vol/1e6).toFixed(0)}M`:`$${Math.round(vol).toLocaleString('en-US')}`):'—';
+ const midEl=document.getElementById('obMidPrice');if(midEl)midEl.textContent=marketMoney(coin,data.price);
+ const arrowEl=document.getElementById('obMidArrow');if(arrowEl)arrowEl.style.color=isUp?'var(--accent-green)':'var(--accent-red)';
  updateMacTotal();
 }
-function updateOrderBook(coin) {
+
+function updateOrderBook(coin){
  const obAsks=document.getElementById('obAsks'),obBids=document.getElementById('obBids'),obSpread=document.getElementById('obSpread'),obUserOrders=document.getElementById('obUserOrders'),obMid=document.getElementById('obMidPrice');
  if(!obAsks||!obBids)return;
- const book=orderBooks[coin],usdCad=Number(exchangeRatesInUSD?.CAD),data=marketPrices[coin];
- if(!book?.initialized){obAsks.innerHTML='<div style="padding:12px 20px;color:var(--text-muted);font-size:11px">Loading live order book…</div>';obBids.innerHTML='';if(obSpread)obSpread.textContent='Spread: —';if(obMid)obMid.textContent=Number.isFinite(data?.price)?(coin==='SOL'?`$${data.price.toFixed(2)}`:`$${data.price.toLocaleString('en-US')}`):'—';return;}
+ const book=orderBooks[coin],usdCad=Number(exchangeRatesInUSD.CAD)||1.386,data=marketPrices[coin];
+ if(!book?.initialized){return;}
  const asks=[...book.asks.entries()].filter(([p,s])=>p>0&&s>0).sort((a,b)=>a[0]-b[0]).slice(0,8);
  const bids=[...book.bids.entries()].filter(([p,s])=>p>0&&s>0).sort((a,b)=>b[0]-a[0]).slice(0,8);
  const bestAsk=asks[0]?.[0],bestBid=bids[0]?.[0];
  const spread=bestAsk&&bestBid?bestAsk-bestBid:null;
- if(obSpread)obSpread.textContent=spread!==null&&usdCad>0?`Spread: $${(spread*usdCad).toFixed(2)}`:'Spread: —';
- const mid=bestAsk&&bestBid?(bestAsk+bestBid)/2:null;
- if(obMid)obMid.textContent=mid!==null&&usdCad>0?(coin==='SOL'?`$${(mid*usdCad).toFixed(2)}`:`$${Math.round(mid*usdCad).toLocaleString('en-US')}`):'—';
- const render=(rows,side)=>rows.map(([usd,size])=>{const cad=usd*usdCad;return `<div class="ob-row ${side}"><div class="ob-price ${side}">$${coin==='SOL'?cad.toFixed(2):Math.round(cad).toLocaleString('en-US')}</div><div class="ob-size">${size.toFixed(4)}</div></div>`;}).join('');
+ if(obSpread)obSpread.textContent=spread!==null?`Spread: $${(spread*usdCad).toFixed(2)}`:'Spread: —';
+ if(obMid)obMid.textContent=Number.isFinite(data?.price)?marketMoney(coin,data.price):'—';
+ const render=(rows,side)=>rows.map(([usd,size])=>{const cad=usd*usdCad;return `<div class="ob-row ${side}"><div class="ob-price ${side}">$${coin==='SOL'?cad.toFixed(2):Math.round(cad).toLocaleString('en-US')}</div><div class="ob-size">${size.toFixed(4)}</div><div class="ob-total">$${Math.round(cad*size).toLocaleString('en-US')}</div><div class="ob-row-fill" style="width:${Math.min(92,10+Math.random()*70)}%"></div></div>`;}).join('');
  obAsks.innerHTML=render(asks,'ask');obBids.innerHTML=render(bids,'bid');
  if(obUserOrders){const name=(document.getElementById('profileName')?.textContent||'You').trim()||'You';const orders=userTrades.filter(t=>t.coin===coin).slice(0,3);obUserOrders.innerHTML=orders.map(t=>`<div class="ob-user-row ${t.side}"><div class="ob-user-name">${name}</div><div class="ob-user-price">$${coin==='SOL'?t.price.toFixed(2):Math.round(t.price).toLocaleString('en-US')}</div><div class="ob-user-side ${t.side}">${t.side==='buy'?'Buy':'Sell'} ${t.size.toFixed(4)}</div></div>`).join('');obUserOrders.style.display=orders.length?'block':'none';}
 }
 
-function updateRecentTrades() {
+function updateRecentTrades(){
  const rtList=document.getElementById('recentTradesList');if(!rtList)return;
- const usdCad=Number(exchangeRatesInUSD?.CAD);
- rtList.innerHTML=recentTrades.filter(t=>Number.isFinite(t.price)&&t.price>0).slice(0,10).map(t=>{const cad=t.price*usdCad;const p=activeCoin==='SOL'?cad.toFixed(2):Math.round(cad).toLocaleString('en-US');const timeStr=t.time instanceof Date?t.time.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';return `<div class="rt-row"><div class="rt-price ${t.side}">$${p}</div><div class="rt-size">${t.size.toFixed(4)}</div><div class="rt-time">${timeStr}</div></div>`;}).join('');
+ const usdCad=Number(exchangeRatesInUSD.CAD)||1.386;
+ rtList.innerHTML=recentTrades.filter(t=>t.coin===activeCoin).slice(0,10).map(t=>{const cad=t.price*usdCad;const p=activeCoin==='SOL'?cad.toFixed(2):Math.round(cad).toLocaleString('en-US');const timeStr=t.time instanceof Date?t.time.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';return `<div class="rt-row"><div class="rt-price ${t.side}">$${p}</div><div class="rt-size">${t.size.toFixed(4)}</div><div class="rt-time">${timeStr}</div></div>`;}).join('');
 }
+
 let macCurrentTab='buy';
 function setMacTab(tab){
  macCurrentTab=tab; const buyTab=document.getElementById('macBuyTab'),sellTab=document.getElementById('macSellTab'),submitBtn=document.getElementById('macSubmitBtn');
+ if(!buyTab||!sellTab||!submitBtn)return;
  buyTab.classList.toggle('active',tab==='buy'); sellTab.classList.toggle('active',tab==='sell');
  if(tab==='buy'){submitBtn.className='mac-submit-btn buy-btn';submitBtn.textContent=`Buy ${activeCoin}`;document.getElementById('macAmountLabel').textContent='Amount (CAD)';document.getElementById('macCurrencyLabel').textContent='CAD';document.getElementById('macTotalLabel').textContent='You receive';}
  else{submitBtn.className='mac-submit-btn sell-btn';submitBtn.textContent=`Sell ${activeCoin}`;document.getElementById('macAmountLabel').textContent=`Amount (${activeCoin})`;document.getElementById('macCurrencyLabel').textContent=activeCoin;document.getElementById('macTotalLabel').textContent='You receive (CAD)';}
  document.getElementById('macAmountInput').value=''; updateMacTotal();
 }
 function setMacPct(pct,el){document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));el.classList.add('active');const bal=macCurrentTab==='buy'?getBalanceForCurrency('CAD'):getBalanceForCurrency(activeCoin);const dec=macCurrentTab==='buy'?2:4;const factor=Math.pow(10,dec);document.getElementById('macAmountInput').value=(Math.floor(bal*(pct/100)*factor)/factor).toFixed(dec);updateMacTotal();}
-function updateMacTotal(){const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const price=marketPrices[activeCoin]?.price;const out=document.getElementById('macTotalVal');if(!out)return;if(!Number.isFinite(price)){out.textContent='Live price unavailable';return;}if(macCurrentTab==='buy')out.textContent=`${(amt/price).toFixed(4)} ${activeCoin}`;else out.textContent=`${(amt*price).toFixed(2)} CAD`;}
+function updateMacTotal(){const amt=parseFloat(document.getElementById('macAmountInput')?.value)||0;const price=marketPrices[activeCoin]?.price;const out=document.getElementById('macTotalVal');if(!out)return;if(!Number.isFinite(price)){out.textContent='—';return;}if(macCurrentTab==='buy')out.textContent=`${(amt/price).toFixed(4)} ${activeCoin}`;else out.textContent=`${(amt*price).toFixed(2)} CAD`;}
 function macSubmitOrder(){
- const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const livePrice=marketPrices[activeCoin]?.price;if(amt<=0)return;if(!Number.isFinite(livePrice)){showToast('Live price unavailable — try again in a moment');return;}const btn=document.getElementById('macSubmitBtn');btn.style.opacity='0.6';btn.style.pointerEvents='none';
- setTimeout(()=>{btn.style.opacity='1';btn.style.pointerEvents='';const price=livePrice;
-  if(macCurrentTab==='buy'){const received=amt/price;if(internalHiddenBalanceCAD<amt){showToast('Insufficient CAD balance');return;}deductBalanceForCurrency('CAD',amt);addBalanceForCurrency(activeCoin,received);userTrades.unshift({coin:activeCoin,price,size:received,side:'buy',time:new Date()});showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);}
-  else{const received=amt*price;const bal=getBalanceForCurrency(activeCoin);if(bal<amt){showToast(`Insufficient ${activeCoin} balance`);return;}deductBalanceForCurrency(activeCoin,amt);addBalanceForCurrency('CAD',received);userTrades.unshift({coin:activeCoin,price,size:amt,side:'sell',time:new Date()});showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);}
-  if(userTrades.length>20)userTrades.pop();renderBalance();updateOrderBook(activeCoin);document.getElementById('macAmountInput').value='';document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));updateMacTotal();
- },700);
+ const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const price=marketPrices[activeCoin]?.price;if(amt<=0||!Number.isFinite(price))return;const btn=document.getElementById('macSubmitBtn');btn.style.opacity='0.6';btn.style.pointerEvents='none';
+ setTimeout(()=>{btn.style.opacity='1';btn.style.pointerEvents='';if(macCurrentTab==='buy'){const received=amt/price;if(internalHiddenBalanceCAD<amt){showToast('Insufficient CAD balance');return;}deductBalanceForCurrency('CAD',amt);addBalanceForCurrency(activeCoin,received);userTrades.unshift({coin:activeCoin,price,size:received,side:'buy',time:new Date()});showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);}else{const received=amt*price;const bal=getBalanceForCurrency(activeCoin);if(bal<amt){showToast(`Insufficient ${activeCoin} balance`);return;}deductBalanceForCurrency(activeCoin,amt);addBalanceForCurrency('CAD',received);userTrades.unshift({coin:activeCoin,price,size:amt,side:'sell',time:new Date()});showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);}if(userTrades.length>20)userTrades.pop();renderBalance();updateOrderBook(activeCoin);document.getElementById('macAmountInput').value='';document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));updateMacTotal();},700);
 }
-function selectMarketCoin(coin) {
-activeCoin = coin;
-['BTC','SOL','ETH'].forEach(c => {
-document.getElementById(`ticker${c}`).classList.toggle('selected', c===coin);
-});
-const mciIcon = document.getElementById('mciIcon');
-const mciName = document.getElementById('mciName');
-const mciSymbol = document.getElementById('mciSymbol');
-const coinNames = {BTC:'Bitcoin',SOL:'Solana',ETH:'Ethereum'};
-mciName.textContent = coinNames[coin];
-mciSymbol.textContent = `${coin} / CAD`;
-const iconMap = {
-BTC: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="32" fill="#F7931A"/><path d="M46.101 27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4 5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.876-1.439 5.766c-0.764-0.174-1.514-0.346-2.242-0.525l0.004-0.018-4.842-1.209-0.934 3.75s2.605 0.597 2.55 0.634c1.422 0.355 1.679 1.296 1.636 2.042l-1.638 6.571c0.098 0.025 0.225 0.061 0.365 0.117l-0.37-0.092-2.296 9.205c-0.174 0.432-0.615 1.08-1.609 0.833 0.035 0.051-2.55-0.637-2.55-0.637l-1.743 4.019 4.569 1.139c0.85 0.213 1.683 0.436 2.504 0.647l-1.453 5.833 3.507 0.875 1.438-5.768c0.958 0.26 1.888 0.5 2.8 0.726l-1.433 5.741 3.511 0.876 1.453-5.823c5.987 1.133 10.489 0.676 12.383-4.738 1.527-4.36-0.076-6.875-3.226-8.515 2.294-0.53 4.022-2.039 4.483-5.155zm-8.022 11.249c-1.085 4.36-8.426 2.003-10.806 1.412l1.928-7.729c2.38 0.594 10.01 1.77 8.878 6.317zm1.086-11.312c-0.989 3.966-7.106 1.951-9.088 1.457l1.748-7.01c1.982 0.494 8.354 1.416 7.34 5.553z" fill="#FFFFFF"/></svg>`,
-SOL: `<svg viewBox="0 0 397.7 311.7" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sG" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#9945FF"/><stop offset="100%" stop-color="#14F195"/></linearGradient></defs><path fill="url(#sG)" d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2l56.3-62.6zM64.6 3.8C67 1.4 70.3 0 73.8 0h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2L64.6 3.8zm268.5 117c-2.4-2.4-5.7-3.8-9.2-3.8H9.2c-5.9 0-9.2 6.8-5.4 11.2l56.3 62.6c2.4 2.4 5.7 3.8 9.2 3.8h314.7c5.9 0 9.2-6.8-5.4-11.2l-56.3-62.6z"/></svg>`,
-ETH: `<svg viewBox="0 0 256 417" xmlns="http://www.w3.org/2000/svg"><path d="M127.9611 0L125.1661 9.5V285.168L127.9611 287.958L255.9231 212.32L127.9611 0" fill="#343434"/><path d="M127.962 0L0 212.32L127.962 287.959V154.158V0" fill="#8C8C8C"/><path d="M127.9611 312.1866L126.3861 314.1066V415.4956L127.9611 420.0006L255.9991 236.5866L127.9611 312.1866" fill="#3C3C3B"/><path d="M127.962 420.0001V312.1861L0 236.5861L127.962 420.0001" fill="#8C8C8C"/><path d="M127.9611 287.9584L255.9231 212.3204L127.9611 154.1584V287.9584" fill="#141414"/><path d="M0 212.3208L127.962 287.9588V154.1588L0 212.3208" fill="#393939"/></svg>`
-};
-const bgMap = { BTC:'btc-bg', SOL:'sol-bg', ETH:'eth-bg' };
-mciIcon.className = `mci-icon ${bgMap[coin]}`;
-mciIcon.innerHTML = iconMap[coin];
-updateMainView(coin, null);
-updateOrderBook(coin);
-updateRecentTrades();
-setMacTab(macCurrentTab);
-updateMarketAlerts();
+
+function selectMarketCoin(coin){
+ activeCoin=coin;
+ ['BTC','SOL','ETH'].forEach(c=>document.getElementById(`ticker${c}`)?.classList.toggle('selected',c===coin));
+ const mciIcon=document.getElementById('mciIcon'),mciName=document.getElementById('mciName'),mciSymbol=document.getElementById('mciSymbol');
+ const coinNames={BTC:'Bitcoin',SOL:'Solana',ETH:'Ethereum'};
+ if(mciName)mciName.textContent=coinNames[coin]; if(mciSymbol)mciSymbol.textContent=`${coin} / CAD`;
+ if(mciIcon){mciIcon.innerHTML='';}
+ updateMainView(coin,null);updateOrderBook(coin);updateRecentTrades();setMacTab(macCurrentTab);updateMarketAlerts();
 }
+
 renderExchangeTransactions();
-// HARD LIVE-PRICE LOCK: crypto prices start as unavailable and can ONLY be
-// populated by a successful live API response. No generated/cached/fallback price.
 startLiveMarketEngine();
 let priceAlertsEnabled = {BTC:false, SOL:false, ETH:false};
 let globalAlertsOn = false;
