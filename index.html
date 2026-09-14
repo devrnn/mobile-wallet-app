@@ -1585,7 +1585,7 @@ overflow: hidden;
 <div class="market-right-panel">
 <div class="orderbook-panel">
 <div class="orderbook-header">
-<span class="ob-title">Order Book</span><span class="sim-flow-badge">Simulated</span>
+<span class="ob-title">Order Book</span><span class="sim-flow-badge"></span>
 <span class="ob-spread-badge" id="obSpread">Spread: —</span>
 </div>
 <div class="orderbook-cols">
@@ -2313,7 +2313,7 @@ const COINS=['BTC','SOL','ETH'];
  *
  * The opening values below are fixed reference values researched on
  * September 13, 2026. They are intentionally used only as the starting
- * point. After the page loads, the market tab is simulated locally.
+ * point. After the page loads, the market movement is generated locally from the fetched starting price.
  *
  * Reference USD prices:
  * BTC 77,271.07
@@ -2520,16 +2520,23 @@ function seedFakeOrderBook(coin){
  updateOrderBook(coin);
 }
 
-const SIM_PRICE_RATE={BTC:10.86,ETH:0.35,SOL:0.014};
+const SIM_PRICE_RANGE={BTC:[0.10,0.45],ETH:[0.01,0.05],SOL:[0.000080,0.000535]};
 const SIM_EVENTS_PER_SECOND={BTC:[5,10],ETH:[3,8],SOL:[2,5]};
 const SIM_ORDER_EVENTS_PER_SECOND={BTC:[100,140],ETH:[60,90],SOL:[40,65]};
+const SIM_EVENTS_PER_SECOND={BTC:[5,10],ETH:[3,8],SOL:[2,5]};
+const SIM_ORDER_EVENTS_PER_SECOND={BTC:[100,140],ETH:[60,90],SOL:[40,65]};
+
+let lastMainRender={BTC:0,ETH:0,SOL:0};
+
 function fakeTrade(coin){
  const data=marketPrices[coin];
  if(!data||!Number.isFinite(data.price))return;
  /* Price movement target is the requested average absolute CAD movement per second.
     Each event receives a fraction of that movement so the total stays stable. */
+ const range=SIM_PRICE_RANGE[coin];
  const avgEvents=(SIM_EVENTS_PER_SECOND[coin][0]+SIM_EVENTS_PER_SECOND[coin][1])/2;
- const perEvent=SIM_PRICE_RATE[coin]/avgEvents;
+ const targetPerSecond=range[0]+Math.random()*(range[1]-range[0]);
+ const perEvent=targetPerSecond/avgEvents;
  const moveCad=(Math.random()<0.5?-1:1)*perEvent*(0.35+Math.random()*1.3);
  const next=Math.max(0.01,data.price+moveCad);
  const previous=data.price;
@@ -2546,7 +2553,14 @@ function fakeTrade(coin){
   if(recentTrades.length>120)recentTrades.length=120;
  }
  seedFakeOrderBook(coin);
- if(coin===activeCoin){updateMainView(coin,next>=previous?'up':'down');updateRecentTrades();}
+ if(coin===activeCoin){
+  const nowRender=performance.now();
+  if(nowRender-lastMainRender[coin]>=850){
+   lastMainRender[coin]=nowRender;
+   updateMainView(coin,next>=previous?'up':'down');
+   updateRecentTrades();
+  }
+ }
  updateTickerBar(coin);
 }
 
