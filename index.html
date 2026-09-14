@@ -1273,7 +1273,6 @@ overflow: hidden;
 }
 
 </style>
-  <link rel="stylesheet" href="./market.css">
 </head>
 <body>
 <div class="intro" aria-hidden="true">
@@ -2322,7 +2321,7 @@ const MARKET_RETRY_MAX_MS=30000;
 
 // Must be initialized before any market functions can run.
 // The page's exchange/conversion code uses this object during startup.
-const exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
+var exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
 
 const COINBASE_SPOT_URL='https://api.coinbase.com/v2/prices';
 const USD_CAD_RATE_URL='https://api.frankfurter.dev/v2/rate/usd/cad';
