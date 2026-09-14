@@ -1273,6 +1273,7 @@ overflow: hidden;
 }
 
 </style>
+  <link rel="stylesheet" href="./market.css">
 </head>
 <body>
 <div class="intro" aria-hidden="true">
@@ -2321,7 +2322,7 @@ const MARKET_RETRY_MAX_MS=30000;
 
 // Must be initialized before any market functions can run.
 // The page's exchange/conversion code uses this object during startup.
-var exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
+const exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
 
 const COINBASE_SPOT_URL='https://api.coinbase.com/v2/prices';
 const USD_CAD_RATE_URL='https://api.frankfurter.dev/v2/rate/usd/cad';
@@ -2443,39 +2444,39 @@ async function fetchLiveMarketPrices(){
  if(marketFetchInFlight)return false;
  marketFetchInFlight=true;
  try{
-  let usdCad=Number(exchangeRatesInUSD?.CAD);
-  if(!Number.isFinite(usdCad)||usdCad<=0){
-   const fxReady=await fetchLiveUsdCadRate();
-   usdCad=Number(exchangeRatesInUSD?.CAD);
-   if(!fxReady||!Number.isFinite(usdCad)||usdCad<=0)throw new Error('Live USD/CAD rate unavailable');
+  const url='https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana,ethereum&vs_currencies=cad&include_24hr_change=true&include_24hr_vol=true&include_24hr_high=true&include_24hr_low=true&_='+Date.now();
+  const cg=await fetchJson(url,12000);
+  const map={BTC:'bitcoin',SOL:'solana',ETH:'ethereum'};
+  let received=0;
+  for(const coin of COINS){
+   const d=cg?.[map[coin]];
+   const price=Number(d?.cad);
+   if(!Number.isFinite(price)||price<=0)continue;
+   const changePct=Number(d?.cad_24h_change);
+   const high24h=Number(d?.cad_24h_high);
+   const low24h=Number(d?.cad_24h_low);
+   const volume24h=Number(d?.cad_24h_vol);
+   const change24h=Number.isFinite(changePct)?price*changePct/100:null;
+   const open24h=Number.isFinite(changePct)&&1+changePct/100>0?price/(1+changePct/100):null;
+   applyLiveMarketData(coin,{price,changePct,change24h,open24h,high24h,low24h,volume24h,lastUpdatedAt:Date.now()});
+   if(Number.isFinite(open24h)&&open24h>0)exchangeRatesInUSD[coin]=price/Number(exchangeRatesInUSD.CAD||1);
+   received++;
   }
-  const results=await Promise.all(COINS.map(async coin=>{
-   const pair=COINBASE_PRODUCTS[coin];
-   const json=await fetchJson(`${COINBASE_SPOT_URL}/${pair}/spot?_=${Date.now()}`,10000);
-   const usd=Number(json?.data?.amount);
-   if(!Number.isFinite(usd)||usd<=0)throw new Error(`Invalid Coinbase ${pair} price`);
-   return [coin,usd];
-  }));
-  for(const [coin,usd] of results){
-   exchangeRatesInUSD[coin]=usd;
-   const previous=marketPrices[coin]||emptyMarketData();
-   applyLiveMarketData(coin,{price:usd*usdCad,changePct:previous.changePct,change24h:previous.change24h,open24h:previous.open24h,high24h:previous.high24h,low24h:previous.low24h,volume24h:previous.volume24h,lastUpdatedAt:Date.now()});
-  }
+  if(received!==COINS.length)throw new Error(`Incomplete CoinGecko response (${received}/${COINS.length})`);
   marketLastSuccessfulFetch=Date.now();
   marketFailureCount=0;
   document.documentElement.dataset.marketStatus='live';
   refreshMarketUI();
-  scheduleNextMarketFetch(60000);
+  scheduleNextMarketFetch(MARKET_PRICE_POLL_MS);
   return true;
  }catch(e){
   marketFailureCount++;
-  console.warn('Initial live market REST update failed:',e.name==='AbortError'?'request timed out':e);
+  console.warn('Live market update failed:',e.name==='AbortError'?'request timed out':e);
   updateMarketFreshness();
   scheduleNextMarketFetch(Math.min(MARKET_RETRY_MAX_MS,MARKET_RETRY_BASE_MS*Math.pow(2,Math.min(marketFailureCount-1,5))));
   return false;
  }finally{marketFetchInFlight=false;}
 }
-
 async function fetchMarketDetails(){return true;}
 async function fetchRealMarketData(){return fetchLiveMarketPrices();}
 
