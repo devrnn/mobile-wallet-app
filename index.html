@@ -1282,6 +1282,21 @@ overflow: hidden;
 .sim-flow-badge { margin-left:auto; font-size:10px; color:var(--text-muted); letter-spacing:.04em; text-transform:uppercase; }
 </style>
   <link rel="stylesheet" href="./market.css">
+<style id="realistic-market-styles">
+.market-chart-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 24px;border-bottom:1px solid var(--border-subtle);background:rgba(255,255,255,.012)}
+.chart-timeframes{display:flex;gap:3px}.chart-timeframes .tr-btn{min-width:42px;padding:6px 9px}
+.chart-live-key{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.55px}
+.chart-canvas-area{padding:14px 18px 8px;min-height:280px;background:linear-gradient(180deg,rgba(255,255,255,.008),transparent)}.market-canvas{height:260px!important;border-radius:10px;cursor:crosshair}
+.chart-crosshair{position:absolute;right:18px;top:14px;padding:4px 7px;border-radius:6px;background:#17171c;border:1px solid var(--border-hover);font-size:10px;color:#fff;pointer-events:none}
+.ticker-item{min-width:150px;padding:15px 18px}.ticker-symbol{display:flex;align-items:center}
+.mci-icon{width:44px;height:44px;border-radius:12px}.mci-icon svg{width:38px;height:38px}.market-live-price{font-size:40px;letter-spacing:-1.5px}
+.market-chart-panel,.orderbook-panel,.market-action-card,.recent-trades-panel{box-shadow:0 12px 36px rgba(0,0,0,.12)}
+.orderbook-header{padding:14px 18px}.ob-title{color:#8b8b96}.ob-spread-badge{font-size:10px}.ob-row{padding:5px 18px}.ob-row-fill{transition:width .25s ease;opacity:.1}.ob-mid-row{padding:9px 18px}.ob-mid-price{font-size:13px}
+.orderbook-panel:after{content:'Depth updates continuously';display:block;padding:7px 18px 10px;color:#484850;font-size:9px;font-weight:700;letter-spacing:.45px;text-transform:uppercase}
+.rt-header{display:flex;align-items:center;justify-content:space-between}.recent-trades-panel{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:20px;overflow:hidden}.rt-header{padding:14px 18px;border-bottom:1px solid var(--border-subtle)}.rt-title{font-size:11px;font-weight:700;color:#8b8b96;text-transform:uppercase;letter-spacing:.8px}.rt-cols{display:grid;grid-template-columns:1fr 1fr 1fr;padding:8px 18px 4px}.rt-col-label{font-size:9px;color:#4d4d55;text-transform:uppercase;font-weight:700}.rt-col-label:nth-child(2),.rt-col-label:nth-child(3){text-align:right}.rt-row{display:grid;grid-template-columns:1fr 1fr 1fr;padding:5px 18px}.rt-price,.rt-size,.rt-time{font-size:11px;font-variant-numeric:tabular-nums}.rt-price.buy{color:var(--accent-green)}.rt-price.sell{color:var(--accent-red)}.rt-size,.rt-time{text-align:right;color:var(--text-muted)}
+.mac-execution-box{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:10px 11px;border:1px solid var(--border-subtle);background:rgba(255,255,255,.018);border-radius:11px}.mac-execution-box div{display:flex;flex-direction:column;gap:3px;min-width:0}.mac-execution-box span{font-size:9px;color:#666672;text-transform:uppercase;font-weight:700;letter-spacing:.45px}.mac-execution-box strong{font-size:10px;color:#e8e8eb;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mac-submit-btn{letter-spacing:.1px}
+@media(max-width:600px){.market-chart-tools{padding:9px 14px}.chart-canvas-area{padding:10px 10px 5px}.market-canvas{height:220px!important}.mac-execution-box{grid-template-columns:1fr}.market-live-price{font-size:32px}}
+</style>
 </head>
 <body>
 <div class="intro" aria-hidden="true">
@@ -1470,6 +1485,11 @@ overflow: hidden;
     <div class="profit-period-value zero" id="monthlyProfitLoss">$0.00 <span>CAD</span></div>
     <div class="profit-period-sub">Since the start of this month</div>
   </div>
+  <div class="profit-period-card">
+    <div class="profit-period-label">Unrealized P/L</div>
+    <div class="profit-period-value zero" id="unrealizedProfitLoss">$0.00 <span>CAD</span></div>
+    <div class="profit-period-sub">Current holdings vs. cost basis</div>
+  </div>
 </div>
 <div class="activity-panel" id="exchangeDetailsPanel" style="display:none;">
 <div class="panel-header"><span class="panel-title" data-i18n="conversionFeesTitle">Conversion Fees & Tax</span></div>
@@ -1478,7 +1498,7 @@ overflow: hidden;
 <div class="item-right"><div class="item-value neg" id="baseSentVal">- 0.00<span class="currency-label" id="baseSentCurrLabel">CAD</span></div></div>
 </div>
 <div class="list-item">
-<div class="item-left"><div class="icon-wrapper" style="background:rgba(248,113,113,0.08);color:var(--accent-red);border:none;"><i data-lucide="percent"></i></div><div><div class="item-title" data-i18n="exFeeTitle">Capital Gain (CRA 50% Inclusion)</div><div class="item-subtitle" data-i18n="exFeeSub">Only 50% of your profit is taxable — the other half is yours tax-free</div></div></div>
+<div class="item-left"><div class="icon-wrapper" style="background:rgba(248,113,113,0.08);color:var(--accent-red);border:none;"><i data-lucide="percent"></i></div><div><div class="item-title" data-i18n="exFeeTitle">Trading Fee</div><div class="item-subtitle" data-i18n="exFeeSub">A small trading fee is charged on each completed exchange</div></div></div>
 <div class="item-right"><div class="item-value neg" id="feeVal">- $0.00<span class="currency-label" id="feeCurrLabel">CAD</span></div></div>
 </div>
 <div class="list-item">
@@ -1563,6 +1583,19 @@ overflow: hidden;
 </div>
 </div>
 </div>
+<div class="market-chart-tools">
+  <div class="chart-timeframes" id="chartTimeframes">
+    <button class="tr-btn active" data-range="1H" onclick="setMarketTimeframe('1H')">1H</button>
+    <button class="tr-btn" data-range="4H" onclick="setMarketTimeframe('4H')">4H</button>
+    <button class="tr-btn" data-range="1D" onclick="setMarketTimeframe('1D')">1D</button>
+    <button class="tr-btn" data-range="1W" onclick="setMarketTimeframe('1W')">1W</button>
+  </div>
+  <div class="chart-live-key">Market feed</div>
+</div>
+<div class="chart-canvas-area">
+  <canvas class="market-canvas" id="marketChart" aria-label="Market price chart"></canvas>
+  <div class="chart-crosshair" id="chartCrosshair" hidden><span id="chartCrosshairPrice"></span></div>
+</div>
 <div class="chart-stats-strip">
 <div class="css-stat">
 <div class="css-label">24h Open</div>
@@ -1585,7 +1618,7 @@ overflow: hidden;
 <div class="market-right-panel">
 <div class="orderbook-panel">
 <div class="orderbook-header">
-<span class="ob-title">Order Book</span><span class="sim-flow-badge"></span>
+<span class="ob-title">Order Book</span>
 <span class="ob-spread-badge" id="obSpread">Spread: —</span>
 </div>
 <div class="orderbook-cols">
@@ -1623,6 +1656,11 @@ overflow: hidden;
 <div class="mac-total-row">
 <span class="mac-total-label" id="macTotalLabel">You receive</span>
 <span class="mac-total-val" id="macTotalVal">0.0000 BTC</span>
+</div>
+<div class="mac-execution-box">
+  <div><span>Estimated fill</span><strong id="macEstimatedPrice">—</strong></div>
+  <div><span>Trading fee</span><strong id="macFeeVal">—</strong></div>
+  <div><span>Slippage</span><strong id="macSlippageVal">—</strong></div>
 </div>
 <button class="mac-submit-btn buy-btn" id="macSubmitBtn" onclick="macSubmitOrder()">Buy BTC</button>
 </div>
@@ -1737,8 +1775,8 @@ overflow: hidden;
 </div>
 </div>
 <div class="preview-box">
-<div class="preview-row"><span data-i18n="prevFeeLabel">Capital Gain (50% taxable)</span><span id="previewFeeVal">0.00 CAD</span></div>
-<div class="preview-row"><span data-i18n="prevTaxLabel">Marginal Tax (on taxable portion)</span><span id="previewTaxVal">0.00 CAD</span></div>
+<div class="preview-row"><span data-i18n="prevFeeLabel">Trading fee (0.49%)</span><span id="previewFeeVal">0.00 CAD</span></div>
+<div class="preview-row"><span data-i18n="prevTaxLabel">Estimated price impact</span><span id="previewTaxVal">0.00 CAD</span></div>
 <div class="preview-row exchange-highlight"><span data-i18n="prevReceiveLabel">Estimated Receive</span><span class="live-preview-val" id="livePreviewVal">0.0000 SOL</span></div>
 </div>
 <div class="error-text" id="exError" data-i18n="exErrorText">Insufficient balance for this conversion.</div>
@@ -1826,7 +1864,7 @@ editWalletPrefix:"Edit",editWalletSuffix:"Wallet",editLabelBalance:"Balance",edi
 recentActivityTitle:"Recent Activity",assetsTitle:"Assets",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
 titleExchangePanel:"Profits & Loss",conversionFeesTitle:"Conversion Fees & Tax",
 exSentTitle:"Amount Sent",exSentSub:"Exchange Base Amount",
-exFeeTitle:"Capital Gain (CRA 50% Inclusion)",exFeeSub:"Only 50% of your profit is taxable — the other half is yours tax-free",
+exFeeTitle:"Trading Fee",exFeeSub:"A small trading fee is charged on each completed exchange",
 exTaxTitle:"Marginal Tax on Taxable Gain",exTaxSub:"Applied to the 50% inclusion amount only",
 exPurchaseTitle:"Recent Purchase Deductions",exPurchaseSub:"Hardware & Scooter Parts",
 exNetTitle:"Net Crypto Received",exNetSub:"Estimated Yield",
@@ -1843,7 +1881,7 @@ notifMarketTitle:"Market Price Updates",notifMarketDesc:"Receive real-time price
 settingsDataTitle:"Data & Storage",dataClearActivityTitle:"Clear Recent Activity",dataClearActivityDesc:"Wipe all cached activity logs",
 btnClrAct:"Clear Activity",dataResetTitle:"Reset Settings",dataResetDesc:"Restore settings and preferences to default",btnRstSet:"Reset Settings",
 modalExTitle:"Exchange",modalFromLabel:"From",modalToLabel:"To",
-prevFeeLabel:"Capital Gain (50% taxable)",prevTaxLabel:"Marginal Tax (on taxable portion)",prevReceiveLabel:"Estimated Receive",
+prevFeeLabel:"Trading fee (0.49%)",prevTaxLabel:"Estimated price impact",prevReceiveLabel:"Estimated Receive",
 exErrorText:"Insufficient balance for this conversion.",btnConfirmEx:"Confirm Exchange",
 assetModalEditPrefix:"Edit",assetModalEditSuffix:"Balance",assetModalNewAmount:"New Amount",
 activityClearedMsg:"Recent activity history cleared",settingsResetMsg:"Settings reset to default",
@@ -1857,7 +1895,7 @@ editWalletPrefix:"Edit",editWalletSuffix:"Wallet",editLabelBalance:"Balance",edi
 recentActivityTitle:"Recent Activity",assetsTitle:"Assets",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
 titleExchangePanel:"Profits & Loss",conversionFeesTitle:"Conversion Fees & Tax",
 exSentTitle:"Amount Sent",exSentSub:"Exchange Base Amount",
-exFeeTitle:"Capital Gain (CRA 50% Inclusion)",exFeeSub:"Only 50% of your profit is taxable",
+exFeeTitle:"Trading Fee",exFeeSub:"Only 50% of your profit is taxable",
 exTaxTitle:"Marginal Tax on Taxable Gain",exTaxSub:"Applied to the 50% inclusion amount only",
 exPurchaseTitle:"Recent Purchase Deductions",exPurchaseSub:"Hardware & Scooter Parts",
 exNetTitle:"Net Crypto Received",exNetSub:"Estimated Yield",
@@ -1874,7 +1912,7 @@ notifMarketTitle:"Market Price Updates",notifMarketDesc:"Receive real-time price
 settingsDataTitle:"Data & Storage",dataClearActivityTitle:"Clear Recent Activity",dataClearActivityDesc:"Wipe all cached activity logs",
 btnClrAct:"Clear Activity",dataResetTitle:"Reset Settings",dataResetDesc:"Restore settings and preferences to default",btnRstSet:"Reset Settings",
 modalExTitle:"Exchange",modalFromLabel:"From",modalToLabel:"To",
-prevFeeLabel:"Capital Gain (50% taxable)",prevTaxLabel:"Marginal Tax (on taxable portion)",prevReceiveLabel:"Estimated Receive",
+prevFeeLabel:"Trading fee (0.49%)",prevTaxLabel:"Estimated price impact",prevReceiveLabel:"Estimated Receive",
 exErrorText:"Insufficient balance for this conversion.",btnConfirmEx:"Confirm Exchange",
 assetModalEditPrefix:"Edit",assetModalEditSuffix:"Balance",assetModalNewAmount:"New Amount",
 activityClearedMsg:"Recent activity history cleared",settingsResetMsg:"Settings reset to default",
@@ -1888,7 +1926,7 @@ editWalletPrefix:"Modifier le portefeuille",editWalletSuffix:"",editLabelBalance
 recentActivityTitle:"Activité Récente",assetsTitle:"Actifs",cadSub:"Dollar canadien",usdSub:"Dollar américain",
 titleExchangePanel:"Profits et pertes",conversionFeesTitle:"Frais de Conversion et Taxes",
 exSentTitle:"Montant Envoyé",exSentSub:"Montant de base de l'échange",
-exFeeTitle:"Gain en Capital (Inclusion 50% ARC)",exFeeSub:"Seulement 50% du profit est imposable — l'autre moitié est libre d'impôt",
+exFeeTitle:"Frais de négociation",exFeeSub:"Des frais de négociation sont appliqués à chaque échange",
 exTaxTitle:"Impôt Marginal sur le Gain Imposable",exTaxSub:"Appliqué au montant d'inclusion de 50% seulement",
 exPurchaseTitle:"Déductions d'Achats Récents",exPurchaseSub:"Matériel et pièces de trottinette",
 exNetTitle:"Crypto Nette Reçue",exNetSub:"Rendement estimé",
@@ -2005,16 +2043,21 @@ accountEmailInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.
 let recentActivities = [];
 const costBasisLots = {BTC: [], SOL: [], ETH: []};
 let costBasisInitialized = false;
-function cadPriceForCurrency(curr) {
+function liveCadPrice(curr) {
   if (curr === 'CAD') return 1;
-  if (curr === 'USD') return exchangeRatesInUSD.CAD > 0 ? 1 / exchangeRatesInUSD.CAD : 0;
-  return marketPrices && marketPrices[curr] && Number.isFinite(marketPrices[curr].price) ? marketPrices[curr].price : 0;
+  if (curr === 'USD') return Number(exchangeRatesInUSD.CAD) || 1.386;
+  const live = marketPrices && marketPrices[curr];
+  if (live && Number.isFinite(live.price) && live.price > 0) return live.price;
+  return Number(MARKET_REFERENCE?.[curr]?.cad) || 0;
 }
+function cadPriceForCurrency(curr) { return liveCadPrice(curr); }
 function initializeCostBasis() {
   if (costBasisInitialized) return;
-  if (solanaBalance > 0) {
-    const price = cadPriceForCurrency('SOL');
-    costBasisLots.SOL.push({qty: solanaBalance, costCad: solanaBalance * price});
+  const initialLots = {BTC: bitcoinBalance, SOL: solanaBalance, ETH: ethereumBalance};
+  for (const coin of Object.keys(initialLots)) {
+    const qty = Number(initialLots[coin]) || 0;
+    const price = liveCadPrice(coin);
+    if (qty > 0 && price > 0) costBasisLots[coin].push({qty, costCad: qty * price});
   }
   costBasisInitialized = true;
 }
@@ -2028,23 +2071,38 @@ function consumeCostBasis(curr, qty) {
   while (remaining > 1e-10 && costBasisLots[curr].length) {
     const lot = costBasisLots[curr][0];
     const take = Math.min(remaining, lot.qty);
-    const unitCost = lot.costCad / lot.qty;
+    const unitCost = lot.qty > 0 ? lot.costCad / lot.qty : 0;
     basis += unitCost * take;
-    lot.qty -= take;
-    lot.costCad -= unitCost * take;
-    remaining -= take;
+    lot.qty -= take; lot.costCad -= unitCost * take; remaining -= take;
     if (lot.qty <= 1e-10) costBasisLots[curr].shift();
   }
   return basis;
 }
-function recordRealizedPnl(fromCurr, toCurr, amount, receivedAmount) {
+function unrealizedProfitLossCad() {
+  initializeCostBasis();
+  let total = 0;
+  for (const coin of ['BTC','SOL','ETH']) {
+    const price = liveCadPrice(coin);
+    if (!price) continue;
+    total += costBasisLots[coin].reduce((sum, lot) => sum + lot.qty * price - lot.costCad, 0);
+  }
+  return total;
+}
+function recordRealizedPnl(fromCurr, toCurr, amount, receivedAmount, fromCostOverride=null) {
   initializeCostBasis();
   const cryptoFrom = ['BTC','SOL','ETH'].includes(fromCurr);
   const cryptoTo = ['BTC','SOL','ETH'].includes(toCurr);
-  const proceedsCad = receivedAmount * cadPriceForCurrency(toCurr);
-  const costBasisCad = cryptoFrom ? consumeCostBasis(fromCurr, amount) : 0;
+  const fromCad = liveCadPrice(fromCurr);
+  const toCad = liveCadPrice(toCurr);
+  const sourceValueCad = Number(amount) * fromCad;
+  const proceedsCad = Number(receivedAmount) * toCad;
+  const costBasisCad = cryptoFrom ? (fromCostOverride ?? consumeCostBasis(fromCurr, amount)) : sourceValueCad;
   const gainCad = cryptoFrom ? proceedsCad - costBasisCad : 0;
-  if (cryptoTo) addCostBasisLot(toCurr, receivedAmount, proceedsCad);
+  if (cryptoTo) {
+    // Carry the actual CAD value of what was spent into the acquired asset.
+    const acquiredBasis = cryptoFrom ? Math.max(0, proceedsCad) : Math.max(0, sourceValueCad);
+    addCostBasisLot(toCurr, receivedAmount, acquiredBasis);
+  }
   return {gainCad, costBasisCad, proceedsCad};
 }
 const activityPanel = document.getElementById('activityPanel');
@@ -2063,7 +2121,7 @@ activityList.innerHTML = recentActivities.map((act, index) => `
 <div class="item-subtitle">${act.time}</div>
 </div>
 </div>
-<div class="item-right"><div class="item-value pos">+${act.received.toFixed(act.toDec)}<span class="currency-label">${act.toCurr}</span></div></div>
+<div class="item-right"><div class="item-value ${Number(act.gainCad||0)>=0?'pos':'neg'}">${Number(act.gainCad||0)>=0?'+':'-'}$${Math.abs(Number(act.gainCad||0)).toFixed(2)}<span class="currency-label">CAD</span></div></div>
 </div>
 </div>
 `).join('');
@@ -2173,6 +2231,7 @@ sidebarItems.forEach(nav => nav.classList.remove('active'));
 item.classList.add('active');
 const targetId = item.getAttribute('data-target');
 currentPanelId = targetId;
+if(targetId==='exchangePanel' && typeof renderExchangeTransactions==='function') renderExchangeTransactions();
 pagePanels.forEach(panel => {
 if (panel.id === targetId) {
 panel.classList.add('active');
@@ -2399,7 +2458,8 @@ function refreshMarketUI(){
  updateMainView(activeCoin);
  updateOrderBook(activeCoin);
  updateRecentTrades();
- updateMacTotal();
+ if(typeof updateMacTotal==='function')updateMacTotal();
+ if(typeof updateLivePreview==='function' && document.getElementById('exchangeModal')?.classList.contains('open')) updateLivePreview();
  if(typeof renderBalance==='function')renderBalance();
  if(typeof renderExchangeTransactions==='function')renderExchangeTransactions();
 }
@@ -2560,6 +2620,7 @@ function fakeTrade(coin){
   }
  }
  updateTickerBar(coin);
+ if(document.getElementById('exchangeModal')?.classList.contains('open') && performance.now()-lastExchangePreviewRender>150){lastExchangePreviewRender=performance.now();updateLivePreview();}
 }
 
 function updateFakeBookMicro(coin,count){
@@ -2650,7 +2711,7 @@ function updateMainView(coin,flashDir){
  if(volEl)volEl.textContent=Number.isFinite(vol)?(vol>=1e9?`$${(vol/1e9).toFixed(1)}B`:vol>=1e6?`$${(vol/1e6).toFixed(0)}M`:`$${Math.round(vol).toLocaleString('en-US')}`):'—';
  const midEl=document.getElementById('obMidPrice');if(midEl)midEl.textContent=marketMoney(coin,data.price);
  const arrowEl=document.getElementById('obMidArrow');if(arrowEl)arrowEl.style.color=isUp?'var(--accent-green)':'var(--accent-red)';
- updateMacTotal();
+ if(typeof updateMacTotal==='function')updateMacTotal();
 }
 
 function updateOrderBook(coin){
@@ -2676,20 +2737,6 @@ function updateRecentTrades(){
 }
 
 let macCurrentTab='buy';
-function setMacTab(tab){
- macCurrentTab=tab; const buyTab=document.getElementById('macBuyTab'),sellTab=document.getElementById('macSellTab'),submitBtn=document.getElementById('macSubmitBtn');
- if(!buyTab||!sellTab||!submitBtn)return;
- buyTab.classList.toggle('active',tab==='buy'); sellTab.classList.toggle('active',tab==='sell');
- if(tab==='buy'){submitBtn.className='mac-submit-btn buy-btn';submitBtn.textContent=`Buy ${activeCoin}`;document.getElementById('macAmountLabel').textContent='Amount (CAD)';document.getElementById('macCurrencyLabel').textContent='CAD';document.getElementById('macTotalLabel').textContent='You receive';}
- else{submitBtn.className='mac-submit-btn sell-btn';submitBtn.textContent=`Sell ${activeCoin}`;document.getElementById('macAmountLabel').textContent=`Amount (${activeCoin})`;document.getElementById('macCurrencyLabel').textContent=activeCoin;document.getElementById('macTotalLabel').textContent='You receive (CAD)';}
- document.getElementById('macAmountInput').value=''; updateMacTotal();
-}
-function setMacPct(pct,el){document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));el.classList.add('active');const bal=macCurrentTab==='buy'?getBalanceForCurrency('CAD'):getBalanceForCurrency(activeCoin);const dec=macCurrentTab==='buy'?2:4;const factor=Math.pow(10,dec);document.getElementById('macAmountInput').value=(Math.floor(bal*(pct/100)*factor)/factor).toFixed(dec);updateMacTotal();}
-function updateMacTotal(){const amt=parseFloat(document.getElementById('macAmountInput')?.value)||0;const price=marketPrices[activeCoin]?.price;const out=document.getElementById('macTotalVal');if(!out)return;if(!Number.isFinite(price)){out.textContent='—';return;}if(macCurrentTab==='buy')out.textContent=`${(amt/price).toFixed(4)} ${activeCoin}`;else out.textContent=`${(amt*price).toFixed(2)} CAD`;}
-function macSubmitOrder(){
- const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const price=marketPrices[activeCoin]?.price;if(amt<=0||!Number.isFinite(price))return;const btn=document.getElementById('macSubmitBtn');btn.style.opacity='0.6';btn.style.pointerEvents='none';
- setTimeout(()=>{btn.style.opacity='1';btn.style.pointerEvents='';if(macCurrentTab==='buy'){const received=amt/price;if(internalHiddenBalanceCAD<amt){showToast('Insufficient CAD balance');return;}deductBalanceForCurrency('CAD',amt);addBalanceForCurrency(activeCoin,received);userTrades.unshift({coin:activeCoin,price,size:received,side:'buy',time:new Date()});showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);}else{const received=amt*price;const bal=getBalanceForCurrency(activeCoin);if(bal<amt){showToast(`Insufficient ${activeCoin} balance`);return;}deductBalanceForCurrency(activeCoin,amt);addBalanceForCurrency('CAD',received);userTrades.unshift({coin:activeCoin,price,size:amt,side:'sell',time:new Date()});showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);}if(userTrades.length>20)userTrades.pop();renderBalance();updateOrderBook(activeCoin);document.getElementById('macAmountInput').value='';document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));updateMacTotal();},700);
-}
 
 function selectMarketCoin(coin){
  activeCoin=coin;
@@ -2706,11 +2753,10 @@ function selectMarketCoin(coin){
   mciIcon.innerHTML=logos[coin]||logos.BTC;
   mciIcon.className=`mci-icon ${coin.toLowerCase()}-bg`;
  }
- updateMainView(coin,null);updateOrderBook(coin);updateRecentTrades();setMacTab(macCurrentTab);updateMarketAlerts();
+ updateMainView(coin,null);updateOrderBook(coin);updateRecentTrades();if(typeof setMacTab==='function')setMacTab(macCurrentTab);updateMarketAlerts();
 }
 
 renderExchangeTransactions();
-startLiveMarketEngine();
 let priceAlertsEnabled = {BTC:false, SOL:false, ETH:false};
 let globalAlertsOn = false;
 let lastAlertToastAt = {BTC:0,SOL:0,ETH:0};
@@ -2770,58 +2816,68 @@ const priceStr = coin==='SOL' ? `$${data.price.toFixed(2)}` : `$${data.price.toL
 const msg = currentLang==='fr-CA' ? `${coin} est maintenant à ${priceStr} (${sign}${data.changePct.toFixed(2)}%)` : `${coin} is now ${priceStr} (${sign}${data.changePct.toFixed(2)}%)`;
 showToast(msg);
 }
+var realisticMarketStarted = false;
 selectMarketCoin('BTC');
-setMacTab('buy');
+if(typeof setMacTab==='function')setMacTab('buy');
+// Market engine owns price startup; do not launch a second competing fetch here.
+
 const MARGINAL_TAX_RATE = 0.33; // applied to the 50% taxable inclusion only
-fetchLiveMarketPrices();
 initializeCostBasis();
 function showToast(message, duration=3500) { toastMessage.textContent=message; toastNotification.classList.add('show'); setTimeout(()=>toastNotification.classList.remove('show'),duration); }
-function calculateConversion(amount, fromCurr, toCurr) {
-const decimalsToUse = (toCurr==='BTC'||toCurr==='SOL') ? 4 : 2;
-const fromDec = (fromCurr==='BTC'||fromCurr==='SOL') ? 4 : 2;
-const fromRate=Number(exchangeRatesInUSD[fromCurr]);
-const toRate=Number(exchangeRatesInUSD[toCurr]);
-if(!Number.isFinite(fromRate)||fromRate<=0||!Number.isFinite(toRate)||toRate<=0){
-return {receivedAmount:0,feeInFrom:0,taxInFrom:0,totalDeductionsInFrom:0,profitInFrom:0,unavailable:true};
+function getLiveUsdRate(curr) {
+  if (curr === 'USD') return 1;
+  if (curr === 'CAD') return 1 / (Number(exchangeRatesInUSD.CAD) || 1.386);
+  const d = marketPrices[curr];
+  if (d && Number.isFinite(d.usdPrice) && d.usdPrice > 0) return d.usdPrice;
+  if (d && Number.isFinite(d.price) && d.price > 0) return d.price / (Number(exchangeRatesInUSD.CAD) || 1.386);
+  return Number(MARKET_REFERENCE?.[curr]?.usd) || 0;
 }
-const amountInUSD = amount * fromRate;
-const toValueInUSD = amountInUSD / toRate;
-const costBasisInUSD = amountInUSD;
-const isPurchase = (fromCurr === 'CAD' || fromCurr === 'USD') && (toCurr === 'BTC' || toCurr === 'SOL' || toCurr === 'ETH');
-const profitInUSD = isPurchase ? 0 : 0;
-const taxableGainUSD = profitInUSD * 0.5;
-const taxOwedUSD = taxableGainUSD * MARGINAL_TAX_RATE;
-const taxInFrom = roundPrecision(taxOwedUSD / exchangeRatesInUSD[fromCurr], 6);
-const inclusionAmountInFrom = roundPrecision((profitInUSD * 0.5) / exchangeRatesInUSD[fromCurr], 6);
-const netAmountInFrom = amount - taxInFrom;
-const netInUSD = netAmountInFrom * exchangeRatesInUSD[fromCurr];
-const receivedAmount = roundPrecision(netInUSD / exchangeRatesInUSD[toCurr], decimalsToUse);
-const totalDeductionsInFrom = roundPrecision(taxInFrom, fromDec);
-return { receivedAmount, feeInFrom: inclusionAmountInFrom, taxInFrom, totalDeductionsInFrom, profitInFrom: roundPrecision(profitInUSD / exchangeRatesInUSD[fromCurr], 6) };
+function estimateExchangeImpact(fromCurr, toCurr, amount) {
+  const crypto = ['BTC','SOL','ETH'];
+  if (!crypto.includes(fromCurr) && !crypto.includes(toCurr)) return 0;
+  const ref = crypto.includes(fromCurr) ? getLiveUsdRate(fromCurr) : getLiveUsdRate(toCurr);
+  const usdNotional = Math.max(0, amount * getLiveUsdRate(fromCurr));
+  const scale = ref > 0 ? Math.sqrt(usdNotional / Math.max(ref, 1)) : 0;
+  return Math.min(0.006, 0.00035 + scale * 0.00012);
+}
+function calculateConversion(amount, fromCurr, toCurr) {
+  const decimalsToUse = (toCurr==='BTC'||toCurr==='SOL') ? 6 : 2;
+  const fromDec = (fromCurr==='BTC'||fromCurr==='SOL') ? 6 : 2;
+  const fromRate = getLiveUsdRate(fromCurr);
+  const toRate = getLiveUsdRate(toCurr);
+  if (!Number.isFinite(fromRate)||fromRate<=0||!Number.isFinite(toRate)||toRate<=0) {
+    return {receivedAmount:0,feeInFrom:0,taxInFrom:0,totalDeductionsInFrom:0,profitInFrom:0,impactPct:0,unavailable:true};
+  }
+  const grossUsd = amount * fromRate;
+  const feeUsd = grossUsd * REALISTIC_MARKET_FEE;
+  const impact = estimateExchangeImpact(fromCurr,toCurr,amount);
+  const executableUsd = Math.max(0, grossUsd - feeUsd) * (1 - impact);
+  const receivedAmount = roundPrecision(executableUsd / toRate, decimalsToUse);
+  const feeInFrom = roundPrecision(feeUsd / fromRate, fromDec);
+  return {receivedAmount, feeInFrom, taxInFrom:0, totalDeductionsInFrom:feeInFrom, profitInFrom:0, impactPct:impact*100};
 }
 function updateLivePreview() {
-const amount = parseFloat(document.getElementById('exAmount').value) || 0;
-const fromCurr = document.getElementById('exFrom').value;
-const toCurr = document.getElementById('exTo').value;
-const fromDec = (fromCurr==='BTC'||fromCurr==='SOL') ? 4 : 2;
-const toDec = (toCurr==='BTC'||toCurr==='SOL') ? 4 : 2;
-if (fromCurr===toCurr) {
-document.getElementById('previewFeeVal').textContent=`0.00 ${fromCurr}`;
-document.getElementById('previewTaxVal').textContent=`0.00 ${fromCurr}`;
-document.getElementById('livePreviewVal').textContent=`${amount.toFixed(toDec)} ${toCurr}`;
-return;
-}
-const conversion=calculateConversion(amount, fromCurr, toCurr);
- if(conversion.unavailable){
-  document.getElementById('previewFeeVal').textContent='Live price unavailable';
-  document.getElementById('previewTaxVal').textContent='Live price unavailable';
-  document.getElementById('livePreviewVal').textContent='Live price unavailable';
-  return;
- }
- const {receivedAmount, feeInFrom, taxInFrom} = conversion;
- document.getElementById('previewFeeVal').textContent=`${feeInFrom.toFixed(fromDec)} ${fromCurr}`;
-document.getElementById('previewTaxVal').textContent=`${taxInFrom.toFixed(fromDec)} ${fromCurr}`;
-document.getElementById('livePreviewVal').textContent=`${receivedAmount.toFixed(toDec)} ${toCurr}`;
+  const amount = parseFloat(document.getElementById('exAmount').value) || 0;
+  const fromCurr = document.getElementById('exFrom').value;
+  const toCurr = document.getElementById('exTo').value;
+  const fromDec = (fromCurr==='BTC'||fromCurr==='SOL') ? 6 : 2;
+  const toDec = (toCurr==='BTC'||toCurr==='SOL') ? 6 : 2;
+  if (fromCurr===toCurr) {
+    document.getElementById('previewFeeVal').textContent=`0.00 ${fromCurr}`;
+    document.getElementById('previewTaxVal').textContent='0.00%';
+    document.getElementById('livePreviewVal').textContent=`${amount.toFixed(toDec)} ${toCurr}`;
+    return;
+  }
+  const conversion=calculateConversion(amount, fromCurr, toCurr);
+  if (conversion.unavailable) {
+    document.getElementById('previewFeeVal').textContent='Price unavailable';
+    document.getElementById('previewTaxVal').textContent='—';
+    document.getElementById('livePreviewVal').textContent='Price unavailable';
+    return;
+  }
+  document.getElementById('previewFeeVal').textContent=`${conversion.feeInFrom.toFixed(fromDec)} ${fromCurr}`;
+  document.getElementById('previewTaxVal').textContent=`${conversion.impactPct.toFixed(2)}%`;
+  document.getElementById('livePreviewVal').textContent=`${conversion.receivedAmount.toFixed(toDec)} ${toCurr}`;
 }
 function formatProfitLossValue(value, compact=false){
  const amount=Math.abs(Number(value)||0);
@@ -2866,6 +2922,7 @@ function renderExchangeTransactions(){
  }
  renderPeriodProfitLoss('dailyProfitLoss',dailyCad);
  renderPeriodProfitLoss('monthlyProfitLoss',monthlyCad);
+ renderPeriodProfitLoss('unrealizedProfitLoss',unrealizedProfitLossCad());
  if(!txs.length){list.innerHTML='<div class="tx-empty">No transactions yet. Your completed exchanges will appear here.</div>';return;}
  list.innerHTML=txs.slice(0,30).map((t,i)=>{
   const fromDec=(t.fromCurr==='BTC'||t.fromCurr==='SOL')?4:2;
@@ -2878,26 +2935,26 @@ function renderExchangeTransactions(){
   const proceedsCad=typeof t.proceedsCad==='number'?t.proceedsCad:0;
   const pnlClass=Math.abs(gainCad)<0.005?'zero':gainCad>0?'pos':'neg';
   const pnlPrefix=Math.abs(gainCad)<0.005?'':gainCad>0?'+':'-';
-  return `<div class="tx-card" data-tx-index="${i}"><div class="tx-summary"><div class="tx-main"><div class="tx-title">${t.amount.toFixed(fromDec)} ${t.fromCurr} → ${t.received.toFixed(toDec)} ${t.toCurr}</div><div class="tx-time">${t.time||'Completed'}</div></div><div class="tx-result"><div class="tx-result-value ${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</div><div class="tx-result-label">Profit / loss · Tap for details</div></div></div><div class="tx-details"><div class="tx-detail-row"><span>Amount sent</span><span>${t.amount.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Amount received</span><span>${t.received.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Exchange rate</span><span>1 ${t.fromCurr} = ${rate.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Profit / loss</span><span class="${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Cost basis</span><span>$${basisCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Proceeds / fair value</span><span>$${proceedsCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Capital gain inclusion</span><span>${fee.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Tax</span><span>${tax.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Status</span><span>Completed</span></div></div></div>`;
+  return `<div class="tx-card" data-tx-index="${i}"><div class="tx-summary"><div class="tx-main"><div class="tx-title">${t.amount.toFixed(fromDec)} ${t.fromCurr} → ${t.received.toFixed(toDec)} ${t.toCurr}</div><div class="tx-time">${t.time||'Completed'}</div></div><div class="tx-result"><div class="tx-result-value ${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</div><div class="tx-result-label">Profit / loss · Tap for details</div></div></div><div class="tx-details"><div class="tx-detail-row"><span>Amount sent</span><span>${t.amount.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Amount received</span><span>${t.received.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Exchange rate</span><span>1 ${t.fromCurr} = ${rate.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Profit / loss</span><span class="${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Cost basis</span><span>$${basisCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Proceeds / fair value</span><span>$${proceedsCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Trading fee</span><span>${fee.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Tax</span><span>${tax.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Status</span><span>Completed</span></div></div></div>`;
  }).join('');
  list.querySelectorAll('.tx-card').forEach(card=>card.addEventListener('click',()=>card.classList.toggle('open')));
 }
 
 function updateConversionPage(amt, fromCurr, toCurr) {
-const {receivedAmount, feeInFrom, taxInFrom, totalDeductionsInFrom} = calculateConversion(amt, fromCurr, toCurr);
-const dec = (toCurr==='BTC'||toCurr==='SOL') ? 4 : 2;
-const fromDec = (fromCurr==='BTC'||fromCurr==='SOL') ? 4 : 2;
-document.getElementById('exchangeDetailsPanel').style.display='none';
-document.getElementById('emptyExchangeState').style.display='none';
-document.getElementById('costCard').style.display='none';
-document.getElementById('baseSentVal').innerHTML=`- ${amt.toFixed(fromDec)}<span class="currency-label">${fromCurr}</span>`;
-document.getElementById('feeVal').innerHTML=`- ${feeInFrom.toFixed(fromDec)}<span class="currency-label">${fromCurr}</span>`;
-document.getElementById('taxVal').innerHTML=`- ${taxInFrom.toFixed(fromDec)}<span class="currency-label">${fromCurr}</span>`;
-document.getElementById('purchaseVal').innerHTML=`- 0.00<span class="currency-label">${fromCurr}</span>`;
-document.getElementById('netYieldVal').innerHTML=`+ ${receivedAmount.toFixed(dec)}<span class="currency-label">${toCurr}</span>`;
-document.getElementById('summaryBase').textContent=`${amt.toFixed(fromDec)} ${fromCurr}`;
-document.getElementById('summaryDeductions').textContent=`-${totalDeductionsInFrom.toFixed(fromDec)} ${fromCurr}`;
-document.getElementById('summaryFinal').textContent=`+${receivedAmount.toFixed(dec)} ${toCurr}`;
+  const conversion = calculateConversion(amt, fromCurr, toCurr);
+  const dec = (toCurr==='BTC'||toCurr==='SOL') ? 6 : 2;
+  const fromDec = (fromCurr==='BTC'||fromCurr==='SOL') ? 6 : 2;
+  document.getElementById('exchangeDetailsPanel').style.display='none';
+  document.getElementById('emptyExchangeState').style.display='none';
+  document.getElementById('costCard').style.display='none';
+  document.getElementById('baseSentVal').innerHTML=`- ${amt.toFixed(fromDec)}<span class="currency-label">${fromCurr}</span>`;
+  document.getElementById('feeVal').innerHTML=`- ${conversion.feeInFrom.toFixed(fromDec)}<span class="currency-label">${fromCurr}</span>`;
+  document.getElementById('taxVal').innerHTML=`- 0.00<span class="currency-label">${fromCurr}</span>`;
+  document.getElementById('purchaseVal').innerHTML=`- 0.00<span class="currency-label">${fromCurr}</span>`;
+  document.getElementById('netYieldVal').innerHTML=`+ ${conversion.receivedAmount.toFixed(dec)}<span class="currency-label">${toCurr}</span>`;
+  document.getElementById('summaryBase').textContent=`${amt.toFixed(fromDec)} ${fromCurr}`;
+  document.getElementById('summaryDeductions').textContent=`-${conversion.feeInFrom.toFixed(fromDec)} ${fromCurr}`;
+  document.getElementById('summaryFinal').textContent=`+${conversion.receivedAmount.toFixed(dec)} ${toCurr}`;
 }
 const exAmountInput = document.getElementById('exAmount');
 const maxBtn = document.getElementById('maxBtn');
@@ -2937,40 +2994,46 @@ else if(curr==='BTC')bitcoinBalance=roundPrecision(bitcoinBalance+amount,4);
 else if(curr==='SOL')solanaBalance=roundPrecision(solanaBalance+amount,4);
 else if(curr==='ETH')ethereumBalance=roundPrecision(ethereumBalance+amount,4);
 }
-confirmExchangeBtn.addEventListener('click', ()=>{
-const amount=parseFloat(exAmountInput.value)||0;
-const fromCurr=exFromSelect.value;
-const toCurr=exToSelect.value;
-const dict=translations[currentLang]||translations['en-CA'];
-if(fromCurr===toCurr){exError.textContent=currentLang==='fr-CA'?'Impossible de convertir entre la même devise.':'Cannot convert between the same currency.';exError.style.display='block';return;}
-const availableBalance=getBalanceForCurrency(fromCurr);
-if(amount<=0||(amount-availableBalance)>0.0000001){exError.textContent=dict.exErrorText;exError.style.display='block';return;}
-exError.style.display='none';
-confirmExchangeBtn.classList.add('loading');
-setTimeout(()=>{
-confirmExchangeBtn.classList.remove('loading');
-exchangeModal.classList.remove('open');
-document.body.classList.remove('exchange-modal-open');
-const{receivedAmount}=calculateConversion(amount,fromCurr,toCurr);
-deductBalanceForCurrency(fromCurr,amount);
-addBalanceForCurrency(toCurr,receivedAmount);
-const toDec=(toCurr==='BTC'||toCurr==='SOL')?4:2;
-const now=new Date();
-const timeString=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-const conversionDetails=calculateConversion(amount,fromCurr,toCurr);
+function pushExchangeTransaction(amount, fromCurr, toCurr, receivedAmount, timeLabel) {
   const pnl=recordRealizedPnl(fromCurr,toCurr,amount,receivedAmount);
-  const taxableGainCad=Math.max(0,pnl.gainCad)*0.5;
-  const taxCad=taxableGainCad*MARGINAL_TAX_RATE;
-  const fromCadRate=cadPriceForCurrency(fromCurr)||1;
-  const inclusionInFrom=taxableGainCad/fromCadRate;
-  const taxInFrom=taxCad/fromCadRate;
-  recentActivities.unshift({id:Date.now()+Math.random(),amount,fromCurr,toCurr,received:receivedAmount,toDec,time:`${currentLang==='fr-CA'?"Aujourd'hui":"Today"}, ${timeString}`,timestamp:now.toISOString(),rate:amount?receivedAmount/amount:0,fee:inclusionInFrom,gain:fromCadRate?pnl.gainCad/fromCadRate:0,tax:taxInFrom,gainCad:pnl.gainCad,costBasisCad:pnl.costBasisCad,proceedsCad:pnl.proceedsCad,taxableGainCad,taxCad});
-renderRecentActivity();
-renderExchangeTransactions();
-updateConversionPage(amount,fromCurr,toCurr);
-renderBalance();
-if(document.getElementById('toggleTxAlerts').checked){ showToast(dict.exSuccessMsg(amount,fromCurr,receivedAmount,toCurr)); }
-},1200);
+  const fromCadRate=liveCadPrice(fromCurr)||1;
+  const conversion=calculateConversion(amount,fromCurr,toCurr);
+  const now=new Date();
+  recentActivities.unshift({
+    id:Date.now()+Math.random(), amount, fromCurr, toCurr, received:receivedAmount,
+    toDec:(toCurr==='BTC'||toCurr==='SOL')?6:2,
+    time:timeLabel || `${currentLang==='fr-CA'?"Aujourd'hui":'Today'}, ${now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`,
+    timestamp:now.toISOString(), rate:amount?receivedAmount/amount:0,
+    fee:conversion.feeInFrom, tax:0, gain:fromCadRate?pnl.gainCad/fromCadRate:0,
+    taxInFrom:0, gainCad:pnl.gainCad, costBasisCad:pnl.costBasisCad, proceedsCad:pnl.proceedsCad,
+    taxableGainCad:Math.max(0,pnl.gainCad)*0.5, taxCad:0, feeCad:conversion.feeInFrom*fromCadRate, impactPct:conversion.impactPct
+  });
+  if(recentActivities.length>100) recentActivities.length=100;
+  renderRecentActivity(); renderExchangeTransactions();
+  return pnl;
+}
+function recordMarketOrderActivity(amount, fromCurr, toCurr, receivedAmount) {
+  return pushExchangeTransaction(amount,fromCurr,toCurr,receivedAmount);
+}
+confirmExchangeBtn.addEventListener('click', ()=>{
+  const amount=parseFloat(exAmountInput.value)||0;
+  const fromCurr=exFromSelect.value;
+  const toCurr=exToSelect.value;
+  const dict=translations[currentLang]||translations['en-CA'];
+  if(fromCurr===toCurr){exError.textContent=currentLang==='fr-CA'?'Impossible de convertir entre la même devise.':'Cannot convert between the same currency.';exError.style.display='block';return;}
+  const availableBalance=getBalanceForCurrency(fromCurr);
+  if(amount<=0 || amount>availableBalance+1e-9){exError.textContent=dict.exErrorText;exError.style.display='block';return;}
+  const conversion=calculateConversion(amount,fromCurr,toCurr);
+  if(conversion.unavailable){exError.textContent='Market price unavailable. Please try again.';exError.style.display='block';return;}
+  exError.style.display='none'; confirmExchangeBtn.classList.add('loading');
+  setTimeout(()=>{
+    confirmExchangeBtn.classList.remove('loading'); exchangeModal.classList.remove('open'); document.body.classList.remove('exchange-modal-open');
+    deductBalanceForCurrency(fromCurr,amount); addBalanceForCurrency(toCurr,conversion.receivedAmount);
+    const now=new Date(); const timeString=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    pushExchangeTransaction(amount,fromCurr,toCurr,conversion.receivedAmount,`${currentLang==='fr-CA'?"Aujourd'hui":'Today'}, ${timeString}`);
+    updateConversionPage(amount,fromCurr,toCurr); renderBalance(); updateAvailableBalanceSubtext(); updateLivePreview();
+    if(document.getElementById('toggleTxAlerts')?.checked) showToast(dict.exSuccessMsg(amount,fromCurr,conversion.receivedAmount,toCurr));
+  },450);
 });
 document.getElementById('toggleHideBalances').addEventListener('change', e=>{ balanceText.classList.toggle('blurred', e.target.checked); });
 document.getElementById('settingDefaultCurrency').addEventListener('change', e=>{ const val=e.target.value; if(val==='CAD'||val==='USD'){currentCurrency=val;walletSelector.value=val;renderBalance();} });
@@ -3022,7 +3085,7 @@ let mStartY=0,mCurrentY=0,mIsDragging=false,mIsRefreshing=false;
 function mHandleStart(y){if(marketPanel.scrollTop<=0&&!mIsRefreshing){mStartY=y;mCurrentY=y;mIsDragging=true;marketContent.style.transition='none';marketIndicator.classList.remove('completed');}}
 function mHandleMove(y,e){if(!mIsDragging||mIsRefreshing)return;mCurrentY=y;const rawDistance=mCurrentY-mStartY;if(rawDistance>0&&marketPanel.scrollTop<=0){if(e.cancelable)e.preventDefault();const dragOffset=Math.pow(rawDistance*0.45,0.90);marketContent.style.transform=`translateY(${dragOffset}px)`;const progress=Math.min(dragOffset/triggerThreshold,1.0);marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE-(progress*CIRCUMFERENCE*0.82);if(dragOffset>10)marketIndicator.classList.add('visible');else marketIndicator.classList.remove('visible');if(dragOffset>=triggerThreshold){if(!marketIndicator.classList.contains('ready')){triggerHaptic();marketIndicator.classList.add('ready');marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).releaseToUpdate||'Release to update';}}else{if(marketIndicator.classList.contains('ready')){marketIndicator.classList.remove('ready');marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).pullToRefresh||'Pull to refresh';}}}}
 function mExitRefreshState(){marketContent.style.transition='transform 0.38s cubic-bezier(0.22,1,0.36,1)';marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready','completed');setTimeout(()=>{mIsRefreshing=false;marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE;marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).pullToRefresh||'Pull to refresh';},380);}
-function mHandleEnd(){if(!mIsDragging)return;mIsDragging=false;const rawDistance=mCurrentY-mStartY;const finalOffset=Math.pow(Math.max(0,rawDistance)*0.45,0.90);marketContent.style.transition='transform 0.42s cubic-bezier(0.175,0.885,0.32,1.15)';if(finalOffset>=triggerThreshold&&rawDistance>0){mIsRefreshing=true;marketContent.style.transform=`translateY(${triggerThreshold-12}px)`;marketIndicator.classList.add('visible','refreshing');marketIndicator.classList.remove('ready');marketRefreshText.textContent='Fetching prices...';marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*0.25;fetchRealMarketData().finally(()=>{marketIndicator.classList.remove('refreshing');marketIndicator.classList.add('completed');marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).updated||'Updated';triggerHaptic();setTimeout(()=>mExitRefreshState(),520);});}else{marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready');}}
+function mHandleEnd(){if(!mIsDragging)return;mIsDragging=false;const rawDistance=mCurrentY-mStartY;const finalOffset=Math.pow(Math.max(0,rawDistance)*0.45,0.90);marketContent.style.transition='transform 0.42s cubic-bezier(0.175,0.885,0.32,1.15)';if(finalOffset>=triggerThreshold&&rawDistance>0){mIsRefreshing=true;marketContent.style.transform=`translateY(${triggerThreshold-12}px)`;marketIndicator.classList.add('visible','refreshing');marketIndicator.classList.remove('ready');marketRefreshText.textContent='Fetching prices...';marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*0.25;fetchRealMarketData().then(()=>{COINS.forEach(c=>{if(marketPrices[c]?.price)realisticSeedHistory(c);seedFakeOrderBook(c);});refreshMarketUI();}).finally(()=>{marketIndicator.classList.remove('refreshing');marketIndicator.classList.add('completed');marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).updated||'Updated';triggerHaptic();setTimeout(()=>mExitRefreshState(),520);});}else{marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready');}}
 marketPanel.addEventListener('touchstart',e=>mHandleStart(e.touches[0].clientY),{passive:true});
 marketPanel.addEventListener('touchmove',e=>mHandleMove(e.touches[0].clientY,e),{passive:false});
 marketPanel.addEventListener('touchend',mHandleEnd);
@@ -3038,13 +3101,227 @@ let pStartY=0,pCurrentY=0,pIsDragging=false,pIsRefreshing=false;
 function pHandleStart(y){if(profitsPanel.scrollTop<=0&&!pIsRefreshing){pStartY=y;pCurrentY=y;pIsDragging=true;profitsContent.style.transition='none';profitsIndicator.classList.remove('completed');}}
 function pHandleMove(y,e){if(!pIsDragging||pIsRefreshing)return;pCurrentY=y;const raw=pCurrentY-pStartY;if(raw>0&&profitsPanel.scrollTop<=0){if(e.cancelable)e.preventDefault();const off=Math.pow(raw*0.45,0.90);profitsContent.style.transform=`translateY(${off}px)`;const progress=Math.min(off/triggerThreshold,1);profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE-(progress*CIRCUMFERENCE*0.82);profitsIndicator.classList.toggle('visible',off>10);if(off>=triggerThreshold){if(!profitsIndicator.classList.contains('ready')){triggerHaptic();profitsIndicator.classList.add('ready');profitsRefreshText.textContent='Release to update';}}else{profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Pull to refresh';}}}
 function pExitRefresh(){profitsContent.style.transition='transform .38s cubic-bezier(.22,1,.36,1)';profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready','completed');setTimeout(()=>{pIsRefreshing=false;profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE;profitsRefreshText.textContent='Pull to refresh';},380);}
-function pHandleEnd(){if(!pIsDragging)return;pIsDragging=false;const raw=pCurrentY-pStartY;const off=Math.pow(Math.max(0,raw)*0.45,0.90);profitsContent.style.transition='transform .42s cubic-bezier(.175,.885,.32,1.15)';if(off>=triggerThreshold&&raw>0){pIsRefreshing=true;profitsContent.style.transform=`translateY(${triggerThreshold-12}px)`;profitsIndicator.classList.add('visible','refreshing');profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Updating prices...';profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*.25;fetchLiveMarketPrices().finally(()=>{renderExchangeTransactions();profitsIndicator.classList.remove('refreshing');profitsIndicator.classList.add('completed');profitsRefreshText.textContent='Updated';triggerHaptic();setTimeout(pExitRefresh,520);});}else{profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready');}}
+function pHandleEnd(){if(!pIsDragging)return;pIsDragging=false;const raw=pCurrentY-pStartY;const off=Math.pow(Math.max(0,raw)*0.45,0.90);profitsContent.style.transition='transform .42s cubic-bezier(.175,.885,.32,1.15)';if(off>=triggerThreshold&&raw>0){pIsRefreshing=true;profitsContent.style.transform=`translateY(${triggerThreshold-12}px)`;profitsIndicator.classList.add('visible','refreshing');profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Updating portfolio...';profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*.25;Promise.resolve().then(()=>{refreshMarketUI();renderExchangeTransactions();profitsIndicator.classList.remove('refreshing');profitsIndicator.classList.add('completed');profitsRefreshText.textContent='Updated';triggerHaptic();setTimeout(pExitRefresh,520);});}else{profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready');}}
 profitsPanel.addEventListener('touchstart',e=>pHandleStart(e.touches[0].clientY),{passive:true});
 profitsPanel.addEventListener('touchmove',e=>pHandleMove(e.touches[0].clientY,e),{passive:false});
 profitsPanel.addEventListener('touchend',pHandleEnd);
 profitsPanel.addEventListener('mousedown',e=>pHandleStart(e.clientY));
 window.addEventListener('mousemove',e=>{if(pIsDragging)pHandleMove(e.clientY,e);});
 window.addEventListener('mouseup',()=>{if(pIsDragging)pHandleEnd();});
+</script>
+<script id="realistic-market-engine">
+/* Enhanced market simulation: realistic microstructure, charting, execution and UI updates. */
+const REALISTIC_MARKET_FEE=0.0049;
+const REALISTIC_MARKET_CONFIG={
+ BTC:{vol:.000055,spreadBps:1.6,tradeRate:[7,14],bookRate:[85,135],size:[.002,.18]},
+ ETH:{vol:.000075,spreadBps:2.1,tradeRate:[5,11],bookRate:[60,105],size:[.01,2.2]},
+ SOL:{vol:.00012,spreadBps:3.0,tradeRate:[4,9],bookRate:[45,80],size:[.1,18]}
+};
+let realisticTimeframe='1H';
+let realisticLastChartDraw=0;
+let realisticLastBookDraw=0;
+let lastExchangePreviewRender=0;
+function realisticCoinDecimals(coin){return coin==='SOL'?2:2;}
+function realisticPrice(coin,v){if(!Number.isFinite(v))return '—';return '$'+Number(v).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function marketMoney(coin,value){return realisticPrice(coin,Number(value));}
+
+function realisticSeedHistory(coin){
+ const d=marketPrices[coin], now=Date.now(), base=d.price;
+ const points=360, arr=[]; let p=base*(1+(Math.random()-.5)*.004);
+ for(let i=points-1;i>=0;i--){
+   const t=now-i*10000;
+   const cyc=Math.sin((points-i)/31)*REALISTIC_MARKET_CONFIG[coin].vol*.45;
+   p*=Math.exp(cyc+(Math.random()-.5)*REALISTIC_MARKET_CONFIG[coin].vol*3.2);
+   arr.push({t,p});
+ }
+ arr[arr.length-1].p=base;
+ priceHistory[coin]=arr;
+}
+
+function seedReferenceMarket(){
+ const now=Date.now();
+ for(const coin of COINS){
+  const ref=MARKET_REFERENCE[coin];
+  const open=ref.cad*(1+(Math.random()-.5)*.014);
+  const d={price:ref.cad,usdPrice:ref.usd,open24h:open,high24h:Math.max(open,ref.cad)*(1+Math.random()*.006),low24h:Math.min(open,ref.cad)*(1-Math.random()*.006),change24h:ref.cad-open,changePct:((ref.cad-open)/open)*100,volume24h:coin==='BTC'?(13e9+Math.random()*4e9):coin==='ETH'?(6e9+Math.random()*2e9):(1e9+Math.random()*.7e9),lastUpdatedAt:now,simulated:true};
+  marketPrices[coin]=d; realisticSeedHistory(coin);
+ }
+}
+
+function seedFakeOrderBook(coin){
+ const d=marketPrices[coin]; if(!d||!Number.isFinite(d.price))return;
+ const cfg=REALISTIC_MARKET_CONFIG[coin], usdCad=Number(exchangeRatesInUSD.CAD)||1.386, mid=d.price/usdCad;
+ const book={bids:new Map(),asks:new Map(),initialized:true};
+ const tick=coin==='BTC'?.25:coin==='ETH'?.05:.01;
+ const halfSpread=mid*(cfg.spreadBps/10000)/2;
+ for(let i=0;i<14;i++){
+  const level=i+1;
+  const curve=1+level*.035;
+  const ask=mid+halfSpread+tick*level*curve;
+  const bid=mid-halfSpread-tick*level*curve;
+  const a=cfg.size[0]+Math.random()*(cfg.size[1]-cfg.size[0]);
+  const b=cfg.size[0]+Math.random()*(cfg.size[1]-cfg.size[0]);
+  book.asks.set(Number(ask.toFixed(coin==='BTC'?2:3)),a*(.7+Math.random()*.9));
+  book.bids.set(Number(bid.toFixed(coin==='BTC'?2:3)),b*(.7+Math.random()*.9));
+ }
+ orderBooks[coin]=book;
+}
+
+function realisticMovePrice(coin){
+ const d=marketPrices[coin],cfg=REALISTIC_MARKET_CONFIG[coin]; if(!d)return;
+ const prev=d.price;
+ const h=Date.now()/1000;
+ const phase={BTC:0,SOL:2.1,ETH:4.4}[coin]||0;
+ const momentum=(priceHistory[coin].length>12)?(priceHistory[coin].at(-1).p-priceHistory[coin].at(-12).p)/priceHistory[coin].at(-12).p:0;
+ const drift=Math.sin(h/37+phase)*cfg.vol*.006 - momentum*.0015;
+ const shock=(Math.random()-.5)*cfg.vol*.16;
+ const next=Math.max(.0001,prev*Math.exp(drift+shock));
+ d.price=next; d.usdPrice=next/(Number(exchangeRatesInUSD.CAD)||1.386); d.change24h=next-d.open24h; d.changePct=(d.change24h/d.open24h)*100; d.high24h=Math.max(d.high24h,next); d.low24h=Math.min(d.low24h,next); d.volume24h+=(Math.random()*220000+50000)*(coin==='BTC'?18:coin==='ETH'?8:1); d.lastUpdatedAt=Date.now();
+ priceHistory[coin].push({t:Date.now(),p:next}); if(priceHistory[coin].length>720)priceHistory[coin].shift();
+ return next-prev;
+}
+
+function fakeTrade(coin){
+ const d=marketPrices[coin]; if(!d)return;
+ const delta=realisticMovePrice(coin), usdCad=Number(exchangeRatesInUSD.CAD)||1.386;
+ const side=delta>=0?'buy':'sell'; const cfg=REALISTIC_MARKET_CONFIG[coin];
+ const min=cfg.size[0],max=cfg.size[1]; const size=min+Math.random()*(max-min);
+ recentTrades.unshift({coin,price:d.price/usdCad,size,side,time:new Date()});
+ if(recentTrades.length>180)recentTrades.length=180;
+ fakeFlow[coin]+=1;
+ if(coin===activeCoin){updateMainView(coin,delta>=0?'up':'down');updateRecentTrades();}
+ updateTickerBar(coin);
+ if(document.getElementById('exchangeModal')?.classList.contains('open') && performance.now()-lastExchangePreviewRender>150){lastExchangePreviewRender=performance.now();updateLivePreview();}
+}
+
+function updateFakeBookMicro(coin,count=1){
+ const book=orderBooks[coin],d=marketPrices[coin]; if(!book||!d)return;
+ const usdCad=Number(exchangeRatesInUSD.CAD)||1.386,cfg=REALISTIC_MARKET_CONFIG[coin],mid=d.price/usdCad;
+ const tick=coin==='BTC'?.25:coin==='ETH'?.05:.01;
+ for(let i=0;i<Math.min(count,60);i++){
+  const side=Math.random()<.5?'bids':'asks', map=book[side], level=1+Math.floor(Math.random()*14), spread=mid*(cfg.spreadBps/10000)/2;
+  const p=mid+(side==='asks'?1:-1)*(spread+tick*level*(1+level*.03));
+  const size=cfg.size[0]+Math.random()*(cfg.size[1]-cfg.size[0]); const key=Number(p.toFixed(coin==='BTC'?2:3));
+  if(Math.random()<.16)map.delete(key); else map.set(key,size*(.65+Math.random()*.9));
+ }
+ if(coin===activeCoin && performance.now()-realisticLastBookDraw>90){realisticLastBookDraw=performance.now();updateOrderBook(coin);}
+}
+
+function startFakeMarket(){
+ clearInterval(marketBookTimer); cancelAnimationFrame(marketSimulationTimer);
+ let last=performance.now(),acc={BTC:0,ETH:0,SOL:0};
+ const tick=now=>{const dt=Math.min(.25,(now-last)/1000);last=now;for(const coin of COINS){const r=REALISTIC_MARKET_CONFIG[coin].tradeRate;acc[coin]+=(r[0]+Math.random()*(r[1]-r[0]))*dt;const n=Math.floor(acc[coin]);acc[coin]-=n;for(let i=0;i<n;i++)fakeTrade(coin);}marketSimulationTimer=requestAnimationFrame(tick);};
+ marketSimulationTimer=requestAnimationFrame(tick);
+ let lastBook=performance.now(),bacc={BTC:0,ETH:0,SOL:0};
+ marketBookTimer=setInterval(()=>{const now=performance.now(),dt=Math.min(.2,(now-lastBook)/1000);lastBook=now;for(const coin of COINS){const r=REALISTIC_MARKET_CONFIG[coin].bookRate;bacc[coin]+=(r[0]+Math.random()*(r[1]-r[0]))*dt;const n=Math.floor(bacc[coin]);bacc[coin]-=n;if(n)updateFakeBookMicro(coin,n);}},50);
+}
+
+function drawMarketChart(){
+ const canvas=document.getElementById('marketChart'); if(!canvas)return; const coin=activeCoin, data=(priceHistory[coin]||[]).slice(); if(data.length<2)return;
+ const rect=canvas.getBoundingClientRect(),dpr=Math.max(1,window.devicePixelRatio||1),w=Math.max(320,rect.width),h=Math.max(200,rect.height); if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);} const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+ const ranges={ '1H':3600e3,'4H':14400e3,'1D':86400e3,'1W':604800e3}; const cutoff=Date.now()-ranges[realisticTimeframe]; const pts=data.filter(x=>x.t>=cutoff); const view=pts.length>2?pts:data.slice(-120); const vals=view.map(x=>x.p); let min=Math.min(...vals),max=Math.max(...vals); const pad=(max-min||max*.002)*.16;min-=pad;max+=pad;
+ ctx.strokeStyle='rgba(255,255,255,.055)';ctx.lineWidth=1;for(let i=1;i<5;i++){const y=(h-24)*i/5+8;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+ const x=i=>i*(w-56)/(view.length-1)+8;const y=p=>h-20-(p-min)/(max-min)*(h-34);
+ ctx.beginPath();view.forEach((pt,i)=>{const xx=x(i),yy=y(pt.p);if(i===0)ctx.moveTo(xx,yy);else ctx.lineTo(xx,yy);});ctx.lineWidth=2;ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--accent-green').trim()||'#34d399';ctx.stroke();
+ const grad=ctx.createLinearGradient(0,0,0,h);grad.addColorStop(0,'rgba(52,211,153,.13)');grad.addColorStop(1,'rgba(52,211,153,0)');ctx.lineTo(x(view.length-1),h-18);ctx.lineTo(x(0),h-18);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+ ctx.fillStyle='#777782';ctx.font='10px system-ui';ctx.textAlign='right';for(let i=0;i<4;i++){const val=max-(max-min)*i/3;ctx.fillText(realisticPrice(coin,val),w-4,12+i*(h-34)/3);}
+ ctx.textAlign='left';ctx.fillStyle='#55555f';ctx.fillText(realisticTimeframe,8,h-5);
+}
+function setMarketTimeframe(range){realisticTimeframe=range;document.querySelectorAll('#chartTimeframes .tr-btn').forEach(b=>b.classList.toggle('active',b.dataset.range===range));drawMarketChart();}
+window.addEventListener('resize',()=>{if(performance.now()-realisticLastChartDraw>100){realisticLastChartDraw=performance.now();drawMarketChart();}});
+
+function updateMainView(coin,flashDir){
+ const d=marketPrices[coin],priceEl=document.getElementById('mciPrice');if(!d||!priceEl)return;const up=d.change24h>=0,sign=up?'+':'-';priceEl.textContent=realisticPrice(coin,d.price);if(flashDir){priceEl.classList.remove('flash-up','flash-down');void priceEl.offsetWidth;priceEl.classList.add('flash-'+flashDir);setTimeout(()=>priceEl.classList.remove('flash-up','flash-down'),300);}const ch=document.getElementById('mciChange'),pct=document.getElementById('mciPct');if(ch){ch.textContent=`${sign}$${Math.abs(d.change24h).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})}`;ch.className='mpm-change '+(up?'up':'down');}if(pct){pct.textContent=`${up?'+':''}${d.changePct.toFixed(2)}%`;pct.className='mpm-badge '+(up?'up':'down');}
+ document.getElementById('statOpen').textContent=realisticPrice(coin,d.open24h);document.getElementById('statHigh').textContent=realisticPrice(coin,d.high24h);document.getElementById('statLow').textContent=realisticPrice(coin,d.low24h);const vol=d.volume24h;document.getElementById('statVol').textContent=vol>=1e9?'$'+(vol/1e9).toFixed(2)+'B':vol>=1e6?'$'+(vol/1e6).toFixed(1)+'M':'$'+Math.round(vol).toLocaleString('en-CA');document.getElementById('obMidPrice').textContent=realisticPrice(coin,d.price);document.getElementById('obMidArrow').style.color=up?'var(--accent-green)':'var(--accent-red)';if(typeof updateMacTotal==='function')updateMacTotal();if(performance.now()-realisticLastChartDraw>350){realisticLastChartDraw=performance.now();drawMarketChart();}
+}
+function updateTickerBar(coin){const d=marketPrices[coin],p=document.getElementById('tickerPrice'+coin),c=document.getElementById('tickerChange'+coin);if(!d||!p)return;p.textContent=realisticPrice(coin,d.price);if(c){c.textContent=`${d.changePct>=0?'+':''}${d.changePct.toFixed(2)}%`;c.className='ticker-change '+(d.changePct>=0?'up':'down');}}
+
+function updateOrderBook(coin){
+ const a=document.getElementById('obAsks'),b=document.getElementById('obBids'),sp=document.getElementById('obSpread');if(!a||!b)return;const book=orderBooks[coin],d=marketPrices[coin],cad=Number(exchangeRatesInUSD.CAD)||1.386;if(!book||!d)return;const asks=[...book.asks.entries()].filter(x=>x[1]>0).sort((x,y)=>x[0]-y[0]).slice(0,8),bids=[...book.bids.entries()].filter(x=>x[1]>0).sort((x,y)=>y[0]-x[0]).slice(0,8);const ba=asks[0]?.[0],bb=bids[0]?.[0],spread=ba&&bb?(ba-bb)*cad:null;if(sp)sp.textContent=spread!==null?`Spread $${spread.toFixed(2)}`:'Spread —';
+ const max=Math.max(...asks.map(x=>x[1]),...bids.map(x=>x[1]),.0001);const row=(x,side)=>{const price=x[0]*cad,size=x[1],total=price*size;return `<div class="ob-row ${side}"><div class="ob-price ${side}">${realisticPrice(coin,price)}</div><div class="ob-size">${size.toFixed(coin==='BTC'?4:3)}</div><div class="ob-total">$${total>=1e6?(total/1e6).toFixed(2)+'M':total>=1000?(total/1000).toFixed(1)+'K':Math.round(total).toLocaleString('en-CA')}</div><div class="ob-row-fill" style="width:${Math.min(92,10+x[1]/max*82)}%"></div></div>`};a.innerHTML=asks.slice().reverse().map(x=>row(x,'ask')).join('');b.innerHTML=bids.map(x=>row(x,'bid')).join('');
+ const user=document.getElementById('obUserOrders');if(user){const name=(document.getElementById('profileName')?.textContent||'You').trim();const orders=userTrades.filter(t=>t.coin===coin).slice(0,3);user.innerHTML=orders.map(t=>`<div class="ob-user-row ${t.side}"><div class="ob-user-name">${name}</div><div class="ob-user-price">${realisticPrice(coin,t.price)}</div><div class="ob-user-side ${t.side}">${t.side==='buy'?'Buy':'Sell'} ${t.size.toFixed(4)}</div></div>`).join('');user.style.display=orders.length?'block':'none';}
+}
+function updateRecentTrades(){const list=document.getElementById('recentTradesList');if(!list)return;const cad=Number(exchangeRatesInUSD.CAD)||1.386;list.innerHTML=recentTrades.filter(t=>t.coin===activeCoin).slice(0,12).map(t=>{const tm=t.time instanceof Date?t.time.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';return `<div class="rt-row"><div class="rt-price ${t.side}">${realisticPrice(activeCoin,t.price*cad)}</div><div class="rt-size">${t.size.toFixed(activeCoin==='BTC'?4:3)}</div><div class="rt-time">${tm}</div></div>`}).join('');}
+
+function estimateBookExecution(coin, side, amount) {
+  const book=orderBooks[coin], cadRate=Number(exchangeRatesInUSD.CAD)||1.386, mid=marketPrices[coin]?.price||0;
+  if(!book||!mid) return null;
+  const levels=[...(side==='buy'?book.asks:book.bids).entries()]
+    .filter(([p,s])=>p>0&&s>0).sort((a,b)=>side==='buy'?a[0]-b[0]:b[0]-a[0]);
+  if(!levels.length) return null;
+  let remaining=side==='buy' ? amount*(1-REALISTIC_MARKET_FEE)/cadRate : amount;
+  let qty=0, quoteUsd=0;
+  if(side==='buy'){
+    for(const [p,size] of levels){
+      if(remaining<=0) break;
+      const take=Math.min(size,remaining/p); qty+=take; quoteUsd+=take*p; remaining-=take*p;
+    }
+    if(remaining>0) return null;
+  }else{
+    for(const [p,size] of levels){
+      if(remaining<=0) break;
+      const take=Math.min(size,remaining); qty+=take; quoteUsd+=take*p; remaining-=take;
+    }
+    if(remaining>1e-10) return null;
+  }
+  const grossCad=quoteUsd*cadRate;
+  const feeCad=side==='buy'?amount*REALISTIC_MARKET_FEE:grossCad*REALISTIC_MARKET_FEE;
+  const netCad=side==='buy'?Math.max(0,amount-feeCad):Math.max(0,grossCad-feeCad);
+  return {qty,avgCad:qty>0?grossCad/qty:mid, grossCad, feeCad, netCad, impactPct:Math.abs((qty>0?grossCad/qty:mid)-mid)/mid*100};
+}
+function updateMacTotal(){
+  const amt=parseFloat(document.getElementById('macAmountInput')?.value)||0, d=marketPrices[activeCoin],out=document.getElementById('macTotalVal'),ep=document.getElementById('macEstimatedPrice'),fee=document.getElementById('macFeeVal'),sl=document.getElementById('macSlippageVal');
+  if(!out||!d){return;}
+  const side=macCurrentTab==='buy'?'buy':'sell'; const fill=estimateBookExecution(activeCoin,side,amt);
+  if(!fill){out.textContent='—';if(ep)ep.textContent='—';if(fee)fee.textContent='—';if(sl)sl.textContent='—';return;}
+  if(side==='buy') out.textContent=`${fill.qty.toFixed(6)} ${activeCoin}`;
+  else out.textContent=`$${fill.netCad.toFixed(2)} CAD`;
+  if(ep)ep.textContent=realisticPrice(activeCoin,fill.avgCad);
+  if(fee)fee.textContent=`$${fill.feeCad.toFixed(2)} CAD`;
+  if(sl)sl.textContent=`${fill.impactPct.toFixed(2)}%`;
+}
+function setMacTab(tab){
+  macCurrentTab=tab; document.getElementById('macBuyTab')?.classList.toggle('active',tab==='buy'); document.getElementById('macSellTab')?.classList.toggle('active',tab==='sell');
+  const btn=document.getElementById('macSubmitBtn');
+  if(tab==='buy'){btn.className='mac-submit-btn buy-btn';btn.textContent=`Buy ${activeCoin}`;document.getElementById('macAmountLabel').textContent='Amount (CAD)';document.getElementById('macCurrencyLabel').textContent='CAD';document.getElementById('macTotalLabel').textContent='You receive';}
+  else{btn.className='mac-submit-btn sell-btn';btn.textContent=`Sell ${activeCoin}`;document.getElementById('macAmountLabel').textContent=`Amount (${activeCoin})`;document.getElementById('macCurrencyLabel').textContent=activeCoin;document.getElementById('macTotalLabel').textContent='You receive (CAD)';}
+  document.getElementById('macAmountInput').value='';document.querySelectorAll('.mac-pct').forEach(x=>x.classList.remove('active'));if(typeof updateMacTotal==='function')updateMacTotal();
+}
+function setMacPct(pct,el){
+  document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));el.classList.add('active');
+  const bal=getBalanceForCurrency(macCurrentTab==='buy'?'CAD':activeCoin),dec=macCurrentTab==='buy'?2:6,factor=10**dec;
+  document.getElementById('macAmountInput').value=(Math.floor(bal*pct/100*factor)/factor).toFixed(dec);if(typeof updateMacTotal==='function')updateMacTotal();
+}
+function macSubmitOrder(){
+  const input=document.getElementById('macAmountInput'),amt=Number(input?.value)||0,coin=activeCoin;
+  if(amt<=0||!marketPrices[coin]?.price){showToast('Enter a valid amount');return;}
+  const isBuy=macCurrentTab==='buy',fromCurr=isBuy?'CAD':coin,toCurr=isBuy?coin:'CAD',balance=getBalanceForCurrency(fromCurr);
+  if(amt>balance+1e-9){showToast(`Insufficient ${fromCurr} balance`);return;}
+  const fill=estimateBookExecution(coin,isBuy?'buy':'sell',amt);
+  if(!fill){showToast('Not enough simulated market liquidity for this order');return;}
+  const btn=document.getElementById('macSubmitBtn');btn.disabled=true;btn.style.opacity='.65';
+  setTimeout(()=>{
+    if(isBuy){deductBalanceForCurrency('CAD',amt);addBalanceForCurrency(coin,fill.qty);recordMarketOrderActivity(amt,'CAD',coin,fill.qty);}
+    else{deductBalanceForCurrency(coin,amt);addBalanceForCurrency('CAD',fill.netCad);recordMarketOrderActivity(amt,coin,'CAD',fill.netCad);}
+    const exec=fill.avgCad; userTrades.unshift({coin,price:exec,size:isBuy?fill.qty:amt,side:isBuy?'buy':'sell',time:new Date()});
+    recentTrades.unshift({coin,price:exec/(Number(exchangeRatesInUSD.CAD)||1.386),size:isBuy?fill.qty:amt,side:isBuy?'buy':'sell',time:new Date()});
+    if(userTrades.length>50)userTrades.length=50; if(recentTrades.length>180)recentTrades.length=180;
+    renderBalance(); updateOrderBook(coin); updateRecentTrades(); if(typeof updateMacTotal==='function')updateMacTotal(); updateLivePreview(); input.value='';document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));
+    btn.disabled=false;btn.style.opacity='';
+    showToast(`${isBuy?'Bought':'Sold'} ${isBuy?fill.qty.toFixed(6)+' '+coin:amt.toFixed(6)+' '+coin} at ${realisticPrice(coin,exec)} · fee $${fill.feeCad.toFixed(2)} CAD`);
+  },350);
+}
+
+function selectMarketCoin(coin){activeCoin=coin;COINS.forEach(c=>document.getElementById('ticker'+c)?.classList.toggle('selected',c===coin));const names={BTC:'Bitcoin',SOL:'Solana',ETH:'Ethereum'};document.getElementById('mciName').textContent=names[coin];document.getElementById('mciSymbol').textContent=coin+' / CAD';const icon=document.getElementById('mciIcon');if(icon){const logos={BTC:'<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="#F7931A"/><path d="M46.101 27.444c.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-.875-1.4 5.616c-.923-.23-1.871-.447-2.813-.662l1.41-5.653-3.509-.876-1.439 5.766c-.764-.174-1.514-.346-2.242-.525l.004-.018-4.842-1.209-.934 3.75s2.605.597 2.55.634c1.422.355 1.679 1.296 1.636 2.042l-1.638 6.571c.098.025.225.061.365.117l-.37-.092-2.296 9.205c-.174.432-.615 1.08-1.609.833.035.051-2.55-.637-2.55-.637l-1.743 4.019 4.569 1.139c.85.213 1.683.436 2.504.647l-1.453 5.833 3.507.875 1.438-5.768c.958.26 1.888.5 2.8.726l-1.433 5.741 3.511.876 1.453-5.823c5.987 1.133 10.489.676 12.383-4.738 1.527-4.36-.076-6.875-3.226-8.515 2.294-.53 4.022-2.039 4.483-5.155zm-8.022 11.249c-1.085 4.36-8.426 2.003-10.806 1.412l1.928-7.729c2.38.594 10.01 1.77 8.878 6.317zm1.086-11.312c-.989 3.966-7.106 1.951-9.088 1.457l1.748-7.01c1.982.494 8.354 1.416 7.34 5.553z" fill="#fff"/></svg>',ETH:'<svg viewBox="0 0 256 417"><path d="M128 0L4 209l124 74 124-74L128 0z" fill="#8a8a8a"/><path d="M128 0v283l124-74L128 0z" fill="#4b4b4b"/><path d="M4 236l124 181 124-181-124 73L4 236z" fill="#777"/><path d="M128 309v108l124-181-124 73z" fill="#444"/></svg>',SOL:'<svg viewBox="0 0 397.7 311.7"><defs><linearGradient id="realSolGrad" x1="0" x2="1"><stop offset="0" stop-color="#9945FF"/><stop offset="1" stop-color="#14F195"/></linearGradient></defs><path fill="url(#realSolGrad)" d="M64 8h320c12 0 18 14 9 23l-59 59H15c-12 0-18-14-9-23L64 8zm0 215h320c12 0 18 14 9 23l-59 59H15c-12 0-18-14-9-23l58-59zm261-108H5c-12 0-18-14-9-23l59-59h320c12 0 18 14 9 23l-58 59z"/></svg>'};icon.innerHTML=logos[coin];icon.className='mci-icon '+coin.toLowerCase()+'-bg';}updateMainView(coin);updateOrderBook(coin);updateRecentTrades();if(typeof updateMacTotal==='function')updateMacTotal();}
+
+async function startLiveMarketEngine(){
+ if(realisticMarketStarted)return;realisticMarketStarted=true;seedReferenceMarket();COINS.forEach(seedFakeOrderBook);refreshMarketUI();document.documentElement.dataset.marketStatus='loading';try{await fetchLiveMarketPrices();}catch(e){console.warn('[MARKET] live start failed',e);}COINS.forEach(c=>{if(marketPrices[c]?.price)realisticSeedHistory(c);seedFakeOrderBook(c);});refreshMarketUI();startFakeMarket();document.documentElement.dataset.marketStatus='live';drawMarketChart();}
+
+/* Prevent the legacy second fetch from restarting market data; the enhanced engine owns startup. */
+window.addEventListener('load',()=>{setTimeout(()=>{if(!realisticMarketStarted)startLiveMarketEngine();},0);});
+
+// Final initialization after all Market controls are defined.
+setTimeout(()=>{if(typeof setMacTab==='function')setMacTab('buy');},0);
 </script>
 </body>
 </html>
