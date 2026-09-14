@@ -2405,13 +2405,82 @@ function refreshMarketUI(){
 }
 
 async function fetchLiveMarketPrices(){
- /* Kept as the refresh entry point for the existing page, but no network
-    request is made. The market tab uses the researched starting references. */
- seedReferenceMarket();
- for(const coin of COINS)seedFakeOrderBook(coin);
+ /*
+  * Get a REAL starting price once when the page loads.
+  * After that, the existing simulator takes over locally.
+  * Coinbase's public ticker endpoint is used first, with CoinGecko as a
+  * fallback so the market tab can still initialize if Coinbase is blocked.
+  */
+ const products={BTC:'BTC-USD',SOL:'SOL-USD',ETH:'ETH-USD'};
+ const usdPrices={};
+ let gotAny=false;
+
+ async function coinbasePrice(coin){
+  const r=await fetch('https://api.exchange.coinbase.com/products/'+products[coin]+'/ticker?_='+Date.now(),{cache:'no-store'});
+  if(!r.ok)throw new Error('Coinbase '+r.status);
+  const j=await r.json();
+  const price=Number(j.price);
+  if(!Number.isFinite(price)||price<=0)throw new Error('Invalid Coinbase price');
+  return price;
+ }
+
+ async function geckoPrices(){
+  const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana,ethereum&vs_currencies=usd&_='+Date.now(),{cache:'no-store'});
+  if(!r.ok)throw new Error('CoinGecko '+r.status);
+  const j=await r.json();
+  return {BTC:Number(j.bitcoin?.usd),SOL:Number(j.solana?.usd),ETH:Number(j.ethereum?.usd)};
+ }
+
+ async function usdCadRate(){
+  try{
+   const r=await fetch('https://api.frankfurter.app/latest?from=USD&to=CAD&_='+Date.now(),{cache:'no-store'});
+   if(!r.ok)throw new Error('FX '+r.status);
+   const j=await r.json();
+   const rate=Number(j.rates?.CAD);
+   if(Number.isFinite(rate)&&rate>0)return rate;
+  }catch(e){console.warn('[MARKET] USD/CAD refresh failed:',e);}
+  return Number(exchangeRatesInUSD.CAD)||1.386;
+ }
+
+ const fallback={};
+ try{Object.assign(fallback,await geckoPrices());}catch(e){console.warn('[MARKET] CoinGecko fallback unavailable:',e);}
+
+ for(const coin of COINS){
+  try{
+   usdPrices[coin]=await coinbasePrice(coin);
+   gotAny=true;
+  }catch(e){
+   if(Number.isFinite(fallback[coin])&&fallback[coin]>0){
+    usdPrices[coin]=fallback[coin];
+    gotAny=true;
+   }else{
+    usdPrices[coin]=Number(MARKET_REFERENCE[coin].usd);
+   }
+  }
+ }
+
+ const cadRate=await usdCadRate();
+ exchangeRatesInUSD.CAD=cadRate;
+
+ const now=Date.now();
+ for(const coin of COINS){
+  const usd=Number(usdPrices[coin]);
+  const cad=usd*cadRate;
+  const previous=marketPrices[coin]?.price;
+  const oldOpen=marketPrices[coin]?.open24h;
+  const open=Number.isFinite(oldOpen)&&oldOpen>0 ? oldOpen : cad*(0.997+Math.random()*0.006);
+  const high=Math.max(cad,Number(marketPrices[coin]?.high24h)||cad);
+  const low=Math.min(cad,Number(marketPrices[coin]?.low24h)||cad);
+  const volume=Number(marketPrices[coin]?.volume24h)||(
+    coin==='BTC'?12000000000:coin==='ETH'?6000000000:900000000
+  );
+  applyLiveMarketData(coin,{price:cad,usdPrice:usd,open24h:open,high24h:high,low24h:low,change24h:cad-open,changePct:((cad-open)/open)*100,volume24h:volume,lastUpdatedAt:now,simulated:false});
+  seedFakeOrderBook(coin);
+ }
+
  refreshMarketUI();
- document.documentElement.dataset.marketStatus='live';
- return true;
+ document.documentElement.dataset.marketStatus=gotAny?'live':'fallback';
+ return gotAny;
 }
 async function fetchMarketDetails(){return true;}
 async function fetchRealMarketData(){return fetchLiveMarketPrices();}
