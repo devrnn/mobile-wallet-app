@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1273,674 +1273,26 @@ overflow: hidden;
 }
 
 
-/* =========================================================
-   FINAL RESPONSIVE / VIEWPORT SAFETY LAYER
-   Keeps the entire application inside the available viewport
-   at every desktop, tablet and mobile width.
-   ========================================================= */
-html {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  height: 100%;
-  overflow: hidden;
+/* Small-screen polish: keeps existing layouts intact while preventing overflow. */
+@media (min-width:769px) and (max-width:1100px){
+  .scroll-content{padding-left:28px;padding-right:28px;}
+  .market-main-view{grid-template-columns:minmax(0,1fr) 310px;}
+  .market-chart-header{padding-left:20px;padding-right:20px;}
 }
-
-html, body {
-  margin: 0;
-  padding: 0;
-  max-width: 100%;
-}
-
-body {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  height: 100dvh;
-  min-height: 100svh;
-  overflow: hidden;
-  display: flex;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
-  min-width: 0;
-}
-
-img, svg, canvas, video {
-  max-width: 100%;
-}
-
-/* The desktop sidebar consumes its own fixed width; the dashboard gets
-   every remaining pixel instead of creating a second horizontal viewport. */
-.sidebar {
-  flex: 0 0 240px;
-  min-width: 0;
-  max-width: 240px;
-}
-
-.main-dashboard {
-  flex: 1 1 auto;
-  width: auto;
-  min-width: 0;
-  max-width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.page-panel {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.scroll-content {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  overflow-x: hidden;
-}
-
-.dashboard-header,
-.dashboard-title-group,
-.top-row-grid,
-.balance-card,
-.activity-panel,
-.market-ticker-bar,
-.market-main-view,
-.market-chart-panel,
-.market-right-panel,
-.orderbook-panel,
-.market-action-card,
-.recent-trades-panel,
-.profit-summary-card,
-.exchange-transactions,
-.settings-section,
-.settings-row,
-.card-actions,
-.panel-header {
-  min-width: 0;
-  max-width: 100%;
-}
-
-/* Grid children MUST be allowed to shrink. This is one of the most common
-   causes of the "half the page is off-screen" problem. */
-.top-row-grid > *,
-.market-main-view > *,
-.chart-stats-strip > *,
-.dashboard-header > *,
-.card-actions > * {
-  min-width: 0;
-  max-width: 100%;
-}
-
-/* Long values must never decide the width of the page. */
-.main-balance,
-.market-live-price,
-.item-value,
-.activity-value,
-.profit-summary-value,
-.profit-period-value,
-.account-field-value,
-.ticker-price,
-.ob-price,
-.ob-size,
-.ob-total,
-.rt-price,
-.rt-size,
-.rt-time {
-  min-width: 0;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Tables/order books can scroll internally rather than pushing the entire
-   application wider than the viewport. */
-.market-chart-panel,
-.orderbook-panel,
-.market-action-card,
-.recent-trades-panel,
-.exchange-transactions,
-.activity-panel {
-  overflow-x: hidden;
-}
-
-/* Controls are allowed to shrink on narrow screens. */
-input, select, textarea, button {
-  max-width: 100%;
-}
-
-/* =========================================================
-   TABLET / PHONE
-   ========================================================= */
-@media (max-width: 768px) {
-  html, body {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    height: 100dvh;
-    min-height: 100svh;
-    overflow: hidden;
-  }
-
-  .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: min(290px, 86vw);
-    max-width: 86vw;
-    min-width: 0;
-    flex: none;
-    z-index: 90;
-  }
-
-  .main-dashboard {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    flex: 1 1 auto;
-  }
-
-  .page-panel {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    overflow-x: hidden;
-  }
-
-  .scroll-content {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    padding-left: clamp(12px, 4vw, 20px);
-    padding-right: clamp(12px, 4vw, 20px);
-    padding-bottom: calc(32px + env(safe-area-inset-bottom));
-    overflow-x: hidden;
-  }
-
-  .dashboard-header {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-  }
-
-  .dashboard-title-group {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  .dashboard-title {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .top-row-grid {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-
-  .balance-card,
-  .activity-panel,
-  .profit-summary-card,
-  .exchange-transactions,
-  .market-chart-panel,
-  .orderbook-panel,
-  .market-action-card,
-  .recent-trades-panel {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-  }
-
-  .balance-header-row,
-  .panel-header,
-  .market-chart-title-row {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  .balance-title-row {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .wallet-selector {
-    flex: 0 1 auto;
-    min-width: 0;
-    max-width: 48%;
-  }
-
-  .main-balance {
-    width: auto;
-    max-width: 100%;
-    font-size: clamp(28px, 9vw, 42px);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .card-actions {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .action-btn {
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .market-main-view {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-
-  .market-right-panel {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-  }
-
-  .market-chart-header,
-  .chart-canvas-area,
-  .chart-timerange {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  .market-chart-title-row {
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .market-live-price {
-    max-width: 100%;
-    font-size: clamp(24px, 8vw, 36px);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .market-canvas {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .chart-stats-strip {
-    width: 100%;
-    max-width: 100%;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .orderbook-cols,
-  .ob-row,
-  .ob-user-row,
-  .rt-cols,
-  .rt-row {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  /* Keep pull-to-refresh UI inside the actual viewport. */
-  .pull-indicator {
-    left: 50%;
-    max-width: calc(100vw - 24px);
-  }
-
-  .refresh-capsule {
-    max-width: calc(100vw - 24px);
-  }
-
-  /* Intro uses 100%, never a width larger than the layout viewport. */
-  .intro {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    max-width: 100%;
-    height: 100dvh;
-    min-height: 100svh;
-    overflow: hidden;
-  }
-
-  .orb {
-    width: min(230px, 62vw);
-    height: min(230px, 62vw);
-    max-width: 230px;
-    max-height: 230px;
-    flex: 0 0 auto;
-  }
-
-  .intro-welcome {
-    left: 50%;
-    width: calc(100% - 32px);
-    max-width: calc(100% - 32px);
-  }
-
-  .intro-title {
-    max-width: 100%;
-    white-space: normal;
-    overflow-wrap: anywhere;
-  }
-}
-
-/* Very narrow phones. */
-@media (max-width: 390px) {
-  .scroll-content {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  .balance-card {
-    padding: 18px;
-  }
-
-  .balance-header-row {
-    gap: 8px;
-  }
-
-  .wallet-selector {
-    max-width: 44%;
-    padding-left: 9px;
-    padding-right: 9px;
-  }
-
-  .card-actions {
-    gap: 8px;
-  }
-
-  .action-btn {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-}
-
-/* Landscape phones / small tablets. */
-@media (max-width: 900px) and (orientation: landscape) {
-  .scroll-content {
-    padding-top: calc(16px + env(safe-area-inset-top));
-    padding-bottom: calc(24px + env(safe-area-inset-bottom));
-  }
-
-  .balance-card {
-    min-height: 200px;
-  }
-}
-
-/* Large screens: don't allow content to become absurdly stretched. */
-@media (min-width: 1400px) {
-  .scroll-content {
-    padding-left: clamp(56px, 5vw, 96px);
-    padding-right: clamp(56px, 5vw, 96px);
-  }
-}
-
-
-/* ===== POLISHED APPEARANCE / DEMO MARKET UI ===== */
-body{background:radial-gradient(circle at 75% 5%,rgba(99,102,241,.09),transparent 28%),radial-gradient(circle at 15% 90%,rgba(52,211,153,.055),transparent 30%),var(--bg-main);}
-.main-dashboard{background:linear-gradient(180deg,rgba(255,255,255,.012),transparent 24%);}
-.scroll-content{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.16) transparent;}
-.asset-list,.exchange-transactions,.activity-panel,.market-chart-panel,.orderbook-panel,.market-action-card,.recent-trades-panel{border:1px solid rgba(255,255,255,.075)!important;box-shadow:0 18px 50px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(18px);}
-.dashboard-header{padding-bottom:22px!important;}
-.dashboard-title{letter-spacing:-.04em!important;font-weight:800!important;}
-.panel-header{border-bottom:1px solid rgba(255,255,255,.06)!important;padding-bottom:14px!important;margin-bottom:2px;}
-.theme-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important;}
-.theme-card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015))!important;border:1px solid rgba(255,255,255,.07)!important;border-radius:20px!important;padding:12px!important;box-shadow:0 12px 35px rgba(0,0,0,.18);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease!important;}
-.theme-card::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 35%,rgba(255,255,255,.07),transparent 65%);transform:translateX(-120%);transition:transform .65s ease;pointer-events:none;}
-.theme-card:hover::after{transform:translateX(120%);}
-.theme-card:hover{transform:translateY(-4px)!important;border-color:rgba(255,255,255,.18)!important;box-shadow:0 20px 45px rgba(0,0,0,.28)!important;}
-.theme-card.active{border-color:rgba(255,255,255,.55)!important;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 20px 50px rgba(0,0,0,.3)!important;}
-.theme-preview-box{height:82px!important;border-radius:14px!important;position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 8px 20px rgba(0,0,0,.25);}
-.theme-preview-box::before{content:"";position:absolute;width:90px;height:90px;border-radius:50%;right:-15px;top:-40px;background:rgba(255,255,255,.13);filter:blur(2px);}
-.theme-preview-box.dark{background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.22),transparent 35%),linear-gradient(135deg,#27272e,#0d0d11 72%)!important;}
-.theme-preview-box.emerald{background:radial-gradient(circle at 78% 18%,rgba(52,211,153,.42),transparent 36%),linear-gradient(135deg,#064e3b,#071d19 70%)!important;}
-.theme-preview-box.midnight{background:radial-gradient(circle at 78% 18%,rgba(168,85,247,.42),transparent 36%),linear-gradient(135deg,#30204d,#11142e 70%)!important;}
-.theme-label{padding:3px 3px 1px!important;font-size:13px!important;}
-.settings-row{border-radius:16px!important;margin:4px 0;padding:16px!important;transition:background .2s ease,transform .2s ease;}
-.settings-row:hover{background:rgba(255,255,255,.025);transform:translateX(2px);}
-.settings-select{border:1px solid rgba(255,255,255,.09)!important;background:rgba(255,255,255,.045)!important;border-radius:12px!important;min-height:42px!important;padding:0 14px!important;}
-.switch .slider{box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 4px 12px rgba(0,0,0,.22);}
-.market-ticker-bar{gap:10px!important;padding:8px!important;border:1px solid rgba(255,255,255,.07)!important;background:rgba(255,255,255,.025)!important;box-shadow:0 15px 40px rgba(0,0,0,.18);backdrop-filter:blur(18px);}
-.ticker-item{border:1px solid transparent!important;border-radius:16px!important;padding:13px 15px!important;transition:all .22s ease!important;}
-.ticker-item:hover{background:rgba(255,255,255,.035)!important;transform:translateY(-1px);}
-.ticker-item.selected{background:linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.025))!important;border-color:rgba(255,255,255,.11)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}
-.market-chart-panel,.orderbook-panel,.market-action-card,.recent-trades-panel{border-radius:22px!important;overflow:hidden;}
-.market-live-price{letter-spacing:-.045em!important;font-weight:800!important;}
-.market-price-meta{gap:8px!important;}
-.mpm-badge{border-radius:999px!important;padding:5px 9px!important;}
-.ob-mid-row{background:linear-gradient(90deg,rgba(255,255,255,.025),rgba(255,255,255,.055),rgba(255,255,255,.025))!important;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);}
-.mac-tabs{padding:5px!important;background:rgba(255,255,255,.035)!important;border-radius:14px!important;}
-.mac-tab{border-radius:10px!important;}
-.mac-input-field{border-radius:14px!important;border-color:rgba(255,255,255,.09)!important;background:rgba(255,255,255,.035)!important;}
-.mac-submit-btn{border-radius:14px!important;box-shadow:0 12px 25px rgba(0,0,0,.2);font-weight:800!important;}
-/* Demo-market badge injected by JS */
-
-
-/* ---------- final visual system ---------- */
-:root {
-  --surface-1: rgba(255,255,255,.045);
-  --surface-2: rgba(255,255,255,.065);
-  --surface-3: rgba(255,255,255,.09);
-  --focus-ring: 0 0 0 3px rgba(255,255,255,.08);
-  --ease-out: cubic-bezier(.22,1,.36,1);
-  --ease-spring: cubic-bezier(.34,1.35,.64,1);
-}
-
-button, input, select, a { font: inherit; }
-button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-}
-
-.scroll-content {
-  max-width: 1500px;
-  margin: 0 auto;
-}
-
-.dashboard-title {
-  font-size: clamp(22px, 2vw, 28px);
-  letter-spacing: -.8px;
-}
-
-.balance-card,
-.asset-list,
-.activity-panel,
-.exchange-transactions,
-.market-chart-panel,
-.orderbook-panel,
-.market-action-card,
-.recent-trades-panel,
-.profit-summary-card {
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.035) inset,
-    0 18px 50px -32px rgba(0,0,0,.9);
-}
-
-.balance-card::before,
-.market-chart-panel::before,
-.profit-summary-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(120deg, rgba(255,255,255,.055), transparent 28%);
-  opacity: .65;
-}
-
-.balance-card > * {
-  position: relative;
-  z-index: 1;
-}
-
-.ticker-item {
-  min-width: 150px;
-  padding: 15px 18px;
-}
-
-.ticker-item.selected {
-  background: rgba(255,255,255,.035);
-}
-
-.market-chart-panel {
-  position: relative;
-}
-
-.market-chart {
-  display: block;
-  width: 100%;
-  height: 230px;
-  overflow: visible;
-}
-
-.chart-grid-lines line {
-  stroke: rgba(255,255,255,.055);
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-}
-
-.chart-area-fill {
-  fill: url(#marketChartFill);
-}
-
-.chart-line {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 0 7px rgba(255,255,255,.16));
-}
-
-.chart-dot {
-  fill: #fff;
-  stroke: rgba(255,255,255,.25);
-  stroke-width: 5;
-  vector-effect: non-scaling-stroke;
-}
-
-.chart-reference-note {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 8px;
-  color: var(--text-muted);
-  font-size: 10px;
-  font-weight: 600;
-}
-
-.chart-reference-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.5);
-  box-shadow: 0 0 0 3px rgba(255,255,255,.05);
-}
-
-.chart-timerange {
-  align-items: center;
-}
-
-.tr-btn {
-  min-width: 44px;
-}
-
-.orderbook-panel,
-.market-action-card,
-.recent-trades-panel {
-  box-shadow: 0 18px 42px -30px rgba(0,0,0,.85);
-}
-
-.ob-row {
-  min-height: 29px;
-}
-
-.ob-row-fill {
-  transition: width .28s var(--ease-out);
-}
-
-.mac-input-field input {
-  min-width: 0;
-}
-
-.mac-submit-btn {
-  min-height: 46px;
-}
-
-.mac-tab {
-  position: relative;
-}
-
-.mac-tab.active::after {
-  content: "";
-  position: absolute;
-  left: 22%;
-  right: 22%;
-  bottom: -1px;
-  height: 2px;
-  border-radius: 999px;
-  background: currentColor;
-}
-
-.tx-card {
-  box-shadow: 0 8px 24px -24px rgba(0,0,0,.8);
-}
-
-.modal-card {
-  box-shadow:
-    0 28px 80px rgba(0,0,0,.7),
-    0 1px 0 rgba(255,255,255,.06) inset;
-}
-
-.toast-notification {
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-@media (max-width: 900px) {
-  .market-chart { height: 200px; }
-  .market-live-price { font-size: 32px; }
-}
-
-@media (max-width: 600px) {
-  .scroll-content { max-width: none; }
-  .market-chart-header { padding: 18px 18px 15px; }
-  .chart-timerange { padding: 12px 18px 9px; overflow-x: auto; }
-  .chart-canvas-area { padding: 16px 18px 18px; }
-  .market-chart { height: 180px; }
-  .market-live-price { font-size: 30px; }
-  .mci-name { font-size: 17px; }
-  .chart-stats-strip { padding: 15px 18px; }
-  .market-right-panel { gap: 14px; }
-  .mac-body { padding: 17px; }
-  .toast-notification {
-    left: 16px;
-    right: 16px;
-    top: max(16px, calc(env(safe-area-inset-top) + 10px));
-    justify-content: center;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    scroll-behavior: auto !important;
-    animation-duration: .001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: .001ms !important;
-  }
+@media (max-width:768px){
+  .dashboard-header{align-items:flex-start;}
+  .dashboard-title-group{min-width:0;}
+  .dashboard-title{white-space:nowrap;}
+  .balance-card,.asset-list,.activity-panel,.exchange-transactions,.market-chart-panel,.orderbook-panel,.market-action-card,.recent-trades-panel{max-width:100%;}
+  .card-actions{gap:8px;}
+  .action-btn{min-width:0;font-size:12px;}
+  .market-chart-title-row{gap:10px;}
+  .market-live-price{font-size:clamp(28px,9vw,36px);}
+  .chart-stats-strip{padding-left:16px;padding-right:16px;}
+  .orderbook-cols,.ob-row{padding-left:14px;padding-right:14px;}
+  .market-action-card{padding:0;}
+  .modal-card{max-height:calc(100dvh - 32px);overflow:auto;}
+  input,select,button{touch-action:manipulation;}
 }
 </style>
 </head>
@@ -2017,7 +1369,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 </div>
 <div class="sidebar-group">
 <a href="#" class="sidebar-item active" data-target="walletPanel"><i data-lucide="wallet"></i><span data-i18n="navOverview">Overview</span></a>
-<a href="#" class="sidebar-item" data-target="exchangePanel"><i data-lucide="arrow-left-right"></i><span data-i18n="navExchange">Profits &amp; Gains</span></a>
+<a href="#" class="sidebar-item" data-target="exchangePanel"><i data-lucide="arrow-left-right"></i><span data-i18n="navExchange">Profits &amp; Loss</span></a>
 <a href="#" class="sidebar-item" data-target="marketPanel"><i data-lucide="line-chart"></i><span data-i18n="navMarket">Market</span></a>
 <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span data-i18n="navSettings">Settings</span></a>
 </div>
@@ -2111,23 +1463,23 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 <div class="dashboard-header">
 <div class="dashboard-title-group">
 <button class="menu-btn" onclick="openSidebar()"><i data-lucide="menu"></i></button>
-<h1 class="dashboard-title" data-i18n="titleExchangePanel">Profits &amp; Gains</h1>
+<h1 class="dashboard-title" data-i18n="titleExchangePanel">Profits &amp; Loss</h1>
 </div>
 
 </div>
 <div class="profit-summary-card">
-<div class="profit-summary-label">Total profits &amp; gains</div>
+<div class="profit-summary-label">Total profit &amp; loss</div>
 <div class="profit-summary-value" id="totalProfitGains">+$0.00 <span>CAD</span></div>
 <div class="profit-summary-sub">Realized profit or loss from completed crypto sales and swaps</div>
 </div>
 <div class="profit-period-grid">
   <div class="profit-period-card">
-    <div class="profit-period-label">Daily profits &amp; gains</div>
+    <div class="profit-period-label">Daily profit &amp; loss</div>
     <div class="profit-period-value zero" id="dailyProfitLoss">$0.00 <span>CAD</span></div>
     <div class="profit-period-sub">Since midnight</div>
   </div>
   <div class="profit-period-card">
-    <div class="profit-period-label">Monthly profits &amp; gains</div>
+    <div class="profit-period-label">Monthly profit &amp; loss</div>
     <div class="profit-period-value zero" id="monthlyProfitLoss">$0.00 <span>CAD</span></div>
     <div class="profit-period-sub">Since the start of this month</div>
   </div>
@@ -2183,17 +1535,17 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 <div class="market-ticker-bar" id="marketTickerBar">
 <div class="ticker-item selected" id="tickerBTC" onclick="selectMarketCoin('BTC')">
 <div class="ticker-symbol">BTC / CAD</div>
-<div class="ticker-price" id="tickerPriceBTC">Reference price</div>
+<div class="ticker-price" id="tickerPriceBTC">—</div>
 <div class="ticker-change up" id="tickerChangeBTC">—</div>
 </div>
 <div class="ticker-item" id="tickerSOL" onclick="selectMarketCoin('SOL')">
 <div class="ticker-symbol">SOL / CAD</div>
-<div class="ticker-price" id="tickerPriceSOL">Reference price</div>
+<div class="ticker-price" id="tickerPriceSOL">—</div>
 <div class="ticker-change up" id="tickerChangeSOL">—</div>
 </div>
 <div class="ticker-item" id="tickerETH" onclick="selectMarketCoin('ETH')">
 <div class="ticker-symbol">ETH / CAD</div>
-<div class="ticker-price" id="tickerPriceETH">Reference price</div>
+<div class="ticker-price" id="tickerPriceETH">—</div>
 <div class="ticker-change up" id="tickerChangeETH">—</div>
 </div>
 </div>
@@ -2215,7 +1567,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 </button>
 </div>
 <div>
-<div class="market-live-price" id="mciPrice">Reference price</div>
+<div class="market-live-price" id="mciPrice">—</div>
 <div class="market-price-meta">
 <div class="mpm-change up" id="mciChange">—</div>
 <div class="mpm-badge up" id="mciPct">—</div>
@@ -2223,27 +1575,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 <div class="mpm-period">24h</div>
 </div>
 </div>
-</div>
-<div class="chart-timerange" id="chartTimeRange">
-<button class="tr-btn active" data-range="1H" type="button">1H</button>
-<button class="tr-btn" data-range="1D" type="button">1D</button>
-<button class="tr-btn" data-range="1W" type="button">1W</button>
-<button class="tr-btn" data-range="1M" type="button">1M</button>
-</div>
-<div class="chart-canvas-area">
-<svg class="market-chart" id="marketChart" viewBox="0 0 900 220" preserveAspectRatio="none" role="img" aria-label="Reference market price chart">
-<defs>
-<linearGradient id="marketChartFill" x1="0" y1="0" x2="0" y2="1">
-<stop offset="0%" stop-color="rgba(255,255,255,0.18)"/>
-<stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-</linearGradient>
-</defs>
-<g class="chart-grid-lines" id="chartGridLines"></g>
-<path class="chart-area-fill" id="chartAreaFill"></path>
-<path class="chart-line" id="chartLine"></path>
-<circle class="chart-dot" id="chartDot" r="4"></circle>
-</svg>
-<div class="chart-reference-note"><span class="chart-reference-dot"></span>Reference prices · not live</div>
 </div>
 <div class="chart-stats-strip">
 <div class="css-stat">
@@ -2378,7 +1709,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 <label class="switch"><input type="checkbox" id="toggleTxAlerts" checked><span class="slider"></span></label>
 </div>
 <div class="settings-row">
-<div class="settings-info"><div class="settings-title" data-i18n="notifMarketTitle">Market Price Updates</div><div class="settings-desc" data-i18n="notifMarketDesc">Receive real-time price alerts for BTC, SOL & ETH</div></div>
+<div class="settings-info"><div class="settings-title" data-i18n="notifMarketTitle">Market Price Updates</div><div class="settings-desc" data-i18n="notifMarketDesc">Receive simulated price alerts for BTC, SOL & ETH</div></div>
 <label class="switch"><input type="checkbox" id="togglePriceAlerts"><span class="slider"></span></label>
 </div>
 </div>
@@ -2521,7 +1852,7 @@ secBiometricsTitle:"Biometric Authentication",secBiometricsDesc:"Require Face ID
 settingsPreferencesTitle:"Preferences",prefDefaultCurrTitle:"Default Display Currency",prefDefaultCurrDesc:"Primary currency on login",
 prefLangTitle:"Language & Regional Format",prefLangDesc:"Interface localization",
 settingsNotifTitle:"Notifications",notifTxTitle:"Transaction Alerts",notifTxDesc:"Get notified on successful crypto exchanges",
-notifMarketTitle:"Market Price Updates",notifMarketDesc:"Receive real-time price alerts for BTC, SOL & ETH",
+notifMarketTitle:"Market Price Updates",notifMarketDesc:"Receive simulated price alerts for BTC, SOL & ETH",
 settingsDataTitle:"Data & Storage",dataClearActivityTitle:"Clear Recent Activity",dataClearActivityDesc:"Wipe all cached activity logs",
 btnClrAct:"Clear Activity",dataResetTitle:"Reset Settings",dataResetDesc:"Restore settings and preferences to default",btnRstSet:"Reset Settings",
 modalExTitle:"Exchange",modalFromLabel:"From",modalToLabel:"To",
@@ -2552,7 +1883,7 @@ secBiometricsTitle:"Biometric Authentication",secBiometricsDesc:"Require Face ID
 settingsPreferencesTitle:"Preferences",prefDefaultCurrTitle:"Default Display Currency",prefDefaultCurrDesc:"Primary currency on login",
 prefLangTitle:"Language & Regional Format",prefLangDesc:"Interface localization",
 settingsNotifTitle:"Notifications",notifTxTitle:"Transaction Alerts",notifTxDesc:"Get notified on successful crypto exchanges",
-notifMarketTitle:"Market Price Updates",notifMarketDesc:"Receive real-time price alerts for BTC, SOL & ETH",
+notifMarketTitle:"Market Price Updates",notifMarketDesc:"Receive simulated price alerts for BTC, SOL & ETH",
 settingsDataTitle:"Data & Storage",dataClearActivityTitle:"Clear Recent Activity",dataClearActivityDesc:"Wipe all cached activity logs",
 btnClrAct:"Clear Activity",dataResetTitle:"Reset Settings",dataResetDesc:"Restore settings and preferences to default",btnRstSet:"Reset Settings",
 modalExTitle:"Exchange",modalFromLabel:"From",modalToLabel:"To",
@@ -2685,6 +2016,8 @@ accountEmailEditRow.classList.remove('open');
 accountEmailSaveBtn.addEventListener('click', saveAccountEmail);
 accountEmailInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveAccountEmail(); } if (e.key === 'Escape') { e.preventDefault(); accountEmailEditRow.classList.remove('open'); } });
 let recentActivities = [];
+let userTrades = [];
+loadWalletState();
 const costBasisLots = {BTC: [], SOL: [], ETH: []};
 let costBasisInitialized = false;
 function cadPriceForCurrency(curr) {
@@ -2871,15 +2204,40 @@ closeSidebar();
 });
 });
 let currentCurrency = 'CAD';
-let displayBalanceCAD = 2500.00;
+let randomStartingValue = Math.floor(Math.random()*1001)+2000;
+let displayBalanceCAD = randomStartingValue + Math.random();
 let internalHiddenBalanceCAD = displayBalanceCAD;
 let displayBalanceUSD = 0.00;
 let internalHiddenBalanceUSD = 0.00;
 let balanceRateCAD = 0.00;
 let balanceRateUSD = 0.00;
 let bitcoinBalance = 0.00;
-let solanaBalance = 0.00;
+let solanaBalance = parseFloat((Math.random() * (46.482340 - 13.839130) + 13.839130).toFixed(6));
 let ethereumBalance = 0.00;
+const WALLET_STORAGE_KEY='wallet_simulator_state_v2';
+function saveWalletState(){
+ try{
+  localStorage.setItem(WALLET_STORAGE_KEY,JSON.stringify({currentCurrency,displayBalanceCAD,internalHiddenBalanceCAD,displayBalanceUSD,internalHiddenBalanceUSD,balanceRateCAD,balanceRateUSD,bitcoinBalance,solanaBalance,ethereumBalance,recentActivities,userTrades}));
+ }catch(e){console.warn('Wallet state save failed:',e);}
+}
+function loadWalletState(){
+ try{
+  const raw=localStorage.getItem(WALLET_STORAGE_KEY); if(!raw)return;
+  const st=JSON.parse(raw); if(!st||typeof st!=='object')return;
+  if(['CAD','USD'].includes(st.currentCurrency))currentCurrency=st.currentCurrency;
+  if(Number.isFinite(Number(st.displayBalanceCAD)))displayBalanceCAD=Number(st.displayBalanceCAD);
+  if(Number.isFinite(Number(st.internalHiddenBalanceCAD)))internalHiddenBalanceCAD=Number(st.internalHiddenBalanceCAD);
+  if(Number.isFinite(Number(st.displayBalanceUSD)))displayBalanceUSD=Number(st.displayBalanceUSD);
+  if(Number.isFinite(Number(st.internalHiddenBalanceUSD)))internalHiddenBalanceUSD=Number(st.internalHiddenBalanceUSD);
+  if(Number.isFinite(Number(st.balanceRateCAD)))balanceRateCAD=Number(st.balanceRateCAD);
+  if(Number.isFinite(Number(st.balanceRateUSD)))balanceRateUSD=Number(st.balanceRateUSD);
+  if(Number.isFinite(Number(st.bitcoinBalance)))bitcoinBalance=Number(st.bitcoinBalance);
+  if(Number.isFinite(Number(st.solanaBalance)))solanaBalance=Number(st.solanaBalance);
+  if(Number.isFinite(Number(st.ethereumBalance)))ethereumBalance=Number(st.ethereumBalance);
+  if(Array.isArray(st.recentActivities))recentActivities=st.recentActivities;
+  if(Array.isArray(st.userTrades))userTrades=st.userTrades.map(t=>({...t,time:new Date(t.time)}));
+ }catch(e){console.warn('Wallet state load failed:',e);}
+}
 const balanceText = document.getElementById('totalBalance');
 const cadValueText = document.getElementById('cadValue');
 const usdValueText = document.getElementById('usdValue');
@@ -2931,8 +2289,8 @@ updateAvailableBalanceSubtext();
 renderBalance();
 renderRecentActivity();
 let lastUpdateTime = Date.now();
-setInterval(()=>{ const now=Date.now(); const d=(now-lastUpdateTime)/1000; internalHiddenBalanceCAD+=balanceRateCAD*d; internalHiddenBalanceUSD+=balanceRateUSD*d; lastUpdateTime=now; }, 100);
-walletSelector.addEventListener('change', e=>{ currentCurrency=e.target.value; renderBalance(); });
+setInterval(()=>{ const now=Date.now(); const d=(now-lastUpdateTime)/1000; internalHiddenBalanceCAD+=balanceRateCAD*d; internalHiddenBalanceUSD+=balanceRateUSD*d; displayBalanceCAD=internalHiddenBalanceCAD; displayBalanceUSD=internalHiddenBalanceUSD; lastUpdateTime=now; renderBalance(); }, 1000);
+walletSelector.value=currentCurrency; walletSelector.addEventListener('change', e=>{ currentCurrency=e.target.value; renderBalance(); saveWalletState(); });
 const walletEditPanel=document.getElementById('walletEditPanel');
 const editBalanceInput=document.getElementById('editBalanceInput');
 const editRateInput=document.getElementById('editRateInput');
@@ -2940,7 +2298,7 @@ const editWalletName=document.getElementById('editWalletName');
 const editUnitLabel=document.getElementById('editUnitLabel');
 function openWalletEditor() { editWalletName.textContent=currentCurrency; editUnitLabel.textContent=currentCurrency; if(currentCurrency==='CAD'){editBalanceInput.value=displayBalanceCAD.toFixed(2);editRateInput.value=balanceRateCAD.toFixed(2);}else{editBalanceInput.value=displayBalanceUSD.toFixed(2);editRateInput.value=balanceRateUSD.toFixed(2);} walletEditPanel.classList.add('open'); editBalanceInput.focus(); editBalanceInput.select(); }
 function closeWalletEditor() { walletEditPanel.classList.remove('open'); }
-function saveWalletEditor() { const amt=parseFloat(editBalanceInput.value); const rate=parseFloat(editRateInput.value); if(!isNaN(amt)){if(currentCurrency==='CAD'){displayBalanceCAD=amt;internalHiddenBalanceCAD=amt;}else{displayBalanceUSD=amt;internalHiddenBalanceUSD=amt;}} if(!isNaN(rate)){if(currentCurrency==='CAD')balanceRateCAD=rate;else balanceRateUSD=rate;} renderBalance(); closeWalletEditor(); }
+function saveWalletEditor() { const amt=parseFloat(editBalanceInput.value); const rate=parseFloat(editRateInput.value); if(!isNaN(amt)){if(currentCurrency==='CAD'){displayBalanceCAD=amt;internalHiddenBalanceCAD=amt;}else{displayBalanceUSD=amt;internalHiddenBalanceUSD=amt;}} if(!isNaN(rate)){if(currentCurrency==='CAD')balanceRateCAD=rate;else balanceRateUSD=rate;} renderBalance(); saveWalletState(); closeWalletEditor(); }
 document.getElementById('walletEditSave').addEventListener('click',saveWalletEditor);
 document.getElementById('walletEditCancel').addEventListener('click',closeWalletEditor);
 [editBalanceInput,editRateInput].forEach(inp=>{ inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();saveWalletEditor();}else if(e.key==='Escape'){e.preventDefault();closeWalletEditor();} }); });
@@ -2953,179 +2311,258 @@ const assetModalCancel=document.getElementById('assetModalCancel');
 let currentTargetAsset=null;
 function openAssetModal(assetKey){currentTargetAsset=assetKey;assetModalName.textContent=assetKey;let cv=0;if(assetKey==='BTC')cv=bitcoinBalance;else if(assetKey==='SOL')cv=solanaBalance;else if(assetKey==='ETH')cv=ethereumBalance;else if(assetKey==='CAD')cv=displayBalanceCAD;else if(assetKey==='USD')cv=displayBalanceUSD;assetModalInput.value=cv;assetEditModal.classList.add('open');assetModalInput.focus();assetModalInput.select();}
 function closeAssetModal(){assetEditModal.classList.remove('open');currentTargetAsset=null;}
-function saveAssetModal(){const val=parseFloat(assetModalInput.value);if(!isNaN(val)&&currentTargetAsset){if(currentTargetAsset==='BTC')bitcoinBalance=val;else if(currentTargetAsset==='SOL')solanaBalance=val;else if(currentTargetAsset==='ETH')ethereumBalance=val;else if(currentTargetAsset==='CAD'){displayBalanceCAD=val;internalHiddenBalanceCAD=val;}else if(currentTargetAsset==='USD'){displayBalanceUSD=val;internalHiddenBalanceUSD=val;}renderBalance();}closeAssetModal();}
+function saveAssetModal(){const val=parseFloat(assetModalInput.value);if(!isNaN(val)&&currentTargetAsset){if(currentTargetAsset==='BTC')bitcoinBalance=val;else if(currentTargetAsset==='SOL')solanaBalance=val;else if(currentTargetAsset==='ETH')ethereumBalance=val;else if(currentTargetAsset==='CAD'){displayBalanceCAD=val;internalHiddenBalanceCAD=val;}else if(currentTargetAsset==='USD'){displayBalanceUSD=val;internalHiddenBalanceUSD=val;}renderBalance(); saveWalletState();}closeAssetModal();}
 assetModalSave.addEventListener('click',saveAssetModal);
 assetModalCancel.addEventListener('click',closeAssetModal);
 assetModalInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveAssetModal();}if(e.key==='Escape'){e.preventDefault();closeAssetModal();}});
 (function setupAssetTripleClicks(){document.querySelectorAll('.item-value[data-asset]').forEach(el=>{let clicks=[];el.addEventListener('click',e=>{const now=Date.now();clicks.push(now);clicks=clicks.filter(t=>now-t<=1000);if(clicks.length>=3){clicks=[];e.preventDefault();e.stopPropagation();openAssetModal(el.getAttribute('data-asset')); }});});})();
 window.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;if(!e.shiftKey)return;if(e.key.toLowerCase()==='q'){e.preventDefault();openWalletEditor();}});
 
-const COINS = ['BTC', 'SOL', 'ETH'];
-const USD_CAD_REFERENCE = 1.365;
-const REFERENCE_MARKET = {
-  BTC: { price: 142500, open24h: 140850, change24h: 1650, changePct: 1.17, high24h: 144900, low24h: 139700, volume24h: 28400000000 },
-  SOL: { price: 228.40, open24h: 221.85, change24h: 6.55, changePct: 2.95, high24h: 233.70, low24h: 217.20, volume24h: 3120000000 },
-  ETH: { price: 4860, open24h: 4775, change24h: 85, changePct: 1.78, high24h: 4935, low24h: 4690, volume24h: 16800000000 }
-};
-
-function emptyMarketData() {
-  return {
-    price: null, open24h: null, change24h: null, changePct: null,
-    high24h: null, low24h: null, volume24h: null, lastUpdatedAt: 0
-  };
+function updateTickerBar(coin){
+ const data=marketPrices?.[coin];
+ const priceEl=document.getElementById(`tickerPrice${coin}`);
+ const changeEl=document.getElementById(`tickerChange${coin}`);
+ if(!priceEl||!changeEl)return;
+ if(!data||!Number.isFinite(data.price)){
+  priceEl.textContent='—';
+  changeEl.textContent='—';
+  changeEl.className='ticker-change';
+  return;
+ }
+ const price=coin==='SOL'?`$${data.price.toFixed(2)}`:`$${data.price.toLocaleString('en-US',{maximumFractionDigits:0})}`;
+ const pct=Number(data.changePct);
+ priceEl.textContent=price;
+ if(Number.isFinite(pct)){
+  const sign=pct>0?'+':'';
+  changeEl.textContent=`${sign}${pct.toFixed(2)}%`;
+  changeEl.className=`ticker-change ${pct>=0?'up':'down'}`;
+ }else{
+  changeEl.textContent='—';
+  changeEl.className='ticker-change';
+ }
 }
 
-function formatMarketPrice(coin, value) {
-  if (!Number.isFinite(value)) return '—';
-  return coin === 'SOL'
-    ? `$${value.toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-    : `$${value.toLocaleString('en-CA', { maximumFractionDigits: 0 })}`;
+let lastMarketDetailsFetch=0;
+const MARKET_PRICE_POLL_MS=30000;
+const MARKET_DETAILS_POLL_MS=60000;
+const COINS=['BTC','SOL','ETH'];
+const EMPTY_MARKET={price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null,lastUpdatedAt:0};
+
+async function fetchJson(url, timeoutMs=10000){
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),timeoutMs);
+ try{
+  const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
+  if(!response.ok)throw new Error(`HTTP ${response.status}`);
+  return await response.json();
+ }finally{clearTimeout(timeout);}
 }
 
-function syncCryptoUsdRates() {
-  exchangeRatesInUSD.CAD = 1 / USD_CAD_REFERENCE;
-  for (const coin of COINS) {
-    const cad = marketPrices?.[coin]?.price;
-    if (Number.isFinite(cad) && cad > 0) exchangeRatesInUSD[coin] = cad * exchangeRatesInUSD.CAD;
-  }
-}
+let marketPollTimer=null;
+let marketFetchInFlight=false;
+let marketLastSuccessfulFetch=0;
+let marketFailureCount=0;
 
-function updateTickerBar(coin) {
-  const data = marketPrices?.[coin];
-  const priceEl = document.getElementById(`tickerPrice${coin}`);
-  const changeEl = document.getElementById(`tickerChange${coin}`);
-  if (!priceEl || !changeEl) return;
+const MARKET_STALE_AFTER_MS=120000;
+const MARKET_RETRY_BASE_MS=5000;
+const MARKET_RETRY_MAX_MS=30000;
+const COINBASE_SPOT_URL='https://api.coinbase.com/v2/prices';
+const USD_CAD_RATE_URL='https://api.frankfurter.dev/v2/rate/usd/cad';
 
-  if (!data || !Number.isFinite(data.price)) {
-    priceEl.textContent = 'Unavailable';
-    changeEl.textContent = '—';
-    changeEl.className = 'ticker-change';
-    return;
-  }
-
-  priceEl.textContent = formatMarketPrice(coin, data.price);
-  const pct = Number(data.changePct);
-  if (Number.isFinite(pct)) {
-    const sign = pct > 0 ? '+' : '';
-    changeEl.textContent = `${sign}${pct.toFixed(2)}% · reference`;
-    changeEl.className = `ticker-change ${pct >= 0 ? 'up' : 'down'}`;
-  } else {
-    changeEl.textContent = '—';
-    changeEl.className = 'ticker-change';
-  }
-}
-
-function buildReferenceHistory(coin) {
-  const d = REFERENCE_MARKET[coin];
-  const points = [];
-  const now = Date.now();
-  for (let i = 59; i >= 0; i--) {
-    const progress = (59 - i) / 59;
-    const wave = Math.sin(progress * Math.PI * 4 + (coin === 'SOL' ? 0.8 : coin === 'ETH' ? 1.5 : 0.2));
-    const drift = (d.price - d.open24h) * progress;
-    points.push({
-      t: now - i * 60_000,
-      p: d.open24h + drift + wave * d.price * 0.004
-    });
-  }
-  points.push({ t: now, p: d.price });
-  return points;
-}
-
-function initializeReferenceMarket() {
-  const now = Date.now();
-  for (const coin of COINS) {
-    marketPrices[coin] = { ...REFERENCE_MARKET[coin], lastUpdatedAt: now };
-    priceHistory[coin] = buildReferenceHistory(coin);
-  }
-
-  document.documentElement.dataset.marketStatus = 'reference';
-  document.documentElement.dataset.marketMode = 'reference';
-  syncCryptoUsdRates();
-  COINS.forEach(updateTickerBar);
-}
-
-function refreshMarketUI() {
-  COINS.forEach(updateTickerBar);
-  updateMainView(activeCoin);
-  updateOrderBook(activeCoin);
-  renderMarketChart();
-  updateRecentTrades();
-  updateMacTotal();
-  renderBalance();
-  renderExchangeTransactions();
-
-  const exchangeModalEl = document.getElementById('exchangeModal');
-  if (exchangeModalEl?.classList.contains('open') && typeof updateLivePreview === 'function') {
-    updateLivePreview();
-  }
-}
-
-
-function renderMarketChart() {
-  const svg = document.getElementById('marketChart');
-  const line = document.getElementById('chartLine');
-  const area = document.getElementById('chartAreaFill');
-  const grid = document.getElementById('chartGridLines');
-  const dot = document.getElementById('chartDot');
-  if (!svg || !line || !area || !grid || !dot) return;
-
-  const data = priceHistory[activeCoin] || [];
-  if (data.length < 2) return;
-
-  const width = 900;
-  const height = 220;
-  const padX = 8;
-  const padY = 12;
-  const values = data.map(p => p.p).filter(Number.isFinite);
-  if (values.length < 2) return;
-
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const span = Math.max(max - min, max * 0.001);
-  const points = data.map((item, i) => {
-    const x = padX + (i / (data.length - 1)) * (width - padX * 2);
-    const y = height - padY - ((item.p - min) / span) * (height - padY * 2);
-    return [x, y];
+async function fetchLiveUsdCadRate(){
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),10000);
+ try{
+  const response=await fetch(`${USD_CAD_RATE_URL}?_=${Date.now()}`,{
+   cache:'no-store',
+   signal:controller.signal,
+   headers:{Accept:'application/json'}
   });
-
-  const d = points.map((p, i) => `${i ? 'L' : 'M'} ${p[0].toFixed(2)} ${p[1].toFixed(2)}`).join(' ');
-  const areaD = `${d} L ${width - padX} ${height - padY} L ${padX} ${height - padY} Z`;
-  line.setAttribute('d', d);
-  area.setAttribute('d', areaD);
-
-  grid.innerHTML = [0.2, 0.4, 0.6, 0.8].map(r =>
-    `<line x1="${padX}" y1="${(height * r).toFixed(1)}" x2="${width - padX}" y2="${(height * r).toFixed(1)}"></line>`
-  ).join('');
-
-  const last = points[points.length - 1];
-  dot.setAttribute('cx', last[0]);
-  dot.setAttribute('cy', last[1]);
+  if(!response.ok)throw new Error(`USD/CAD HTTP ${response.status}`);
+  const json=await response.json();
+  const rate=Number(json?.rate);
+  if(!Number.isFinite(rate)||rate<=0)throw new Error('Invalid USD/CAD rate');
+  exchangeRatesInUSD.CAD=1/rate;
+  syncCryptoUsdRates();
+  if(typeof updateLivePreview==='function')updateLivePreview();
+  return true;
+ }catch(e){
+  console.warn('Live USD/CAD rate update failed:',e.name==='AbortError'?'request timed out':e);
+  return false;
+ }finally{clearTimeout(timeout);}
 }
 
-function refreshReferenceMarket() {
-  // The market intentionally stays static. Refresh only redraws the local reference data.
-  initializeReferenceMarket();
+function syncCryptoUsdRates(){
+ const usdCad=Number(exchangeRatesInUSD?.CAD);
+ if(!Number.isFinite(usdCad)||usdCad<=0)return;
+ for(const coin of COINS){
+  const cad=Number(marketPrices?.[coin]?.price);
+  if(Number.isFinite(cad)&&cad>0)exchangeRatesInUSD[coin]=cad*usdCad;
+ }
+}
+
+function emptyMarketData(){
+ return {...EMPTY_MARKET};
+}
+
+function updateMarketFreshness(){
+ const now=Date.now();
+ for(const coin of COINS){
+  const data=marketPrices[coin];
+  if(!data || !Number.isFinite(data.price)){
+   updateTickerBar(coin);
+   continue;
+  }
+  if(!Number.isFinite(data.lastUpdatedAt) || now-data.lastUpdatedAt>MARKET_STALE_AFTER_MS){
+   marketPrices[coin]={...emptyMarketData()};
+   priceHistory[coin]=[];
+  }
+  updateTickerBar(coin);
+ }
+ const anyLive=Object.values(marketPrices).some(d=>d&&Number.isFinite(d.price));
+ document.documentElement.dataset.marketStatus=anyLive?'live':'offline';
+ updateMainView(activeCoin);
+ updateOrderBook(activeCoin);
+ updateMacTotal();
+}
+
+function applyLiveMarketData(coin,data){
+ if(!data||!Number.isFinite(data.price)||data.price<=0)return false;
+ const previous=marketPrices[coin]?.price;
+ const previousData=marketPrices[coin]||emptyMarketData();
+ marketPrices[coin]={
+  ...previousData,
+  ...data,
+  price:data.price,
+  lastUpdatedAt:Number.isFinite(data.lastUpdatedAt)?data.lastUpdatedAt:Date.now()
+ };
+ if(!Array.isArray(priceHistory[coin]))priceHistory[coin]=[];
+ if(!Number.isFinite(previous)){
+  priceHistory[coin]=[{t:marketPrices[coin].lastUpdatedAt,p:data.price}];
+ }else if(previous!==data.price){
+  const direction=data.price>=previous?'up':'down';
+  priceHistory[coin].push({t:marketPrices[coin].lastUpdatedAt,p:data.price});
+  if(priceHistory[coin].length>300)priceHistory[coin].shift();
+  updateTickerBar(coin);
+  if(coin===activeCoin)updateMainView(coin,direction);
+  maybeShowPriceAlertToast(coin);
+ }
+ updateTickerBar(coin);
+ return true;
+}
+
+function refreshMarketUI(){
+ COINS.forEach(updateTickerBar);
+ updateMainView(activeCoin);
+ updateOrderBook(activeCoin);
+ updateMacTotal();
+ renderBalance();
+ renderExchangeTransactions();
+ const exchangeModalEl=document.getElementById('exchangeModal');
+ if(exchangeModalEl?.classList.contains('open')&&typeof updateLivePreview==='function')updateLivePreview();
+}
+
+function scheduleNextMarketFetch(delay=MARKET_PRICE_POLL_MS){
+ clearTimeout(marketPollTimer);
+ marketPollTimer=setTimeout(()=>fetchLiveMarketPrices(),delay);
+}
+
+async function fetchLiveMarketPrices(){
+ if(marketFetchInFlight)return false;
+ marketFetchInFlight=true;
+ try{
+  // Primary provider: CoinGecko returns CAD prices plus real 24h market data directly.
+  // No generated/fallback prices are used. If it fails, we fall back to Coinbase spot.
+  const cgUrl='https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana,ethereum&vs_currencies=cad&include_24hr_change=true&include_24hr_vol=true&include_24hr_high=true&include_24hr_low=true&_='+Date.now();
+  let cg=null;
+  try{
+   cg=await fetchJson(cgUrl,12000);
+  }catch(cgError){
+   console.warn('CoinGecko live market request failed, trying Coinbase:',cgError);
+  }
+
+  if(cg?.bitcoin?.cad>0 && cg?.solana?.cad>0 && cg?.ethereum?.cad>0){
+   const map={BTC:'bitcoin',SOL:'solana',ETH:'ethereum'};
+   for(const coin of COINS){
+    const d=cg[map[coin]];
+    const price=Number(d.cad);
+    const changePct=Number(d.cad_24h_change);
+    const high24h=Number(d.cad_24h_high);
+    const low24h=Number(d.cad_24h_low);
+    const volume24h=Number(d.cad_24h_vol);
+    const change24h=Number.isFinite(changePct)?price*(changePct/100):null;
+    const open24h=Number.isFinite(changePct)&&Math.abs(100+changePct)>0?price/(1+changePct/100):null;
+    applyLiveMarketData(coin,{price,changePct,change24h,open24h,high24h,low24h,volume24h,lastUpdatedAt:Date.now()});
+    exchangeRatesInUSD[coin]=exchangeRatesInUSD[coin]||0;
+   }
+   // CAD is the native quote currency here, so no FX conversion is required.
+   exchangeRatesInUSD.CAD=exchangeRatesInUSD.CAD>0?exchangeRatesInUSD.CAD:1;
+   marketLastSuccessfulFetch=Date.now();
+   marketFailureCount=0;
+   document.documentElement.dataset.marketStatus='live';
+   refreshMarketUI();
+   scheduleNextMarketFetch(MARKET_PRICE_POLL_MS);
+   return true;
+  }
+
+  // Fallback provider: Coinbase spot prices + live USD/CAD FX.
+  let usdCad=Number(exchangeRatesInUSD?.CAD);
+  if(!Number.isFinite(usdCad)||usdCad<=0){
+   const fxReady=await fetchLiveUsdCadRate();
+   usdCad=Number(exchangeRatesInUSD?.CAD);
+   if(!fxReady||!Number.isFinite(usdCad)||usdCad<=0)throw new Error('Live USD/CAD rate unavailable');
+  }
+  const symbols={BTC:'BTC-USD',SOL:'SOL-USD',ETH:'ETH-USD'};
+  const results=await Promise.all(Object.entries(symbols).map(async([coin,pair])=>{
+   const json=await fetchJson(`${COINBASE_SPOT_URL}/${pair}/spot?_=${Date.now()}`,10000);
+   const usd=Number(json?.data?.amount);
+   if(!Number.isFinite(usd)||usd<=0)throw new Error(`Invalid Coinbase ${pair} price`);
+   return [coin,usd];
+  }));
+  let received=0;
+  for(const [coin,usd] of results){
+   const price=usd/usdCad;
+   if(!Number.isFinite(price)||price<=0)continue;
+   const previous=marketPrices[coin]||emptyMarketData();
+   applyLiveMarketData(coin,{price,changePct:previous.changePct,change24h:previous.change24h,open24h:previous.open24h,high24h:previous.high24h,low24h:previous.low24h,volume24h:previous.volume24h,lastUpdatedAt:Date.now()});
+   exchangeRatesInUSD[coin]=usd;
+   received++;
+  }
+  if(received!==COINS.length)throw new Error(`Incomplete live response (${received}/${COINS.length})`);
+  marketLastSuccessfulFetch=Date.now();
+  marketFailureCount=0;
+  document.documentElement.dataset.marketStatus='live';
   refreshMarketUI();
-  return Promise.resolve(true);
+  scheduleNextMarketFetch(MARKET_PRICE_POLL_MS);
+  return true;
+ }catch(e){
+  marketFailureCount++;
+  console.warn('All live market providers failed:',e.name==='AbortError'?'request timed out':e);
+  updateMarketFreshness();
+  const retryDelay=Math.min(MARKET_RETRY_MAX_MS,MARKET_RETRY_BASE_MS*Math.pow(2,Math.min(marketFailureCount-1,3)));
+  scheduleNextMarketFetch(retryDelay);
+  return false;
+ }finally{
+  marketFetchInFlight=false;
+ }
+}
+async function fetchMarketDetails(){
+ return true;
 }
 
-async function fetchRealMarketData() {
-  return refreshReferenceMarket();
-}
+async function fetchRealMarketData(){return fetchLiveMarketPrices();}
 
 let marketPrices = {BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData()};
 let activeCoin = 'BTC';
 let recentTrades = [];
-let userTrades = [];
 let priceHistory = {BTC:[],SOL:[],ETH:[]};
 
 function updateMainView(coin, flashDir) {
  const data=marketPrices[coin];
  const priceEl=document.getElementById('mciPrice');
  if(!data||!Number.isFinite(data.price)){
-  if(priceEl)priceEl.textContent='Price unavailable';
-  const changeEl=document.getElementById('mciChange'); if(changeEl)changeEl.textContent='Waiting for live market data…';
+  if(priceEl)priceEl.textContent='—';
+  const changeEl=document.getElementById('mciChange'); if(changeEl)changeEl.textContent='Simulated market';
   ['mciOpen','mciHigh','mciLow','mciVolume','obMidPrice'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
   updateMacTotal();
   return;
@@ -3141,20 +2578,25 @@ function updateMainView(coin, flashDir) {
   priceEl.classList.add(`tick-${flashDir}`,`flash-${flashDir}`);
   setTimeout(()=>priceEl.classList.remove('flash-up','flash-down'),700);
  }
- const fmtChange=coin==='SOL'?`${sign}$${Math.abs(data.change24h).toFixed(2)}`:`${sign}$${Math.abs(Math.round(data.change24h)).toLocaleString('en-US')}`;
+ const change24h=Number(data.change24h);
+ const changePct=Number(data.changePct);
+ const open24h=Number(data.open24h);
+ const high24h=Number(data.high24h);
+ const low24h=Number(data.low24h);
+ const fmtChange=Number.isFinite(change24h)?(coin==='SOL'?`${sign}$${Math.abs(change24h).toFixed(2)}`:`${sign}$${Math.abs(Math.round(change24h)).toLocaleString('en-US')}`):'—';
  const changeEl=document.getElementById('mciChange');
  const pctEl=document.getElementById('mciPct');
  if(changeEl){changeEl.textContent=fmtChange;changeEl.className=`mpm-change ${isUp?'up':'down'}`;}
- if(pctEl){pctEl.textContent=`${sign}${data.changePct.toFixed(2)}%`;pctEl.className=`mpm-badge ${isUp?'up':'down'}`;}
- const fmtOpen=coin==='SOL'?`$${data.open24h.toFixed(2)}`:`$${Math.round(data.open24h).toLocaleString('en-US')}`;
- const fmtHigh=coin==='SOL'?`$${data.high24h.toFixed(2)}`:`$${data.high24h.toLocaleString('en-US')}`;
- const fmtLow=coin==='SOL'?`$${data.low24h.toFixed(2)}`:`$${data.low24h.toLocaleString('en-US')}`;
+ if(pctEl){pctEl.textContent=Number.isFinite(changePct)?`${sign}${changePct.toFixed(2)}%`:'—';pctEl.className=`mpm-badge ${isUp?'up':'down'}`;}
+ const fmtOpen=Number.isFinite(open24h)?(coin==='SOL'?`$${open24h.toFixed(2)}`:`$${Math.round(open24h).toLocaleString('en-US')}`):'—';
+ const fmtHigh=Number.isFinite(high24h)?(coin==='SOL'?`$${high24h.toFixed(2)}`:`$${high24h.toLocaleString('en-US')}`):'—';
+ const fmtLow=Number.isFinite(low24h)?(coin==='SOL'?`$${low24h.toFixed(2)}`:`$${low24h.toLocaleString('en-US')}`):'—';
  const openEl=document.getElementById('statOpen'),highEl=document.getElementById('statHigh'),lowEl=document.getElementById('statLow'),volEl=document.getElementById('statVol');
  if(openEl)openEl.textContent=fmtOpen;
  if(highEl)highEl.textContent=fmtHigh;
  if(lowEl)lowEl.textContent=fmtLow;
- const vol=data.volume24h;
- const volFmt=vol>=1e9?`$${(vol/1e9).toFixed(1)}B`:vol>=1e6?`$${(vol/1e6).toFixed(0)}M`:`$${vol.toFixed(0)}`;
+ const vol=Number(data.volume24h);
+ const volFmt=Number.isFinite(vol)?(vol>=1e9?`$${(vol/1e9).toFixed(1)}B`:vol>=1e6?`$${(vol/1e6).toFixed(0)}M`:`$${vol.toFixed(0)}`):'—';
  if(volEl)volEl.textContent=volFmt;
  const midEl=document.getElementById('obMidPrice');
  if(midEl)midEl.textContent=fmtPrice;
@@ -3163,84 +2605,30 @@ function updateMainView(coin, flashDir) {
  updateMacTotal();
 }
 function updateOrderBook(coin) {
-  const obAsks = document.getElementById('obAsks');
-  const obBids = document.getElementById('obBids');
-  const obSpread = document.getElementById('obSpread');
-  const obUserOrders = document.getElementById('obUserOrders');
-  const obMid = document.getElementById('obMidPrice');
-  if (!obAsks || !obBids) return;
-
-  const price = marketPrices[coin]?.price;
-  if (!Number.isFinite(price)) {
-    obAsks.innerHTML = '';
-    obBids.innerHTML = '';
-    if (obSpread) obSpread.textContent = 'Spread: —';
-    if (obMid) obMid.textContent = '—';
-    return;
-  }
-
-  const isSol = coin === 'SOL';
-  const tick = isSol ? 0.15 : coin === 'ETH' ? 3 : 75;
-  const amountBase = coin === 'BTC' ? 0.08 : coin === 'ETH' ? 0.9 : 18;
-  const levels = 6;
-
-  const rows = side => Array.from({ length: levels }, (_, i) => {
-    const level = i + 1;
-    const levelPrice = price + (side === 'ask' ? tick * level : -tick * level);
-    const size = amountBase * (0.72 + ((level * 17) % 9) / 20);
-    return {
-      price: levelPrice,
-      size,
-      total: levelPrice * size
-    };
-  });
-
-  const asks = rows('ask').reverse();
-  const bids = rows('bid');
-  const maxTotal = Math.max(...asks.concat(bids).map(r => r.total), 1);
-
-  const rowHtml = (row, side) => {
-    const decimals = isSol ? 2 : coin === 'BTC' ? 0 : 2;
-    const priceText = `$${row.price.toLocaleString('en-CA', {
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals
-    })}`;
-    const sizeText = row.size.toFixed(4);
-    const totalText = `$${row.total.toLocaleString('en-CA', {
-      maximumFractionDigits: 0
-    })}`;
-    const fill = Math.min(100, Math.max(8, (row.total / maxTotal) * 100));
-
-    return `<div class="ob-row ${side}">
-      <div class="ob-row-fill" style="width:${fill}%"></div>
-      <span class="ob-price ${side}">${priceText}</span>
-      <span class="ob-size">${sizeText}</span>
-      <span class="ob-total">${totalText}</span>
-    </div>`;
-  };
-
-  obAsks.innerHTML = asks.map(row => rowHtml(row, 'ask')).join('');
-  obBids.innerHTML = bids.map(row => rowHtml(row, 'bid')).join('');
-
-  const spread = tick * 2;
-  if (obSpread) {
-    obSpread.textContent = `Spread: ${isSol ? '$' + spread.toFixed(2) : '$' + spread.toLocaleString('en-CA')}`;
-  }
-  if (obMid) obMid.textContent = formatMarketPrice(coin, price);
-
-  if (obUserOrders) {
-    const name = (document.getElementById('profileName')?.textContent || 'You').trim() || 'You';
-    const orders = userTrades.filter(t => t.coin === coin).slice(0, 3);
-    obUserOrders.innerHTML = orders.map(t => {
-      const p = formatMarketPrice(coin, t.price);
-      return `<div class="ob-user-row ${t.side}">
-        <div class="ob-user-name">${name}</div>
-        <div class="ob-user-price">${p}</div>
-        <div class="ob-user-side ${t.side}">${t.side === 'buy' ? 'Buy' : 'Sell'} ${t.size.toFixed(4)}</div>
-      </div>`;
-    }).join('');
-    obUserOrders.style.display = orders.length ? 'block' : 'none';
-  }
+ const obAsks=document.getElementById('obAsks'),obBids=document.getElementById('obBids'),obSpread=document.getElementById('obSpread'),obUserOrders=document.getElementById('obUserOrders'),obMid=document.getElementById('obMidPrice');
+ if(!obAsks||!obBids)return;
+ const price=marketPrices[coin]?.price;
+ const safePrice=Number.isFinite(price)&&price>0?price:SIMULATED_MARKET_BASE[coin];
+ const step=coin==='BTC'?safePrice*0.00035:(coin==='ETH'?safePrice*0.0006:safePrice*0.0009);
+ const rows=6;
+ const makeRows=(side)=>Array.from({length:rows},(_,i)=>{
+  const level=side==='ask'?safePrice+step*(i+1):safePrice-step*(i+1);
+  const size=(Math.random()*1.8+0.15)*(coin==='BTC'?0.12:(coin==='ETH'?1.6:18));
+  const total=level*size;
+  const width=Math.min(92,12+i*12+Math.random()*10);
+  const p=coin==='SOL'?level.toFixed(2):Math.round(level).toLocaleString('en-US');
+  return `<div class="ob-row ${side}"><div class="ob-row-fill" style="width:${width}%"></div><div class="ob-price ${side}">$${p}</div><div class="ob-size">${size.toFixed(4)}</div><div class="ob-total">$${total>=1e6?(total/1e6).toFixed(2)+'M':(total/1e3).toFixed(1)+'K'}</div></div>`;
+ }).join('');
+ obAsks.innerHTML=makeRows('ask');
+ obBids.innerHTML=makeRows('bid');
+ if(obSpread)obSpread.textContent=`Spread: $${(step*2).toFixed(coin==='SOL'?2:0)}`;
+ if(obMid)obMid.textContent=Number.isFinite(price)?(coin==='SOL'?`$${price.toFixed(2)}`:`$${price.toLocaleString('en-US')}`):`$${safePrice.toLocaleString('en-US')}`;
+ if(obUserOrders){
+  const name=(document.getElementById('profileName')?.textContent||'You').trim()||'You';
+  const orders=userTrades.filter(t=>t.coin===coin).slice(0,3);
+  obUserOrders.innerHTML=orders.map(t=>{const p=coin==='SOL'?t.price.toFixed(2):Math.round(t.price).toLocaleString('en-US');return `<div class="ob-user-row ${t.side}"><div class="ob-user-name">${name}</div><div class="ob-user-price">$${p}</div><div class="ob-user-side ${t.side}">${t.side==='buy'?'Buy':'Sell'} ${t.size.toFixed(4)}</div></div>`;}).join('');
+  obUserOrders.style.display=orders.length?'block':'none';
+ }
 }
 
 function updateRecentTrades() {
@@ -3256,13 +2644,13 @@ function setMacTab(tab){
  document.getElementById('macAmountInput').value=''; updateMacTotal();
 }
 function setMacPct(pct,el){document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));el.classList.add('active');const bal=macCurrentTab==='buy'?getBalanceForCurrency('CAD'):getBalanceForCurrency(activeCoin);const dec=macCurrentTab==='buy'?2:4;const factor=Math.pow(10,dec);document.getElementById('macAmountInput').value=(Math.floor(bal*(pct/100)*factor)/factor).toFixed(dec);updateMacTotal();}
-function updateMacTotal(){const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const price=marketPrices[activeCoin]?.price;const out=document.getElementById('macTotalVal');if(!out)return;if(!Number.isFinite(price)){out.textContent='Price unavailable';return;}if(macCurrentTab==='buy')out.textContent=`${(amt/price).toFixed(4)} ${activeCoin}`;else out.textContent=`${(amt*price).toFixed(2)} CAD`;}
+function updateMacTotal(){const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const price=Number(marketPrices[activeCoin]?.price)||SIMULATED_MARKET_BASE[activeCoin];const out=document.getElementById('macTotalVal');if(!out)return;if(macCurrentTab==='buy')out.textContent=`${(amt/price).toFixed(4)} ${activeCoin}`;else out.textContent=`${(amt*price).toFixed(2)} CAD`;}
 function macSubmitOrder(){
- const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const livePrice=marketPrices[activeCoin]?.price;if(amt<=0)return;if(!Number.isFinite(livePrice)){showToast('Price unavailable — try again in a moment');return;}const btn=document.getElementById('macSubmitBtn');btn.style.opacity='0.6';btn.style.pointerEvents='none';
+ const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const livePrice=Number(marketPrices[activeCoin]?.price)||SIMULATED_MARKET_BASE[activeCoin];if(amt<=0)return;const btn=document.getElementById('macSubmitBtn');btn.style.opacity='0.6';btn.style.pointerEvents='none';
  setTimeout(()=>{btn.style.opacity='1';btn.style.pointerEvents='';const price=livePrice;
   if(macCurrentTab==='buy'){const received=amt/price;if(internalHiddenBalanceCAD<amt){showToast('Insufficient CAD balance');return;}deductBalanceForCurrency('CAD',amt);addBalanceForCurrency(activeCoin,received);userTrades.unshift({coin:activeCoin,price,size:received,side:'buy',time:new Date()});showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);}
   else{const received=amt*price;const bal=getBalanceForCurrency(activeCoin);if(bal<amt){showToast(`Insufficient ${activeCoin} balance`);return;}deductBalanceForCurrency(activeCoin,amt);addBalanceForCurrency('CAD',received);userTrades.unshift({coin:activeCoin,price,size:amt,side:'sell',time:new Date()});showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);}
-  if(userTrades.length>20)userTrades.pop();renderBalance();updateOrderBook(activeCoin);document.getElementById('macAmountInput').value='';document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));updateMacTotal();
+  if(userTrades.length>20)userTrades.pop();renderBalance();saveWalletState();updateOrderBook(activeCoin);document.getElementById('macAmountInput').value='';document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));updateMacTotal();
  },700);
 }
 function selectMarketCoin(coin) {
@@ -3287,20 +2675,65 @@ mciIcon.innerHTML = iconMap[coin];
 updateMainView(coin, null);
 updateOrderBook(coin);
 updateRecentTrades();
-renderMarketChart();
 setMacTab(macCurrentTab);
 updateMarketAlerts();
 }
 renderExchangeTransactions();
-// Local reference market: no network requests and no live-price dependency.
-function loadReferenceMarket() {
-  initializeReferenceMarket();
-  updateRecentTrades();
-  refreshMarketUI();
+// Simulated market: prices are intentionally fake and generated locally.
+// Nothing here depends on an external market API, so the wallet/exchange always has prices.
+const SIMULATED_MARKET_BASE = {BTC:155000,SOL:215,ETH:5200};
+const SIMULATED_MARKET_RANGE = {BTC:0.0045,SOL:0.009,ETH:0.006};
+function seedSimulatedMarket(){
+ const now=Date.now();
+ for(const coin of COINS){
+  const base=SIMULATED_MARKET_BASE[coin];
+  const drift=(Math.random()*2-1)*SIMULATED_MARKET_RANGE[coin];
+  const price=base*(1+drift);
+  const changePct=(Math.random()*5.6)-2.8;
+  const open24h=price/(1+changePct/100);
+  const high24h=Math.max(price,open24h)*(1+Math.random()*0.018);
+  const low24h=Math.min(price,open24h)*(1-Math.random()*0.018);
+  const volume24h=coin==='BTC'?(8.5e9+Math.random()*3.5e9):(coin==='ETH'?(2.8e9+Math.random()*1.7e9):(1.2e9+Math.random()*900e6));
+  marketPrices[coin]={price,open24h,changePct,change24h:price-open24h,high24h,low24h,volume24h,lastUpdatedAt:now};
+  priceHistory[coin]=Array.from({length:48},(_,i)=>({t:now-(47-i)*60000,p:price*(1+((Math.random()-.5)*.025))}));
+  priceHistory[coin][47].p=price;
+ }
+ document.documentElement.dataset.marketStatus='simulated';
+ refreshMarketUI();
 }
-
-loadReferenceMarket();
-
+function tickSimulatedMarket(){
+ const now=Date.now();
+ for(const coin of COINS){
+  const data=marketPrices[coin];
+  if(!data||!Number.isFinite(data.price))continue;
+  const previous=data.price;
+  const move=(Math.random()*2-1)*SIMULATED_MARKET_RANGE[coin];
+  const price=Math.max(0.01,previous*(1+move));
+  const changePct=Math.max(-12,Math.min(12,(Number(data.changePct)||0)+(Math.random()-.5)*0.35));
+  data.price=price;
+  data.changePct=changePct;
+  data.change24h=price-(price/(1+changePct/100));
+  data.open24h=price/(1+changePct/100);
+  data.high24h=Math.max(Number(data.high24h)||price,price);
+  data.low24h=Math.min(Number(data.low24h)||price,price);
+  data.volume24h=(Number(data.volume24h)||0)+(Math.random()*3-1)*9000000;
+  data.lastUpdatedAt=now;
+  priceHistory[coin].push({t:now,p:price});
+  if(priceHistory[coin].length>300)priceHistory[coin].shift();
+  exchangeRatesInUSD[coin]=price;
+  updateTickerBar(coin);
+  if(coin===activeCoin)updateMainView(coin,price>=previous?'up':'down');
+  maybeShowPriceAlertToast(coin);
+ }
+ document.documentElement.dataset.marketStatus='simulated';
+ updateOrderBook(activeCoin);
+ updateMacTotal();
+ if(document.getElementById('exchangeModal')?.classList.contains('open'))updateLivePreview();
+}
+seedSimulatedMarket();
+setInterval(tickSimulatedMarket,5000);
+setInterval(fetchLiveUsdCadRate,3600000);
+setInterval(updateMarketFreshness,15000);
 let priceAlertsEnabled = {BTC:false, SOL:false, ETH:false};
 let globalAlertsOn = false;
 let lastAlertToastAt = {BTC:0,SOL:0,ETH:0};
@@ -3363,7 +2796,10 @@ showToast(msg);
 selectMarketCoin('BTC');
 setMacTab('buy');
 const MARGINAL_TAX_RATE = 0.33; // applied to the 50% taxable inclusion only
-const exchangeRatesInUSD = {USD:1.0,CAD:1/USD_CAD_REFERENCE,BTC:REFERENCE_MARKET.BTC.price/USD_CAD_REFERENCE,SOL:REFERENCE_MARKET.SOL.price/USD_CAD_REFERENCE,ETH:REFERENCE_MARKET.ETH.price/USD_CAD_REFERENCE};
+const exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
+exchangeRatesInUSD.CAD=1;
+for(const coin of COINS)exchangeRatesInUSD[coin]=Number(marketPrices[coin]?.price)||SIMULATED_MARKET_BASE[coin];
+fetchLiveUsdCadRate();
 initializeCostBasis();
 function showToast(message, duration=3500) { toastMessage.textContent=message; toastNotification.classList.add('show'); setTimeout(()=>toastNotification.classList.remove('show'),duration); }
 function calculateConversion(amount, fromCurr, toCurr) {
@@ -3403,9 +2839,9 @@ return;
 }
 const conversion=calculateConversion(amount, fromCurr, toCurr);
  if(conversion.unavailable){
-  document.getElementById('previewFeeVal').textContent='Price unavailable';
-  document.getElementById('previewTaxVal').textContent='Price unavailable';
-  document.getElementById('livePreviewVal').textContent='Price unavailable';
+  document.getElementById('previewFeeVal').textContent='0.00 '+fromCurr;
+  document.getElementById('previewTaxVal').textContent='0.00 '+fromCurr;
+  document.getElementById('livePreviewVal').textContent='0.00 '+toCurr;
   return;
  }
  const {receivedAmount, feeInFrom, taxInFrom} = conversion;
@@ -3564,7 +3000,7 @@ if(document.getElementById('toggleTxAlerts').checked){ showToast(dict.exSuccessM
 });
 document.getElementById('toggleHideBalances').addEventListener('change', e=>{ balanceText.classList.toggle('blurred', e.target.checked); });
 document.getElementById('settingDefaultCurrency').addEventListener('change', e=>{ const val=e.target.value; if(val==='CAD'||val==='USD'){currentCurrency=val;walletSelector.value=val;renderBalance();} });
-document.getElementById('btnClearActivity').addEventListener('click', ()=>{ recentActivities=[]; renderRecentActivity(); const dict=translations[currentLang]||translations['en-CA']; showToast(dict.activityClearedMsg,2500); });
+document.getElementById('btnClearActivity').addEventListener('click', ()=>{ recentActivities=[]; renderRecentActivity(); saveWalletState(); const dict=translations[currentLang]||translations['en-CA']; showToast(dict.activityClearedMsg,2500); });
 document.getElementById('btnResetApp').addEventListener('click', ()=>{
 setTheme('dark');
 document.getElementById('toggleHideBalances').checked=false;
@@ -3612,7 +3048,7 @@ let mStartY=0,mCurrentY=0,mIsDragging=false,mIsRefreshing=false;
 function mHandleStart(y){if(marketPanel.scrollTop<=0&&!mIsRefreshing){mStartY=y;mCurrentY=y;mIsDragging=true;marketContent.style.transition='none';marketIndicator.classList.remove('completed');}}
 function mHandleMove(y,e){if(!mIsDragging||mIsRefreshing)return;mCurrentY=y;const rawDistance=mCurrentY-mStartY;if(rawDistance>0&&marketPanel.scrollTop<=0){if(e.cancelable)e.preventDefault();const dragOffset=Math.pow(rawDistance*0.45,0.90);marketContent.style.transform=`translateY(${dragOffset}px)`;const progress=Math.min(dragOffset/triggerThreshold,1.0);marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE-(progress*CIRCUMFERENCE*0.82);if(dragOffset>10)marketIndicator.classList.add('visible');else marketIndicator.classList.remove('visible');if(dragOffset>=triggerThreshold){if(!marketIndicator.classList.contains('ready')){triggerHaptic();marketIndicator.classList.add('ready');marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).releaseToUpdate||'Release to update';}}else{if(marketIndicator.classList.contains('ready')){marketIndicator.classList.remove('ready');marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).pullToRefresh||'Pull to refresh';}}}}
 function mExitRefreshState(){marketContent.style.transition='transform 0.38s cubic-bezier(0.22,1,0.36,1)';marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready','completed');setTimeout(()=>{mIsRefreshing=false;marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE;marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).pullToRefresh||'Pull to refresh';},380);}
-function mHandleEnd(){if(!mIsDragging)return;mIsDragging=false;const rawDistance=mCurrentY-mStartY;const finalOffset=Math.pow(Math.max(0,rawDistance)*0.45,0.90);marketContent.style.transition='transform 0.42s cubic-bezier(0.175,0.885,0.32,1.15)';if(finalOffset>=triggerThreshold&&rawDistance>0){mIsRefreshing=true;marketContent.style.transform=`translateY(${triggerThreshold-12}px)`;marketIndicator.classList.add('visible','refreshing');marketIndicator.classList.remove('ready');marketRefreshText.textContent='Refreshing market...';marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*0.25;fetchRealMarketData().finally(()=>{marketIndicator.classList.remove('refreshing');marketIndicator.classList.add('completed');marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).updated||'Updated';triggerHaptic();setTimeout(()=>mExitRefreshState(),520);});}else{marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready');}}
+function mHandleEnd(){if(!mIsDragging)return;mIsDragging=false;const rawDistance=mCurrentY-mStartY;const finalOffset=Math.pow(Math.max(0,rawDistance)*0.45,0.90);marketContent.style.transition='transform 0.42s cubic-bezier(0.175,0.885,0.32,1.15)';if(finalOffset>=triggerThreshold&&rawDistance>0){mIsRefreshing=true;marketContent.style.transform=`translateY(${triggerThreshold-12}px)`;marketIndicator.classList.add('visible','refreshing');marketIndicator.classList.remove('ready');marketRefreshText.textContent='Fetching prices...';marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*0.25;fetchRealMarketData().finally(()=>{marketIndicator.classList.remove('refreshing');marketIndicator.classList.add('completed');marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).updated||'Updated';triggerHaptic();setTimeout(()=>mExitRefreshState(),520);});}else{marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready');}}
 marketPanel.addEventListener('touchstart',e=>mHandleStart(e.touches[0].clientY),{passive:true});
 marketPanel.addEventListener('touchmove',e=>mHandleMove(e.touches[0].clientY,e),{passive:false});
 marketPanel.addEventListener('touchend',mHandleEnd);
@@ -3628,50 +3064,13 @@ let pStartY=0,pCurrentY=0,pIsDragging=false,pIsRefreshing=false;
 function pHandleStart(y){if(profitsPanel.scrollTop<=0&&!pIsRefreshing){pStartY=y;pCurrentY=y;pIsDragging=true;profitsContent.style.transition='none';profitsIndicator.classList.remove('completed');}}
 function pHandleMove(y,e){if(!pIsDragging||pIsRefreshing)return;pCurrentY=y;const raw=pCurrentY-pStartY;if(raw>0&&profitsPanel.scrollTop<=0){if(e.cancelable)e.preventDefault();const off=Math.pow(raw*0.45,0.90);profitsContent.style.transform=`translateY(${off}px)`;const progress=Math.min(off/triggerThreshold,1);profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE-(progress*CIRCUMFERENCE*0.82);profitsIndicator.classList.toggle('visible',off>10);if(off>=triggerThreshold){if(!profitsIndicator.classList.contains('ready')){triggerHaptic();profitsIndicator.classList.add('ready');profitsRefreshText.textContent='Release to update';}}else{profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Pull to refresh';}}}
 function pExitRefresh(){profitsContent.style.transition='transform .38s cubic-bezier(.22,1,.36,1)';profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready','completed');setTimeout(()=>{pIsRefreshing=false;profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE;profitsRefreshText.textContent='Pull to refresh';},380);}
-function pHandleEnd(){if(!pIsDragging)return;pIsDragging=false;const raw=pCurrentY-pStartY;const off=Math.pow(Math.max(0,raw)*0.45,0.90);profitsContent.style.transition='transform .42s cubic-bezier(.175,.885,.32,1.15)';if(off>=triggerThreshold&&raw>0){pIsRefreshing=true;profitsContent.style.transform=`translateY(${triggerThreshold-12}px)`;profitsIndicator.classList.add('visible','refreshing');profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Updating...';profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*.25;refreshReferenceMarket().finally(()=>{renderExchangeTransactions();profitsIndicator.classList.remove('refreshing');profitsIndicator.classList.add('completed');profitsRefreshText.textContent='Updated';triggerHaptic();setTimeout(pExitRefresh,520);});}else{profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready');}}
+function pHandleEnd(){if(!pIsDragging)return;pIsDragging=false;const raw=pCurrentY-pStartY;const off=Math.pow(Math.max(0,raw)*0.45,0.90);profitsContent.style.transition='transform .42s cubic-bezier(.175,.885,.32,1.15)';if(off>=triggerThreshold&&raw>0){pIsRefreshing=true;profitsContent.style.transform=`translateY(${triggerThreshold-12}px)`;profitsIndicator.classList.add('visible','refreshing');profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Updating prices...';profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*.25;fetchLiveMarketPrices().finally(()=>{renderExchangeTransactions();profitsIndicator.classList.remove('refreshing');profitsIndicator.classList.add('completed');profitsRefreshText.textContent='Updated';triggerHaptic();setTimeout(pExitRefresh,520);});}else{profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready');}}
 profitsPanel.addEventListener('touchstart',e=>pHandleStart(e.touches[0].clientY),{passive:true});
 profitsPanel.addEventListener('touchmove',e=>pHandleMove(e.touches[0].clientY,e),{passive:false});
 profitsPanel.addEventListener('touchend',pHandleEnd);
 profitsPanel.addEventListener('mousedown',e=>pHandleStart(e.clientY));
 window.addEventListener('mousemove',e=>{if(pIsDragging)pHandleMove(e.clientY,e);});
 window.addEventListener('mouseup',()=>{if(pIsDragging)pHandleEnd();});
-</script>
-
-<script>
-/* Final UI polish and local persistence. */
-(function () {
-  const originalSetTheme = window.setTheme;
-  window.setTheme = function (themeName) {
-    originalSetTheme(themeName);
-    try { localStorage.setItem('walletTheme', themeName); } catch (_) {}
-    document.documentElement.dataset.theme = themeName;
-  };
-
-  try {
-    const savedTheme = localStorage.getItem('walletTheme');
-    if (savedTheme && ['dark', 'emerald', 'midnight'].includes(savedTheme)) {
-      window.setTheme(savedTheme);
-    }
-  } catch (_) {}
-
-  const chartButtons = document.querySelectorAll('#chartTimeRange .tr-btn');
-  chartButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      chartButtons.forEach(item => item.classList.remove('active'));
-      button.classList.add('active');
-      renderMarketChart();
-    });
-  });
-
-  window.addEventListener('resize', () => {
-    if (currentPanelId === 'marketPanel') renderMarketChart();
-  });
-
-  setTimeout(() => {
-    if (typeof refreshMarketUI === 'function') refreshMarketUI();
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-  }, 0);
-})();
 </script>
 </body>
 </html>
