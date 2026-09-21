@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -27,77 +27,16 @@
 --card-border: rgba(255, 255, 255, 0.08);
 --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
 }
-
-
-
-
-.theme-preview-box.dark {
-  background:
-    linear-gradient(135deg, #1e1e24 0%, #111115 58%, #0c0c0e 100%);
+body.theme-emerald {
+--card-gradient: radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.25) 0%, transparent 50%), linear-gradient(135deg, #064e3b 0%, #022c22 50%, #0f172a 100%);
+--card-border: rgba(52, 211, 153, 0.25);
+--card-shadow: 0 20px 50px -12px rgba(16, 185, 129, 0.35), 0 8px 20px rgba(0, 0, 0, 0.4);
 }
-
-
-/* DARK ONYX — original brighter neutral palette */
-body {
-  --bg-main: #070709;
-  --bg-sidebar: #0c0c0e;
-  --bg-card: #111115;
-  --bg-input: #18181d;
-  --bg-surface: rgba(255, 255, 255, 0.04);
-  --bg-surface-hover: rgba(255, 255, 255, 0.065);
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-card: rgba(255, 255, 255, 0.10);
-  --text-main: #ffffff;
-  --text-heading: #f4f4f6;
-  --text-muted: #7a7a83;
-  --text-dark-muted: #5a5a65;
-  --accent-primary: #60a5fa;
-  --accent-primary-strong: #3b82f6;
-  --accent-focus: #60a5fa;
-  --accent-green: #34d399;
-  --accent-red: #f87171;
-  --nav-active-bg: rgba(255, 255, 255, 0.06);
-  --nav-active-border: rgba(255, 255, 255, 0.10);
-  --card-gradient: linear-gradient(135deg, #1e1e24 0%, #111115 100%);
-  --card-border: rgba(255, 255, 255, 0.10);
-  --card-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.45);
+body.theme-midnight {
+--card-gradient: radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.2) 0%, transparent 50%), linear-gradient(135deg, #2d1b4e 0%, #3730a3 50%, #0f172a 100%);
+--card-border: rgba(168, 85, 247, 0.22);
+--card-shadow: 0 20px 50px -12px rgba(147, 51, 234, 0.35), 0 8px 20px rgba(0, 0, 0, 0.4);
 }
-
-/* NAVY THEME */
-body.theme-navy {
-  --bg-main: #050b16;
-  --bg-sidebar: #07111f;
-  --bg-card: #0b1728;
-  --bg-input: #0f1d31;
-  --bg-surface: rgba(255, 255, 255, 0.035);
-  --bg-surface-hover: rgba(255, 255, 255, 0.055);
-  --border-subtle: rgba(148, 163, 184, 0.14);
-  --border-card: rgba(96, 165, 250, 0.18);
-  --text-main: #ffffff;
-  --text-heading: #f4f7fb;
-  --text-muted: #8190a5;
-  --text-dark-muted: #536176;
-  --accent-primary: #60a5fa;
-  --accent-primary-strong: #3b82f6;
-  --accent-focus: #60a5fa;
-  --accent-green: #34d399;
-  --accent-red: #f87171;
-  --nav-active-bg: rgba(59, 130, 246, 0.14);
-  --nav-active-border: rgba(96, 165, 250, 0.28);
-  --card-gradient:
-    radial-gradient(circle at 82% 18%, rgba(96, 165, 250, 0.18) 0%, transparent 52%),
-    linear-gradient(135deg, #102542 0%, #0b1728 52%, #07111f 100%);
-  --card-border: rgba(96, 165, 250, 0.22);
-  --card-shadow:
-    0 20px 50px -12px rgba(37, 99, 235, 0.28),
-    0 8px 20px rgba(0, 0, 0, 0.48);
-}
-.theme-preview-box.navy {
-  background:
-    radial-gradient(circle at 80% 20%, rgba(96, 165, 250, 0.28), transparent 55%),
-    linear-gradient(135deg, #102542 0%, #0b1728 55%, #07111f 100%);
-}
-
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; user-select: none; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; background-color: var(--bg-main); }
 body {
@@ -486,9 +425,9 @@ will-change: transform;
 .theme-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
 .theme-card.active { border-color: #ffffff; background: rgba(255,255,255,0.03); }
 .theme-preview-box { width: 100%; height: 48px; border-radius: 10px; }
-
+.theme-preview-box.emerald { background: radial-gradient(circle at 80% 20%, rgba(52,211,153,0.25) 0%, transparent 50%), linear-gradient(135deg, #064e3b 0%, #022c22 50%, #0f172a 100%); }
 .theme-preview-box.dark { background: radial-gradient(circle at 85% 15%, rgba(255,255,255,0.15) 0%, transparent 45%), linear-gradient(135deg, #1e1e24 0%, #111115 100%); }
-
+.theme-preview-box.midnight { background: radial-gradient(circle at 80% 20%, rgba(168,85,247,0.2) 0%, transparent 50%), linear-gradient(135deg, #2d1b4e 0%, #3730a3 50%, #0f172a 100%); }
 .theme-label { font-size: 13.5px; font-weight: 600; color: #fff; display: flex; justify-content: space-between; align-items: center; }
 .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border-subtle); }
 .settings-row:last-child { border-bottom: none; }
@@ -1334,664 +1273,421 @@ overflow: hidden;
 }
 
 
-/* ===== POLISHED APP OVERRIDES ===== */
-:root{
-  --ease-smooth:cubic-bezier(.22,1,.36,1);
-  --ease-spring:cubic-bezier(.34,1.28,.64,1);
-  --surface-1:rgba(255,255,255,.035);
-  --surface-2:rgba(255,255,255,.055);
-  --hairline:rgba(255,255,255,.065);
-  --hairline-strong:rgba(255,255,255,.105);
-}
-
-/* Subtle depth behind the entire app */
-body::before{
-  content:"";
-  position:fixed;
-  inset:-20%;
-  pointer-events:none;
-  z-index:0;
-  background:
-    radial-gradient(circle at 16% 12%,rgba(99,102,241,.075),transparent 28%),
-    radial-gradient(circle at 82% 78%,rgba(56,189,248,.045),transparent 30%);
-  filter:blur(28px);
-  animation:ambientDrift 18s ease-in-out infinite alternate;
-}
-@keyframes ambientDrift{
-  from{transform:translate3d(-1%,-1%,0) scale(1)}
-  to{transform:translate3d(1.5%,1%,0) scale(1.035)}
-}
-
-.sidebar,.main-dashboard{position:relative;z-index:1}
-.sidebar{
-  background:linear-gradient(180deg,rgba(12,12,15,.98),rgba(8,8,10,.98));
-  box-shadow:18px 0 45px rgba(0,0,0,.16);
-  border-right-color:rgba(255,255,255,.065);
-}
-.sidebar-item{
-  position:relative;
-  overflow:hidden;
-  transition:
-    color .22s var(--ease-smooth),
-    background .22s var(--ease-smooth),
-    transform .22s var(--ease-smooth),
-    box-shadow .22s var(--ease-smooth);
-}
-.sidebar-item::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(90deg,rgba(255,255,255,.075),transparent 70%);
-  opacity:0;
-  transform:translateX(-12px);
-  transition:opacity .22s var(--ease-smooth),transform .3s var(--ease-smooth);
-  pointer-events:none;
-}
-.sidebar-item:hover::before,.sidebar-item.active::before{opacity:1;transform:none}
-.sidebar-item.active{
-  background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035));
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.075),0 8px 22px rgba(0,0,0,.22);
-}
-.sidebar-item.active::after{
-  content:"";
-  position:absolute;
-  left:0;top:8px;bottom:8px;width:2px;
-  border-radius:0 3px 3px 0;
-  background:#fff;
-  box-shadow:0 0 12px rgba(255,255,255,.35);
-}
-.sidebar-item:hover{transform:translateX(2px)}
-
-.main-dashboard{
-  background:
-    radial-gradient(circle at 50% -15%,rgba(255,255,255,.025),transparent 35%),
-    var(--bg-main);
-}
-.scroll-content{
-  scroll-behavior:smooth;
-}
-.scroll-content::before{
-  content:"";
-  position:absolute;
-  top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);
-  pointer-events:none;
-}
-
-/* Cleaner cards: less "floating", more like a real product UI */
-.balance-card,.activity-panel,.asset-list,.profit-summary-card,
-.exchange-transactions,.cost-card,.market-chart-panel,.orderbook-panel,
-.market-action-card,.theme-card{
-  box-shadow:
-    0 18px 50px -28px rgba(0,0,0,.9),
-    inset 0 1px 0 rgba(255,255,255,.045);
-}
-.balance-card{
-  border-color:rgba(255,255,255,.095);
-  background-image:
-    radial-gradient(circle at 88% 12%,rgba(255,255,255,.10),transparent 34%),
-    var(--card-gradient);
-}
-.balance-card::after{
-  content:"";
-  position:absolute;
-  width:280px;height:280px;
-  right:-150px;bottom:-190px;
-  border-radius:50%;
-  background:rgba(255,255,255,.035);
-  filter:blur(22px);
-  pointer-events:none;
-  animation:cardGlow 8s ease-in-out infinite alternate;
-}
-@keyframes cardGlow{
-  from{transform:translate3d(0,0,0) scale(.95);opacity:.65}
-  to{transform:translate3d(-22px,-14px,0) scale(1.08);opacity:1}
-}
-
-.action-btn,.modal-btn,.edit-btn,.wallet-selector,.settings-select,.max-btn{
-  transition:
-    background .2s ease,
-    border-color .2s ease,
-    color .2s ease,
-    transform .2s var(--ease-smooth),
-    box-shadow .2s ease;
-}
-.action-btn.primary,.modal-btn,.edit-btn.save{
-  box-shadow:0 8px 22px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.35);
-}
-.action-btn.primary:hover,.modal-btn:hover,.edit-btn.save:hover{
-  box-shadow:0 12px 28px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.45);
-}
-
-/* Softer list interactions */
-.list-item{
-  position:relative;
-  border-bottom-color:rgba(255,255,255,.045);
-}
-.list-item::after{
-  content:"";
-  position:absolute;
-  left:12px;right:12px;bottom:-1px;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.035),transparent);
-  pointer-events:none;
-}
-.icon-wrapper,.bitcoin-icon,.solana-icon,.eth-icon{
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 5px 16px rgba(0,0,0,.12);
-}
-
-/* More natural panel entrance */
-.page-panel.panel-enter{
-  animation:pageEnter .46s var(--ease-smooth) both;
-}
-@keyframes pageEnter{
-  0%{opacity:0;transform:translateY(10px) scale(.995);filter:blur(2px)}
-  55%{filter:blur(0)}
-  100%{opacity:1;transform:none}
-}
-
-/* Market polish */
-.market-ticker-bar,.market-chart-panel,.orderbook-panel,.market-action-card{
-  background:linear-gradient(180deg,rgba(17,17,21,.98),rgba(13,13,16,.98));
-  border-color:rgba(255,255,255,.065);
-}
-.ticker-item{
-  transition:background .2s ease,transform .2s var(--ease-smooth);
-}
-.ticker-item:hover{transform:translateY(-1px)}
-.ticker-item.selected::after{
-  height:2px;
-  box-shadow:0 0 12px rgba(255,255,255,.35);
-}
-.chart-timerange{
-  background:rgba(0,0,0,.08);
-}
-.tr-btn.active{
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 12px rgba(0,0,0,.15);
-}
-
-/* Modal: more physical opening/closing */
-.modal-overlay{
-  background:rgba(0,0,0,.72);
-  backdrop-filter:blur(16px) saturate(115%);
-}
-.modal-card{
-  box-shadow:0 30px 90px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.055);
-  border-color:rgba(255,255,255,.09);
-}
-.modal-overlay.open .modal-card{
-  animation:modalSettle .42s var(--ease-spring) both;
-}
-@keyframes modalSettle{
-  0%{transform:scale(.94) translateY(14px);opacity:.4}
-  65%{transform:scale(1.012) translateY(-1px)}
-  100%{transform:scale(1) translateY(0);opacity:1}
-}
-
-/* Toast feels attached to the app instead of a browser alert */
-.toast-notification{
-  background:linear-gradient(180deg,rgba(28,28,33,.98),rgba(16,16,19,.98));
-  border-color:rgba(255,255,255,.1);
-  box-shadow:0 18px 45px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);
-}
-
-/* Better focus without ugly browser defaults */
-button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{
-  outline:none;
-  box-shadow:0 0 0 3px rgba(255,255,255,.10),0 0 0 1px rgba(255,255,255,.28);
-}
-
-/* Make scrolling feel intentionally designed */
-.page-panel::-webkit-scrollbar{width:9px}
-.page-panel::-webkit-scrollbar-track{background:transparent}
-.page-panel::-webkit-scrollbar-thumb{
-  background:rgba(255,255,255,.075);
-  border:3px solid transparent;
-  background-clip:padding-box;
-  border-radius:999px;
-}
-.page-panel::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.13);background-clip:padding-box}
-
-/* Touch devices should not get desktop hover lift */
-@media (hover:none){
-  .balance-card:hover,.action-btn:hover,.list-item:hover,.theme-card:hover,
-  .tx-card:hover{transform:none}
-}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    animation-duration:.001ms!important;
-    animation-iteration-count:1!important;
-    scroll-behavior:auto!important;
-    transition-duration:.001ms!important;
-  }
-}
-@media (max-width:768px){
-  .scroll-content{padding-top:calc(24px + env(safe-area-inset-top))}
-  .dashboard-header{margin-bottom:18px}
-  .balance-card{box-shadow:0 18px 45px -26px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.05)}
-  .sidebar{box-shadow:25px 0 60px rgba(0,0,0,.55)}
-}
-
-
-/* Live-price transaction safety */
-#macSubmitBtn.live-price-blocked, #confirmExchangeBtn.live-price-blocked {
-  opacity: .42 !important;
-  filter: grayscale(.35) !important;
-  cursor: not-allowed !important;
-  transform: none !important;
-  box-shadow: none !important;
-}
-.live-price-lock-note {
-  display: none;
-  align-items: center;
-  gap: 7px;
-  margin-top: -2px;
-  padding: 9px 11px;
-  border: 1px solid rgba(248,113,113,.16);
-  border-radius: 10px;
-  background: rgba(248,113,113,.06);
-  color: rgba(248,113,113,.9);
-  font-size: 11px;
-  font-weight: 650;
-  line-height: 1.35;
-}
-.live-price-lock-note.show { display: flex; }
-.live-price-lock-note i { width: 14px; height: 14px; flex-shrink: 0; }
-
-
 /* =========================================================
-   REALISTIC APP-WIDE COLOR THEMES
-   These themes intentionally affect the entire interface,
-   not just the balance card.
+   FINAL RESPONSIVE / VIEWPORT SAFETY LAYER
+   Keeps the entire application inside the available viewport
+   at every desktop, tablet and mobile width.
    ========================================================= */
-
-body {
-  --theme-accent: #34d399;
-  --theme-accent-2: #22c55e;
-  --theme-accent-rgb: 52,211,153;
-  --theme-accent-soft: rgba(52,211,153,.12);
-  --theme-accent-border: rgba(52,211,153,.28);
-  --theme-accent-glow: rgba(52,211,153,.18);
-  --theme-nav-active: rgba(52,211,153,.10);
-  --theme-input-focus: rgba(52,211,153,.12);
-  --theme-card-glow: rgba(52,211,153,.10);
-  --theme-buy: #34d399;
-  --theme-sell: #f87171;
-  --theme-bg-tint: rgba(0,0,0,0);
-}
-
-
-
-
-
-
-
-
-
-
-
-/* Theme-aware app chrome */
-body.theme-emerald .sidebar-item.active,
-body.theme-midnight .sidebar-item.active,
-body.theme-ocean .sidebar-item.active,
-body.theme-graphite .sidebar-item.active,
-body.theme-burgundy .sidebar-item.active {
-  background: var(--theme-nav-active) !important;
-  box-shadow: inset 0 0 0 1px var(--theme-accent-border),0 5px 16px rgba(0,0,0,.25) !important;
-  color: #fff !important;
-}
-
-body.theme-emerald .sidebar-item:hover,
-body.theme-midnight .sidebar-item:hover,
-body.theme-ocean .sidebar-item:hover,
-body.theme-graphite .sidebar-item:hover,
-body.theme-burgundy .sidebar-item:hover {
-  background: var(--theme-accent-soft) !important;
-}
-
-body.theme-emerald .sidebar-item.active i,
-body.theme-midnight .sidebar-item.active i,
-body.theme-ocean .sidebar-item.active i,
-body.theme-graphite .sidebar-item.active i,
-body.theme-burgundy .sidebar-item.active i {
-  color: var(--theme-accent) !important;
-}
-
-body.theme-emerald .action-btn.primary,
-body.theme-midnight .action-btn.primary,
-body.theme-ocean .action-btn.primary,
-body.theme-graphite .action-btn.primary,
-body.theme-burgundy .action-btn.primary {
-  background: var(--theme-accent) !important;
-  border-color: var(--theme-accent) !important;
-  color: #06100d !important;
-  box-shadow: 0 8px 24px var(--theme-accent-glow) !important;
-}
-
-body.theme-midnight .action-btn.primary { color: #fff !important; }
-body.theme-burgundy .action-btn.primary { color: #18080c !important; }
-
-body.theme-emerald .action-btn.primary:hover,
-body.theme-midnight .action-btn.primary:hover,
-body.theme-ocean .action-btn.primary:hover,
-body.theme-graphite .action-btn.primary:hover,
-body.theme-burgundy .action-btn.primary:hover {
-  filter: brightness(1.08);
-}
-
-body.theme-emerald .theme-card.active,
-body.theme-midnight .theme-card.active,
-body.theme-ocean .theme-card.active,
-body.theme-graphite .theme-card.active,
-body.theme-burgundy .theme-card.active {
-  border-color: var(--theme-accent) !important;
-  background: var(--theme-accent-soft) !important;
-  box-shadow: 0 0 0 1px var(--theme-accent-border),0 10px 28px var(--theme-accent-glow) !important;
-}
-
-body.theme-emerald .theme-check-icon,
-body.theme-midnight .theme-check-icon,
-body.theme-ocean .theme-check-icon,
-body.theme-graphite .theme-check-icon,
-body.theme-burgundy .theme-check-icon { width:16px; height:16px; color:var(--theme-accent); }
-.theme-card.active .theme-check-icon { display:inline-block !important; }
-.theme-card:not(.active) .theme-check-icon { display:none !important; }
-
-  color: var(--theme-accent) !important;
-}
-
-body.theme-emerald .settings-select:focus,
-body.theme-midnight .settings-select:focus,
-body.theme-ocean .settings-select:focus,
-body.theme-graphite .settings-select:focus,
-body.theme-burgundy .settings-select:focus {
-  border-color: var(--theme-accent-border) !important;
-  box-shadow: 0 0 0 3px var(--theme-accent-soft) !important;
-}
-
-body.theme-emerald .tr-btn.active,
-body.theme-midnight .tr-btn.active,
-body.theme-ocean .tr-btn.active,
-body.theme-graphite .tr-btn.active,
-body.theme-burgundy .tr-btn.active {
-  color: #fff !important;
-  background: var(--theme-accent-soft) !important;
-  box-shadow: inset 0 0 0 1px var(--theme-accent-border);
-}
-
-body.theme-emerald .ticker-item.selected::after,
-body.theme-midnight .ticker-item.selected::after,
-body.theme-ocean .ticker-item.selected::after,
-body.theme-graphite .ticker-item.selected::after,
-body.theme-burgundy .ticker-item.selected::after {
-  background: var(--theme-accent) !important;
-  box-shadow: 0 0 12px var(--theme-accent-glow);
-}
-
-body.theme-emerald .market-status-chip.live,
-body.theme-midnight .market-status-chip.live,
-body.theme-ocean .market-status-chip.live,
-body.theme-graphite .market-status-chip.live,
-body.theme-burgundy .market-status-chip.live {
-  box-shadow: 0 0 18px var(--theme-accent-glow);
-}
-
-body.theme-emerald .modal-btn,
-body.theme-midnight .modal-btn,
-body.theme-ocean .modal-btn,
-body.theme-graphite .modal-btn,
-body.theme-burgundy .modal-btn {
-  background: var(--theme-accent) !important;
-  color: #06100d !important;
-  box-shadow: 0 8px 24px var(--theme-accent-glow) !important;
-}
-
-body.theme-midnight .modal-btn { color: #fff !important; }
-body.theme-burgundy .modal-btn { color: #18080c !important; }
-
-body.theme-emerald .live-preview-val,
-body.theme-ocean .live-preview-val,
-body.theme-midnight .live-preview-val,
-body.theme-graphite .live-preview-val,
-body.theme-burgundy .live-preview-val {
-  color: var(--theme-accent) !important;
-}
-
-body.theme-emerald .pull-indicator.completed .spinner-box,
-body.theme-ocean .pull-indicator.completed .spinner-box,
-body.theme-midnight .pull-indicator.completed .spinner-box,
-body.theme-graphite .pull-indicator.completed .spinner-box,
-body.theme-burgundy .pull-indicator.completed .spinner-box {
-  background: var(--theme-accent-soft) !important;
-  border-color: var(--theme-accent-border) !important;
-}
-
-body.theme-emerald .success-icon,
-body.theme-ocean .success-icon,
-body.theme-midnight .success-icon,
-body.theme-graphite .success-icon,
-body.theme-burgundy .success-icon {
-  color: var(--theme-accent) !important;
-}
-
-/* Colorful but still realistic asset/action icon surfaces */
-body.theme-ocean .icon-wrapper { color:#38bdf8 !important; background:rgba(56,189,248,.08) !important; border-color:rgba(56,189,248,.15) !important; }
-body.theme-emerald .icon-wrapper { color:#34d399 !important; background:rgba(52,211,153,.08) !important; border-color:rgba(52,211,153,.15) !important; }
-body.theme-midnight .icon-wrapper { color:#a78bfa !important; background:rgba(167,139,250,.08) !important; border-color:rgba(167,139,250,.15) !important; }
-body.theme-burgundy .icon-wrapper { color:#fb7185 !important; background:rgba(251,113,133,.08) !important; border-color:rgba(251,113,133,.15) !important; }
-
-/* Theme cards themselves */
-.theme-card {
-  position: relative;
+html {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  height: 100%;
   overflow: hidden;
 }
-.theme-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: .55;
-  background: radial-gradient(circle at 80% 0%, rgba(255,255,255,.08), transparent 42%);
-}
-.theme-card > * { position: relative; z-index: 1; }
-.theme-preview-box {
-  height: 62px !important;
-  border: 1px solid rgba(255,255,255,.10);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 8px 20px rgba(0,0,0,.18);
+
+html, body {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
 }
 
+body {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  height: 100dvh;
+  min-height: 100svh;
+  overflow: hidden;
+  display: flex;
+}
 
+*, *::before, *::after {
+  box-sizing: border-box;
+  min-width: 0;
+}
 
+img, svg, canvas, video {
+  max-width: 100%;
+}
 
-/* Smoothly animate theme changes instead of making them feel like a reload */
-body,
-.sidebar,
-.main-dashboard,
-.scroll-content,
-.asset-list,
+/* The desktop sidebar consumes its own fixed width; the dashboard gets
+   every remaining pixel instead of creating a second horizontal viewport. */
+.sidebar {
+  flex: 0 0 240px;
+  min-width: 0;
+  max-width: 240px;
+}
+
+.main-dashboard {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.page-panel {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.scroll-content {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.dashboard-header,
+.dashboard-title-group,
+.top-row-grid,
+.balance-card,
 .activity-panel,
+.market-ticker-bar,
+.market-main-view,
+.market-chart-panel,
+.market-right-panel,
+.orderbook-panel,
+.market-action-card,
+.recent-trades-panel,
+.profit-summary-card,
+.exchange-transactions,
+.settings-section,
+.settings-row,
+.card-actions,
+.panel-header {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Grid children MUST be allowed to shrink. This is one of the most common
+   causes of the "half the page is off-screen" problem. */
+.top-row-grid > *,
+.market-main-view > *,
+.chart-stats-strip > *,
+.dashboard-header > *,
+.card-actions > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Long values must never decide the width of the page. */
+.main-balance,
+.market-live-price,
+.item-value,
+.activity-value,
+.profit-summary-value,
+.profit-period-value,
+.account-field-value,
+.ticker-price,
+.ob-price,
+.ob-size,
+.ob-total,
+.rt-price,
+.rt-size,
+.rt-time {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Tables/order books can scroll internally rather than pushing the entire
+   application wider than the viewport. */
 .market-chart-panel,
 .orderbook-panel,
-.market-ticker-bar,
+.market-action-card,
+.recent-trades-panel,
 .exchange-transactions,
-.profit-summary-card,
-.profit-period-card,
-.cost-card,
-.modal-card,
-.theme-card,
-.settings-select,
-.action-btn,
-.icon-wrapper {
-  transition:
-    background-color .30s ease,
-    background .30s ease,
-    border-color .30s ease,
-    box-shadow .30s ease,
-    color .22s ease !important;
+.activity-panel {
+  overflow-x: hidden;
 }
 
-</style>
-
-<style id="market-polish-overrides">
-.market-header-actions{display:flex;align-items:center;gap:8px}
-.market-status-chip{display:flex;align-items:center;gap:7px;min-height:32px;padding:0 10px;border:1px solid rgba(255,255,255,.07);border-radius:10px;background:rgba(255,255,255,.035);color:var(--text-muted);font-size:10px;font-weight:600;white-space:nowrap}
-.market-status-dot{width:6px;height:6px;border-radius:50%;background:#777;box-shadow:0 0 0 3px rgba(255,255,255,.035)}
-html[data-market-status="live"] .market-status-dot{background:var(--accent-green);box-shadow:0 0 0 3px rgba(74,222,128,.10),0 0 10px rgba(74,222,128,.35)}
-html[data-market-status="live"] .market-status-chip{color:rgba(255,255,255,.68);border-color:rgba(74,222,128,.13);background:rgba(74,222,128,.035)}
-.market-chart-wrap{margin-top:14px;padding:18px 18px 13px;border:1px solid var(--border-subtle);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.012));box-shadow:0 10px 30px rgba(0,0,0,.12);overflow:hidden}
-.market-chart-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.market-chart-label{font-size:12px;font-weight:700;color:#fff}
-.market-chart-range{display:inline-flex;margin-left:8px;padding:3px 7px;border-radius:6px;background:rgba(255,255,255,.055);color:var(--text-muted);font-size:9px;font-weight:700;letter-spacing:.04em}
-.market-chart-live{font-size:10px;color:var(--text-muted)}
-.market-chart{height:250px;position:relative;border-radius:12px;overflow:hidden;background:radial-gradient(circle at 50% 100%,rgba(255,255,255,.025),transparent 55%)}
-.market-chart svg{width:100%;height:100%;display:block}
-.chart-grid-lines line{stroke:rgba(255,255,255,.055);stroke-width:1}
-.market-chart-line{fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 2px 7px rgba(255,255,255,.10))}
-.market-chart-area{fill:url(#marketChartFill);opacity:.9}
-.market-chart-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;color:rgba(255,255,255,.32);font-size:11px;pointer-events:none}
-.market-chart-axis{display:flex;justify-content:space-between;margin-top:8px;color:rgba(255,255,255,.28);font-size:9px}
-.profit-summary-card,.profit-period-card,.activity-panel,.asset-list{border-color:rgba(255,255,255,.075);box-shadow:0 10px 30px rgba(0,0,0,.12)}
-.profit-summary-card{background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:20px}
-.profit-summary-value{letter-spacing:-.045em}
-.profit-period-card{background:rgba(255,255,255,.022);border-radius:16px;transition:transform .22s cubic-bezier(.22,1,.36,1),border-color .22s ease,background .22s ease}
-.profit-period-card:hover{transform:translateY(-2px);background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.11)}
-.settings-row{transition:background .2s ease}
-.settings-row:hover{background:rgba(255,255,255,.018)}
-.settings-select,.settings-btn-danger,.theme-card{transition:transform .22s cubic-bezier(.22,1,.36,1),border-color .22s ease,background .22s ease,box-shadow .22s ease}
-.theme-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.13);box-shadow:0 10px 24px rgba(0,0,0,.18)}
-@media(max-width:768px){
-.market-header-actions{gap:5px}
-.market-status-chip{padding:0 8px;max-width:110px;overflow:hidden}
-.market-status-chip #marketStatusText{overflow:hidden;text-overflow:ellipsis}
-.market-chart-wrap{padding:14px 12px 10px}
-.market-chart{height:190px}
+/* Controls are allowed to shrink on narrow screens. */
+input, select, textarea, button {
+  max-width: 100%;
 }
-
 
 /* =========================================================
-   SYSTEM-WIDE COLOR TOKEN REFINEMENT
-   Explicit theme tokens, muted surfaces, and visible focus rings.
+   TABLET / PHONE
    ========================================================= */
-body {
-  /* Core neutral palette */
-  --bg-main: #070709;
-  --bg-sidebar: #0c0c0e;
-  --bg-card: #111115;
-  --bg-input: #18181d;
-  --surface-1: #111115;
-  --surface-2: #18181d;
-  --surface-muted: rgba(255,255,255,.04);
-  --surface-muted-strong: rgba(255,255,255,.07);
-  --surface-hover: rgba(255,255,255,.055);
-  --surface-pressed: rgba(255,255,255,.08);
+@media (max-width: 768px) {
+  html, body {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: 100dvh;
+    min-height: 100svh;
+    overflow: hidden;
+  }
 
-  /* Text hierarchy */
-  --text-main: #ffffff;
-  --text-heading: #f4f4f6;
-  --text-muted: #7a7a83;
-  --text-subtle: #5a5a65;
-  --text-faint: #4a4a52;
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: min(290px, 86vw);
+    max-width: 86vw;
+    min-width: 0;
+    flex: none;
+    z-index: 90;
+  }
 
-  /* Functional colors stay consistent across themes */
-  --accent-green: #34d399;
-  --accent-red: #f87171;
-  --danger: #ef4444;
-  --danger-dark: #b91c1c;
+  .main-dashboard {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
 
-  /* Theme-controlled accent tokens */
-  --theme-accent: #34d399;
-  --theme-accent-2: #10b981;
-  --theme-accent-rgb: 52,211,153;
-  --theme-accent-soft: rgba(52,211,153,.12);
-  --theme-accent-border: rgba(52,211,153,.28);
-  --theme-accent-glow: rgba(52,211,153,.18);
-  --theme-nav-active: rgba(52,211,153,.10);
-  --theme-input-focus: rgba(52,211,153,.12);
-  --theme-card-glow: rgba(52,211,153,.10);
-  --theme-focus: #60a5fa;
-  --theme-focus-rgb: 96,165,250;
-  --theme-buy: #34d399;
-  --theme-sell: #f87171;
+  .page-panel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
 
-  /* Default card treatment */
-  --card-gradient: linear-gradient(135deg, #1e1e24 0%, #111115 100%);
-  --card-border: rgba(255,255,255,.08);
-  --card-shadow: 0 20px 40px -15px rgba(0,0,0,.7);
-}
+  .scroll-content {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding-left: clamp(12px, 4vw, 20px);
+    padding-right: clamp(12px, 4vw, 20px);
+    padding-bottom: calc(32px + env(safe-area-inset-bottom));
+    overflow-x: hidden;
+  }
 
-/* Emerald */
+  .dashboard-header {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
 
+  .dashboard-title-group {
+    min-width: 0;
+    max-width: 100%;
+  }
 
-/* Midnight Purple */
+  .dashboard-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
+  .top-row-grid {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
 
-/* Ocean Blue */
+  .balance-card,
+  .activity-panel,
+  .profit-summary-card,
+  .exchange-transactions,
+  .market-chart-panel,
+  .orderbook-panel,
+  .market-action-card,
+  .recent-trades-panel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
 
+  .balance-header-row,
+  .panel-header,
+  .market-chart-title-row {
+    min-width: 0;
+    max-width: 100%;
+  }
 
-/* Graphite */
+  .balance-title-row {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
+  .wallet-selector {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 48%;
+  }
 
-/* Burgundy */
+  .main-balance {
+    width: auto;
+    max-width: 100%;
+    font-size: clamp(28px, 9vw, 42px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
+  .card-actions {
+    width: 100%;
+    min-width: 0;
+  }
 
-/* Consistent translucent surfaces for cards, rows and controls. */
-.settings-row,
-.asset-row,
-.activity-row,
-.recent-trade-row,
-.market-row,
-.theme-card,
-.mac-pct,
-.tr-btn,
-.settings-select,
-.mac-input,
-.modal-content,
-.notification-panel,
-.profile-menu {
-  background-color: var(--surface-muted);
-}
+  .action-btn {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-.settings-row:hover,
-.asset-row:hover,
-.activity-row:hover,
-.recent-trade-row:hover,
-.market-row:hover,
-.theme-card:hover,
-.mac-pct:hover,
-.tr-btn:hover {
-  background-color: var(--surface-hover);
-}
+  .market-main-view {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
 
-/* Keyboard and touch focus visibility across the whole application. */
-:where(button, input, select, textarea, [tabindex]):focus-visible {
-  outline: 2px solid var(--theme-focus) !important;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(var(--theme-focus-rgb), .16) !important;
-}
+  .market-right-panel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
 
-:where(input, select, textarea):focus {
-  border-color: var(--theme-focus) !important;
-  box-shadow: 0 0 0 3px rgba(var(--theme-focus-rgb), .14) !important;
-}
+  .market-chart-header,
+  .chart-canvas-area,
+  .chart-timerange {
+    min-width: 0;
+    max-width: 100%;
+  }
 
-:where(button, .sidebar-item, .theme-card, .tr-btn, .mac-pct):focus-visible {
-  box-shadow: 0 0 0 3px rgba(var(--theme-focus-rgb), .18) !important;
-}
+  .market-chart-title-row {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
 
-/* Theme accent controls now inherit one source of truth. */
-:where(.theme-check-icon, .live-preview-val, .success-icon) {
-  color: var(--theme-accent) !important;
-}
+  .market-live-price {
+    max-width: 100%;
+    font-size: clamp(24px, 8vw, 36px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-/* Keep gain/loss semantics independent from the selected theme. */
-:where(.pos, .profit, .gain, .positive) { color: #34d399 !important; }
-:where(.neg, .loss, .negative) { color: #f87171 !important; }
+  .market-canvas {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+  }
 
-/* Respect reduced-motion users while keeping the color system intact. */
-@media (prefers-reduced-motion: reduce) {
-  :where(button, input, select, textarea, .sidebar-item, .theme-card, .tr-btn, .mac-pct) {
-    transition-duration: .01ms !important;
+  .chart-stats-strip {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .orderbook-cols,
+  .ob-row,
+  .ob-user-row,
+  .rt-cols,
+  .rt-row {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* Keep pull-to-refresh UI inside the actual viewport. */
+  .pull-indicator {
+    left: 50%;
+    max-width: calc(100vw - 24px);
+  }
+
+  .refresh-capsule {
+    max-width: calc(100vw - 24px);
+  }
+
+  /* Intro uses 100%, never a width larger than the layout viewport. */
+  .intro {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100dvh;
+    min-height: 100svh;
+    overflow: hidden;
+  }
+
+  .orb {
+    width: min(230px, 62vw);
+    height: min(230px, 62vw);
+    max-width: 230px;
+    max-height: 230px;
+    flex: 0 0 auto;
+  }
+
+  .intro-welcome {
+    left: 50%;
+    width: calc(100% - 32px);
+    max-width: calc(100% - 32px);
+  }
+
+  .intro-title {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 }
+
+/* Very narrow phones. */
+@media (max-width: 390px) {
+  .scroll-content {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .balance-card {
+    padding: 18px;
+  }
+
+  .balance-header-row {
+    gap: 8px;
+  }
+
+  .wallet-selector {
+    max-width: 44%;
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
+  .card-actions {
+    gap: 8px;
+  }
+
+  .action-btn {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+/* Landscape phones / small tablets. */
+@media (max-width: 900px) and (orientation: landscape) {
+  .scroll-content {
+    padding-top: calc(16px + env(safe-area-inset-top));
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+
+  .balance-card {
+    min-height: 200px;
+  }
+}
+
+/* Large screens: don't allow content to become absurdly stretched. */
+@media (min-width: 1400px) {
+  .scroll-content {
+    padding-left: clamp(56px, 5vw, 96px);
+    padding-right: clamp(56px, 5vw, 96px);
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2067,7 +1763,7 @@ body {
 </div>
 <div class="sidebar-group">
 <a href="#" class="sidebar-item active" data-target="walletPanel"><i data-lucide="wallet"></i><span data-i18n="navOverview">Overview</span></a>
-<a href="#" class="sidebar-item" data-target="exchangePanel"><i data-lucide="arrow-left-right"></i><span data-i18n="navExchange">Profits &amp; Gains</span></a>
+<a href="#" class="sidebar-item" data-target="exchangePanel"><i data-lucide="arrow-left-right"></i><span data-i18n="navExchange">Profits &amp; Loss</span></a>
 <a href="#" class="sidebar-item" data-target="marketPanel"><i data-lucide="line-chart"></i><span data-i18n="navMarket">Market</span></a>
 <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span data-i18n="navSettings">Settings</span></a>
 </div>
@@ -2161,12 +1857,12 @@ body {
 <div class="dashboard-header">
 <div class="dashboard-title-group">
 <button class="menu-btn" onclick="openSidebar()"><i data-lucide="menu"></i></button>
-<h1 class="dashboard-title" data-i18n="titleExchangePanel">Profits &amp; Gains</h1>
+<h1 class="dashboard-title" data-i18n="titleExchangePanel">Profits &amp; Loss</h1>
 </div>
 
 </div>
 <div class="profit-summary-card">
-<div class="profit-summary-label">Total profits &amp; gains</div>
+<div class="profit-summary-label">Total profit &amp; loss</div>
 <div class="profit-summary-value" id="totalProfitGains">+$0.00 <span>CAD</span></div>
 <div class="profit-summary-sub">Realized profit or loss from completed crypto sales and swaps</div>
 </div>
@@ -2224,8 +1920,7 @@ body {
 <button class="menu-btn" onclick="openSidebar()"><i data-lucide="menu"></i></button>
 <h1 class="dashboard-title" data-i18n="titleMarket">Market</h1>
 </div>
-<div class="market-header-actions">
-<div class="market-status-chip" id="marketStatusChip"><span class="market-status-dot"></span><span id="marketStatusText">Live data unavailable</span></div>
+<div style="display:flex;gap:8px;align-items:center;">
 <button class="market-alert-bell" id="btcAlertBell" onclick="toggleCoinAlert('BTC', event)" title="Toggle BTC price alerts" type="button" style="display:none;"><i data-lucide="bell-off"></i></button>
 <button class="market-alert-bell" id="solAlertBell" onclick="toggleCoinAlert('SOL', event)" title="Toggle SOL price alerts" type="button" style="display:none;"><i data-lucide="bell-off"></i></button>
 <button class="market-alert-bell" id="ethAlertBell" onclick="toggleCoinAlert('ETH', event)" title="Toggle ETH price alerts" type="button" style="display:none;"><i data-lucide="bell-off"></i></button>
@@ -2293,32 +1988,6 @@ body {
 <div class="css-value" id="statVol">—</div>
 </div>
 </div>
-<div class="market-chart-wrap">
-<div class="market-chart-toolbar">
-<div><span class="market-chart-label">Price</span><span class="market-chart-range">24H</span></div>
-<div class="market-chart-live" id="marketChartLive">Waiting for live data</div>
-</div>
-<div class="market-chart" id="marketChart">
-<svg id="marketChartSvg" viewBox="0 0 900 300" preserveAspectRatio="none" aria-label="Market price chart">
-<defs>
-<linearGradient id="marketChartFill" x1="0" y1="0" x2="0" y2="1">
-<stop offset="0%" stop-color="rgba(255,255,255,0.12)"/>
-<stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-</linearGradient>
-</defs>
-<g class="chart-grid-lines">
-<line x1="0" y1="60" x2="900" y2="60"/>
-<line x1="0" y1="120" x2="900" y2="120"/>
-<line x1="0" y1="180" x2="900" y2="180"/>
-<line x1="0" y1="240" x2="900" y2="240"/>
-</g>
-<path id="marketChartArea" class="market-chart-area" d=""/>
-<path id="marketChartLine" class="market-chart-line" d=""/>
-</svg>
-<div class="market-chart-empty" id="marketChartEmpty">Live price history will appear here once market data is available.</div>
-</div>
-<div class="market-chart-axis"><span>24h ago</span><span>12h</span><span>Now</span></div>
-</div>
 </div>
 <div class="market-right-panel">
 <div class="orderbook-panel">
@@ -2363,7 +2032,6 @@ body {
 <span class="mac-total-val" id="macTotalVal">0.0000 BTC</span>
 </div>
 <button class="mac-submit-btn buy-btn" id="macSubmitBtn" onclick="macSubmitOrder()">Buy BTC</button>
-<div class="live-price-lock-note" id="macLivePriceLockNote"><i data-lucide="shield-alert"></i><span>Live price unavailable. Transactions are temporarily blocked.</span></div>
 </div>
 </div>
 <div class="recent-trades-panel">
@@ -2396,9 +2064,13 @@ body {
 <div class="theme-preview-box dark"></div>
 <div class="theme-label"><span data-i18n="themeDark">Dark Onyx</span><i data-lucide="check" class="theme-check-icon" style="width:16px;height:16px;color:var(--accent-green);"></i></div>
 </div>
-<div class="theme-card" id="themeNavyCard" onclick="setTheme('navy')">
-<div class="theme-preview-box navy"></div>
-<div class="theme-label"><span>Navy</span><i data-lucide="check" class="theme-check-icon" style="width:16px;height:16px;color:var(--accent-primary);display:none;"></i></div>
+<div class="theme-card" id="themeEmeraldCard" onclick="setTheme('emerald')">
+<div class="theme-preview-box emerald"></div>
+<div class="theme-label"><span data-i18n="themeEmerald">Emerald Cyber</span><i data-lucide="check" class="theme-check-icon" style="width:16px;height:16px;color:var(--accent-green);display:none;"></i></div>
+</div>
+<div class="theme-card" id="themeMidnightCard" onclick="setTheme('midnight')">
+<div class="theme-preview-box midnight"></div>
+<div class="theme-label"><span>Midnight Purple</span><i data-lucide="check" class="theme-check-icon" style="width:16px;height:16px;color:var(--accent-green);display:none;"></i></div>
 </div>
 </div>
 </div>
@@ -2478,7 +2150,6 @@ body {
 </div>
 <div class="error-text" id="exError" data-i18n="exErrorText">Insufficient balance for this conversion.</div>
 <button class="modal-btn" id="confirmExchangeBtn"><span data-i18n="btnConfirmEx">Confirm Exchange</span></button>
-<div class="live-price-lock-note" id="exchangeLivePriceLockNote"><i data-lucide="shield-alert"></i><span>Live price unavailable. Transactions are temporarily blocked.</span></div>
 </div>
 </div>
 <div class="modal-overlay" id="assetEditModal">
@@ -2660,63 +2331,16 @@ updateAvailableBalanceSubtext();
 marketRefreshText.textContent = dict.pullToRefresh || 'Pull to refresh';
 }
 document.getElementById('settingLanguage').addEventListener('change', e => setLanguage(e.target.value));
-function setTheme(themeName, savePreference = true) {
-  document.body.classList.remove(
-    'theme-emerald',
-    'theme-midnight',
-    'theme-ocean',
-    'theme-graphite',
-    'theme-burgundy',
-    'theme-navy'
-  );
-
-  const darkCard = document.getElementById('themeDarkCard');
-  const navyCard = document.getElementById('themeNavyCard');
-
-  [darkCard, navyCard].forEach(card => {
-    if (!card) return;
-    card.classList.remove('active');
-    const check = card.querySelector('.theme-check-icon');
-    if (check) check.style.display = 'none';
-  });
-
-  if (themeName === 'navy') {
-    document.body.classList.add('theme-navy');
-
-    if (navyCard) {
-      navyCard.classList.add('active');
-      const check = navyCard.querySelector('.theme-check-icon');
-      if (check) check.style.display = 'inline-block';
-    }
-  } else {
-    themeName = 'dark';
-
-    if (darkCard) {
-      darkCard.classList.add('active');
-      const check = darkCard.querySelector('.theme-check-icon');
-      if (check) check.style.display = 'inline-block';
-    }
-  }
-
-  document.documentElement.dataset.theme = themeName;
-
-  if (savePreference) {
-    try {
-      localStorage.setItem('walletTheme', themeName);
-    } catch (e) {}
-  }
+function setTheme(themeName) {
+const darkCard = document.getElementById('themeDarkCard');
+const emeraldCard = document.getElementById('themeEmeraldCard');
+const midnightCard = document.getElementById('themeMidnightCard');
+document.body.classList.remove('theme-emerald','theme-midnight');
+[darkCard,emeraldCard,midnightCard].forEach(c => { c.classList.remove('active'); c.querySelector('.theme-check-icon').style.display='none'; });
+if (themeName==='emerald') { document.body.classList.add('theme-emerald'); emeraldCard.classList.add('active'); emeraldCard.querySelector('.theme-check-icon').style.display='inline-block'; }
+else if (themeName==='midnight') { document.body.classList.add('theme-midnight'); midnightCard.classList.add('active'); midnightCard.querySelector('.theme-check-icon').style.display='inline-block'; }
+else { darkCard.classList.add('active'); darkCard.querySelector('.theme-check-icon').style.display='inline-block'; }
 }
-
-function loadSavedTheme() {
-  let saved = 'dark';
-
-  try {
-    saved = localStorage.getItem('walletTheme') || 'dark';
-  } catch (e) {}
-
-  setTheme(saved === 'navy' ? 'navy' : 'dark', false);
-}
-
 const sidebar = document.getElementById('sidebar');
 const sidebarOverlay = document.getElementById('sidebarOverlay');
 const menuBtn = document.getElementById('menuBtn');
@@ -3087,12 +2711,13 @@ function updateTickerBar(coin){
 }
 
 let lastMarketDetailsFetch=0;
-const MARKET_PRICE_POLL_MS=30000;
+const MARKET_PRICE_POLL_MS=12000;
 const MARKET_DETAILS_POLL_MS=60000;
 const COINS=['BTC','SOL','ETH'];
-const EMPTY_MARKET={price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null,lastUpdatedAt:0};
+const COINGECKO_IDS={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
+const EMPTY_MARKET={price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null};
 
-async function fetchJson(url, timeoutMs=10000){
+async function fetchJson(url, timeoutMs=9000){
  const controller=new AbortController();
  const timeout=setTimeout(()=>controller.abort(),timeoutMs);
  try{
@@ -3102,78 +2727,110 @@ async function fetchJson(url, timeoutMs=10000){
  }finally{clearTimeout(timeout);}
 }
 
-let marketPollTimer=null;
-let marketFetchInFlight=false;
-let marketLastSuccessfulFetch=0;
-let marketFailureCount=0;
+function applyLiveCoinPrice(coin, price, changePct, change24h){
+ if(!Number.isFinite(price)||price<=0)return false;
+ const previous=marketPrices[coin]?.price;
+ const old=marketPrices[coin]||{...EMPTY_MARKET};
+ const next={
+  ...old,
+  price,
+  changePct:Number.isFinite(changePct)?changePct:old.changePct,
+  change24h:Number.isFinite(change24h)?change24h:old.change24h
+ };
+ marketPrices[coin]=next;
+ if(!Number.isFinite(previous)){
+  priceHistory[coin]=[{t:Date.now(),p:price}];
+ }else if(previous!==price){
+  const direction=price>=previous?'up':'down';
+  priceHistory[coin].push({t:Date.now(),p:price});
+  if(priceHistory[coin].length>300)priceHistory[coin].shift();
+  updateTickerBar(coin);
+  if(coin===activeCoin)updateMainView(coin,direction);
+  maybeShowPriceAlertToast(coin);
+ }
+ updateTickerBar(coin);
+ return true;
+}
 
-const MARKET_STALE_AFTER_MS=120000;
-const MARKET_RETRY_BASE_MS=5000;
-const MARKET_RETRY_MAX_MS=30000;
-const COINBASE_SPOT_URL='https://api.coinbase.com/v2/prices';
-const USD_CAD_RATE_URL='https://api.frankfurter.dev/v2/rate/usd/cad';
+let marketPollTimer = null;
+let marketFetchInFlight = false;
+let marketLastSuccessfulFetch = 0;
+let marketFailureCount = 0;
+
+const MARKET_STALE_AFTER_MS = 90000;
+const MARKET_RETRY_BASE_MS = 5000;
+const MARKET_RETRY_MAX_MS = 30000;
+const MARKET_PRICE_URL = 'https://api.coingecko.com/api/v3/simple/price';
+const MARKET_DETAILS_URL = 'https://api.coingecko.com/api/v3/coins/markets';
+const USD_CAD_RATE_URL = 'https://api.frankfurter.dev/v2/rate/usd/cad';
 
 async function fetchLiveUsdCadRate(){
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),10000);
- try{
-  const response=await fetch(`${USD_CAD_RATE_URL}?_=${Date.now()}`,{
-   cache:'no-store',
-   signal:controller.signal,
-   headers:{Accept:'application/json'}
-  });
-  if(!response.ok)throw new Error(`USD/CAD HTTP ${response.status}`);
-  const json=await response.json();
-  const rate=Number(json?.rate);
-  if(!Number.isFinite(rate)||rate<=0)throw new Error('Invalid USD/CAD rate');
-  exchangeRatesInUSD.CAD=1/rate;
-  syncCryptoUsdRates();
-  if(typeof updateLivePreview==='function')updateLivePreview();
-  return true;
- }catch(e){
-  console.warn('Live USD/CAD rate update failed:',e.name==='AbortError'?'request timed out':e);
-  return false;
- }finally{clearTimeout(timeout);}
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),10000);
+  try{
+    const response=await fetch(`${USD_CAD_RATE_URL}?_=${Date.now()}`,{
+      cache:'no-store',
+      signal:controller.signal,
+      headers:{Accept:'application/json'}
+    });
+    if(!response.ok)throw new Error(`USD/CAD HTTP ${response.status}`);
+    const json=await response.json();
+    const rate=Number(json?.rate);
+    if(!Number.isFinite(rate)||rate<=0)throw new Error('Invalid USD/CAD rate');
+
+    // exchangeRatesInUSD stores the USD value of one unit of each currency.
+    // USD is always 1, so CAD is the inverse of USD/CAD.
+    exchangeRatesInUSD.CAD=1/rate;
+    syncCryptoUsdRates();
+    if(typeof updateLivePreview==='function')updateLivePreview();
+    return true;
+  }catch(e){
+    console.warn('Live USD/CAD rate update failed:',e.name==='AbortError'?'request timed out':e);
+    return false;
+  }finally{
+    clearTimeout(timeout);
+  }
 }
 
 function syncCryptoUsdRates(){
- const usdCad=Number(exchangeRatesInUSD?.CAD);
- if(!Number.isFinite(usdCad)||usdCad<=0)return;
- for(const coin of COINS){
-  const cad=Number(marketPrices?.[coin]?.price);
-  if(Number.isFinite(cad)&&cad>0)exchangeRatesInUSD[coin]=cad*usdCad;
- }
+  const usdCad=Number(exchangeRatesInUSD?.CAD);
+  if(!Number.isFinite(usdCad)||usdCad<=0)return;
+  for(const coin of ['BTC','SOL','ETH']){
+    const cad=Number(marketPrices?.[coin]?.price);
+    if(Number.isFinite(cad)&&cad>0){
+      exchangeRatesInUSD[coin]=cad*usdCad;
+    }
+  }
 }
 
 function emptyMarketData(){
- return {...EMPTY_MARKET};
+ return {price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null,lastUpdatedAt:0};
 }
 
 function updateMarketFreshness(){
  const now=Date.now();
- for(const coin of COINS){
+ const staleAfter=MARKET_STALE_AFTER_MS;
+ for(const coin of ['BTC','SOL','ETH']){
   const data=marketPrices[coin];
   if(!data || !Number.isFinite(data.price)){
    updateTickerBar(coin);
    continue;
   }
-  if(!Number.isFinite(data.lastUpdatedAt) || now-data.lastUpdatedAt>MARKET_STALE_AFTER_MS){
+  if(!Number.isFinite(data.lastUpdatedAt) || now-data.lastUpdatedAt>staleAfter){
    marketPrices[coin]={...emptyMarketData()};
-   exchangeRatesInUSD[coin]=0;
    priceHistory[coin]=[];
   }
   updateTickerBar(coin);
  }
- const anyLive=Object.values(marketPrices).some(d=>d&&Number.isFinite(d.price));
+ const anyLive=Object.values(marketPrices).some(d=>d && Number.isFinite(d.price));
  document.documentElement.dataset.marketStatus=anyLive?'live':'offline';
  updateMainView(activeCoin);
  updateOrderBook(activeCoin);
  updateMacTotal();
- updateTransactionPriceLocks();
 }
 
-function applyLiveMarketData(coin,data){
- if(!data||!Number.isFinite(data.price)||data.price<=0)return false;
+function applyLiveMarketData(coin, data){
+ if(!data || !Number.isFinite(data.price) || data.price<=0)return false;
  const previous=marketPrices[coin]?.price;
  const previousData=marketPrices[coin]||emptyMarketData();
  marketPrices[coin]={
@@ -3182,7 +2839,8 @@ function applyLiveMarketData(coin,data){
   price:data.price,
   lastUpdatedAt:Number.isFinite(data.lastUpdatedAt)?data.lastUpdatedAt:Date.now()
  };
- if(!Array.isArray(priceHistory[coin]))priceHistory[coin]=[];
+ marketLastUpdateAt[coin]=marketPrices[coin].lastUpdatedAt;
+
  if(!Number.isFinite(previous)){
   priceHistory[coin]=[{t:marketPrices[coin].lastUpdatedAt,p:data.price}];
  }else if(previous!==data.price){
@@ -3198,14 +2856,14 @@ function applyLiveMarketData(coin,data){
 }
 
 function refreshMarketUI(){
- COINS.forEach(updateTickerBar);
+ ['BTC','SOL','ETH'].forEach(updateTickerBar);
  updateMainView(activeCoin);
  updateOrderBook(activeCoin);
  updateMacTotal();
  renderBalance();
  renderExchangeTransactions();
  const exchangeModalEl=document.getElementById('exchangeModal');
- if(exchangeModalEl?.classList.contains('open')&&typeof updateLivePreview==='function')updateLivePreview();
+ if(exchangeModalEl?.classList.contains('open') && typeof updateLivePreview==='function') updateLivePreview();
 }
 
 function scheduleNextMarketFetch(delay=MARKET_PRICE_POLL_MS){
@@ -3216,65 +2874,131 @@ function scheduleNextMarketFetch(delay=MARKET_PRICE_POLL_MS){
 async function fetchLiveMarketPrices(){
  if(marketFetchInFlight)return false;
  marketFetchInFlight=true;
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),10000);
  try{
-  let usdCad=Number(exchangeRatesInUSD?.CAD);
-  if(!Number.isFinite(usdCad)||usdCad<=0){
-   const fxReady=await fetchLiveUsdCadRate();
-   usdCad=Number(exchangeRatesInUSD?.CAD);
-   if(!fxReady||!Number.isFinite(usdCad)||usdCad<=0)throw new Error('Live USD/CAD rate unavailable');
-  }
-
-  const symbols={BTC:'BTC-USD',SOL:'SOL-USD',ETH:'ETH-USD'};
-  const results=await Promise.all(Object.entries(symbols).map(async([coin,pair])=>{
-   const json=await fetchJson(`${COINBASE_SPOT_URL}/${pair}/spot?_=${Date.now()}`,10000);
-   const usd=Number(json?.data?.amount);
-   if(!Number.isFinite(usd)||usd<=0)throw new Error(`Invalid Coinbase ${pair} price`);
-   return [coin,usd];
-  }));
-
+  const url=`${MARKET_PRICE_URL}?vs_currencies=cad&ids=bitcoin%2Csolana%2Cethereum&include_24hr_change=true&include_last_updated_at=true&_=${Date.now()}`;
+  const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
+  if(!response.ok)throw new Error(`CoinGecko HTTP ${response.status}`);
+  const json=await response.json();
+  const map={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
   let received=0;
-  for(const [coin,usd] of results){
-   const price=usd/usdCad;
+
+  for(const [id,coin] of Object.entries(map)){
+   const row=json?.[id];
+   const price=Number(row?.cad);
    if(!Number.isFinite(price)||price<=0)continue;
-   const previous=marketPrices[coin]||emptyMarketData();
-   applyLiveMarketData(coin,{
+
+   const changePct=Number(row?.cad_24h_change);
+   const pct=Number.isFinite(changePct)?changePct:null;
+   const previousData=marketPrices[coin]||emptyMarketData();
+   const open24h=Number.isFinite(pct)&&Math.abs(1+pct/100)>0.000001
+    ? price/(1+pct/100)
+    : previousData.open24h;
+   const change24h=Number.isFinite(pct)&&Number.isFinite(open24h)
+    ? price-open24h
+    : previousData.change24h;
+   const providerUpdated=Number(row?.last_updated_at)*1000;
+   const updatedAt=Number.isFinite(providerUpdated)&&providerUpdated>0?providerUpdated:Date.now();
+
+   if(applyLiveMarketData(coin,{
     price,
-    changePct:previous.changePct,
-    change24h:previous.change24h,
-    open24h:previous.open24h,
-    high24h:previous.high24h,
-    low24h:previous.low24h,
-    volume24h:previous.volume24h,
-    lastUpdatedAt:Date.now()
-   });
-   exchangeRatesInUSD[coin]=usd;
-   received++;
+    open24h:Number.isFinite(open24h)&&open24h>0?open24h:null,
+    change24h:Number.isFinite(change24h)?change24h:null,
+    changePct:pct,
+    high24h:previousData.high24h,
+    low24h:previousData.low24h,
+    volume24h:previousData.volume24h,
+    lastUpdatedAt:updatedAt
+   }))received++;
   }
 
-  if(received!==COINS.length)throw new Error(`Incomplete Coinbase response (${received}/${COINS.length})`);
+  if(received!==3)throw new Error(`Incomplete CoinGecko live response (${received}/3)`);
+
   marketLastSuccessfulFetch=Date.now();
   marketFailureCount=0;
   document.documentElement.dataset.marketStatus='live';
   refreshMarketUI();
+
+  // Pull slower-changing market details separately so price updates stay efficient.
+  fetchMarketDetails().catch(()=>{});
   scheduleNextMarketFetch(MARKET_PRICE_POLL_MS);
   return true;
  }catch(e){
   marketFailureCount++;
-  console.warn('Live Coinbase price update failed:',e.name==='AbortError'?'request timed out':e);
+  console.warn('Live CoinGecko CAD price update failed:',e.name==='AbortError'?'request timed out':e);
+
+  // Do NOT invent or substitute a price. Keep the last real price briefly during
+  // transient network/API failures, then show the exact unavailable state.
   updateMarketFreshness();
-  const retryDelay=Math.min(MARKET_RETRY_MAX_MS,MARKET_RETRY_BASE_MS*Math.pow(2,Math.min(marketFailureCount-1,3)));
+  const retryDelay=Math.min(
+   MARKET_RETRY_MAX_MS,
+   MARKET_RETRY_BASE_MS*Math.pow(2,Math.min(marketFailureCount-1,3))
+  );
   scheduleNextMarketFetch(retryDelay);
   return false;
  }finally{
+  clearTimeout(timeout);
   marketFetchInFlight=false;
  }
 }
 
+let marketDetailsInFlight=false;
+let marketDetailsLastFetched=0;
+
 async function fetchMarketDetails(){
- return true;
+ if(marketDetailsInFlight)return false;
+ if(Date.now()-marketDetailsLastFetched<MARKET_DETAILS_POLL_MS)return true;
+ marketDetailsInFlight=true;
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),10000);
+ try{
+  const url=`${MARKET_DETAILS_URL}?vs_currency=cad&ids=bitcoin%2Csolana%2Cethereum&order=market_cap_desc&per_page=3&page=1&sparkline=false&price_change_percentage=24h&_=${Date.now()}`;
+  const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
+  if(!response.ok)throw new Error(`CoinGecko details HTTP ${response.status}`);
+  const rows=await response.json();
+  const map={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
+  let received=0;
+
+  for(const row of Array.isArray(rows)?rows:[]){
+   const coin=map[row?.id];
+   const current=marketPrices[coin];
+   if(!coin||!current||!Number.isFinite(current.price))continue;
+
+   const high=Number(row?.high_24h);
+   const low=Number(row?.low_24h);
+   const volume=Number(row?.total_volume);
+   const open=Number(row?.current_price)/(1+Number(row?.price_change_percentage_24h)/100);
+   const change=Number(row?.price_change_percentage_24h);
+
+   marketPrices[coin]={
+    ...current,
+    open24h:Number.isFinite(open)&&open>0?open:current.open24h,
+    change24h:Number.isFinite(change)?current.price-open:current.change24h,
+    changePct:Number.isFinite(change)?change:current.changePct,
+    high24h:Number.isFinite(high)&&high>0?high:current.high24h,
+    low24h:Number.isFinite(low)&&low>0?low:current.low24h,
+    volume24h:Number.isFinite(volume)&&volume>=0?volume:current.volume24h
+   };
+   received++;
+  }
+
+  if(received===3){
+   marketDetailsLastFetched=Date.now();
+   refreshMarketUI();
+   return true;
+  }
+  return false;
+ }catch(e){
+  console.warn('CoinGecko market details update failed:',e.name==='AbortError'?'request timed out':e);
+  return false;
+ }finally{
+  clearTimeout(timeout);
+  marketDetailsInFlight=false;
+ }
 }
 
-async function fetchRealMarketData(){return fetchLiveMarketPrices();}
+async function fetchRealMarketData(){ return fetchLiveMarketPrices(); }
 
 let marketPrices = {BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData()};
 let activeCoin = 'BTC';
@@ -3290,8 +3014,6 @@ function updateMainView(coin, flashDir) {
   const changeEl=document.getElementById('mciChange'); if(changeEl)changeEl.textContent='Waiting for live market data…';
   ['mciOpen','mciHigh','mciLow','mciVolume','obMidPrice'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
   updateMacTotal();
-  renderMarketChart(coin);
-  updateMarketStatusChip();
   return;
  }
  const isUp=data.changePct>=0;
@@ -3305,33 +3027,26 @@ function updateMainView(coin, flashDir) {
   priceEl.classList.add(`tick-${flashDir}`,`flash-${flashDir}`);
   setTimeout(()=>priceEl.classList.remove('flash-up','flash-down'),700);
  }
- const change24h=Number(data.change24h);
- const changePct=Number(data.changePct);
- const open24h=Number(data.open24h);
- const high24h=Number(data.high24h);
- const low24h=Number(data.low24h);
- const fmtChange=Number.isFinite(change24h)?(coin==='SOL'?`${sign}$${Math.abs(change24h).toFixed(2)}`:`${sign}$${Math.abs(Math.round(change24h)).toLocaleString('en-US')}`):'—';
+ const fmtChange=coin==='SOL'?`${sign}$${Math.abs(data.change24h).toFixed(2)}`:`${sign}$${Math.abs(Math.round(data.change24h)).toLocaleString('en-US')}`;
  const changeEl=document.getElementById('mciChange');
  const pctEl=document.getElementById('mciPct');
  if(changeEl){changeEl.textContent=fmtChange;changeEl.className=`mpm-change ${isUp?'up':'down'}`;}
- if(pctEl){pctEl.textContent=Number.isFinite(changePct)?`${sign}${changePct.toFixed(2)}%`:'—';pctEl.className=`mpm-badge ${isUp?'up':'down'}`;}
- const fmtOpen=Number.isFinite(open24h)?(coin==='SOL'?`$${open24h.toFixed(2)}`:`$${Math.round(open24h).toLocaleString('en-US')}`):'—';
- const fmtHigh=Number.isFinite(high24h)?(coin==='SOL'?`$${high24h.toFixed(2)}`:`$${high24h.toLocaleString('en-US')}`):'—';
- const fmtLow=Number.isFinite(low24h)?(coin==='SOL'?`$${low24h.toFixed(2)}`:`$${low24h.toLocaleString('en-US')}`):'—';
+ if(pctEl){pctEl.textContent=`${sign}${data.changePct.toFixed(2)}%`;pctEl.className=`mpm-badge ${isUp?'up':'down'}`;}
+ const fmtOpen=coin==='SOL'?`$${data.open24h.toFixed(2)}`:`$${Math.round(data.open24h).toLocaleString('en-US')}`;
+ const fmtHigh=coin==='SOL'?`$${data.high24h.toFixed(2)}`:`$${data.high24h.toLocaleString('en-US')}`;
+ const fmtLow=coin==='SOL'?`$${data.low24h.toFixed(2)}`:`$${data.low24h.toLocaleString('en-US')}`;
  const openEl=document.getElementById('statOpen'),highEl=document.getElementById('statHigh'),lowEl=document.getElementById('statLow'),volEl=document.getElementById('statVol');
  if(openEl)openEl.textContent=fmtOpen;
  if(highEl)highEl.textContent=fmtHigh;
  if(lowEl)lowEl.textContent=fmtLow;
- const vol=Number(data.volume24h);
- const volFmt=Number.isFinite(vol)?(vol>=1e9?`$${(vol/1e9).toFixed(1)}B`:vol>=1e6?`$${(vol/1e6).toFixed(0)}M`:`$${vol.toFixed(0)}`):'—';
+ const vol=data.volume24h;
+ const volFmt=vol>=1e9?`$${(vol/1e9).toFixed(1)}B`:vol>=1e6?`$${(vol/1e6).toFixed(0)}M`:`$${vol.toFixed(0)}`;
  if(volEl)volEl.textContent=volFmt;
  const midEl=document.getElementById('obMidPrice');
  if(midEl)midEl.textContent=fmtPrice;
  const arrowEl=document.getElementById('obMidArrow');
  if(arrowEl)arrowEl.style.color=isUp?'var(--accent-green)':'var(--accent-red)';
  updateMacTotal();
- renderMarketChart(coin);
- updateMarketStatusChip();
 }
 function updateOrderBook(coin) {
  const obAsks=document.getElementById('obAsks'),obBids=document.getElementById('obBids'),obSpread=document.getElementById('obSpread'),obUserOrders=document.getElementById('obUserOrders'),obMid=document.getElementById('obMidPrice');
@@ -3365,85 +3080,13 @@ function setMacTab(tab){
 }
 function setMacPct(pct,el){document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));el.classList.add('active');const bal=macCurrentTab==='buy'?getBalanceForCurrency('CAD'):getBalanceForCurrency(activeCoin);const dec=macCurrentTab==='buy'?2:4;const factor=Math.pow(10,dec);document.getElementById('macAmountInput').value=(Math.floor(bal*(pct/100)*factor)/factor).toFixed(dec);updateMacTotal();}
 function updateMacTotal(){const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const price=marketPrices[activeCoin]?.price;const out=document.getElementById('macTotalVal');if(!out)return;if(!Number.isFinite(price)){out.textContent='Live price unavailable';return;}if(macCurrentTab==='buy')out.textContent=`${(amt/price).toFixed(4)} ${activeCoin}`;else out.textContent=`${(amt*price).toFixed(2)} CAD`;}
-function isLiveCryptoPriceAvailable(coin){
- const data=marketPrices?.[coin];
- return !!data && Number.isFinite(data.price) && data.price>0 && Number.isFinite(data.lastUpdatedAt) && (Date.now()-data.lastUpdatedAt)<=MARKET_STALE_AFTER_MS;
-}
-function isLiveTransactionPriceAvailable(fromCurr,toCurr){
- const crypto=['BTC','SOL','ETH'];
- if(fromCurr===toCurr)return false;
- if(crypto.includes(fromCurr) && !isLiveCryptoPriceAvailable(fromCurr))return false;
- if(crypto.includes(toCurr) && !isLiveCryptoPriceAvailable(toCurr))return false;
- if((fromCurr==='USD'||toCurr==='USD') && (!Number.isFinite(Number(exchangeRatesInUSD?.CAD)) || Number(exchangeRatesInUSD.CAD)<=0))return false;
- return true;
-}
-function updateTransactionPriceLocks(){
- const macBtn=document.getElementById('macSubmitBtn');
- if(macBtn){
-  const live=isLiveCryptoPriceAvailable(activeCoin);
-  macBtn.classList.toggle('live-price-blocked',!live);
-  macBtn.setAttribute('aria-disabled',live?'false':'true');
-  macBtn.title=live?'':`Live ${activeCoin} price unavailable`;
-  const note=document.getElementById('macLivePriceLockNote');
-  if(note)note.classList.toggle('show',!live);
- }
- const from=document.getElementById('exFrom')?.value;
- const to=document.getElementById('exTo')?.value;
- const exBtn=document.getElementById('confirmExchangeBtn');
- if(exBtn && from && to){
-  const live=isLiveTransactionPriceAvailable(from,to);
-  exBtn.classList.toggle('live-price-blocked',!live);
-  exBtn.disabled=!live;
-  exBtn.setAttribute('aria-disabled',live?'false':'true');
-  exBtn.title=live?'':'Live price unavailable';
-  const note=document.getElementById('exchangeLivePriceLockNote');
-  if(note)note.classList.toggle('show',!live);
- }
-}
 function macSubmitOrder(){
- const amt=parseFloat(document.getElementById('macAmountInput').value)||0;
- if(amt<=0)return;
- if(!isLiveCryptoPriceAvailable(activeCoin)){showToast('Live price unavailable — transaction blocked');updateTransactionPriceLocks();return;}
- const btn=document.getElementById('macSubmitBtn');btn.style.opacity='0.6';btn.style.pointerEvents='none';
- setTimeout(()=>{
-  btn.style.opacity='1';btn.style.pointerEvents='';
-  if(!isLiveCryptoPriceAvailable(activeCoin)){showToast('Live price unavailable — transaction cancelled');updateTransactionPriceLocks();return;}
-  const price=marketPrices[activeCoin].price;
+ const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const livePrice=marketPrices[activeCoin]?.price;if(amt<=0)return;if(!Number.isFinite(livePrice)){showToast('Live price unavailable — try again in a moment');return;}const btn=document.getElementById('macSubmitBtn');btn.style.opacity='0.6';btn.style.pointerEvents='none';
+ setTimeout(()=>{btn.style.opacity='1';btn.style.pointerEvents='';const price=livePrice;
   if(macCurrentTab==='buy'){const received=amt/price;if(internalHiddenBalanceCAD<amt){showToast('Insufficient CAD balance');return;}deductBalanceForCurrency('CAD',amt);addBalanceForCurrency(activeCoin,received);userTrades.unshift({coin:activeCoin,price,size:received,side:'buy',time:new Date()});showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);}
   else{const received=amt*price;const bal=getBalanceForCurrency(activeCoin);if(bal<amt){showToast(`Insufficient ${activeCoin} balance`);return;}deductBalanceForCurrency(activeCoin,amt);addBalanceForCurrency('CAD',received);userTrades.unshift({coin:activeCoin,price,size:amt,side:'sell',time:new Date()});showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);}
   if(userTrades.length>20)userTrades.pop();renderBalance();updateOrderBook(activeCoin);document.getElementById('macAmountInput').value='';document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));updateMacTotal();
  },700);
-}
-
-function updateMarketStatusChip(){
- const chip=document.getElementById('marketStatusText');
- if(!chip)return;
- const live=document.documentElement.dataset.marketStatus==='live';
- chip.textContent=live?'Live market data':'Live data unavailable';
- const chartLive=document.getElementById('marketChartLive');
- if(chartLive)chartLive.textContent=live?'Updating in real time':'Waiting for live data';
-}
-function renderMarketChart(coin){
- const line=document.getElementById('marketChartLine');
- const area=document.getElementById('marketChartArea');
- const empty=document.getElementById('marketChartEmpty');
- if(!line||!area||!empty)return;
- const points=(priceHistory[coin]||[]).filter(x=>Number.isFinite(x?.p)&&x.p>0).slice(-120);
- if(points.length<2){line.setAttribute('d','');area.setAttribute('d','');empty.style.display='flex';updateMarketStatusChip();return;}
- empty.style.display='none';
- const vals=points.map(x=>x.p);
- let min=Math.min(...vals),max=Math.max(...vals);
- if(min===max){const pad=min*.002||1;min-=pad;max+=pad;}
- const range=max-min;
- const coords=points.map((x,i)=>{
-  const px=(i/(points.length-1))*900;
-  const py=248-((x.p-min)/range)*214;
-  return [px,py];
- });
- const d=coords.map((p,i)=>(i?'L':'M')+p[0].toFixed(2)+' '+p[1].toFixed(2)).join(' ');
- const areaD=d+' L 900 270 L 0 270 Z';
- line.setAttribute('d',d);area.setAttribute('d',areaD);
- updateMarketStatusChip();
 }
 function selectMarketCoin(coin) {
 activeCoin = coin;
@@ -3468,7 +3111,6 @@ updateMainView(coin, null);
 updateOrderBook(coin);
 updateRecentTrades();
 setMacTab(macCurrentTab);
-updateTransactionPriceLocks();
 updateMarketAlerts();
 }
 renderExchangeTransactions();
@@ -3478,6 +3120,8 @@ marketPrices = {BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData(
 ['BTC','SOL','ETH'].forEach(coin => updateTickerBar(coin));
 updateMainView('BTC');
 updateOrderBook('BTC');
+fetchLiveUsdCadRate();
+fetchLiveMarketPrices();
 setInterval(fetchLiveUsdCadRate, 3600000);
 setInterval(updateMarketFreshness, 15000);
 let priceAlertsEnabled = {BTC:false, SOL:false, ETH:false};
@@ -3541,11 +3185,9 @@ showToast(msg);
 }
 selectMarketCoin('BTC');
 setMacTab('buy');
-updateTransactionPriceLocks();
 const MARGINAL_TAX_RATE = 0.33; // applied to the 50% taxable inclusion only
 const exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
 fetchLiveUsdCadRate();
-fetchLiveMarketPrices();
 initializeCostBasis();
 function showToast(message, duration=3500) { toastMessage.textContent=message; toastNotification.classList.add('show'); setTimeout(()=>toastNotification.classList.remove('show'),duration); }
 function calculateConversion(amount, fromCurr, toCurr) {
@@ -3575,7 +3217,6 @@ function updateLivePreview() {
 const amount = parseFloat(document.getElementById('exAmount').value) || 0;
 const fromCurr = document.getElementById('exFrom').value;
 const toCurr = document.getElementById('exTo').value;
-updateTransactionPriceLocks();
 const fromDec = (fromCurr==='BTC'||fromCurr==='SOL') ? 4 : 2;
 const toDec = (toCurr==='BTC'||toCurr==='SOL') ? 4 : 2;
 if (fromCurr===toCurr) {
@@ -3693,7 +3334,6 @@ exFromSelect.value=currentCurrency;
 exAmountInput.value='';
 updateAvailableBalanceSubtext();
 updateLivePreview();
-updateTransactionPriceLocks();
 exchangeModal.classList.add('open');
 });
 exchangeModal.addEventListener('click', e=>{ if(e.target===exchangeModal) exchangeModal.classList.remove('open'); });
@@ -3717,24 +3357,12 @@ const fromCurr=exFromSelect.value;
 const toCurr=exToSelect.value;
 const dict=translations[currentLang]||translations['en-CA'];
 if(fromCurr===toCurr){exError.textContent=currentLang==='fr-CA'?'Impossible de convertir entre la même devise.':'Cannot convert between the same currency.';exError.style.display='block';return;}
-if(!isLiveTransactionPriceAvailable(fromCurr,toCurr)){
- exError.textContent='Live price unavailable — transaction blocked. Please wait for live market data.';
- exError.style.display='block';
- updateTransactionPriceLocks();
- return;
-}
 const availableBalance=getBalanceForCurrency(fromCurr);
 if(amount<=0||(amount-availableBalance)>0.0000001){exError.textContent=dict.exErrorText;exError.style.display='block';return;}
 exError.style.display='none';
 confirmExchangeBtn.classList.add('loading');
 setTimeout(()=>{
 confirmExchangeBtn.classList.remove('loading');
-if(!isLiveTransactionPriceAvailable(fromCurr,toCurr)){
- exError.textContent='Live price unavailable — transaction cancelled. No balances were changed.';
- exError.style.display='block';
- updateTransactionPriceLocks();
- return;
-}
 exchangeModal.classList.remove('open');
 document.body.classList.remove('exchange-modal-open');
 const{receivedAmount}=calculateConversion(amount,fromCurr,toCurr);
@@ -3762,8 +3390,7 @@ document.getElementById('toggleHideBalances').addEventListener('change', e=>{ ba
 document.getElementById('settingDefaultCurrency').addEventListener('change', e=>{ const val=e.target.value; if(val==='CAD'||val==='USD'){currentCurrency=val;walletSelector.value=val;renderBalance();} });
 document.getElementById('btnClearActivity').addEventListener('click', ()=>{ recentActivities=[]; renderRecentActivity(); const dict=translations[currentLang]||translations['en-CA']; showToast(dict.activityClearedMsg,2500); });
 document.getElementById('btnResetApp').addEventListener('click', ()=>{
-try { localStorage.removeItem('walletTheme'); } catch (e) {}
-setTheme('dark', false);
+setTheme('dark');
 document.getElementById('toggleHideBalances').checked=false;
 balanceText.classList.remove('blurred');
 document.getElementById('toggleBiometrics').checked=true;
@@ -3832,57 +3459,6 @@ profitsPanel.addEventListener('touchend',pHandleEnd);
 profitsPanel.addEventListener('mousedown',e=>pHandleStart(e.clientY));
 window.addEventListener('mousemove',e=>{if(pIsDragging)pHandleMove(e.clientY,e);});
 window.addEventListener('mouseup',()=>{if(pIsDragging)pHandleEnd();});
-
-/* ===== POLISHED MICRO-INTERACTIONS ===== */
-(function(){
-  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Give navigation a consistent, subtle "app" transition.
-  const navItems = document.querySelectorAll('.sidebar-item');
-  const panels = document.querySelectorAll('.page-panel');
-  navItems.forEach(item => {
-    item.addEventListener('click', () => {
-      if (prefersReduced) return;
-      const target = document.getElementById(item.dataset.target);
-      if (!target) return;
-      panels.forEach(p => {
-        if (p !== target) p.style.willChange = 'opacity, transform';
-      });
-      target.style.willChange = 'opacity, transform';
-      window.setTimeout(() => {
-        panels.forEach(p => p.style.willChange = '');
-      }, 520);
-    });
-  });
-
-  // Tiny press feedback for important controls. Uses a CSS variable so it
-  // never fights the existing transform animations.
-  document.addEventListener('pointerdown', e => {
-    const el = e.target.closest('button,.action-btn,.sidebar-item,.theme-card,.tr-btn,.ticker-item,.tx-card');
-    if (!el || el.disabled) return;
-    el.dataset.pressed = '1';
-  });
-  document.addEventListener('pointerup', e => {
-    const el = e.target.closest('[data-pressed]');
-    if (el) delete el.dataset.pressed;
-  });
-  document.addEventListener('pointercancel', e => {
-    const el = e.target.closest('[data-pressed]');
-    if (el) delete el.dataset.pressed;
-  });
-
-  // Prevent accidental page-jump from sidebar anchors.
-  navItems.forEach(item => item.setAttribute('aria-current', item.classList.contains('active') ? 'page' : 'false'));
-
-  const observer = new MutationObserver(mutations => {
-    mutations.forEach(m => {
-      if (!m.target.classList || !m.target.classList.contains('sidebar-item')) return;
-      m.target.setAttribute('aria-current', m.target.classList.contains('active') ? 'page' : 'false');
-    });
-  });
-  navItems.forEach(item => observer.observe(item,{attributes:true,attributeFilter:['class']}));
-})();
-
 </script>
 </body>
 </html>
