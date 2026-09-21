@@ -1510,7 +1510,7 @@ body.theme-light .market-chart-container { background:#fff; }
 }
 .intro-welcome::after {
   display:block;
-  content:'Your wallet, simplified';
+  content:'';
   margin:7px auto 0;
   color:rgba(255,255,255,.38);
   font-size:11px;
@@ -1535,6 +1535,95 @@ body.theme-light .market-chart-container { background:#fff; }
   .intro-title{font-size:17px;}
   .orb{width:min(190px,52vw);height:min(190px,52vw);}
 }
+
+
+/* --- Clean White theme cleanup + chart attribution removal --- */
+body.theme-light .dashboard-header,
+body.theme-light .market-ticker-bar,
+body.theme-light .market-chart-header,
+body.theme-light .chart-canvas-area,
+body.theme-light .chart-stats-strip,
+body.theme-light .market-right-panel,
+body.theme-light .market-action-card,
+body.theme-light .recent-trades-panel,
+body.theme-light .orderbook-panel,
+body.theme-light .activity-panel,
+body.theme-light .asset-list,
+body.theme-light .exchange-transactions,
+body.theme-light .cost-card,
+body.theme-light .profit-summary-card,
+body.theme-light .profit-period-card,
+body.theme-light .settings-row,
+body.theme-light .theme-card {
+  border-color: rgba(15,23,42,.10);
+}
+body.theme-light .market-ticker-bar,
+body.theme-light .chart-toolbar,
+body.theme-light .chart-canvas-area,
+body.theme-light .chart-stats-strip {
+  background:#fff;
+}
+body.theme-light .ticker-item,
+body.theme-light .chart-tool-btn,
+body.theme-light .tr-btn,
+body.theme-light .mac-tab,
+body.theme-light .mac-pct,
+body.theme-light .ob-row,
+body.theme-light .rt-row,
+body.theme-light .list-item {
+  border-color:rgba(15,23,42,.09);
+}
+body.theme-light .ticker-item.selected {
+  background:#f1f5f9;
+  box-shadow:inset 0 0 0 1px rgba(15,23,42,.10);
+}
+body.theme-light .mac-body,
+body.theme-light .mac-input-field,
+body.theme-light .mac-pct,
+body.theme-light .cost-card,
+body.theme-light .exchange-transactions {
+  background:#fff;
+}
+body.theme-light .mac-input-field input,
+body.theme-light .search-assets-input {
+  color:#111827;
+}
+body.theme-light .ob-row-fill { opacity:.10; }
+body.theme-light .tx-card { background:#fff; border-color:rgba(15,23,42,.09); }
+body.theme-light .profit-summary-label,
+body.theme-light .profit-period-label,
+body.theme-light .profit-summary-sub,
+body.theme-light .profit-period-sub,
+body.theme-light .css-label,
+body.theme-light .ob-col-label,
+body.theme-light .rt-col-label { color:#6b7280; }
+.tv-lightweight-charts__attribution-logo,
+.tv-lightweight-charts__attribution-logo-container,
+[class*="attribution-logo"],
+[class*="attributionLogo"] { display:none !important; visibility:hidden !important; opacity:0 !important; }
+.search-assets-wrap { margin:0 0 18px; position:relative; }
+.search-assets-input { width:100%; height:46px; border:1px solid var(--border-hover); border-radius:14px; background:var(--bg-input); color:var(--text-main); padding:0 16px 0 42px; outline:none; font-size:14px; font-weight:600; }
+.search-assets-input:focus { border-color:rgba(52,211,153,.55); box-shadow:0 0 0 3px rgba(52,211,153,.10); }
+.search-assets-icon { position:absolute; left:14px; top:14px; color:var(--text-muted); pointer-events:none; }
+.asset-search-results { display:grid; gap:8px; margin-top:10px; }
+.asset-search-result { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 12px; border:1px solid var(--border-subtle); border-radius:13px; background:var(--bg-card); }
+.asset-search-main { min-width:0; }
+.asset-search-name { font-weight:800; font-size:13px; }
+.asset-search-symbol { color:var(--text-muted); font-size:11px; margin-top:2px; }
+.asset-search-price { font-weight:800; font-size:13px; white-space:nowrap; }
+.asset-search-actions { display:flex; gap:6px; }
+.asset-search-btn { border:1px solid var(--border-hover); background:var(--bg-input); color:var(--text-main); border-radius:9px; padding:7px 10px; font-size:11px; font-weight:800; cursor:pointer; }
+.asset-search-btn.primary { background:var(--text-main); color:var(--bg-main); border-color:var(--text-main); }
+.tracked-assets { margin-top:18px; }
+.tracked-assets-empty { color:var(--text-muted); font-size:12px; padding:8px 0; }
+.tracked-asset-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-top:1px solid var(--border-subtle); cursor:pointer; }
+.tracked-asset-row:first-child { border-top:0; }
+.tracked-asset-left { display:flex; align-items:center; gap:10px; min-width:0; }
+.tracked-asset-icon { width:34px; height:34px; border-radius:50%; display:grid; place-items:center; background:var(--bg-input); font-weight:900; font-size:11px; }
+.tracked-asset-name { font-weight:800; font-size:13px; }
+.tracked-asset-sub { color:var(--text-muted); font-size:11px; }
+.tracked-asset-value { text-align:right; font-weight:800; font-size:13px; }
+.tracked-asset-price { color:var(--text-muted); font-size:10px; margin-top:2px; }
 
 </style>
 </head>
@@ -1697,6 +1786,10 @@ body.theme-light .market-chart-container { background:#fff; }
 <div class="item-right"><div class="item-value" id="usdValue" data-asset="USD">0.00<span class="currency-label">USD</span></div></div>
 </div>
 </div>
+<div class="tracked-assets" id="trackedAssetsBlock">
+<div class="panel-header"><span class="panel-title">Tracked assets</span></div>
+<div id="trackedAssetsList"><div class="tracked-assets-empty">Search for an asset in Market and add it here.</div></div>
+</div>
 </div>
 </div>
 </section>
@@ -1774,21 +1867,26 @@ body.theme-light .market-chart-container { background:#fff; }
 <button class="market-alert-bell" id="ethAlertBell" onclick="toggleCoinAlert('ETH', event)" title="Toggle ETH price alerts" type="button" style="display:none;"><i data-lucide="bell-off"></i></button>
 </div>
 </div>
+<div class="search-assets-wrap">
+<i data-lucide="search" class="search-assets-icon" style="width:17px;height:17px;"></i>
+<input class="search-assets-input" id="marketAssetSearch" type="search" autocomplete="off" placeholder="Search assets to trade...">
+<div class="asset-search-results" id="assetSearchResults" style="display:none;"></div>
+</div>
 <div class="market-ticker-bar" id="marketTickerBar">
 <div class="ticker-item selected" id="tickerBTC" onclick="selectMarketCoin('BTC')">
 <div class="ticker-symbol">BTC / CAD</div>
-<div class="ticker-price" id="tickerPriceBTC">—</div>
-<div class="ticker-change up" id="tickerChangeBTC">—</div>
+<div class="ticker-price" id="tickerPriceBTC">••••••</div>
+<div class="ticker-change" id="tickerChangeBTC">••</div>
 </div>
 <div class="ticker-item" id="tickerSOL" onclick="selectMarketCoin('SOL')">
 <div class="ticker-symbol">SOL / CAD</div>
-<div class="ticker-price" id="tickerPriceSOL">—</div>
-<div class="ticker-change up" id="tickerChangeSOL">—</div>
+<div class="ticker-price" id="tickerPriceSOL">••••••</div>
+<div class="ticker-change" id="tickerChangeSOL">••</div>
 </div>
 <div class="ticker-item" id="tickerETH" onclick="selectMarketCoin('ETH')">
 <div class="ticker-symbol">ETH / CAD</div>
-<div class="ticker-price" id="tickerPriceETH">—</div>
-<div class="ticker-change up" id="tickerChangeETH">—</div>
+<div class="ticker-price" id="tickerPriceETH">••••••</div>
+<div class="ticker-change" id="tickerChangeETH">••</div>
 </div>
 </div>
 <div class="market-main-view">
@@ -1809,10 +1907,10 @@ body.theme-light .market-chart-container { background:#fff; }
 </button>
 </div>
 <div>
-<div class="market-live-price" id="mciPrice">—</div>
+<div class="market-live-price" id="mciPrice">••••••</div>
 <div class="market-price-meta">
-<div class="mpm-change up" id="mciChange">—</div>
-<div class="mpm-badge up" id="mciPct">—</div>
+<div class="mpm-change up" id="mciChange">••</div>
+<div class="mpm-badge up" id="mciPct">••</div>
 <div class="mpm-divider"></div>
 <div class="mpm-period">24h</div>
 </div>
@@ -1850,19 +1948,19 @@ body.theme-light .market-chart-container { background:#fff; }
 <div class="chart-stats-strip">
 <div class="css-stat">
 <div class="css-label">24h Open</div>
-<div class="css-value" id="statOpen">—</div>
+<div class="css-value" id="statOpen">••••••</div>
 </div>
 <div class="css-stat">
 <div class="css-label">24h High</div>
-<div class="css-value" id="statHigh" style="color:var(--accent-green);">—</div>
+<div class="css-value" id="statHigh" style="color:var(--accent-green);">••••••</div>
 </div>
 <div class="css-stat">
 <div class="css-label">24h Low</div>
-<div class="css-value" id="statLow" style="color:var(--accent-red);">—</div>
+<div class="css-value" id="statLow" style="color:var(--accent-red);">••••••</div>
 </div>
 <div class="css-stat">
 <div class="css-label">Volume</div>
-<div class="css-value" id="statVol">—</div>
+<div class="css-value" id="statVol">••••••</div>
 </div>
 </div>
 </div>
@@ -1870,7 +1968,7 @@ body.theme-light .market-chart-container { background:#fff; }
 <div class="orderbook-panel">
 <div class="orderbook-header">
 <span class="ob-title">Order Book</span>
-<span class="ob-spread-badge" id="obSpread">Spread: —</span>
+<span class="ob-spread-badge" id="obSpread">Spread: •••</span>
 </div>
 <div class="orderbook-cols">
 <div class="ob-col-label">Price</div>
@@ -1879,7 +1977,7 @@ body.theme-light .market-chart-container { background:#fff; }
 </div>
 <div class="ob-asks" id="obAsks"></div>
 <div class="ob-mid-row">
-<span class="ob-mid-price" id="obMidPrice">—</span>
+<span class="ob-mid-price" id="obMidPrice">••••••</span>
 <i data-lucide="trending-up" class="ob-mid-arrow" id="obMidArrow" style="color:var(--accent-green);"></i>
 </div>
 <div class="ob-user-orders" id="obUserOrders" style="display:none;"></div>
@@ -2302,7 +2400,7 @@ accountEmailInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.
 let recentActivities = [];
 let userTrades = [];
 loadWalletState();
-const costBasisLots = {BTC: [], SOL: [], ETH: []};
+const costBasisLots = Object.fromEntries(COINS.map(c=>[c,[]]));
 let costBasisInitialized = false;
 function cadPriceForCurrency(curr) {
   if (curr === 'CAD') return 1;
@@ -2311,10 +2409,9 @@ function cadPriceForCurrency(curr) {
 }
 function initializeCostBasis() {
   if (costBasisInitialized) return;
-  if (solanaBalance > 0) {
-    const price = cadPriceForCurrency('SOL');
-    costBasisLots.SOL.push({qty: solanaBalance, costCad: solanaBalance * price});
-  }
+  if (solanaBalance > 0) { const price=cadPriceForCurrency('SOL'); costBasisLots.SOL.push({qty:solanaBalance,costCad:solanaBalance*price}); }
+  if (ethereumBalance > 0) { const price=cadPriceForCurrency('ETH'); costBasisLots.ETH.push({qty:ethereumBalance,costCad:ethereumBalance*price}); }
+  for(const coin of COINS.filter(c=>!['BTC','SOL','ETH'].includes(c))){ const bal=Number(assetBalances[coin])||0; if(bal>0){const price=cadPriceForCurrency(coin);costBasisLots[coin].push({qty:bal,costCad:bal*price});}}
   costBasisInitialized = true;
 }
 function addCostBasisLot(curr, qty, costCad) {
@@ -2338,8 +2435,8 @@ function consumeCostBasis(curr, qty) {
 }
 function recordRealizedPnl(fromCurr, toCurr, amount, receivedAmount) {
   initializeCostBasis();
-  const cryptoFrom = ['BTC','SOL','ETH'].includes(fromCurr);
-  const cryptoTo = ['BTC','SOL','ETH'].includes(toCurr);
+  const cryptoFrom = COINS.includes(fromCurr);
+  const cryptoTo = COINS.includes(toCurr);
   const proceedsCad = receivedAmount * cadPriceForCurrency(toCurr);
   const costBasisCad = cryptoFrom ? consumeCostBasis(fromCurr, amount) : 0;
   const gainCad = cryptoFrom ? proceedsCad - costBasisCad : 0;
@@ -2498,10 +2595,10 @@ let balanceRateUSD = 0.00;
 let bitcoinBalance = 0.00;
 let solanaBalance = parseFloat((Math.random() * (46.482340 - 13.839130) + 13.839130).toFixed(6));
 let ethereumBalance = 0.00;
-const WALLET_STORAGE_KEY='wallet_simulator_state_v2';
+const WALLET_STORAGE_KEY='wallet_simulator_state_v3';
 function saveWalletState(){
  try{
-  localStorage.setItem(WALLET_STORAGE_KEY,JSON.stringify({currentCurrency,displayBalanceCAD,internalHiddenBalanceCAD,displayBalanceUSD,internalHiddenBalanceUSD,balanceRateCAD,balanceRateUSD,bitcoinBalance,solanaBalance,ethereumBalance,recentActivities,userTrades}));
+  localStorage.setItem(WALLET_STORAGE_KEY,JSON.stringify({currentCurrency,displayBalanceCAD,internalHiddenBalanceCAD,displayBalanceUSD,internalHiddenBalanceUSD,balanceRateCAD,balanceRateUSD,bitcoinBalance,solanaBalance,ethereumBalance,assetBalances,recentActivities,userTrades}));
  }catch(e){console.warn('Wallet state save failed:',e);}
 }
 function loadWalletState(){
@@ -2519,6 +2616,7 @@ function loadWalletState(){
   if(Number.isFinite(Number(st.solanaBalance)))solanaBalance=Number(st.solanaBalance);
   if(Number.isFinite(Number(st.ethereumBalance)))ethereumBalance=Number(st.ethereumBalance);
   if(Array.isArray(st.recentActivities))recentActivities=st.recentActivities;
+  if(st.assetBalances&&typeof st.assetBalances==='object')assetBalances=st.assetBalances;
   if(Array.isArray(st.userTrades))userTrades=st.userTrades.map(t=>({...t,time:new Date(t.time)}));
  }catch(e){console.warn('Wallet state load failed:',e);}
 }
@@ -2535,19 +2633,19 @@ if (curr==='USD') return internalHiddenBalanceUSD;
 if (curr==='BTC') return bitcoinBalance;
 if (curr==='SOL') return solanaBalance;
 if (curr==='ETH') return ethereumBalance;
-return 0;
+return Number(assetBalances[curr])||0;
 }
 function updateAvailableBalanceSubtext() {
 const curr = document.getElementById('exFrom').value;
 const bal = getBalanceForCurrency(curr);
-const dec = (curr==='BTC'||curr==='SOL') ? 4 : 2;
+const dec = COINS.includes(curr) ? (COIN_DECIMALS[curr]||4) : 2;
 const prefix = currentLang==='fr-CA' ? 'Disponible :' : 'Available:';
 availableBalanceSubtext.textContent = `${prefix} ${bal.toFixed(dec)} ${curr}`;
 }
 function setMaxExchangeAmount() {
 const curr = document.getElementById('exFrom').value;
 const bal = getBalanceForCurrency(curr);
-const dec = (curr==='BTC'||curr==='SOL') ? 4 : 2;
+const dec = COINS.includes(curr) ? (COIN_DECIMALS[curr]||4) : 2;
 const factor = Math.pow(10,dec);
 const safeBal = bal>0?(Math.floor(bal*factor)/factor).toFixed(dec):'';
 document.getElementById('exAmount').value = safeBal;
@@ -2579,6 +2677,13 @@ btcAssetValueText.innerHTML=`${bitcoinBalance.toFixed(4)}<span class="currency-l
 if (solAssetValueText) solAssetValueText.innerHTML=`${solanaBalance.toFixed(4)}<span class="currency-label">SOL</span>`;
 document.getElementById('ethAssetValue').innerHTML=`${ethereumBalance.toFixed(4)}<span class="currency-label">ETH</span>`;
 updateAvailableBalanceSubtext();
+ renderTrackedAssets();
+}
+function renderTrackedAssets(){
+ const list=document.getElementById('trackedAssetsList'); if(!list)return;
+ const tracked=JSON.parse(localStorage.getItem('eisa_tracked_assets')||'[]').filter(c=>COINS.includes(c));
+ if(!tracked.length){list.innerHTML='<div class="tracked-assets-empty">Search for an asset in Market and add it here.</div>';return;}
+ list.innerHTML=tracked.map(c=>{const d=marketDisplayPrices[c]||marketPrices[c];const bal=getBalanceForCurrency(c);return `<div class="tracked-asset-row" onclick="selectMarketCoin('${c}')"><div class="tracked-asset-left"><div class="tracked-asset-icon">${MARKET_META[c].icon}</div><div><div class="tracked-asset-name">${MARKET_META[c].name}</div><div class="tracked-asset-sub">${c} · ${bal.toFixed(MARKET_META[c].decimals)}</div></div></div><div class="tracked-asset-value">${formatMarketPrice(c,d?.price)}<div class="tracked-asset-price">${Number(d?.changePct||0)>=0?'+':''}${Number(d?.changePct||0).toFixed(2)}%</div></div></div>`;}).join('');
 }
 renderBalance();
 renderRecentActivity();
@@ -2597,15 +2702,16 @@ document.getElementById('walletEditSave').addEventListener('click',saveWalletEdi
 document.getElementById('walletEditCancel').addEventListener('click',closeWalletEditor);
 [editBalanceInput,editRateInput].forEach(inp=>{ inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();saveWalletEditor();}else if(e.key==='Escape'){e.preventDefault();closeWalletEditor();} }); });
 (function setupTripleClick(){let clickTimes=[];function registerClick(e){const now=Date.now();clickTimes.push(now);clickTimes=clickTimes.filter(t=>now-t<=1500);if(clickTimes.length>=3){clickTimes=[];e.preventDefault();openWalletEditor();}}balanceText.addEventListener('click',registerClick,true);})();
+var assetBalances = {};
 const assetEditModal=document.getElementById('assetEditModal');
 const assetModalName=document.getElementById('assetModalName');
 const assetModalInput=document.getElementById('assetModalInput');
 const assetModalSave=document.getElementById('assetModalSave');
 const assetModalCancel=document.getElementById('assetModalCancel');
 let currentTargetAsset=null;
-function openAssetModal(assetKey){currentTargetAsset=assetKey;assetModalName.textContent=assetKey;let cv=0;if(assetKey==='BTC')cv=bitcoinBalance;else if(assetKey==='SOL')cv=solanaBalance;else if(assetKey==='ETH')cv=ethereumBalance;else if(assetKey==='CAD')cv=displayBalanceCAD;else if(assetKey==='USD')cv=displayBalanceUSD;assetModalInput.value=cv;assetEditModal.classList.add('open');assetModalInput.focus();assetModalInput.select();}
+function openAssetModal(assetKey){currentTargetAsset=assetKey;assetModalName.textContent=assetKey;let cv=0;if(assetKey==='BTC')cv=bitcoinBalance;else if(assetKey==='SOL')cv=solanaBalance;else if(assetKey==='ETH')cv=ethereumBalance;else if(assetKey==='CAD')cv=displayBalanceCAD;else if(assetKey==='USD')cv=displayBalanceUSD; else if(COINS.includes(assetKey))cv=getBalanceForCurrency(assetKey);assetModalInput.value=cv;assetEditModal.classList.add('open');assetModalInput.focus();assetModalInput.select();}
 function closeAssetModal(){assetEditModal.classList.remove('open');currentTargetAsset=null;}
-function saveAssetModal(){const val=parseFloat(assetModalInput.value);if(!isNaN(val)&&currentTargetAsset){if(currentTargetAsset==='BTC')bitcoinBalance=val;else if(currentTargetAsset==='SOL')solanaBalance=val;else if(currentTargetAsset==='ETH')ethereumBalance=val;else if(currentTargetAsset==='CAD'){displayBalanceCAD=val;internalHiddenBalanceCAD=val;}else if(currentTargetAsset==='USD'){displayBalanceUSD=val;internalHiddenBalanceUSD=val;}renderBalance(); saveWalletState();}closeAssetModal();}
+function saveAssetModal(){const val=parseFloat(assetModalInput.value);if(!isNaN(val)&&currentTargetAsset){if(currentTargetAsset==='BTC')bitcoinBalance=val;else if(currentTargetAsset==='SOL')solanaBalance=val;else if(currentTargetAsset==='ETH')ethereumBalance=val;else if(currentTargetAsset==='CAD'){displayBalanceCAD=val;internalHiddenBalanceCAD=val;}else if(currentTargetAsset==='USD'){displayBalanceUSD=val;internalHiddenBalanceUSD=val;} else if(COINS.includes(currentTargetAsset))assetBalances[currentTargetAsset]=val;renderBalance(); saveWalletState();}closeAssetModal();}
 assetModalSave.addEventListener('click',saveAssetModal);
 assetModalCancel.addEventListener('click',closeAssetModal);
 assetModalInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveAssetModal();}if(e.key==='Escape'){e.preventDefault();closeAssetModal();}});
@@ -2618,12 +2724,12 @@ function updateTickerBar(coin){
  const changeEl=document.getElementById(`tickerChange${coin}`);
  if(!priceEl||!changeEl)return;
  if(!data||!Number.isFinite(data.price)){
-  priceEl.textContent='—';
-  changeEl.textContent='—';
+  priceEl.textContent='••••••';
+  changeEl.textContent='••';
   changeEl.className='ticker-change';
   return;
  }
- const price=coin==='SOL'?`$${data.price.toFixed(2)}`:`$${data.price.toLocaleString('en-US',{maximumFractionDigits:0})}`;
+ const price=formatMarketPrice(coin,data.price);
  const pct=Number(data.changePct);
  priceEl.textContent=price;
  priceEl.classList.remove('market-price-hidden');
@@ -2632,15 +2738,22 @@ function updateTickerBar(coin){
   changeEl.textContent=`${sign}${pct.toFixed(2)}%`;
   changeEl.className=`ticker-change ${pct>=0?'up':'down'}`;
  }else{
-  changeEl.textContent='—';
-  changeEl.className='ticker-change';
+  changeEl.textContent='••';
+  changeEl.className='ticker-change market-price-hidden';
  }
 }
 
 let lastMarketDetailsFetch=0;
 const MARKET_PRICE_POLL_MS=30000;
 const MARKET_DETAILS_POLL_MS=60000;
-const COINS=['BTC','SOL','ETH'];
+const COINS=['BTC','ETH','SOL','XRP','ADA','DOGE','AVAX','LINK','DOT','LTC','XLM'];
+const MARKET_META={
+ BTC:{name:'Bitcoin',base:85186.20,decimals:2,icon:'₿'}, ETH:{name:'Ethereum',base:2723.84,decimals:2,icon:'Ξ'}, SOL:{name:'Solana',base:116.64,decimals:2,icon:'S'}, XRP:{name:'XRP',base:2.91,decimals:4,icon:'X'}, ADA:{name:'Cardano',base:0.88,decimals:4,icon:'A'}, DOGE:{name:'Dogecoin',base:0.19,decimals:4,icon:'Ð'}, AVAX:{name:'Avalanche',base:38.60,decimals:2,icon:'A'}, LINK:{name:'Chainlink',base:22.40,decimals:2,icon:'L'}, DOT:{name:'Polkadot',base:4.35,decimals:2,icon:'D'}, LTC:{name:'Litecoin',base:91.50,decimals:2,icon:'Ł'}, XLM:{name:'Stellar',base:0.38,decimals:4,icon:'X'}
+};
+const COIN_DECIMALS=Object.fromEntries(COINS.map(c=>[c,MARKET_META[c].decimals]));
+function formatMarketPrice(coin,value){ const n=Number(value); if(!Number.isFinite(n)) return '—'; return '$'+n.toLocaleString('en-CA',{minimumFractionDigits:COIN_DECIMALS[coin]||2,maximumFractionDigits:COIN_DECIMALS[coin]||2}); }
+function formatMarketNumber(coin,value){ const n=Number(value); if(!Number.isFinite(n)) return '—'; return n.toLocaleString('en-CA',{minimumFractionDigits:COIN_DECIMALS[coin]||2,maximumFractionDigits:COIN_DECIMALS[coin]||2}); }
+function emptyCoinObject(){return Object.fromEntries(COINS.map(c=>[c,emptyMarketData()]));}
 const EMPTY_MARKET={price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null,lastUpdatedAt:0};
 
 async function fetchJson(url, timeoutMs=10000){
@@ -2715,7 +2828,7 @@ function updateMarketFreshness(){
   updateTickerBar(coin);
  }
  const anyLive=Object.values(marketPrices).some(d=>d&&Number.isFinite(d.price));
- document.documentElement.dataset.marketStatus=anyLive?'live':'offline';
+ document.documentElement.dataset.marketStatus=anyLive?'simulated':'offline';
  updateMainView(activeCoin);
  updateOrderBook(activeCoin);
  updateMacTotal();
@@ -2768,98 +2881,24 @@ function scheduleNextMarketFetch(delay=MARKET_PRICE_POLL_MS){
 }
 
 async function fetchLiveMarketPrices(reveal=false){
- if(marketFetchInFlight)return false;
- marketFetchInFlight=true;
- try{
-  // Primary provider: CoinGecko returns CAD prices plus real 24h market data directly.
-  // No generated/fallback prices are used. If it fails, we fall back to Coinbase spot.
-  const cgUrl='https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana,ethereum&vs_currencies=cad&include_24hr_change=true&include_24hr_vol=true&include_24hr_high=true&include_24hr_low=true&_='+Date.now();
-  let cg=null;
-  try{
-   cg=await fetchJson(cgUrl,12000);
-  }catch(cgError){
-   console.warn('CoinGecko live market request failed, trying Coinbase:',cgError);
-  }
-
-  if(cg?.bitcoin?.cad>0 && cg?.solana?.cad>0 && cg?.ethereum?.cad>0){
-   const map={BTC:'bitcoin',SOL:'solana',ETH:'ethereum'};
-   for(const coin of COINS){
-    const d=cg[map[coin]];
-    const price=Number(d.cad);
-    const changePct=Number(d.cad_24h_change);
-    const high24h=Number(d.cad_24h_high);
-    const low24h=Number(d.cad_24h_low);
-    const volume24h=Number(d.cad_24h_vol);
-    const change24h=Number.isFinite(changePct)?price*(changePct/100):null;
-    const open24h=Number.isFinite(changePct)&&Math.abs(100+changePct)>0?price/(1+changePct/100):null;
-    applyLiveMarketData(coin,{price,changePct,change24h,open24h,high24h,low24h,volume24h,lastUpdatedAt:Date.now()});
-    exchangeRatesInUSD[coin]=exchangeRatesInUSD[coin]||0;
-   }
-   // CAD is the native quote currency here, so no FX conversion is required.
-   exchangeRatesInUSD.CAD=exchangeRatesInUSD.CAD>0?exchangeRatesInUSD.CAD:1;
-   marketLastSuccessfulFetch=Date.now();
-   marketFailureCount=0;
-   document.documentElement.dataset.marketStatus='live';
-   if(reveal){ marketRevealPrices=true; refreshMarketUI(); }
-   scheduleNextMarketFetch(MARKET_PRICE_POLL_MS);
-   return true;
-  }
-
-  // Fallback provider: Coinbase spot prices + live USD/CAD FX.
-  let usdCad=Number(exchangeRatesInUSD?.CAD);
-  if(!Number.isFinite(usdCad)||usdCad<=0){
-   const fxReady=await fetchLiveUsdCadRate();
-   usdCad=Number(exchangeRatesInUSD?.CAD);
-   if(!fxReady||!Number.isFinite(usdCad)||usdCad<=0)throw new Error('Live USD/CAD rate unavailable');
-  }
-  const symbols={BTC:'BTC-USD',SOL:'SOL-USD',ETH:'ETH-USD'};
-  const results=await Promise.all(Object.entries(symbols).map(async([coin,pair])=>{
-   const json=await fetchJson(`${COINBASE_SPOT_URL}/${pair}/spot?_=${Date.now()}`,10000);
-   const usd=Number(json?.data?.amount);
-   if(!Number.isFinite(usd)||usd<=0)throw new Error(`Invalid Coinbase ${pair} price`);
-   return [coin,usd];
-  }));
-  let received=0;
-  for(const [coin,usd] of results){
-   const price=usd/usdCad;
-   if(!Number.isFinite(price)||price<=0)continue;
-   const previous=marketPrices[coin]||emptyMarketData();
-   applyLiveMarketData(coin,{price,changePct:previous.changePct,change24h:previous.change24h,open24h:previous.open24h,high24h:previous.high24h,low24h:previous.low24h,volume24h:previous.volume24h,lastUpdatedAt:Date.now()});
-   exchangeRatesInUSD[coin]=usd;
-   received++;
-  }
-  if(received!==COINS.length)throw new Error(`Incomplete live response (${received}/${COINS.length})`);
-  marketLastSuccessfulFetch=Date.now();
-  marketFailureCount=0;
-  document.documentElement.dataset.marketStatus='live';
-  refreshMarketUI();
-  scheduleNextMarketFetch(MARKET_PRICE_POLL_MS);
-  return true;
- }catch(e){
-  marketFailureCount++;
-  console.warn('All live market providers failed:',e.name==='AbortError'?'request timed out':e);
-  updateMarketFreshness();
-  const retryDelay=Math.min(MARKET_RETRY_MAX_MS,MARKET_RETRY_BASE_MS*Math.pow(2,Math.min(marketFailureCount-1,3)));
-  scheduleNextMarketFetch(retryDelay);
-  return false;
- }finally{
-  marketFetchInFlight=false;
- }
+ if(reveal){ marketRevealPrices=true; refreshMarketUI(); }
+ return true;
 }
+
 async function fetchMarketDetails(){
  return true;
 }
 
 async function fetchRealMarketData(reveal=false){return fetchLiveMarketPrices(reveal);}
 
-let marketPrices = {BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData()};
-let marketDisplayPrices = {BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData()};
+let marketPrices = emptyCoinObject();
+let marketDisplayPrices = emptyCoinObject();
 let marketRevealPrices = false;
 let simulatedProfitState = {total:null, daily:null, monthly:null, lastSnapshot:null};
 
 let activeCoin = 'BTC';
 let recentTrades = [];
-let priceHistory = {BTC:[],SOL:[],ETH:[]};
+let priceHistory = Object.fromEntries(COINS.map(c=>[c,[]]));
 
 // TradingView-style market chart powered by the official Lightweight Charts library.
 let marketChart=null;
@@ -2877,7 +2916,7 @@ function chartContainerWidth(){
  const el=document.getElementById('marketTradingChart');
  return Math.max(320,el?.clientWidth||640);
 }
-function chartPrecision(coin){return coin==='SOL'?2:0;}
+function chartPrecision(coin){return COIN_DECIMALS[coin]||2;}
 function buildSyntheticOHLC(coin, range){
   const raw=(priceHistory[coin]||[]).filter(x=>Number.isFinite(x?.t)&&Number.isFinite(x?.p)&&x.p>0);
   if(!raw.length)return {candles:[],volume:[],sma:[],ema:[]};
@@ -2964,6 +3003,7 @@ function initMarketChart(){
  const LC=window.LightweightCharts;
  marketChart=LC.createChart(container,{
   width:chartContainerWidth(),height:390,
+   attributionLogo:{hidden:true},
    layout:{background:{type:'solid',color:document.body.classList.contains('theme-light')?'#f8f9fb':'#0b0b0e'},textColor:document.body.classList.contains('theme-light')?'#68707d':'#777782',fontFamily:'Inter, sans-serif',fontSize:10},
    grid:{vertLines:{color:document.body.classList.contains('theme-light')?'rgba(15,23,42,.07)':'rgba(255,255,255,.035)'},horzLines:{color:document.body.classList.contains('theme-light')?'rgba(15,23,42,.07)':'rgba(255,255,255,.035)'}},
    crosshair:{mode:LC.CrosshairMode.Normal,vertLine:{color:document.body.classList.contains('theme-light')?'rgba(15,23,42,.24)':'rgba(255,255,255,.24)',width:1,style:2,labelBackgroundColor:document.body.classList.contains('theme-light')?'#343943':'#25252b'},horzLine:{color:document.body.classList.contains('theme-light')?'rgba(15,23,42,.24)':'rgba(255,255,255,.24)',width:1,style:2,labelBackgroundColor:document.body.classList.contains('theme-light')?'#343943':'#25252b'}},
@@ -2971,7 +3011,7 @@ function initMarketChart(){
    timeScale:{borderColor:document.body.classList.contains('theme-light')?'rgba(15,23,42,.12)':'rgba(255,255,255,.08)',timeVisible:true,secondsVisible:false,rightOffset:5,barSpacing:8,minBarSpacing:3},
   handleScale:{mouseWheel:true,pinch:true,axisPressedMouseMove:true},
   handleScroll:{mouseWheel:true,pressedMouseMove:true,horzTouchDrag:true,vertTouchDrag:true},
-  localization:{priceFormatter:price=>{const coin=activeCoin;return '$'+(coin==='SOL'?Number(price).toFixed(2):Math.round(price).toLocaleString('en-US'));}}
+  localization:{priceFormatter:price=>{const coin=activeCoin;return formatMarketPrice(coin,price);}}
  });
  marketCandleSeries=marketChart.addSeries(LC.CandlestickSeries,{upColor:'#34d399',downColor:'#f87171',borderUpColor:'#34d399',borderDownColor:'#f87171',wickUpColor:'#34d399',wickDownColor:'#f87171',priceLineVisible:true,lastValueVisible:true});
  marketLineSeries=marketChart.addSeries(LC.LineSeries,{color:'#d7d7dc',lineWidth:2,priceLineVisible:true,lastValueVisible:true});
@@ -2999,7 +3039,7 @@ function updateTradingChart(coin,fit=false){
  marketVolumeSeries.applyOptions({visible:marketChartIndicators.volume});
  marketSmaSeries.applyOptions({visible:marketChartIndicators.sma});
  marketEmaSeries.applyOptions({visible:marketChartIndicators.ema});
- marketChart.applyOptions({localization:{priceFormatter:price=>'$'+(coin==='SOL'?Number(price).toFixed(2):Math.round(price).toLocaleString('en-US'))}});
+ marketChart.applyOptions({localization:{priceFormatter:price=>formatMarketPrice(coin,price)}});
  if(fit)marketChart.timeScale().fitContent();
 }
 function setChartRange(range,btn){
@@ -3033,16 +3073,16 @@ function updateMainView(coin, flashDir) {
  const data=marketDisplayPrices[coin];
  const priceEl=document.getElementById('mciPrice');
  if(!data||!Number.isFinite(data.price)){
-  if(priceEl)priceEl.textContent='—';
-  const changeEl=document.getElementById('mciChange'); if(changeEl)changeEl.textContent='Simulated market';
-  ['mciOpen','mciHigh','mciLow','mciVolume','obMidPrice'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
+  if(priceEl)priceEl.textContent='••••••';
+  const changeEl=document.getElementById('mciChange'); if(changeEl)changeEl.textContent='••';
+  ['mciOpen','mciHigh','mciLow','mciVolume','obMidPrice'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='••••••';});
   updateMacTotal();
   return;
  }
  const isUp=data.changePct>=0;
  const sign=isUp?'+':'';
  if(!priceEl)return;
- const fmtPrice=coin==='SOL'?`$${data.price.toFixed(2)}`:`$${data.price.toLocaleString('en-US')}`;
+ const fmtPrice=formatMarketPrice(coin,data.price);
  priceEl.textContent=fmtPrice;
  priceEl.classList.remove('market-price-hidden');
  if(flashDir){
@@ -3056,14 +3096,14 @@ function updateMainView(coin, flashDir) {
  const open24h=Number(data.open24h);
  const high24h=Number(data.high24h);
  const low24h=Number(data.low24h);
- const fmtChange=Number.isFinite(change24h)?(coin==='SOL'?`${sign}$${Math.abs(change24h).toFixed(2)}`:`${sign}$${Math.abs(Math.round(change24h)).toLocaleString('en-US')}`):'—';
+ const fmtChange=Number.isFinite(change24h)?`${sign}${formatMarketPrice(coin,Math.abs(change24h))}`:'—';
  const changeEl=document.getElementById('mciChange');
  const pctEl=document.getElementById('mciPct');
  if(changeEl){changeEl.textContent=fmtChange;changeEl.className=`mpm-change ${isUp?'up':'down'}`;}
  if(pctEl){pctEl.textContent=Number.isFinite(changePct)?`${sign}${changePct.toFixed(2)}%`:'—';pctEl.className=`mpm-badge ${isUp?'up':'down'}`;}
- const fmtOpen=Number.isFinite(open24h)?(coin==='SOL'?`$${open24h.toFixed(2)}`:`$${Math.round(open24h).toLocaleString('en-US')}`):'—';
- const fmtHigh=Number.isFinite(high24h)?(coin==='SOL'?`$${high24h.toFixed(2)}`:`$${high24h.toLocaleString('en-US')}`):'—';
- const fmtLow=Number.isFinite(low24h)?(coin==='SOL'?`$${low24h.toFixed(2)}`:`$${low24h.toLocaleString('en-US')}`):'—';
+ const fmtOpen=Number.isFinite(open24h)?formatMarketPrice(coin,open24h):'—';
+ const fmtHigh=Number.isFinite(high24h)?formatMarketPrice(coin,high24h):'—';
+ const fmtLow=Number.isFinite(low24h)?formatMarketPrice(coin,low24h):'—';
  const openEl=document.getElementById('statOpen'),highEl=document.getElementById('statHigh'),lowEl=document.getElementById('statLow'),volEl=document.getElementById('statVol');
  if(openEl)openEl.textContent=fmtOpen;
  if(highEl)highEl.textContent=fmtHigh;
@@ -3090,17 +3130,17 @@ function updateOrderBook(coin) {
   const size=(Math.random()*1.8+0.15)*(coin==='BTC'?0.12:(coin==='ETH'?1.6:18));
   const total=level*size;
   const width=Math.min(92,12+i*12+Math.random()*10);
-  const p=coin==='SOL'?level.toFixed(2):Math.round(level).toLocaleString('en-US');
+  const p=formatMarketNumber(coin,level);
   return `<div class="ob-row ${side}"><div class="ob-row-fill" style="width:${width}%"></div><div class="ob-price ${side}">$${p}</div><div class="ob-size">${size.toFixed(4)}</div><div class="ob-total">$${total>=1e6?(total/1e6).toFixed(2)+'M':(total/1e3).toFixed(1)+'K'}</div></div>`;
  }).join('');
  obAsks.innerHTML=makeRows('ask');
  obBids.innerHTML=makeRows('bid');
- if(obSpread)obSpread.textContent=`Spread: $${(step*2).toFixed(coin==='SOL'?2:0)}`;
- if(obMid)obMid.textContent=Number.isFinite(price)?(coin==='SOL'?`$${price.toFixed(2)}`:`$${price.toLocaleString('en-US')}`):`$${safePrice.toLocaleString('en-US')}`;
+ if(obSpread)obSpread.textContent=`Spread: $${formatMarketNumber(coin,step*2)}`;
+ if(obMid)obMid.textContent=Number.isFinite(price)?formatMarketPrice(coin,price):`$${safePrice.toLocaleString('en-US')}`;
  if(obUserOrders){
   const name=(document.getElementById('profileName')?.textContent||'You').trim()||'You';
   const orders=userTrades.filter(t=>t.coin===coin).slice(0,3);
-  obUserOrders.innerHTML=orders.map(t=>{const p=coin==='SOL'?t.price.toFixed(2):Math.round(t.price).toLocaleString('en-US');return `<div class="ob-user-row ${t.side}"><div class="ob-user-name">${name}</div><div class="ob-user-price">$${p}</div><div class="ob-user-side ${t.side}">${t.side==='buy'?'Buy':'Sell'} ${t.size.toFixed(4)}</div></div>`;}).join('');
+  obUserOrders.innerHTML=orders.map(t=>{const p=formatMarketNumber(coin,t.price);return `<div class="ob-user-row ${t.side}"><div class="ob-user-name">${name}</div><div class="ob-user-price">$${p}</div><div class="ob-user-side ${t.side}">${t.side==='buy'?'Buy':'Sell'} ${t.size.toFixed(4)}</div></div>`;}).join('');
   obUserOrders.style.display=orders.length?'block':'none';
  }
 }
@@ -3122,100 +3162,87 @@ function updateMacTotal(){const amt=parseFloat(document.getElementById('macAmoun
 function macSubmitOrder(){
  const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const livePrice=Number(marketPrices[activeCoin]?.price)||SIMULATED_MARKET_BASE[activeCoin];if(amt<=0)return;const btn=document.getElementById('macSubmitBtn');btn.style.opacity='0.6';btn.style.pointerEvents='none';
  setTimeout(()=>{btn.style.opacity='1';btn.style.pointerEvents='';const price=livePrice;
-  if(macCurrentTab==='buy'){const received=amt/price;if(internalHiddenBalanceCAD<amt){showToast('Insufficient CAD balance');return;}deductBalanceForCurrency('CAD',amt);addBalanceForCurrency(activeCoin,received);userTrades.unshift({coin:activeCoin,price,size:received,side:'buy',time:new Date()});showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);}
-  else{const received=amt*price;const bal=getBalanceForCurrency(activeCoin);if(bal<amt){showToast(`Insufficient ${activeCoin} balance`);return;}deductBalanceForCurrency(activeCoin,amt);addBalanceForCurrency('CAD',received);userTrades.unshift({coin:activeCoin,price,size:amt,side:'sell',time:new Date()});showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);}
-  if(userTrades.length>20)userTrades.pop();renderBalance();saveWalletState();updateOrderBook(activeCoin);document.getElementById('macAmountInput').value='';document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));updateMacTotal();
+  if(macCurrentTab==='buy'){const received=amt/price;if(internalHiddenBalanceCAD<amt){showToast('Insufficient CAD balance');return;}deductBalanceForCurrency('CAD',amt);addBalanceForCurrency(activeCoin,received);addCostBasisLot(activeCoin,received,amt);userTrades.unshift({coin:activeCoin,price,size:received,side:'buy',time:new Date()});showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);}
+  else{const received=amt*price;const bal=getBalanceForCurrency(activeCoin);if(bal<amt){showToast(`Insufficient ${activeCoin} balance`);return;}const basis=consumeCostBasis(activeCoin,amt);const gainCad=received-basis;deductBalanceForCurrency(activeCoin,amt);addBalanceForCurrency('CAD',received);simulatedProfitState.realizedPnl=(simulatedProfitState.realizedPnl||0)+gainCad;simulatedProfitState.monthly=Math.max(50,Math.min(500,(simulatedProfitState.monthly===null?200:simulatedProfitState.monthly)+gainCad));simulatedProfitState.total=(simulatedProfitState.total||0)+gainCad;userTrades.unshift({coin:activeCoin,price,size:amt,side:'sell',time:new Date(),gainCad});showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);}
+  if(userTrades.length>20)userTrades.pop();renderBalance();updateMarketProfitFromRefresh();saveWalletState();updateOrderBook(activeCoin);document.getElementById('macAmountInput').value='';document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));updateMacTotal();
  },700);
 }
+function buildMarketTicker(){
+ const bar=document.getElementById('marketTickerBar'); if(!bar)return;
+ bar.innerHTML=COINS.map(c=>`<div class="ticker-item ${c===activeCoin?'selected':''}" id="ticker${c}" onclick="selectMarketCoin('${c}')"><div class="ticker-symbol">${c} / CAD</div><div class="ticker-price" id="tickerPrice${c}">••••••</div><div class="ticker-change" id="tickerChange${c}">••</div></div>`).join('');
+}
 function selectMarketCoin(coin) {
-activeCoin = coin;
-['BTC','SOL','ETH'].forEach(c => {
-document.getElementById(`ticker${c}`).classList.toggle('selected', c===coin);
-});
-const mciIcon = document.getElementById('mciIcon');
-const mciName = document.getElementById('mciName');
-const mciSymbol = document.getElementById('mciSymbol');
-const coinNames = {BTC:'Bitcoin',SOL:'Solana',ETH:'Ethereum'};
-mciName.textContent = coinNames[coin];
-mciSymbol.textContent = `${coin} / CAD`;
-const iconMap = {
-BTC: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="32" fill="#F7931A"/><path d="M46.101 27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4 5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.876-1.439 5.766c-0.764-0.174-1.514-0.346-2.242-0.525l0.004-0.018-4.842-1.209-0.934 3.75s2.605 0.597 2.55 0.634c1.422 0.355 1.679 1.296 1.636 2.042l-1.638 6.571c0.098 0.025 0.225 0.061 0.365 0.117l-0.37-0.092-2.296 9.205c-0.174 0.432-0.615 1.08-1.609 0.833 0.035 0.051-2.55-0.637-2.55-0.637l-1.743 4.019 4.569 1.139c0.85 0.213 1.683 0.436 2.504 0.647l-1.453 5.833 3.507 0.875 1.438-5.768c0.958 0.26 1.888 0.5 2.8 0.726l-1.433 5.741 3.511 0.876 1.453-5.823c5.987 1.133 10.489 0.676 12.383-4.738 1.527-4.36-0.076-6.875-3.226-8.515 2.294-0.53 4.022-2.039 4.483-5.155zm-8.022 11.249c-1.085 4.36-8.426 2.003-10.806 1.412l1.928-7.729c2.38 0.594 10.01 1.77 8.878 6.317zm1.086-11.312c-0.989 3.966-7.106 1.951-9.088 1.457l1.748-7.01c1.982 0.494 8.354 1.416 7.34 5.553z" fill="#FFFFFF"/></svg>`,
-SOL: `<svg viewBox="0 0 397.7 311.7" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sG" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#9945FF"/><stop offset="100%" stop-color="#14F195"/></linearGradient></defs><path fill="url(#sG)" d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2l56.3-62.6zM64.6 3.8C67 1.4 70.3 0 73.8 0h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2L64.6 3.8zm268.5 117c-2.4-2.4-5.7-3.8-9.2-3.8H9.2c-5.9 0-9.2 6.8-5.4 11.2l56.3 62.6c2.4 2.4 5.7 3.8 9.2 3.8h314.7c5.9 0 9.2-6.8-5.4-11.2l-56.3-62.6z"/></svg>`,
-ETH: `<svg viewBox="0 0 256 417" xmlns="http://www.w3.org/2000/svg"><path d="M127.9611 0L125.1661 9.5V285.168L127.9611 287.958L255.9231 212.32L127.9611 0" fill="#343434"/><path d="M127.962 0L0 212.32L127.962 287.959V154.158V0" fill="#8C8C8C"/><path d="M127.9611 312.1866L126.3861 314.1066V415.4956L127.9611 420.0006L255.9991 236.5866L127.9611 312.1866" fill="#3C3C3B"/><path d="M127.962 420.0001V312.1861L0 236.5861L127.962 420.0001" fill="#8C8C8C"/><path d="M127.9611 287.9584L255.9231 212.3204L127.9611 154.1584V287.9584" fill="#141414"/><path d="M0 212.3208L127.962 287.9588V154.1588L0 212.3208" fill="#393939"/></svg>`
-};
-const bgMap = { BTC:'btc-bg', SOL:'sol-bg', ETH:'eth-bg' };
-mciIcon.className = `mci-icon ${bgMap[coin]}`;
-mciIcon.innerHTML = iconMap[coin];
-updateMainView(coin, null);
-if(!marketRevealPrices)setMarketHiddenUI();
-updateOrderBook(coin);
-updateRecentTrades();
-if(marketChartReady)updateTradingChart(coin,true);
+ if(!COINS.includes(coin))return;
+ activeCoin=coin;
+ COINS.forEach(c=>document.getElementById(`ticker${c}`)?.classList.toggle('selected',c===coin));
+ const meta=MARKET_META[coin];
+ const mciIcon=document.getElementById('mciIcon'),mciName=document.getElementById('mciName'),mciSymbol=document.getElementById('mciSymbol');
+ if(mciName)mciName.textContent=meta.name; if(mciSymbol)mciSymbol.textContent=`${coin} / CAD`;
+ if(mciIcon){mciIcon.className='mci-icon';mciIcon.innerHTML=`<span style="font-weight:900;font-size:22px;">${meta.icon}</span>`;}
+ updateMainView(coin,null);
+ if(!marketRevealPrices)setMarketHiddenUI();
+ updateOrderBook(coin); updateRecentTrades(); if(marketChartReady)updateTradingChart(coin,true); setMacTab(macCurrentTab); updateMarketAlerts(); renderTrackedAssets();
+}
+buildMarketTicker();
+selectMarketCoin('BTC');
 setMacTab(macCurrentTab);
 updateMarketAlerts();
-}
 renderExchangeTransactions();
-// Local fallback market model. Live market data is used when available; the fallback keeps the chart usable offline.
-const SIMULATED_MARKET_BASE = {BTC:155000,SOL:215,ETH:5200};
-const SIMULATED_MARKET_RANGE = {BTC:0.0019,SOL:0.0024,ETH:0.0017};
+// Fully simulated market model. It never depends on a live quote provider.
+const SIMULATED_MARKET_BASE=Object.fromEntries(COINS.map(c=>[c,MARKET_META[c].base]));
+const SIMULATED_MARKET_RANGE=Object.fromEntries(COINS.map(c=>[c,c==='BTC'?0.00010:c==='ETH'?0.00016:c==='SOL'?0.00022:(MARKET_META[c].base<1?0.00045:0.00024)]));
+const SIMULATED_MARKET_TICK_MS=1400;
+const simulatedMarketVelocity=Object.fromEntries(COINS.map(c=>[c,0]));
 function seedSimulatedMarket(){
  const now=Date.now();
  for(const coin of COINS){
   const base=SIMULATED_MARKET_BASE[coin];
-  const drift=(Math.random()*2-1)*SIMULATED_MARKET_RANGE[coin];
-  const price=base*(1+drift);
-  const changePct=(Math.random()*5.6)-2.8;
+  const price=base*(1+(Math.random()-.5)*0.006);
+  const changePct=(Math.random()*1.8)-.9;
   const open24h=price/(1+changePct/100);
-  const high24h=Math.max(price,open24h)*(1+Math.random()*0.018);
-  const low24h=Math.min(price,open24h)*(1-Math.random()*0.018);
-  const volume24h=coin==='BTC'?(8.5e9+Math.random()*3.5e9):(coin==='ETH'?(2.8e9+Math.random()*1.7e9):(1.2e9+Math.random()*900e6));
+  const high24h=Math.max(price,open24h)*(1+Math.random()*0.006);
+  const low24h=Math.min(price,open24h)*(1-Math.random()*0.006);
+  const volume24h=(base>100?3.5e9:base>10?8.5e8:base>1?2.8e8:1.2e8)*(0.8+Math.random()*.5);
   marketPrices[coin]={price,open24h,changePct,change24h:price-open24h,high24h,low24h,volume24h,lastUpdatedAt:now};
-  // Build a deeper synthetic history so every chart range has enough candles.
-  const historyCount=3000;
-  const stepMs=15*60*1000;
-  let walk=price*(1+(Math.random()-.5)*0.035);
+  const historyCount=3000,stepMs=15*60*1000;
+  let walk=price;
   priceHistory[coin]=Array.from({length:historyCount},(_,i)=>{
-   const volatility=SIMULATED_MARKET_RANGE[coin]*0.34;
-   walk=Math.max(0.01,walk*(1+(Math.random()-.5)*volatility));
+   const wave=Math.sin(i*.19+coin.length)*.0018+Math.sin(i*.047)*.0011;
+   walk=Math.max(.000001,walk*(1+wave+(Math.random()-.5)*SIMULATED_MARKET_RANGE[coin]*.7));
    return {t:now-(historyCount-1-i)*stepMs,p:walk};
   });
   priceHistory[coin][historyCount-1].p=price;
  }
  document.documentElement.dataset.marketStatus='simulated';
- refreshMarketUI();
+ setMarketHiddenUI();
  requestAnimationFrame(()=>initMarketChart());
 }
 function tickSimulatedMarket(){
  const now=Date.now();
  for(const coin of COINS){
-  const data=marketPrices[coin];
-  if(!data||!Number.isFinite(data.price))continue;
-  const previous=data.price;
-  const move=(Math.random()*2-1)*SIMULATED_MARKET_RANGE[coin];
-  const price=Math.max(0.01,previous*(1+move));
-  const changePct=Math.max(-12,Math.min(12,(Number(data.changePct)||0)+(Math.random()-.5)*0.35));
-  data.price=price;
-  data.changePct=changePct;
-  data.change24h=price-(price/(1+changePct/100));
-  data.open24h=price/(1+changePct/100);
-  data.high24h=Math.max(Number(data.high24h)||price,price);
-  data.low24h=Math.min(Number(data.low24h)||price,price);
-  data.volume24h=(Number(data.volume24h)||0)+(Math.random()*3-1)*9000000;
-  data.lastUpdatedAt=now;
-  priceHistory[coin].push({t:now,p:price});
-  if(priceHistory[coin].length>300)priceHistory[coin].shift();
+  const data=marketPrices[coin]; if(!data||!Number.isFinite(data.price))continue;
+  const previous=data.price,base=SIMULATED_MARKET_BASE[coin];
+  const distance=(base-previous)/base;
+  const noise=(Math.random()-.5)*SIMULATED_MARKET_RANGE[coin];
+  simulatedMarketVelocity[coin]=simulatedMarketVelocity[coin]*.90+noise*.10+distance*.018;
+  const maxMove=SIMULATED_MARKET_RANGE[coin]*.75;
+  const move=Math.max(-maxMove,Math.min(maxMove,simulatedMarketVelocity[coin]));
+  const price=Math.max(.000001,previous*(1+move));
+  const changePct=Math.max(-9,Math.min(9,(Number(data.changePct)||0)+move*100*.7));
+  data.price=price; data.changePct=changePct; data.change24h=price-(price/(1+changePct/100)); data.open24h=price/(1+changePct/100);
+  data.high24h=Math.max(Number(data.high24h)||price,price); data.low24h=Math.min(Number(data.low24h)||price,price);
+  data.volume24h=Math.max(0,(Number(data.volume24h)||0)+(Math.random()-.5)*500000); data.lastUpdatedAt=now;
+  priceHistory[coin].push({t:now,p:price}); if(priceHistory[coin].length>1200)priceHistory[coin].shift();
   exchangeRatesInUSD[coin]=price;
-  updateTickerBar(coin);
-  if(coin===activeCoin){updateMainView(coin,price>=previous?'up':'down'); if(marketChartReady)updateTradingChart(coin,false);}
-  maybeShowPriceAlertToast(coin);
+  if(marketRevealPrices){ updateTickerBar(coin); if(coin===activeCoin){updateMainView(coin,price>=previous?'up':'down'); if(marketChartReady)updateTradingChart(coin,false);} maybeShowPriceAlertToast(coin); }
  }
+ if(marketRevealPrices){ updateOrderBook(activeCoin); updateMacTotal(); updateMarketProfitFromRefresh(); if(document.getElementById('exchangeModal')?.classList.contains('open'))updateLivePreview(); renderBalance(); renderTrackedAssets(); }
  document.documentElement.dataset.marketStatus='simulated';
- updateOrderBook(activeCoin);
- updateMacTotal();
- if(document.getElementById('exchangeModal')?.classList.contains('open'))updateLivePreview();
 }
 seedSimulatedMarket();
-setInterval(tickSimulatedMarket,5000);
+window.__eisaMarketsReady=true;
+renderTrackedAssets();
+setInterval(tickSimulatedMarket,SIMULATED_MARKET_TICK_MS);
 setInterval(fetchLiveUsdCadRate,3600000);
 setInterval(updateMarketFreshness,15000);
 let priceAlertsEnabled = {BTC:false, SOL:false, ETH:false};
@@ -3236,7 +3263,7 @@ mciAlertBell.innerHTML = '<i data-lucide="bell-off"></i>';
 mciAlertBell.title = globalAlertsOn ? 'Price alerts disabled' : 'Enable Market Price Updates in Settings first';
 }
 }
-['BTC','SOL','ETH'].forEach(coin => {
+COINS.forEach(coin => {
 const bell = document.getElementById(`${coin.toLowerCase()}AlertBell`);
 if (!bell) return;
 bell.classList.toggle('disabled-global', !globalAlertsOn);
@@ -3273,7 +3300,7 @@ lastAlertToastAt[coin] = now;
 const data = marketPrices[coin];
 const isUp = data.changePct >= 0;
 const sign = isUp ? '+' : '';
-const priceStr = coin==='SOL' ? `$${data.price.toFixed(2)}` : `$${data.price.toLocaleString('en-US')}`;
+const priceStr=formatMarketPrice(coin,data.price);
 const msg = currentLang==='fr-CA' ? `${coin} est maintenant à ${priceStr} (${sign}${data.changePct.toFixed(2)}%)` : `${coin} is now ${priceStr} (${sign}${data.changePct.toFixed(2)}%)`;
 showToast(msg);
 }
@@ -3286,8 +3313,8 @@ fetchLiveUsdCadRate();
 initializeCostBasis();
 function showToast(message, duration=3500) { toastMessage.textContent=message; toastNotification.classList.add('show'); setTimeout(()=>toastNotification.classList.remove('show'),duration); }
 function calculateConversion(amount, fromCurr, toCurr) {
-const decimalsToUse = (toCurr==='BTC'||toCurr==='SOL'||toCurr==='ETH') ? 4 : 2;
-const fromDec = (fromCurr==='BTC'||fromCurr==='SOL'||fromCurr==='ETH') ? 4 : 2;
+const decimalsToUse = COINS.includes(toCurr) ? (COIN_DECIMALS[toCurr]||4) : 2;
+const fromDec = COINS.includes(fromCurr) ? (COIN_DECIMALS[fromCurr]||4) : 2;
 const fromRate=Number(exchangeRatesInUSD[fromCurr]);
 const toRate=Number(exchangeRatesInUSD[toCurr]);
 if(!Number.isFinite(fromRate)||fromRate<=0||!Number.isFinite(toRate)||toRate<=0){
@@ -3307,8 +3334,8 @@ function updateLivePreview() {
 const amount = parseFloat(document.getElementById('exAmount').value) || 0;
 const fromCurr = document.getElementById('exFrom').value;
 const toCurr = document.getElementById('exTo').value;
-const fromDec = (fromCurr==='BTC'||fromCurr==='SOL') ? 4 : 2;
-const toDec = (toCurr==='BTC'||toCurr==='SOL') ? 4 : 2;
+const fromDec = COINS.includes(fromCurr) ? (COIN_DECIMALS[fromCurr]||4) : 2;
+const toDec = COINS.includes(toCurr) ? (COIN_DECIMALS[toCurr]||4) : 2;
 if (fromCurr===toCurr) {
 document.getElementById('previewFeeVal').textContent=`0.00 ${fromCurr}`;
 document.getElementById('previewTaxVal').textContent=`0.00 ${fromCurr}`;
@@ -3358,41 +3385,37 @@ function renderProfitPanel(elId,value,cardSelector){
 }
 
 function setMarketHiddenUI(){
+  const spread=document.getElementById('obSpread'); if(spread)spread.textContent='Spread: •••';
   document.querySelectorAll('.ticker-price').forEach(el=>{el.textContent='••••••';el.classList.add('market-price-hidden');});
-  document.querySelectorAll('.ticker-change').forEach(el=>{el.textContent='—';el.className='ticker-change';});
+  document.querySelectorAll('.ticker-change').forEach(el=>{el.textContent='••';el.className='ticker-change market-price-hidden';});
   const p=document.getElementById('mciPrice');
   if(p){p.textContent='••••••';p.classList.add('market-price-hidden');}
   const c=document.getElementById('mciChange');
   const pct=document.getElementById('mciPct');
-  if(c)c.textContent='—';
-  if(pct)pct.textContent='—';
+  if(c){c.textContent='••';c.className='mpm-change market-price-hidden';}
+  if(pct){pct.textContent='••';pct.className='mpm-badge market-price-hidden';}
+  ['statOpen','statHigh','statLow','statVol','obMidPrice'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent='••••••';el.classList.add('market-price-hidden');}});
 }
 
 function updateMarketProfitFromRefresh(){
-  if(!marketRevealPrices)return;
-  const prices={};
-  COINS.forEach(c=>prices[c]=Number(marketPrices[c]?.price)||0);
-  const previous=simulatedProfitState.lastSnapshot;
-  if(simulatedProfitState.total===null){
-    simulatedProfitState.total=Math.round((Math.random()*1800-700)*100)/100;
-    simulatedProfitState.monthly=Math.round((Math.random()*1100-420)*100)/100;
-    simulatedProfitState.daily=Math.round((Math.random()*320-140)*100)/100;
-  }else{
-    let marketMove=0;
-    COINS.forEach(c=>{
-      if(previous?.[c]>0&&prices[c]>0)marketMove+=(prices[c]-previous[c])/previous[c];
-    });
-    const totalStep=marketMove*42000+(Math.random()-.5)*35;
-    const monthlyStep=marketMove*26000+(Math.random()-.5)*24;
-    simulatedProfitState.total=Math.round((simulatedProfitState.total+totalStep)*100)/100;
-    simulatedProfitState.monthly=Math.round((simulatedProfitState.monthly+monthlyStep)*100)/100;
-    simulatedProfitState.daily=Math.round((marketMove*9000+(Math.random()-.5)*20)*100)/100;
-  }
-  simulatedProfitState.lastSnapshot=prices;
-  renderProfitPanel('totalProfitGains',simulatedProfitState.total,'.profit-summary-card');
-  renderProfitPanel('dailyProfitLoss',simulatedProfitState.daily,'.profit-period-card');
-  renderProfitPanel('monthlyProfitLoss',simulatedProfitState.monthly,'.profit-period-card');
+ const prices=Object.fromEntries(COINS.map(c=>[c,Number(marketPrices[c]?.price)||0]));
+ if(simulatedProfitState.monthly===null){simulatedProfitState.monthly=143.34+Math.random()*(346.43-143.34);simulatedProfitState.total=0;simulatedProfitState.daily=0;simulatedProfitState.lastSnapshot=prices;}
+ let unrealized=0;
+ for(const coin of COINS){
+  const lots=costBasisLots[coin]||[]; const current=prices[coin]||0;
+  for(const lot of lots){if(lot.qty>0&&current>0)unrealized+=(current*(lot.qty)-lot.costCad);}
+ }
+ const realized=(simulatedProfitState.realizedPnl||0);
+ const marketChange=simulatedProfitState.lastSnapshot?COINS.reduce((sum,c)=>{const old=simulatedProfitState.lastSnapshot[c]||0,newP=prices[c]||0;const bal=getBalanceForCurrency(c);return sum+(old>0&&newP>0?bal*(newP-old):0);},0):0;
+ simulatedProfitState.total=realized+unrealized;
+ simulatedProfitState.monthly=Math.max(50,Math.min(500,simulatedProfitState.monthly+marketChange*.025));
+ simulatedProfitState.daily=marketChange*.10;
+ simulatedProfitState.lastSnapshot=prices;
+ renderProfitPanel('totalProfitGains',simulatedProfitState.total,'.profit-summary-card');
+ renderProfitPanel('dailyProfitLoss',simulatedProfitState.daily,'.profit-period-card');
+ renderProfitPanel('monthlyProfitLoss',simulatedProfitState.monthly,'.profit-period-card');
 }
+
 function renderExchangeTransactions(){
  const list=document.getElementById('exchangeTransactionsList');
  const count=document.getElementById('transactionsCount');
@@ -3414,17 +3437,13 @@ function renderExchangeTransactions(){
      if(stamp>=monthStart)monthlyCad+=gain;
    }
  });
- if(totalEl){
-   const formatted=formatProfitLossValue(totalCad);
-   totalEl.className=`profit-summary-value ${formatted.className}`;
-   totalEl.innerHTML=formatted.text;
- }
- renderPeriodProfitLoss('dailyProfitLoss',dailyCad);
- renderPeriodProfitLoss('monthlyProfitLoss',monthlyCad);
+ if(totalEl && simulatedProfitState.total===null){ renderProfitPanel('totalProfitGains',totalCad,'.profit-summary-card'); }
+ if(simulatedProfitState.total===null){ simulatedProfitState.total=totalCad; simulatedProfitState.monthly=(143.34+Math.random()*(346.43-143.34)); simulatedProfitState.daily=dailyCad; }
+ updateMarketProfitFromRefresh();
  if(!txs.length){list.innerHTML='<div class="tx-empty">No transactions yet. Your completed exchanges will appear here.</div>';return;}
  list.innerHTML=txs.slice(0,30).map((t,i)=>{
-  const fromDec=(t.fromCurr==='BTC'||t.fromCurr==='SOL')?4:2;
-  const toDec=(t.toCurr==='BTC'||t.toCurr==='SOL')?4:2;
+  const fromDec=COINS.includes(t.fromCurr)?(COIN_DECIMALS[t.fromCurr]||4):2;
+  const toDec=COINS.includes(t.toCurr)?(COIN_DECIMALS[t.toCurr]||4):2;
   const rate=typeof t.rate==='number'?t.rate:(t.amount?t.received/t.amount:0);
   const fee=typeof t.fee==='number'?t.fee:0;
   const tax=typeof t.tax==='number'?t.tax:0;
@@ -3440,8 +3459,8 @@ function renderExchangeTransactions(){
 
 function updateConversionPage(amt, fromCurr, toCurr) {
 const {receivedAmount, feeInFrom, taxInFrom, totalDeductionsInFrom} = calculateConversion(amt, fromCurr, toCurr);
-const dec = (toCurr==='BTC'||toCurr==='SOL') ? 4 : 2;
-const fromDec = (fromCurr==='BTC'||fromCurr==='SOL') ? 4 : 2;
+const dec = COINS.includes(toCurr) ? (COIN_DECIMALS[toCurr]||4) : 2;
+const fromDec = COINS.includes(fromCurr) ? (COIN_DECIMALS[fromCurr]||4) : 2;
 document.getElementById('exchangeDetailsPanel').style.display='none';
 document.getElementById('emptyExchangeState').style.display='none';
 document.getElementById('costCard').style.display='none';
@@ -3484,6 +3503,7 @@ else if(curr==='USD'){internalHiddenBalanceUSD=Math.max(0,roundPrecision(interna
 else if(curr==='BTC')bitcoinBalance=Math.max(0,roundPrecision(bitcoinBalance-amount,4));
 else if(curr==='SOL')solanaBalance=Math.max(0,roundPrecision(solanaBalance-amount,4));
 else if(curr==='ETH')ethereumBalance=Math.max(0,roundPrecision(ethereumBalance-amount,4));
+else if(COINS.includes(curr))assetBalances[curr]=Math.max(0,roundPrecision((Number(assetBalances[curr])||0)-amount,6));
 }
 function addBalanceForCurrency(curr, amount) {
 if(curr==='CAD'){displayBalanceCAD=roundPrecision(displayBalanceCAD+amount,4);internalHiddenBalanceCAD=displayBalanceCAD;}
@@ -3491,6 +3511,7 @@ else if(curr==='USD'){displayBalanceUSD=roundPrecision(displayBalanceUSD+amount,
 else if(curr==='BTC')bitcoinBalance=roundPrecision(bitcoinBalance+amount,4);
 else if(curr==='SOL')solanaBalance=roundPrecision(solanaBalance+amount,4);
 else if(curr==='ETH')ethereumBalance=roundPrecision(ethereumBalance+amount,4);
+else if(COINS.includes(curr))assetBalances[curr]=roundPrecision((Number(assetBalances[curr])||0)+amount,6);
 }
 confirmExchangeBtn.addEventListener('click', ()=>{
 const amount=parseFloat(exAmountInput.value)||0;
@@ -3599,6 +3620,12 @@ profitsPanel.addEventListener('touchend',pHandleEnd);
 profitsPanel.addEventListener('mousedown',e=>pHandleStart(e.clientY));
 window.addEventListener('mousemove',e=>{if(pIsDragging)pHandleMove(e.clientY,e);});
 window.addEventListener('mouseup',()=>{if(pIsDragging)pHandleEnd();});
+
+function getTrackedAssets(){try{return JSON.parse(localStorage.getItem('eisa_tracked_assets')||'[]').filter(c=>COINS.includes(c));}catch(e){return [];}}
+function saveTrackedAssets(arr){localStorage.setItem('eisa_tracked_assets',JSON.stringify([...new Set(arr)].filter(c=>COINS.includes(c))));renderTrackedAssets();}
+function addTrackedAsset(coin){saveTrackedAssets([...getTrackedAssets(),coin]);selectMarketCoin(coin);showToast(`${MARKET_META[coin].name} added to your assets`);}
+function renderAssetSearchResults(query=''){const box=document.getElementById('assetSearchResults');if(!box)return;const q=query.trim().toLowerCase();if(!q){box.style.display='none';box.innerHTML='';return;}const matches=COINS.filter(c=>c.toLowerCase().includes(q)||MARKET_META[c].name.toLowerCase().includes(q)).slice(0,8);if(!matches.length){box.style.display='block';box.innerHTML='<div class="asset-search-result"><div class="asset-search-main"><div class="asset-search-name">No assets found</div><div class="asset-search-symbol">Try BTC, XRP, ADA, DOGE, AVAX, LINK, DOT, LTC or XLM</div></div></div>';return;}const tracked=getTrackedAssets();box.style.display='grid';box.innerHTML=matches.map(c=>{const d=marketDisplayPrices[c]||marketPrices[c];return `<div class="asset-search-result"><div class="asset-search-main"><div class="asset-search-name">${MARKET_META[c].name}</div><div class="asset-search-symbol">${c} / CAD · ${formatMarketPrice(c,d?.price)}</div></div><div class="asset-search-actions"><button class="asset-search-btn" onclick="selectMarketCoin('${c}');document.getElementById('marketAssetSearch').value='';renderAssetSearchResults('')">Trade</button>${tracked.includes(c)?'<button class="asset-search-btn" disabled>Added</button>':`<button class="asset-search-btn primary" onclick="addTrackedAsset('${c}');document.getElementById('marketAssetSearch').value='';renderAssetSearchResults('')">Add</button>`}</div></div>`;}).join('');}
+const marketAssetSearch=document.getElementById('marketAssetSearch');if(marketAssetSearch){marketAssetSearch.addEventListener('input',e=>renderAssetSearchResults(e.target.value));marketAssetSearch.addEventListener('keydown',e=>{if(e.key==='Escape'){e.target.value='';renderAssetSearchResults('');e.target.blur();}});}
 </script>
 </body>
 </html>
