@@ -1536,7 +1536,81 @@ body.theme-light .market-chart-container { background:#fff; }
   .orb{width:min(190px,52vw);height:min(190px,52vw);}
 }
 
+
+/* Clean profits & loss ledger */
+.pnl-overview-card,.pnl-list-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:20px;box-shadow:0 12px 32px -18px rgba(0,0,0,.55);}
+.pnl-overview-card{padding:22px;margin-bottom:16px;}
+.pnl-overview-label{font-size:11px;text-transform:uppercase;letter-spacing:.75px;color:var(--text-muted);font-weight:800;}
+.pnl-overview-value{margin-top:8px;font-size:32px;line-height:1.05;font-weight:850;letter-spacing:-1px;font-variant-numeric:tabular-nums;}
+.pnl-overview-value span{font-size:13px;letter-spacing:0;font-weight:700;margin-left:3px;}
+.pnl-overview-value.pos,.pnl-trade-pnl.pos,.pnl-detail-total strong.pos{color:var(--accent-green);}
+.pnl-overview-value.neg,.pnl-trade-pnl.neg,.pnl-detail-total strong.neg{color:var(--accent-red);}
+.pnl-overview-value.zero,.pnl-trade-pnl.zero{color:var(--text-main);}
+.pnl-overview-value.open,.pnl-trade-pnl.open{color:var(--text-muted);}
+.pnl-overview-sub{margin-top:8px;color:var(--text-muted);font-size:11px;}
+.pnl-list-card{padding:18px;}
+.pnl-list-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;}
+.pnl-list-title{font-size:14px;font-weight:800;color:var(--text-main);}
+.pnl-list-subtitle{font-size:11px;color:var(--text-muted);margin-top:3px;}
+.pnl-trade{border:1px solid var(--border-subtle);border-radius:16px;margin-top:10px;background:rgba(255,255,255,.018);overflow:hidden;cursor:pointer;transition:background .18s ease,border-color .18s ease,transform .18s ease;}
+.pnl-trade:hover{background:rgba(255,255,255,.035);border-color:var(--border-hover);transform:translateY(-1px);}
+.pnl-trade-main{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;}
+.pnl-trade-info{min-width:0;flex:1;}
+.pnl-side-badge{font-size:10px;font-weight:850;letter-spacing:.5px;padding:6px 8px;border-radius:8px;flex-shrink:0;}
+.pnl-side-badge.buy{color:var(--accent-green);background:rgba(52,211,153,.10);}
+.pnl-side-badge.sell{color:var(--accent-red);background:rgba(248,113,113,.10);}
+.pnl-trade-title{font-size:13px;font-weight:750;color:var(--text-main);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pnl-trade-title span{color:var(--text-muted);margin:0 3px;}
+.pnl-trade-time{font-size:10.5px;color:var(--text-muted);margin-top:3px;}
+.pnl-trade-result{text-align:right;flex-shrink:0;}
+.pnl-trade-pnl{font-size:13px;font-weight:850;font-variant-numeric:tabular-nums;}
+.pnl-trade-label{font-size:10px;color:var(--text-muted);margin-top:3px;}
+.pnl-trade-details{display:none;padding:0 14px 14px;border-top:1px solid var(--border-subtle);}
+.pnl-trade.open .pnl-trade-details{display:block;}
+.pnl-trade-details>div{display:flex;justify-content:space-between;gap:16px;padding:8px 0;font-size:11px;}
+.pnl-trade-details span{color:var(--text-muted);}
+.pnl-trade-details strong{color:var(--text-main);font-weight:700;font-variant-numeric:tabular-nums;text-align:right;}
+.pnl-detail-total{border-top:1px solid var(--border-subtle);margin-top:3px;padding-top:11px!important;}
+.pnl-empty{text-align:center;padding:42px 12px 34px;color:var(--text-muted);}
+.pnl-empty-icon{width:42px;height:42px;margin:0 auto 12px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04);border:1px solid var(--border-subtle);}
+.pnl-empty-icon i{width:18px;height:18px;}
+.pnl-empty-title{font-size:13px;font-weight:750;color:var(--text-main);}
+.pnl-empty-sub{font-size:11px;margin-top:5px;}
+body.theme-light .pnl-overview-card,body.theme-light .pnl-list-card{background:#fff;border-color:rgba(15,23,42,.10);box-shadow:0 12px 30px -22px rgba(15,23,42,.28);}
+body.theme-light .pnl-trade{background:#f8f9fb;border-color:rgba(15,23,42,.09);}
+body.theme-light .pnl-trade:hover{background:#f1f3f6;border-color:rgba(15,23,42,.16);}
+body.theme-light .pnl-trade-details{border-color:rgba(15,23,42,.09);}
+body.theme-light .pnl-empty-icon{background:#f1f3f6;border-color:rgba(15,23,42,.09);}
+body.theme-light .market-ticker-bar{box-shadow:0 8px 24px -20px rgba(15,23,42,.28);}
+body.theme-light .ticker-item{background:#fff;}
+body.theme-light .ticker-symbol,.theme-light .ob-col-label,.theme-light .rt-col-label{color:#596273;}
+body.theme-light .ob-spread-badge,.theme-light .mac-total-row,.theme-light .mac-input-field,.theme-light .mac-pct{background:#f1f3f6;border-color:rgba(15,23,42,.09);}
+body.theme-light .ob-mid-row{background:#f5f6f8;}
+body.theme-light .ob-user-row{background:#f5f6f8;}
+body.theme-light .chart-toolbar{background:#f7f8fa;}
+body.theme-light .chart-tool-btn,.theme-light .tr-btn{color:#303642;}
+body.theme-light .chart-tool-btn:hover,body.theme-light .tr-btn:hover{color:#111827;background:#e9ebef;}
+body.theme-light .chart-tool-btn.active,body.theme-light .tr-btn.active{color:#111827;background:#e1e4e9;}
+body.theme-light .market-chart-container{background:#f7f8fa;}
+.tv-lightweight-charts__attribution-logo,.tv-lightweight-charts__attribution-logo-container,[class*="attribution-logo"]{display:none!important;visibility:hidden!important;}
+@media(max-width:600px){.pnl-overview-card{padding:18px}.pnl-list-card{padding:15px}.pnl-overview-value{font-size:28px}.pnl-trade-main{padding:13px}}
 </style>
+
+<style id="pl-color-fix">
+/* P/L coloring: zero is neutral; positive is green; negative is red. */
+.pl-zero, .pnl-zero, .profit-zero, .loss-zero, [data-pl-value="0"] {
+  color: inherit !important;
+}
+.pl-positive, .pnl-positive, .profit-positive, .loss-positive,
+[data-pl-sign="positive"] {
+  color: #16a34a !important;
+}
+.pl-negative, .pnl-negative, .profit-negative, .loss-negative,
+[data-pl-sign="negative"] {
+  color: #dc2626 !important;
+}
+</style>
+
 </head>
 <body>
 <div class="intro" aria-hidden="true">
@@ -1600,6 +1674,7 @@ body.theme-light .market-chart-container { background:#fff; }
 <div class="success-icon"><i data-lucide="check"></i></div>
 </div>
 <span class="refresh-text" id="profitsRefreshText">Pull to refresh</span>
+</div>
 </div>
 </div>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -1705,59 +1780,17 @@ body.theme-light .market-chart-container { background:#fff; }
 <div class="dashboard-header">
 <div class="dashboard-title-group">
 <button class="menu-btn" onclick="openSidebar()"><i data-lucide="menu"></i></button>
-<h1 class="dashboard-title" data-i18n="titleExchangePanel">Profits &amp; Loss</h1>
-</div>
-
-</div>
-<div class="profit-summary-card">
-<div class="profit-summary-label">Total profit &amp; loss</div>
-<div class="profit-summary-value" id="totalProfitGains">+$0.00 <span>CAD</span></div>
-<div class="profit-summary-sub">Realized profit or loss from completed crypto sales and swaps</div>
-</div>
-<div class="profit-period-grid">
-  <div class="profit-period-card">
-    <div class="profit-period-label">Daily profit &amp; loss</div>
-    <div class="profit-period-value zero" id="dailyProfitLoss">$0.00 <span>CAD</span></div>
-    <div class="profit-period-sub">Since midnight</div>
-  </div>
-  <div class="profit-period-card">
-    <div class="profit-period-label">Monthly profit &amp; loss</div>
-    <div class="profit-period-value zero" id="monthlyProfitLoss">$0.00 <span>CAD</span></div>
-    <div class="profit-period-sub">Since the start of this month</div>
-  </div>
-</div>
-<div class="activity-panel" id="exchangeDetailsPanel" style="display:none;">
-<div class="panel-header"><span class="panel-title" data-i18n="conversionFeesTitle">Conversion Summary</span></div>
-<div class="list-item">
-<div class="item-left"><div class="icon-wrapper" style="background:rgba(248,113,113,0.08);color:var(--accent-red);border:none;"><i data-lucide="arrow-up-right"></i></div><div><div class="item-title" data-i18n="exSentTitle">Amount Sent</div><div class="item-subtitle" data-i18n="exSentSub">Exchange Base Amount</div></div></div>
-<div class="item-right"><div class="item-value neg" id="baseSentVal">- 0.00<span class="currency-label" id="baseSentCurrLabel">CAD</span></div></div>
-</div>
-<div class="list-item">
-<div class="item-left"><div class="icon-wrapper" style="background:rgba(248,113,113,0.08);color:var(--accent-red);border:none;"><i data-lucide="percent"></i></div><div><div class="item-title" data-i18n="exFeeTitle">Conversion Fee</div><div class="item-subtitle" data-i18n="exFeeSub">No conversion fee is charged</div></div></div>
-<div class="item-right"><div class="item-value neg" id="feeVal">- $0.00<span class="currency-label" id="feeCurrLabel">CAD</span></div></div>
-</div>
-<div class="list-item">
-<div class="item-left"><div class="icon-wrapper" style="background:rgba(248,113,113,0.08);color:var(--accent-red);border:none;"><i data-lucide="receipt"></i></div><div><div class="item-title" data-i18n="exTaxTitle">Conversion Tax</div><div class="item-subtitle" data-i18n="exTaxSub">No conversion tax is charged</div></div></div>
-<div class="item-right"><div class="item-value neg" id="taxVal">- $0.00<span class="currency-label" id="taxCurrLabel">CAD</span></div></div>
-</div>
-<div class="list-item">
-<div class="item-left"><div class="icon-wrapper" style="background:rgba(248,113,113,0.08);color:var(--accent-red);border:none;"><i data-lucide="shopping-bag"></i></div><div><div class="item-title" data-i18n="exPurchaseTitle">Recent Purchase Deductions</div><div class="item-subtitle" data-i18n="exPurchaseSub">Hardware & Scooter Parts</div></div></div>
-<div class="item-right"><div class="item-value neg" id="purchaseVal">- $0.00<span class="currency-label" id="purchaseCurrLabel">CAD</span></div></div>
-</div>
-<div class="list-item">
-<div class="item-left"><div class="solana-icon"><svg viewBox="0 0 397.7 311.7" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="solanaGrad2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#9945FF"/><stop offset="100%" stop-color="#14F195"/></linearGradient></defs><path fill="url(#solanaGrad2)" d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2l56.3-62.6zM64.6 3.8C67 1.4 70.3 0 73.8 0h314.7c5.9 0 9.2 6.8 5.4 11.2l-56.3 62.6c-2.4 2.4-5.7 3.8-9.2 3.8H13.7c-5.9 0-9.2-6.8-5.4-11.2L64.6 3.8zm268.5 117c-2.4-2.4-5.7-3.8-9.2-3.8H9.2c-5.9 0-9.2 6.8-5.4 11.2l56.3 62.6c2.4 2.4 5.7 3.8 9.2 3.8h314.7c5.9 0 9.2-6.8-5.4-11.2l-56.3-62.6z"/></svg></div><div><div class="item-title" data-i18n="exNetTitle">Net Crypto Received</div><div class="item-subtitle" data-i18n="exNetSub">Estimated Yield</div></div></div>
-<div class="item-right"><div class="item-value pos" id="netYieldVal">+ 0.0000<span class="currency-label">SOL</span></div></div>
+<h1 class="dashboard-title">Profits &amp; Loss</h1>
 </div>
 </div>
-<div class="empty-exchange-state" id="emptyExchangeState" data-i18n="emptyExchangeText">No exchange transactions made yet. Complete an exchange to view the breakdown.</div>
-<div class="cost-card" id="costCard">
-<div class="cost-row"><span class="cost-label" data-i18n="costBaseLabel">Base Amount</span><span class="cost-val" id="summaryBase">$0.00 CAD</span></div>
-<div class="cost-row"><span class="cost-label" data-i18n="costDeductionsLabel">Conversion Tax</span><span class="cost-val" id="summaryDeductions" style="color:var(--accent-red);">-$0.00 CAD</span></div>
-<div class="cost-row" style="font-weight:800;font-size:14px;"><span class="cost-label" style="color:#fff;" data-i18n="costFinalLabel">Final Settlement</span><span class="cost-val" id="summaryFinal" style="color:var(--accent-green);">+0.0000 SOL</span></div>
+<div class="pnl-overview-card" id="pnlOverviewCard">
+<div class="pnl-overview-label">Overall realized profit / loss</div>
+<div class="pnl-overview-value zero" id="totalProfitGains">$0.00 <span>CAD</span></div>
+<div class="pnl-overview-sub" id="pnlOverviewSub">Your completed market sells are shown below.</div>
 </div>
-<div class="exchange-transactions" id="exchangeTransactions">
-  <div class="transactions-header"><span>Transactions</span><span class="transactions-count" id="transactionsCount">0</span></div>
-  <div id="exchangeTransactionsList"></div>
+<div class="pnl-list-card">
+<div class="pnl-list-header"><div><div class="pnl-list-title">Trade history</div><div class="pnl-list-subtitle">Every market buy and sell</div></div><span class="transactions-count" id="transactionsCount">0</span></div>
+<div id="exchangeTransactionsList"></div>
 </div>
 </div>
 </section>
@@ -3119,12 +3152,42 @@ function setMacTab(tab){
 }
 function setMacPct(pct,el){document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));el.classList.add('active');const bal=macCurrentTab==='buy'?getBalanceForCurrency('CAD'):getBalanceForCurrency(activeCoin);const dec=macCurrentTab==='buy'?2:4;const factor=Math.pow(10,dec);document.getElementById('macAmountInput').value=(Math.floor(bal*(pct/100)*factor)/factor).toFixed(dec);updateMacTotal();}
 function updateMacTotal(){const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const price=Number(marketPrices[activeCoin]?.price)||SIMULATED_MARKET_BASE[activeCoin];const out=document.getElementById('macTotalVal');if(!out)return;if(macCurrentTab==='buy')out.textContent=`${(amt/price).toFixed(4)} ${activeCoin}`;else out.textContent=`${(amt*price).toFixed(2)} CAD`;}
+function getMarketSellCostBasis(coin,qty,excludeTrade){
+ const buys=(userTrades||[]).filter(t=>t&&t.coin===coin&&t.side==='buy'&&t!==excludeTrade).slice().sort((a,b)=>new Date(a.time)-new Date(b.time));
+ const sells=(userTrades||[]).filter(t=>t&&t.coin===coin&&t.side==='sell'&&t!==excludeTrade).slice().sort((a,b)=>new Date(a.time)-new Date(b.time));
+ const lots=[];
+ buys.forEach(t=>lots.push({qty:Number(t.size)||0,cost:Number(t.cadValue)||((Number(t.size)||0)*(Number(t.price)||0))}));
+ sells.forEach(s=>{let left=Number(s.size)||0;while(left>1e-10&&lots.length){const lot=lots[0];const take=Math.min(left,lot.qty);const unit=lot.qty>0?lot.cost/lot.qty:0;lot.qty-=take;lot.cost-=unit*take;left-=take;if(lot.qty<=1e-10)lots.shift();}});
+ let remaining=qty,basis=0;
+ while(remaining>1e-10&&lots.length){const lot=lots[0];const take=Math.min(remaining,lot.qty);const unit=lot.qty>0?lot.cost/lot.qty:0;basis+=unit*take;remaining-=take;lot.qty-=take;lot.cost-=unit*take;if(lot.qty<=1e-10)lots.shift();}
+ return basis;
+}
 function macSubmitOrder(){
  const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const livePrice=Number(marketPrices[activeCoin]?.price)||SIMULATED_MARKET_BASE[activeCoin];if(amt<=0)return;const btn=document.getElementById('macSubmitBtn');btn.style.opacity='0.6';btn.style.pointerEvents='none';
  setTimeout(()=>{btn.style.opacity='1';btn.style.pointerEvents='';const price=livePrice;
-  if(macCurrentTab==='buy'){const received=amt/price;if(internalHiddenBalanceCAD<amt){showToast('Insufficient CAD balance');return;}deductBalanceForCurrency('CAD',amt);addBalanceForCurrency(activeCoin,received);userTrades.unshift({coin:activeCoin,price,size:received,side:'buy',time:new Date()});showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);}
-  else{const received=amt*price;const bal=getBalanceForCurrency(activeCoin);if(bal<amt){showToast(`Insufficient ${activeCoin} balance`);return;}deductBalanceForCurrency(activeCoin,amt);addBalanceForCurrency('CAD',received);userTrades.unshift({coin:activeCoin,price,size:amt,side:'sell',time:new Date()});showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);}
-  if(userTrades.length>20)userTrades.pop();renderBalance();saveWalletState();updateOrderBook(activeCoin);document.getElementById('macAmountInput').value='';document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));updateMacTotal();
+  if(macCurrentTab==='buy'){
+   const received=amt/price;
+   if(internalHiddenBalanceCAD<amt){showToast('Insufficient CAD balance');return;}
+   deductBalanceForCurrency('CAD',amt);
+   addBalanceForCurrency(activeCoin,received);
+   userTrades.unshift({id:Date.now()+Math.random(),coin:activeCoin,price,size:received,side:'buy',cadValue:amt,time:new Date()});
+   addCostBasisLot(activeCoin,received,amt);
+   showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);
+  }
+  else{
+   const received=amt*price;
+   const bal=getBalanceForCurrency(activeCoin);
+   if(bal<amt){showToast(`Insufficient ${activeCoin} balance`);return;}
+   deductBalanceForCurrency(activeCoin,amt);
+   addBalanceForCurrency('CAD',received);
+   const costBasisCad=getMarketSellCostBasis(activeCoin,amt);
+   const gainCad=received-costBasisCad;
+   userTrades.unshift({id:Date.now()+Math.random(),coin:activeCoin,price,size:amt,side:'sell',cadValue:received,costBasisCad,proceedsCad:received,gainCad,time:new Date()});
+   showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);
+  }
+  if(userTrades.length>50)userTrades.pop();
+  renderBalance();saveWalletState();updateOrderBook(activeCoin);renderExchangeTransactions();
+  document.getElementById('macAmountInput').value='';document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));updateMacTotal();
  },700);
 }
 function selectMarketCoin(coin) {
@@ -3407,73 +3470,64 @@ function setMarketHiddenUI(){
 }
 
 function updateMarketProfitFromRefresh(){
-  if(!marketRevealPrices)return;
-  const prices={};
-  COINS.forEach(c=>prices[c]=Number(marketPrices[c]?.price)||0);
-  const previous=simulatedProfitState.lastSnapshot;
-  if(simulatedProfitState.total===null){
-    simulatedProfitState.total=Math.round((Math.random()*1800-700)*100)/100;
-    simulatedProfitState.monthly=Math.round((Math.random()*1100-420)*100)/100;
-    simulatedProfitState.daily=Math.round((Math.random()*320-140)*100)/100;
-  }else{
-    let marketMove=0;
-    COINS.forEach(c=>{
-      if(previous?.[c]>0&&prices[c]>0)marketMove+=(prices[c]-previous[c])/previous[c];
-    });
-    const totalStep=marketMove*42000+(Math.random()-.5)*35;
-    const monthlyStep=marketMove*26000+(Math.random()-.5)*24;
-    simulatedProfitState.total=Math.round((simulatedProfitState.total+totalStep)*100)/100;
-    simulatedProfitState.monthly=Math.round((simulatedProfitState.monthly+monthlyStep)*100)/100;
-    simulatedProfitState.daily=Math.round((marketMove*9000+(Math.random()-.5)*20)*100)/100;
-  }
-  simulatedProfitState.lastSnapshot=prices;
-  renderProfitPanel('totalProfitGains',simulatedProfitState.total,'.profit-summary-card');
-  renderProfitPanel('dailyProfitLoss',simulatedProfitState.daily,'.profit-period-card');
-  renderProfitPanel('monthlyProfitLoss',simulatedProfitState.monthly,'.profit-period-card');
+ renderExchangeTransactions();
 }
+
 function renderExchangeTransactions(){
  const list=document.getElementById('exchangeTransactionsList');
  const count=document.getElementById('transactionsCount');
  const totalEl=document.getElementById('totalProfitGains');
  if(!list)return;
- const txs=(recentActivities||[]).filter(t=>t&&t.fromCurr&&t.toCurr);
- if(count)count.textContent=txs.length;
- let totalCad=0,dailyCad=0,monthlyCad=0;
- const now=Date.now();
- const current=new Date(now);
- const dayStart=new Date(current.getFullYear(),current.getMonth(),current.getDate()).getTime();
- const monthStart=new Date(current.getFullYear(),current.getMonth(),1).getTime();
- txs.forEach(t=>{
-   const gain=typeof t.gainCad==='number'&&Number.isFinite(t.gainCad)?t.gainCad:0;
-   totalCad+=gain;
-   const stamp=Date.parse(t.timestamp||'');
-   if(Number.isFinite(stamp)){
-     if(stamp>=dayStart)dailyCad+=gain;
-     if(stamp>=monthStart)monthlyCad+=gain;
-   }
+ const trades=(userTrades||[]).filter(t=>t&&['BTC','SOL','ETH'].includes(t.coin)&&['buy','sell'].includes(t.side)).slice().sort((a,b)=>new Date(a.time)-new Date(b.time));
+ const lots={BTC:[],SOL:[],ETH:[]};
+ const ledger=[];
+ let realizedTotal=0;
+ trades.forEach(t=>{
+  const qty=Number(t.size)||0, price=Number(t.price)||0;
+  if(qty<=0||price<=0)return;
+  if(t.side==='buy'){
+   const cost=Number(t.cadValue)||qty*price;
+   lots[t.coin].push({qty,cost});
+   ledger.push({...t,costCad:cost,proceedsCad:cost,gainCad:null});
+   return;
+  }
+  let remaining=qty,basis=0;
+  while(remaining>1e-10&&lots[t.coin].length){
+   const lot=lots[t.coin][0];
+   const take=Math.min(remaining,lot.qty);
+   const unitCost=lot.qty>0?lot.cost/lot.qty:0;
+   basis+=unitCost*take;
+   lot.qty-=take;lot.cost-=unitCost*take;remaining-=take;
+   if(lot.qty<=1e-10)lots[t.coin].shift();
+  }
+  const proceeds=Number(t.cadValue)||qty*price;
+  const gain=proceeds-basis;
+  realizedTotal+=gain;
+  ledger.push({...t,costCad:basis,proceedsCad:proceeds,gainCad:gain});
  });
+ ledger.reverse();
+ if(count)count.textContent=ledger.length;
+ const totalClass=Math.abs(realizedTotal)<0.005?'zero':realizedTotal>0?'pos':'neg';
  if(totalEl){
-   const formatted=formatProfitLossValue(totalCad);
-   totalEl.className=`profit-summary-value ${formatted.className}`;
-   totalEl.innerHTML=formatted.text;
+  totalEl.className=`pnl-overview-value ${totalClass}`;
+  totalEl.innerHTML=`${realizedTotal>0?'+':realizedTotal<0?'-':''}$${Math.abs(realizedTotal).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})} <span>CAD</span>`;
  }
- renderPeriodProfitLoss('dailyProfitLoss',dailyCad);
- renderPeriodProfitLoss('monthlyProfitLoss',monthlyCad);
- if(!txs.length){list.innerHTML='<div class="tx-empty">No transactions yet. Your completed exchanges will appear here.</div>';return;}
- list.innerHTML=txs.slice(0,30).map((t,i)=>{
-  const fromDec=(t.fromCurr==='BTC'||t.fromCurr==='SOL')?4:2;
-  const toDec=(t.toCurr==='BTC'||t.toCurr==='SOL')?4:2;
-  const rate=typeof t.rate==='number'?t.rate:(t.amount?t.received/t.amount:0);
-  const fee=typeof t.fee==='number'?t.fee:0;
-  const tax=typeof t.tax==='number'?t.tax:0;
-  const gainCad=typeof t.gainCad==='number'?t.gainCad:0;
-  const basisCad=typeof t.costBasisCad==='number'?t.costBasisCad:0;
-  const proceedsCad=typeof t.proceedsCad==='number'?t.proceedsCad:0;
-  const pnlClass=Math.abs(gainCad)<0.005?'zero':gainCad>0?'pos':'neg';
-  const pnlPrefix=Math.abs(gainCad)<0.005?'':gainCad>0?'+':'-';
-  return `<div class="tx-card" data-tx-index="${i}"><div class="tx-summary"><div class="tx-main"><div class="tx-title">${t.amount.toFixed(fromDec)} ${t.fromCurr} → ${t.received.toFixed(toDec)} ${t.toCurr}</div><div class="tx-time">${t.time||'Completed'}</div></div><div class="tx-result"><div class="tx-result-value ${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</div><div class="tx-result-label">Profit / loss · Tap for details</div></div></div><div class="tx-details"><div class="tx-detail-row"><span>Amount sent</span><span>${t.amount.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Amount received</span><span>${t.received.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Exchange rate</span><span>1 ${t.fromCurr} = ${rate.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Profit / loss</span><span class="${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Cost basis</span><span>$${basisCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Proceeds / fair value</span><span>$${proceedsCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Conversion fee</span><span>${fee.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Tax</span><span>${tax.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Status</span><span>Completed</span></div></div></div>`;
+ const sub=document.getElementById('pnlOverviewSub');
+ if(sub)sub.textContent=ledger.length?`${ledger.filter(t=>t.side==='sell').length} completed sell${ledger.filter(t=>t.side==='sell').length===1?'':'s'} · unrealized buys are not included`:'Buy or sell an asset in Market to start your trade history.';
+ if(!ledger.length){list.innerHTML='<div class="pnl-empty"><div class="pnl-empty-icon"><i data-lucide="receipt-text"></i></div><div class="pnl-empty-title">No trades yet</div><div class="pnl-empty-sub">Your market buys and sells will appear here.</div></div>';lucide.createIcons();return;}
+ list.innerHTML=ledger.map((t,i)=>{
+  const dec=t.coin==='SOL'?2:4;
+  const qty=t.size.toFixed(dec);
+  const price=t.price.toLocaleString('en-CA',{minimumFractionDigits:t.coin==='SOL'?2:2,maximumFractionDigits:t.coin==='SOL'?2:2});
+  const time=t.time instanceof Date?t.time:new Date(t.time);
+  const timeText=Number.isFinite(time.getTime())?time.toLocaleString('en-CA',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'Completed';
+  const isSell=t.side==='sell';
+  const gain=Number(t.gainCad)||0;
+  const pnlClass=!isSell?'open':Math.abs(gain)<0.005?'zero':gain>0?'pos':'neg';
+  const pnlText=!isSell?'Open position':`${gain>0?'+':gain<0?'-':''}$${Math.abs(gain).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  return `<div class="pnl-trade ${isSell?'sell':'buy'}"><div class="pnl-trade-main"><div class="pnl-side-badge ${isSell?'sell':'buy'}">${isSell?'SELL':'BUY'}</div><div class="pnl-trade-info"><div class="pnl-trade-title">${qty} ${t.coin} <span>·</span> $${price}</div><div class="pnl-trade-time">${timeText}</div></div></div><div class="pnl-trade-result"><div class="pnl-trade-pnl ${pnlClass}">${pnlText}</div><div class="pnl-trade-label">${isSell?'Realized P/L':'Cost'}</div></div><div class="pnl-trade-details"><div><span>Trade value</span><strong>$${(Number(t.cadValue)||0).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})} CAD</strong></div>${isSell?`<div><span>Buy cost</span><strong>$${Number(t.costBasisCad||0).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})} CAD</strong></div><div><span>Sell proceeds</span><strong>$${Number(t.proceedsCad||0).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})} CAD</strong></div><div class="pnl-detail-total"><span>Overall on this trade</span><strong class="${pnlClass}">${pnlText} CAD</strong></div>`:'<div><span>Position cost</span><strong>$'+(Number(t.cadValue)||0).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})+' CAD</strong></div>'}</div></div>`;
  }).join('');
- list.querySelectorAll('.tx-card').forEach(card=>card.addEventListener('click',()=>card.classList.toggle('open')));
+ list.querySelectorAll('.pnl-trade').forEach(card=>card.addEventListener('click',()=>card.classList.toggle('open')));
 }
 
 function updateConversionPage(amt, fromCurr, toCurr) {
@@ -3638,5 +3692,51 @@ profitsPanel.addEventListener('mousedown',e=>pHandleStart(e.clientY));
 window.addEventListener('mousemove',e=>{if(pIsDragging)pHandleMove(e.clientY,e);});
 window.addEventListener('mouseup',()=>{if(pIsDragging)pHandleEnd();});
 </script>
+
+<script id="pl-color-normalizer">
+(function(){
+  function applyPLColor(el, value){
+    var n = Number(value);
+    if (!Number.isFinite(n)) return;
+    el.classList.remove(
+      'pl-zero','pnl-zero','profit-zero','loss-zero',
+      'pl-positive','pnl-positive','profit-positive','loss-positive',
+      'pl-negative','pnl-negative','profit-negative','loss-negative'
+    );
+    if (n === 0) {
+      el.classList.add('pl-zero');
+      el.removeAttribute('data-pl-sign');
+    } else if (n > 0) {
+      el.classList.add('pl-positive');
+      el.setAttribute('data-pl-sign','positive');
+    } else {
+      el.classList.add('pl-negative');
+      el.setAttribute('data-pl-sign','negative');
+    }
+  }
+
+  function normalize(){
+    var nodes = document.querySelectorAll(
+      '[data-pl-value], .pl, .pnl, .profit, .loss, .pnl-value, .profit-value, .loss-value'
+    );
+    nodes.forEach(function(el){
+      var raw = el.getAttribute('data-pl-value');
+      if (raw == null) raw = el.textContent.replace(/[$,%+\s,]/g,'');
+      var n = Number(raw);
+      if (Number.isFinite(n)) applyPLColor(el, n);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', normalize);
+  } else {
+    normalize();
+  }
+  new MutationObserver(normalize).observe(document.documentElement, {
+    subtree:true, childList:true, characterData:true
+  });
+})();
+</script>
+
 </body>
 </html>
