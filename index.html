@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://unpkg.com/lightweight-charts@5.2.0/dist/lightweight-charts.standalone.production.js"></script>
 <style>
 :root {
 --bg-main: #070709;
@@ -27,15 +28,21 @@
 --card-border: rgba(255, 255, 255, 0.08);
 --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
 }
-body.theme-emerald {
---card-gradient: radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.25) 0%, transparent 50%), linear-gradient(135deg, #064e3b 0%, #022c22 50%, #0f172a 100%);
---card-border: rgba(52, 211, 153, 0.25);
---card-shadow: 0 20px 50px -12px rgba(16, 185, 129, 0.35), 0 8px 20px rgba(0, 0, 0, 0.4);
-}
-body.theme-midnight {
---card-gradient: radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.2) 0%, transparent 50%), linear-gradient(135deg, #2d1b4e 0%, #3730a3 50%, #0f172a 100%);
---card-border: rgba(168, 85, 247, 0.22);
---card-shadow: 0 20px 50px -12px rgba(147, 51, 234, 0.35), 0 8px 20px rgba(0, 0, 0, 0.4);
+body.theme-light {
+  --bg-main: #f4f5f7;
+  --bg-sidebar: #ffffff;
+  --bg-card: #ffffff;
+  --bg-input: #f0f1f3;
+  --border-subtle: rgba(15, 23, 42, 0.09);
+  --border-hover: rgba(15, 23, 42, 0.16);
+  --text-main: #101114;
+  --text-muted: #68707d;
+  --accent-green: #12966f;
+  --accent-red: #d94a4a;
+  --card-gradient: radial-gradient(circle at 85% 15%, rgba(0,0,0,.045) 0%, transparent 45%), linear-gradient(135deg, #ffffff 0%, #f7f8fa 100%);
+  --card-border: rgba(15, 23, 42, 0.10);
+  --card-shadow: 0 18px 40px -18px rgba(15, 23, 42, 0.20);
+  color-scheme: light;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; user-select: none; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; background-color: var(--bg-main); }
@@ -48,6 +55,85 @@ body {
   overflow: hidden;
   position: relative;
 }
+body.theme-light .sidebar { background: var(--bg-sidebar); border-color: var(--border-subtle); }
+body.theme-light .main-dashboard,
+body.theme-light .scroll-content { background: var(--bg-main); }
+body.theme-light .dashboard-title,
+body.theme-light .item-title,
+body.theme-light .settings-title,
+body.theme-light .theme-label,
+body.theme-light .panel-title,
+body.theme-light .ticker-price,
+body.theme-light .market-live-price,
+body.theme-light .mci-name,
+body.theme-light .css-value,
+body.theme-light .item-value,
+body.theme-light .profit-summary-value,
+body.theme-light .profit-period-value,
+body.theme-light .tx-title,
+body.theme-light .modal-title { color: var(--text-main); }
+body.theme-light .sidebar-item { color: #68707d; }
+body.theme-light .sidebar-item:hover { color: #101114; background: rgba(15,23,42,.045); }
+body.theme-light .sidebar-item.active { color: #101114; background: rgba(15,23,42,.07); box-shadow: inset 0 0 0 1px rgba(15,23,42,.07), 0 4px 12px rgba(15,23,42,.06); }
+body.theme-light .sidebar-label,
+body.theme-light .panel-title,
+body.theme-light .ob-title,
+body.theme-light .ob-col-label { color: #78808c; }
+body.theme-light .profile-name,
+body.theme-light .intro-title { color: #101114; }
+body.theme-light .profile-tag,
+body.theme-light .item-subtitle,
+body.theme-light .settings-desc,
+body.theme-light .ticker-symbol,
+body.theme-light .mpm-period,
+body.theme-light .css-label { color: #68707d; }
+body.theme-light .wallet-selector,
+body.theme-light .settings-select,
+body.theme-light .modal-field select { color: #101114; background: rgba(15,23,42,.045); border-color: var(--border-hover); }
+body.theme-light .wallet-selector option,
+body.theme-light .modal-field select option { background: #fff; color: #101114; }
+body.theme-light .action-btn,
+body.theme-light .chart-tool-btn,
+body.theme-light .tr-btn { color: #343943; }
+body.theme-light .action-btn { background: rgba(15,23,42,.045); border-color: var(--border-hover); }
+body.theme-light .action-btn:hover,
+body.theme-light .chart-tool-btn:hover,
+body.theme-light .tr-btn:hover { background: rgba(15,23,42,.07); color: #101114; }
+body.theme-light .action-btn.primary,
+body.theme-light .modal-btn,
+body.theme-light .edit-btn.save { background: #101114; color: #fff; border-color: #101114; }
+body.theme-light .action-btn.primary:hover,
+body.theme-light .modal-btn:hover { background: #2b2e35; border-color: #2b2e35; }
+body.theme-light .chart-canvas-area,
+body.theme-light .market-chart-container { background: #f8f9fb; }
+body.theme-light .chart-toolbar { background: rgba(15,23,42,.018); }
+body.theme-light .chart-tool-btn.active,
+body.theme-light .tr-btn.active { background: rgba(15,23,42,.09); color: #101114; }
+body.theme-light .market-chart-panel,
+body.theme-light .orderbook-panel,
+body.theme-light .asset-list,
+body.theme-light .activity-panel,
+body.theme-light .exchange-transactions,
+body.theme-light .cost-card,
+body.theme-light .profit-summary-card,
+body.theme-light .profit-period-card,
+body.theme-light .tx-card,
+body.theme-light .theme-card,
+body.theme-light .modal-card,
+body.theme-light .toast-notification { color: var(--text-main); }
+body.theme-light .theme-card.active { border-color: #101114; background: rgba(15,23,42,.035); }
+body.theme-light .theme-preview-box.dark { background: linear-gradient(135deg,#111318,#2a2d34); }
+body.theme-light .switch .slider { background: #e4e6ea; border-color: #d1d5db; }
+body.theme-light .switch input:checked + .slider { background: #101114; border-color: #101114; }
+body.theme-light .switch input:checked + .slider:before { background: #fff; }
+body.theme-light .modal-overlay { background: rgba(15,23,42,.35); }
+body.theme-light .edit-panel { background: rgba(255,255,255,.97); border-color: var(--border-hover); }
+body.theme-light .edit-row input,
+body.theme-light .modal-field { background: #f4f5f7; color: #101114; border-color: var(--border-hover); }
+body.theme-light .modal-field input,
+body.theme-light .edit-row input { color: #101114; }
+body.theme-light .chart-status-pill { color: #68707d; background: rgba(255,255,255,.9); border-color: rgba(15,23,42,.08); }
+
 .sidebar {
 width: 240px;
 background-color: var(--bg-sidebar);
@@ -338,7 +424,7 @@ will-change: transform;
 .wallet-selector:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
 .wallet-selector option { background-color: var(--bg-card); color: #ffffff; }
 .main-balance { font-size: 42px; font-weight: 800; letter-spacing: -1.2px; margin: 12px 0 4px; color: var(--text-main); font-variant-numeric: tabular-nums; position: relative; z-index: 1; cursor: pointer; width: fit-content; transition: opacity 0.18s ease, filter 0.22s ease; }
-.main-balance.blurred { filter: blur(8px); }
+.main-balance.blurred { filter: none; }
 .main-balance:hover { opacity: 0.92; }
 .card-actions { display: flex; gap: 12px; position: relative; z-index: 1; }
 .action-btn {
@@ -425,9 +511,8 @@ will-change: transform;
 .theme-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
 .theme-card.active { border-color: #ffffff; background: rgba(255,255,255,0.03); }
 .theme-preview-box { width: 100%; height: 48px; border-radius: 10px; }
-.theme-preview-box.emerald { background: radial-gradient(circle at 80% 20%, rgba(52,211,153,0.25) 0%, transparent 50%), linear-gradient(135deg, #064e3b 0%, #022c22 50%, #0f172a 100%); }
 .theme-preview-box.dark { background: radial-gradient(circle at 85% 15%, rgba(255,255,255,0.15) 0%, transparent 45%), linear-gradient(135deg, #1e1e24 0%, #111115 100%); }
-.theme-preview-box.midnight { background: radial-gradient(circle at 80% 20%, rgba(168,85,247,0.2) 0%, transparent 50%), linear-gradient(135deg, #2d1b4e 0%, #3730a3 50%, #0f172a 100%); }
+.theme-preview-box.light { background: radial-gradient(circle at 82% 18%, rgba(0,0,0,.04) 0%, transparent 50%), linear-gradient(135deg,#ffffff 0%,#eceff3 100%); }
 .theme-label { font-size: 13.5px; font-weight: 600; color: #fff; display: flex; justify-content: space-between; align-items: center; }
 .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border-subtle); }
 .settings-row:last-child { border-bottom: none; }
@@ -637,35 +722,30 @@ font-variant-numeric: tabular-nums;
 .mpm-badge.down { background: rgba(248,113,113,0.12); color: var(--accent-red); }
 .mpm-divider { width: 1px; height: 14px; background: var(--border-subtle); }
 .mpm-period { font-size: 11px; font-weight: 600; color: var(--text-muted); }
-.chart-timerange {
-display: flex;
-gap: 4px;
-padding: 16px 24px 12px;
+.chart-toolbar {
+height: 44px;
+padding: 0 18px;
+border-top: 1px solid var(--border-subtle);
 border-bottom: 1px solid var(--border-subtle);
+display:flex;align-items:center;gap:4px;
+background:rgba(255,255,255,0.012);
+overflow-x:auto;
+scrollbar-width:none;
 }
-.tr-btn {
-padding: 5px 12px;
-border-radius: 8px;
-font-size: 12px;
-font-weight: 600;
-color: var(--text-muted);
-cursor: pointer;
-border: none;
-background: transparent;
-transition: color 0.18s ease, background 0.18s ease;
+.chart-toolbar::-webkit-scrollbar{display:none;}
+.chart-toolbar-group{display:flex;align-items:center;gap:2px;flex-shrink:0;}
+.chart-toolbar-divider{width:1px;height:20px;background:var(--border-subtle);margin:0 7px;flex-shrink:0;}
+.chart-tool-btn,.tr-btn{
+height:28px;padding:0 9px;border:0;border-radius:6px;background:transparent;color:var(--text-muted);
+font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;
+transition:background .16s ease,color .16s ease;
 }
-.tr-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
-.tr-btn.active { color: #fff; background: rgba(255,255,255,0.1); }
-.chart-canvas-area {
-padding: 20px 24px;
-position: relative;
-}
-.market-canvas {
-width: 100%;
-height: 200px;
-display: block;
-border-radius: 8px;
-}
+.chart-tool-btn:hover,.tr-btn:hover{color:#fff;background:rgba(255,255,255,.055);}
+.chart-tool-btn.active,.tr-btn.active{color:#fff;background:rgba(255,255,255,.09);}
+.chart-tool-btn svg{width:14px;height:14px;vertical-align:middle;}
+.chart-canvas-area{padding:0;position:relative;background:#0b0b0e;}
+.market-chart-container{width:100%;height:390px;min-height:300px;position:relative;}
+.chart-status-pill{position:absolute;top:10px;left:14px;z-index:3;font-size:9px;font-weight:800;letter-spacing:.65px;text-transform:uppercase;color:#8b8b95;background:rgba(10,10,13,.82);border:1px solid rgba(255,255,255,.06);border-radius:5px;padding:4px 7px;pointer-events:none;backdrop-filter:blur(6px);}
 .chart-stats-strip {
 display: grid;
 grid-template-columns: repeat(4, 1fr);
@@ -852,7 +932,7 @@ overflow: hidden;
 .intro-welcome {
   position: absolute;
   left: 50%;
-  top: calc(50% + 145px);
+  top: calc(50% + 142px);
   transform: translate(-50%, 18px) scale(.97);
   width: max-content;
   max-width: calc(100vw - 36px);
@@ -860,7 +940,7 @@ overflow: hidden;
   text-align: center;
   z-index: 20;
   opacity: 0;
-  color: rgba(255,255,255,.78);
+  color: rgba(255,255,255,.86);
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   background: transparent;
   border: 0;
@@ -876,10 +956,10 @@ overflow: hidden;
 .intro-title {
   position: relative;
   z-index: 1;
-  color: rgba(255,255,255,.72);
-  font-size: 18px;
+  color: rgba(255,255,255,.78);
+  font-size: 17px;
   line-height: 1.2;
-  font-weight: 500;
+  font-weight: 550;
   letter-spacing: -.42px;
   white-space: nowrap;
   text-shadow: 0 2px 16px rgba(0,0,0,.35);
@@ -891,7 +971,7 @@ overflow: hidden;
   font-weight: 750;
   background: none;
   -webkit-text-fill-color: currentColor;
-  text-shadow: 0 2px 18px rgba(255,255,255,.12);
+  text-shadow: 0 2px 20px rgba(255,255,255,.16);
   animation: none;
 }
 @keyframes welcomeEntrance {
@@ -1278,6 +1358,8 @@ overflow: hidden;
   .scroll-content{padding-left:28px;padding-right:28px;}
   .market-main-view{grid-template-columns:minmax(0,1fr) 310px;}
   .market-chart-header{padding-left:20px;padding-right:20px;}
+  .market-chart-container{height:330px;min-height:280px;}
+  .chart-toolbar{padding:0 10px;}
 }
 @media (max-width:768px){
   .dashboard-header{align-items:flex-start;}
@@ -1308,7 +1390,7 @@ overflow: hidden;
     <div class="w">W</div>
   </div>
   <div class="intro-welcome">
-  <div class="intro-title">Welcome <span>@3sa</span></div>
+  <div class="intro-title">Welcome <span>EISA</span></div>
 </div>
 </div>
 <script>
@@ -1485,17 +1567,17 @@ overflow: hidden;
   </div>
 </div>
 <div class="activity-panel" id="exchangeDetailsPanel" style="display:none;">
-<div class="panel-header"><span class="panel-title" data-i18n="conversionFeesTitle">Conversion Fees & Tax</span></div>
+<div class="panel-header"><span class="panel-title" data-i18n="conversionFeesTitle">Conversion Summary</span></div>
 <div class="list-item">
 <div class="item-left"><div class="icon-wrapper" style="background:rgba(248,113,113,0.08);color:var(--accent-red);border:none;"><i data-lucide="arrow-up-right"></i></div><div><div class="item-title" data-i18n="exSentTitle">Amount Sent</div><div class="item-subtitle" data-i18n="exSentSub">Exchange Base Amount</div></div></div>
 <div class="item-right"><div class="item-value neg" id="baseSentVal">- 0.00<span class="currency-label" id="baseSentCurrLabel">CAD</span></div></div>
 </div>
 <div class="list-item">
-<div class="item-left"><div class="icon-wrapper" style="background:rgba(248,113,113,0.08);color:var(--accent-red);border:none;"><i data-lucide="percent"></i></div><div><div class="item-title" data-i18n="exFeeTitle">Capital Gain (CRA 50% Inclusion)</div><div class="item-subtitle" data-i18n="exFeeSub">Only 50% of your profit is taxable — the other half is yours tax-free</div></div></div>
+<div class="item-left"><div class="icon-wrapper" style="background:rgba(248,113,113,0.08);color:var(--accent-red);border:none;"><i data-lucide="percent"></i></div><div><div class="item-title" data-i18n="exFeeTitle">Conversion Fee</div><div class="item-subtitle" data-i18n="exFeeSub">No conversion fee is charged</div></div></div>
 <div class="item-right"><div class="item-value neg" id="feeVal">- $0.00<span class="currency-label" id="feeCurrLabel">CAD</span></div></div>
 </div>
 <div class="list-item">
-<div class="item-left"><div class="icon-wrapper" style="background:rgba(248,113,113,0.08);color:var(--accent-red);border:none;"><i data-lucide="receipt"></i></div><div><div class="item-title" data-i18n="exTaxTitle">Marginal Tax on Taxable Gain</div><div class="item-subtitle" data-i18n="exTaxSub">Applied to the 50% inclusion amount only</div></div></div>
+<div class="item-left"><div class="icon-wrapper" style="background:rgba(248,113,113,0.08);color:var(--accent-red);border:none;"><i data-lucide="receipt"></i></div><div><div class="item-title" data-i18n="exTaxTitle">Conversion Tax</div><div class="item-subtitle" data-i18n="exTaxSub">No conversion tax is charged</div></div></div>
 <div class="item-right"><div class="item-value neg" id="taxVal">- $0.00<span class="currency-label" id="taxCurrLabel">CAD</span></div></div>
 </div>
 <div class="list-item">
@@ -1510,7 +1592,7 @@ overflow: hidden;
 <div class="empty-exchange-state" id="emptyExchangeState" data-i18n="emptyExchangeText">No exchange transactions made yet. Complete an exchange to view the breakdown.</div>
 <div class="cost-card" id="costCard">
 <div class="cost-row"><span class="cost-label" data-i18n="costBaseLabel">Base Amount</span><span class="cost-val" id="summaryBase">$0.00 CAD</span></div>
-<div class="cost-row"><span class="cost-label" data-i18n="costDeductionsLabel">CRA Tax (on 50% of gain)</span><span class="cost-val" id="summaryDeductions" style="color:var(--accent-red);">-$0.00 CAD</span></div>
+<div class="cost-row"><span class="cost-label" data-i18n="costDeductionsLabel">Conversion Tax</span><span class="cost-val" id="summaryDeductions" style="color:var(--accent-red);">-$0.00 CAD</span></div>
 <div class="cost-row" style="font-weight:800;font-size:14px;"><span class="cost-label" style="color:#fff;" data-i18n="costFinalLabel">Final Settlement</span><span class="cost-val" id="summaryFinal" style="color:var(--accent-green);">+0.0000 SOL</span></div>
 </div>
 <div class="exchange-transactions" id="exchangeTransactions">
@@ -1574,6 +1656,35 @@ overflow: hidden;
 <div class="mpm-divider"></div>
 <div class="mpm-period">24h</div>
 </div>
+</div>
+</div>
+<div class="chart-toolbar" id="marketChartToolbar">
+<div class="chart-toolbar-group" id="chartTimeframes">
+<button class="tr-btn active" data-range="1H" onclick="setChartRange('1H',this)">1H</button>
+<button class="tr-btn" data-range="4H" onclick="setChartRange('4H',this)">4H</button>
+<button class="tr-btn" data-range="1D" onclick="setChartRange('1D',this)">1D</button>
+<button class="tr-btn" data-range="1W" onclick="setChartRange('1W',this)">1W</button>
+<button class="tr-btn" data-range="1M" onclick="setChartRange('1M',this)">1M</button>
+</div>
+<div class="chart-toolbar-divider"></div>
+<div class="chart-toolbar-group">
+<button class="chart-tool-btn active" id="chartTypeCandle" onclick="setChartType('candles',this)">Candles</button>
+<button class="chart-tool-btn" id="chartTypeLine" onclick="setChartType('line',this)">Line</button>
+</div>
+<div class="chart-toolbar-divider"></div>
+<div class="chart-toolbar-group">
+<button class="chart-tool-btn active" id="indicatorVolume" onclick="toggleChartIndicator('volume',this)">Volume</button>
+<button class="chart-tool-btn" id="indicatorSma" onclick="toggleChartIndicator('sma',this)">SMA</button>
+<button class="chart-tool-btn" id="indicatorEma" onclick="toggleChartIndicator('ema',this)">EMA</button>
+</div>
+<div class="chart-toolbar-divider"></div>
+<div class="chart-toolbar-group">
+<button class="chart-tool-btn" onclick="resetMarketChart()">Reset</button>
+</div>
+</div>
+<div class="chart-canvas-area">
+<div class="market-chart-container" id="marketTradingChart">
+<div class="chart-status-pill">SIMULATED MARKET</div>
 </div>
 </div>
 <div class="chart-stats-strip">
@@ -1670,20 +1781,16 @@ overflow: hidden;
 <div class="theme-preview-box dark"></div>
 <div class="theme-label"><span data-i18n="themeDark">Dark Onyx</span><i data-lucide="check" class="theme-check-icon" style="width:16px;height:16px;color:var(--accent-green);"></i></div>
 </div>
-<div class="theme-card" id="themeEmeraldCard" onclick="setTheme('emerald')">
-<div class="theme-preview-box emerald"></div>
-<div class="theme-label"><span data-i18n="themeEmerald">Emerald Cyber</span><i data-lucide="check" class="theme-check-icon" style="width:16px;height:16px;color:var(--accent-green);display:none;"></i></div>
-</div>
-<div class="theme-card" id="themeMidnightCard" onclick="setTheme('midnight')">
-<div class="theme-preview-box midnight"></div>
-<div class="theme-label"><span>Midnight Purple</span><i data-lucide="check" class="theme-check-icon" style="width:16px;height:16px;color:var(--accent-green);display:none;"></i></div>
+<div class="theme-card" id="themeLightCard" onclick="setTheme('light')">
+<div class="theme-preview-box light"></div>
+<div class="theme-label"><span data-i18n="themeLight">Clean White</span><i data-lucide="check" class="theme-check-icon" style="width:16px;height:16px;color:var(--accent-green);display:none;"></i></div>
 </div>
 </div>
 </div>
 <div class="asset-list">
 <div class="panel-header"><span class="panel-title" data-i18n="settingsSecurityTitle">Security & Privacy</span></div>
 <div class="settings-row">
-<div class="settings-info"><div class="settings-title" data-i18n="secHideBalanceTitle">Hide Balances Privacy Mode</div><div class="settings-desc" data-i18n="secHideBalanceDesc">Blur primary total balance on overview screen</div></div>
+<div class="settings-info"><div class="settings-title" data-i18n="secHideBalanceTitle">Hide Balances Privacy Mode</div><div class="settings-desc" data-i18n="secHideBalanceDesc">Replace balance and asset prices with dashes on overview screen</div></div>
 <label class="switch"><input type="checkbox" id="toggleHideBalances"><span class="slider"></span></label>
 </div>
 <div class="settings-row">
@@ -1750,8 +1857,8 @@ overflow: hidden;
 </div>
 </div>
 <div class="preview-box">
-<div class="preview-row"><span data-i18n="prevFeeLabel">Capital Gain (50% taxable)</span><span id="previewFeeVal">0.00 CAD</span></div>
-<div class="preview-row"><span data-i18n="prevTaxLabel">Marginal Tax (on taxable portion)</span><span id="previewTaxVal">0.00 CAD</span></div>
+<div class="preview-row"><span data-i18n="prevFeeLabel">Conversion Fee</span><span id="previewFeeVal">0.00 CAD</span></div>
+<div class="preview-row"><span data-i18n="prevTaxLabel">Conversion Tax</span><span id="previewTaxVal">0.00 CAD</span></div>
 <div class="preview-row exchange-highlight"><span data-i18n="prevReceiveLabel">Estimated Receive</span><span class="live-preview-val" id="livePreviewVal">0.0000 SOL</span></div>
 </div>
 <div class="error-text" id="exError" data-i18n="exErrorText">Insufficient balance for this conversion.</div>
@@ -1837,17 +1944,17 @@ menuLabel:"Menu",navOverview:"Overview",navExchange:"Profits & Loss",navMarket:"
 titleWallet:"Wallet",totalBalanceTitle:"Total Balance",btnExchange:"Exchange",btnTransfer:"Transfer",
 editWalletPrefix:"Edit",editWalletSuffix:"Wallet",editLabelBalance:"Balance",editLabelRate:"Rate",btnCancel:"Cancel",btnSave:"Save",
 recentActivityTitle:"Recent Activity",assetsTitle:"Assets",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
-titleExchangePanel:"Profits & Loss",conversionFeesTitle:"Conversion Fees & Tax",
+titleExchangePanel:"Profits & Loss",conversionFeesTitle:"Conversion Summary",
 exSentTitle:"Amount Sent",exSentSub:"Exchange Base Amount",
-exFeeTitle:"Capital Gain (CRA 50% Inclusion)",exFeeSub:"Only 50% of your profit is taxable — the other half is yours tax-free",
-exTaxTitle:"Marginal Tax on Taxable Gain",exTaxSub:"Applied to the 50% inclusion amount only",
+exFeeTitle:"Conversion Fee",exFeeSub:"No conversion fee is charged",
+exTaxTitle:"Conversion Tax",exTaxSub:"No conversion tax is charged",
 exPurchaseTitle:"Recent Purchase Deductions",exPurchaseSub:"Hardware & Scooter Parts",
 exNetTitle:"Net Crypto Received",exNetSub:"Estimated Yield",
 emptyExchangeText:"No exchange transactions made yet. Complete an exchange to view the breakdown.",
-costBaseLabel:"Base Amount",costDeductionsLabel:"CRA Tax (on 50% of gain)",costFinalLabel:"Final Settlement",
+costBaseLabel:"Base Amount",costDeductionsLabel:"Conversion Tax",costFinalLabel:"Final Settlement",
 titleMarket:"Market",titleSettings:"Settings",
-settingsThemeTitle:"Card Theme Appearance",themeDark:"Dark Onyx",themeEmerald:"Emerald Cyber",
-settingsSecurityTitle:"Security & Privacy",secHideBalanceTitle:"Hide Balances Privacy Mode",secHideBalanceDesc:"Blur primary total balance on overview screen",
+settingsThemeTitle:"Card Theme Appearance",themeDark:"Dark Onyx",themeLight:"Clean White",
+settingsSecurityTitle:"Security & Privacy",secHideBalanceTitle:"Hide Balances Privacy Mode",secHideBalanceDesc:"Replace balance and asset prices with dashes on overview screen",
 secBiometricsTitle:"Biometric Authentication",secBiometricsDesc:"Require Face ID / Touch ID when opening wallet",
 settingsPreferencesTitle:"Preferences",prefDefaultCurrTitle:"Default Display Currency",prefDefaultCurrDesc:"Primary currency on login",
 prefLangTitle:"Language & Regional Format",prefLangDesc:"Interface localization",
@@ -1856,7 +1963,7 @@ notifMarketTitle:"Market Price Updates",notifMarketDesc:"Receive simulated price
 settingsDataTitle:"Data & Storage",dataClearActivityTitle:"Clear Recent Activity",dataClearActivityDesc:"Wipe all cached activity logs",
 btnClrAct:"Clear Activity",dataResetTitle:"Reset Settings",dataResetDesc:"Restore settings and preferences to default",btnRstSet:"Reset Settings",
 modalExTitle:"Exchange",modalFromLabel:"From",modalToLabel:"To",
-prevFeeLabel:"Capital Gain (50% taxable)",prevTaxLabel:"Marginal Tax (on taxable portion)",prevReceiveLabel:"Estimated Receive",
+prevFeeLabel:"Conversion Fee",prevTaxLabel:"Conversion Tax",prevReceiveLabel:"Estimated Receive",
 exErrorText:"Insufficient balance for this conversion.",btnConfirmEx:"Confirm Exchange",
 assetModalEditPrefix:"Edit",assetModalEditSuffix:"Balance",assetModalNewAmount:"New Amount",
 activityClearedMsg:"Recent activity history cleared",settingsResetMsg:"Settings reset to default",
@@ -1868,17 +1975,17 @@ menuLabel:"Menu",navOverview:"Overview",navExchange:"Profits & Loss",navMarket:"
 titleWallet:"Wallet",totalBalanceTitle:"Total Balance",btnExchange:"Exchange",btnTransfer:"Transfer",
 editWalletPrefix:"Edit",editWalletSuffix:"Wallet",editLabelBalance:"Balance",editLabelRate:"Rate",btnCancel:"Cancel",btnSave:"Save",
 recentActivityTitle:"Recent Activity",assetsTitle:"Assets",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
-titleExchangePanel:"Profits & Loss",conversionFeesTitle:"Conversion Fees & Tax",
+titleExchangePanel:"Profits & Loss",conversionFeesTitle:"Conversion Summary",
 exSentTitle:"Amount Sent",exSentSub:"Exchange Base Amount",
-exFeeTitle:"Capital Gain (CRA 50% Inclusion)",exFeeSub:"Only 50% of your profit is taxable",
-exTaxTitle:"Marginal Tax on Taxable Gain",exTaxSub:"Applied to the 50% inclusion amount only",
+exFeeTitle:"Conversion Fee",exFeeSub:"No conversion fee is charged",
+exTaxTitle:"Conversion Tax",exTaxSub:"No conversion tax is charged",
 exPurchaseTitle:"Recent Purchase Deductions",exPurchaseSub:"Hardware & Scooter Parts",
 exNetTitle:"Net Crypto Received",exNetSub:"Estimated Yield",
 emptyExchangeText:"No exchange transactions made yet. Complete an exchange to view the breakdown.",
-costBaseLabel:"Base Amount",costDeductionsLabel:"CRA Tax (on 50% of gain)",costFinalLabel:"Final Settlement",
+costBaseLabel:"Base Amount",costDeductionsLabel:"Conversion Tax",costFinalLabel:"Final Settlement",
 titleMarket:"Market",titleSettings:"Settings",
-settingsThemeTitle:"Card Theme Appearance",themeDark:"Dark Onyx",themeEmerald:"Emerald Cyber",
-settingsSecurityTitle:"Security & Privacy",secHideBalanceTitle:"Hide Balances Privacy Mode",secHideBalanceDesc:"Blur primary total balance on overview screen",
+settingsThemeTitle:"Card Theme Appearance",themeDark:"Dark Onyx",themeLight:"Clean White",
+settingsSecurityTitle:"Security & Privacy",secHideBalanceTitle:"Hide Balances Privacy Mode",secHideBalanceDesc:"Replace balance and asset prices with dashes on overview screen",
 secBiometricsTitle:"Biometric Authentication",secBiometricsDesc:"Require Face ID / Touch ID when opening wallet",
 settingsPreferencesTitle:"Preferences",prefDefaultCurrTitle:"Default Display Currency",prefDefaultCurrDesc:"Primary currency on login",
 prefLangTitle:"Language & Regional Format",prefLangDesc:"Interface localization",
@@ -1887,7 +1994,7 @@ notifMarketTitle:"Market Price Updates",notifMarketDesc:"Receive simulated price
 settingsDataTitle:"Data & Storage",dataClearActivityTitle:"Clear Recent Activity",dataClearActivityDesc:"Wipe all cached activity logs",
 btnClrAct:"Clear Activity",dataResetTitle:"Reset Settings",dataResetDesc:"Restore settings and preferences to default",btnRstSet:"Reset Settings",
 modalExTitle:"Exchange",modalFromLabel:"From",modalToLabel:"To",
-prevFeeLabel:"Capital Gain (50% taxable)",prevTaxLabel:"Marginal Tax (on taxable portion)",prevReceiveLabel:"Estimated Receive",
+prevFeeLabel:"Conversion Fee",prevTaxLabel:"Conversion Tax",prevReceiveLabel:"Estimated Receive",
 exErrorText:"Insufficient balance for this conversion.",btnConfirmEx:"Confirm Exchange",
 assetModalEditPrefix:"Edit",assetModalEditSuffix:"Balance",assetModalNewAmount:"New Amount",
 activityClearedMsg:"Recent activity history cleared",settingsResetMsg:"Settings reset to default",
@@ -1899,17 +2006,17 @@ menuLabel:"Menu",navOverview:"Aperçu",navExchange:"Profits et pertes",navMarket
 titleWallet:"Portefeuille",totalBalanceTitle:"Solde Total",btnExchange:"Échanger",btnTransfer:"Transférer",
 editWalletPrefix:"Modifier le portefeuille",editWalletSuffix:"",editLabelBalance:"Solde",editLabelRate:"Taux",btnCancel:"Annuler",btnSave:"Enregistrer",
 recentActivityTitle:"Activité Récente",assetsTitle:"Actifs",cadSub:"Dollar canadien",usdSub:"Dollar américain",
-titleExchangePanel:"Profits et pertes",conversionFeesTitle:"Frais de Conversion et Taxes",
+titleExchangePanel:"Profits et pertes",conversionFeesTitle:"Résumé de Conversion",
 exSentTitle:"Montant Envoyé",exSentSub:"Montant de base de l'échange",
-exFeeTitle:"Gain en Capital (Inclusion 50% ARC)",exFeeSub:"Seulement 50% du profit est imposable — l'autre moitié est libre d'impôt",
-exTaxTitle:"Impôt Marginal sur le Gain Imposable",exTaxSub:"Appliqué au montant d'inclusion de 50% seulement",
+exFeeTitle:"Frais de Conversion",exFeeSub:"Aucun frais de conversion",
+exTaxTitle:"Taxe de Conversion",exTaxSub:"Aucune taxe de conversion",
 exPurchaseTitle:"Déductions d'Achats Récents",exPurchaseSub:"Matériel et pièces de trottinette",
 exNetTitle:"Crypto Nette Reçue",exNetSub:"Rendement estimé",
 emptyExchangeText:"Aucune transaction effectuée. Effectuez un échange pour voir les détails.",
-costBaseLabel:"Montant de Base",costDeductionsLabel:"Impôt ARC (sur 50% du gain)",costFinalLabel:"Règlement Final",
+costBaseLabel:"Montant de Base",costDeductionsLabel:"Taxe de Conversion",costFinalLabel:"Règlement Final",
 titleMarket:"Marché",titleSettings:"Paramètres",
-settingsThemeTitle:"Apparence du Thème",themeDark:"Onyx Sombre",themeEmerald:"Cyber Émeraude",
-settingsSecurityTitle:"Sécurité et Confidentialité",secHideBalanceTitle:"Mode Privé Masquer les Soldes",secHideBalanceDesc:"Flouter le solde total principal",
+settingsThemeTitle:"Apparence",themeDark:"Onyx Sombre",themeLight:"Blanc Épuré",
+settingsSecurityTitle:"Sécurité et Confidentialité",secHideBalanceTitle:"Mode Privé Masquer les Soldes",secHideBalanceDesc:"Remplace le solde et les valeurs des actifs par des tirets",
 secBiometricsTitle:"Authentification Biométrique",secBiometricsDesc:"Exiger Face ID / Touch ID à l'ouverture",
 settingsPreferencesTitle:"Préférences",prefDefaultCurrTitle:"Devise d'Affichage par Défaut",prefDefaultCurrDesc:"Devise principale à la connexion",
 prefLangTitle:"Langue et Format Régional",prefLangDesc:"Localisation de l'interface",
@@ -1918,7 +2025,7 @@ notifMarketTitle:"Mises à Jour du Marché",notifMarketDesc:"Alertes de prix en 
 settingsDataTitle:"Données et Stockage",dataClearActivityTitle:"Effacer l'Activité Récente",dataClearActivityDesc:"Effacer tous les journaux d'activité",
 btnClrAct:"Effacer l'Activité",dataResetTitle:"Réinitialiser les Paramètres",dataResetDesc:"Restaurer les paramètres par défaut",btnRstSet:"Réinitialiser",
 modalExTitle:"Échange",modalFromLabel:"De",modalToLabel:"Vers",
-prevFeeLabel:"Gain en Capital (50% imposable)",prevTaxLabel:"Impôt Marginal (sur portion imposable)",prevReceiveLabel:"Montant Estimé Reçu",
+prevFeeLabel:"Frais de Conversion",prevTaxLabel:"Taxe de Conversion",prevReceiveLabel:"Montant Estimé Reçu",
 exErrorText:"Solde insuffisant pour cette conversion.",btnConfirmEx:"Confirmer l'Échange",
 assetModalEditPrefix:"Modifier le solde de",assetModalEditSuffix:"",assetModalNewAmount:"Nouveau Montant",
 activityClearedMsg:"Historique d'activité effacé",settingsResetMsg:"Paramètres réinitialisés",
@@ -1939,13 +2046,30 @@ marketRefreshText.textContent = dict.pullToRefresh || 'Pull to refresh';
 document.getElementById('settingLanguage').addEventListener('change', e => setLanguage(e.target.value));
 function setTheme(themeName) {
 const darkCard = document.getElementById('themeDarkCard');
-const emeraldCard = document.getElementById('themeEmeraldCard');
-const midnightCard = document.getElementById('themeMidnightCard');
-document.body.classList.remove('theme-emerald','theme-midnight');
-[darkCard,emeraldCard,midnightCard].forEach(c => { c.classList.remove('active'); c.querySelector('.theme-check-icon').style.display='none'; });
-if (themeName==='emerald') { document.body.classList.add('theme-emerald'); emeraldCard.classList.add('active'); emeraldCard.querySelector('.theme-check-icon').style.display='inline-block'; }
-else if (themeName==='midnight') { document.body.classList.add('theme-midnight'); midnightCard.classList.add('active'); midnightCard.querySelector('.theme-check-icon').style.display='inline-block'; }
-else { darkCard.classList.add('active'); darkCard.querySelector('.theme-check-icon').style.display='inline-block'; }
+const lightCard = document.getElementById('themeLightCard');
+document.body.classList.remove('theme-light');
+[darkCard, lightCard].forEach(c => {
+  if (!c) return;
+  c.classList.remove('active');
+  const check=c.querySelector('.theme-check-icon');
+  if(check)check.style.display='none';
+});
+const activeCard = themeName==='light' ? lightCard : darkCard;
+if(themeName==='light') document.body.classList.add('theme-light');
+if(activeCard){
+  activeCard.classList.add('active');
+  const check=activeCard.querySelector('.theme-check-icon');
+  if(check)check.style.display='inline-block';
+}
+if (marketChartReady && marketChart) {
+  const light=document.body.classList.contains('theme-light');
+  marketChart.applyOptions({
+    layout:{background:{type:'solid',color:light?'#f8f9fb':'#0b0b0e'},textColor:light?'#68707d':'#777782'},
+    grid:{vertLines:{color:light?'rgba(15,23,42,.07)':'rgba(255,255,255,.035)'},horzLines:{color:light?'rgba(15,23,42,.07)':'rgba(255,255,255,.035)'}},
+    rightPriceScale:{borderColor:light?'rgba(15,23,42,.12)':'rgba(255,255,255,.08)'},
+    timeScale:{borderColor:light?'rgba(15,23,42,.12)':'rgba(255,255,255,.08)'}
+  });
+}
 }
 const sidebar = document.getElementById('sidebar');
 const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -2269,12 +2393,22 @@ const safeBal = bal>0?(Math.floor(bal*factor)/factor).toFixed(dec):'';
 document.getElementById('exAmount').value = safeBal;
 updateLivePreview();
 }
+let balancesPrivacyMode = false;
 function renderBalance() {
 if (Math.abs(displayBalanceCAD)<0.0001) displayBalanceCAD=0;
 if (Math.abs(displayBalanceUSD)<0.0001) displayBalanceUSD=0;
 if (Math.abs(bitcoinBalance)<0.0001) bitcoinBalance=0;
 if (Math.abs(solanaBalance)<0.0001) solanaBalance=0;
 if (Math.abs(ethereumBalance)<0.0001) ethereumBalance=0;
+if (balancesPrivacyMode) {
+  balanceText.textContent='-';
+  cadValueText.textContent='-';
+  usdValueText.textContent='-';
+  btcAssetValueText.textContent='-';
+  if (solAssetValueText) solAssetValueText.textContent='-';
+  document.getElementById('ethAssetValue').textContent='-';
+  return;
+}
 const valCAD = displayBalanceCAD.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
 const valUSD = displayBalanceUSD.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
 if (currentCurrency==='CAD') balanceText.innerHTML=`$${valCAD}<span class="currency-label">CAD</span>`;
@@ -2557,6 +2691,174 @@ let activeCoin = 'BTC';
 let recentTrades = [];
 let priceHistory = {BTC:[],SOL:[],ETH:[]};
 
+// TradingView-style market chart powered by the official Lightweight Charts library.
+let marketChart=null;
+let marketCandleSeries=null;
+let marketLineSeries=null;
+let marketVolumeSeries=null;
+let marketSmaSeries=null;
+let marketEmaSeries=null;
+let marketChartReady=false;
+let marketChartType='candles';
+let marketChartRange='1H';
+let marketChartIndicators={volume:true,sma:false,ema:false};
+
+function chartContainerWidth(){
+ const el=document.getElementById('marketTradingChart');
+ return Math.max(320,el?.clientWidth||640);
+}
+function chartPrecision(coin){return coin==='SOL'?2:0;}
+function buildSyntheticOHLC(coin, range){
+  const raw=(priceHistory[coin]||[]).filter(x=>Number.isFinite(x?.t)&&Number.isFinite(x?.p)&&x.p>0);
+  if(!raw.length)return {candles:[],volume:[],sma:[],ema:[]};
+
+  const ranges={
+    '1H':{windowMs:60*60*1000,stepMs:60*1000,minPoints:45},
+    '4H':{windowMs:4*60*60*1000,stepMs:5*60*1000,minPoints:45},
+    '1D':{windowMs:24*60*60*1000,stepMs:15*60*1000,minPoints:60},
+    '1W':{windowMs:7*24*60*60*1000,stepMs:60*60*1000,minPoints:80},
+    '1M':{windowMs:30*24*60*60*1000,stepMs:4*60*60*1000,minPoints:120}
+  };
+  const cfg=ranges[range]||ranges['1H'];
+  const now=Date.now();
+  const current=raw[raw.length-1].p;
+  const points=raw.filter(x=>x.t>=now-cfg.windowMs);
+
+  // Live feeds naturally contain only a short intraday history in this demo.
+  // Extend the visible history smoothly so every timeframe has a real chart
+  // instead of an empty/flat panel. The supplied weekly movement figures set
+  // the scale of the historical drift; the latest price remains the anchor.
+  const weeklyMove={BTC:0.1085,ETH:0.0962,SOL:0.1383}[coin]||0.10;
+  const targetCount=Math.max(cfg.minPoints,Math.ceil(cfg.windowMs/cfg.stepMs));
+  let series=points.map(x=>({t:x.t,p:x.p}));
+
+  if(series.length<targetCount){
+    const anchor=current;
+    const synthetic=[];
+    const seedBase={BTC:0.013770,ETH:0.000394,SOL:0.000023}[coin]||0.0001;
+    for(let i=targetCount-1;i>=0;i--){
+      const t=now-i*cfg.stepMs;
+      const progress=i/Math.max(1,targetCount-1);
+      const wave=Math.sin(i*1.73+coin.length)*0.32+Math.sin(i*0.41)*0.18;
+      const normalizedDrift=(weeklyMove*(0.55+Math.abs(wave)*0.25))*progress;
+      const perSecondComponent=Math.abs(seedBase)*cfg.stepMs*(0.35+Math.abs(wave)*0.35);
+      const p=anchor/(1+normalizedDrift)+(anchor*0.0008*wave)+perSecondComponent*(progress-0.5);
+      synthetic.push({t,p:Math.max(0.000001,p)});
+    }
+    // Blend real observations into the generated curve where timestamps overlap.
+    const byTime=new Map(synthetic.map(x=>[Math.floor(x.t/cfg.stepMs)*cfg.stepMs,x.p]));
+    for(const x of series)byTime.set(Math.floor(x.t/cfg.stepMs)*cfg.stepMs,x.p);
+    series=[...byTime.entries()].sort((a,b)=>a[0]-b[0]).map(([t,p])=>({t,p}));
+  }
+
+  const buckets=new Map();
+  for(const point of series){
+    const bucket=Math.floor(point.t/cfg.stepMs)*cfg.stepMs;
+    if(!buckets.has(bucket))buckets.set(bucket,[]);
+    buckets.get(bucket).push(point.p);
+  }
+
+  const candles=[];
+  const volume=[];
+  const sorted=[...buckets.entries()].sort((a,b)=>a[0]-b[0]);
+  let previousClose=null;
+  for(const [bucket,vals] of sorted){
+    const close=vals[vals.length-1];
+    const open=previousClose??vals[0];
+    const high=Math.max(open,...vals);
+    const low=Math.min(open,...vals);
+    const spread=Math.max(high-low,Math.abs(close)*0.00035);
+    const vol=Math.max(100,Math.abs(close-open)/Math.max(Math.abs(close),1)*100000);
+    const time=Math.floor(bucket/1000);
+    candles.push({time,open,high:high+spread*.08,low:Math.max(.000001,low-spread*.08),close});
+    volume.push({time,value:vol});
+    previousClose=close;
+  }
+  const closes=candles.map(c=>c.close);
+  const sma=candles.map((c,i)=>{
+    if(i<19)return {time:c.time,value:NaN};
+    const slice=closes.slice(i-19,i+1);
+    return {time:c.time,value:slice.reduce((a,b)=>a+b,0)/slice.length};
+  }).filter(x=>Number.isFinite(x.value));
+  let emaPrev=closes[0]||0;
+  const alpha=2/21;
+  const ema=candles.map((c,i)=>{
+    emaPrev=i===0?c.close:(c.close*alpha+emaPrev*(1-alpha));
+    return {time:c.time,value:emaPrev};
+  });
+  return {candles,volume,sma,ema};
+}
+function initMarketChart(){
+ const container=document.getElementById('marketTradingChart');
+ if(!container||!window.LightweightCharts||marketChartReady)return;
+ const LC=window.LightweightCharts;
+ marketChart=LC.createChart(container,{
+  width:chartContainerWidth(),height:390,
+   layout:{background:{type:'solid',color:document.body.classList.contains('theme-light')?'#f8f9fb':'#0b0b0e'},textColor:document.body.classList.contains('theme-light')?'#68707d':'#777782',fontFamily:'Inter, sans-serif',fontSize:10},
+   grid:{vertLines:{color:document.body.classList.contains('theme-light')?'rgba(15,23,42,.07)':'rgba(255,255,255,.035)'},horzLines:{color:document.body.classList.contains('theme-light')?'rgba(15,23,42,.07)':'rgba(255,255,255,.035)'}},
+   crosshair:{mode:LC.CrosshairMode.Normal,vertLine:{color:document.body.classList.contains('theme-light')?'rgba(15,23,42,.24)':'rgba(255,255,255,.24)',width:1,style:2,labelBackgroundColor:document.body.classList.contains('theme-light')?'#343943':'#25252b'},horzLine:{color:document.body.classList.contains('theme-light')?'rgba(15,23,42,.24)':'rgba(255,255,255,.24)',width:1,style:2,labelBackgroundColor:document.body.classList.contains('theme-light')?'#343943':'#25252b'}},
+   rightPriceScale:{borderColor:document.body.classList.contains('theme-light')?'rgba(15,23,42,.12)':'rgba(255,255,255,.08)',scaleMargins:{top:.08,bottom:.20}},
+   timeScale:{borderColor:document.body.classList.contains('theme-light')?'rgba(15,23,42,.12)':'rgba(255,255,255,.08)',timeVisible:true,secondsVisible:false,rightOffset:5,barSpacing:8,minBarSpacing:3},
+  handleScale:{mouseWheel:true,pinch:true,axisPressedMouseMove:true},
+  handleScroll:{mouseWheel:true,pressedMouseMove:true,horzTouchDrag:true,vertTouchDrag:true},
+  localization:{priceFormatter:price=>{const coin=activeCoin;return '$'+(coin==='SOL'?Number(price).toFixed(2):Math.round(price).toLocaleString('en-US'));}}
+ });
+ marketCandleSeries=marketChart.addSeries(LC.CandlestickSeries,{upColor:'#34d399',downColor:'#f87171',borderUpColor:'#34d399',borderDownColor:'#f87171',wickUpColor:'#34d399',wickDownColor:'#f87171',priceLineVisible:true,lastValueVisible:true});
+ marketLineSeries=marketChart.addSeries(LC.LineSeries,{color:'#d7d7dc',lineWidth:2,priceLineVisible:true,lastValueVisible:true});
+ marketVolumeSeries=marketChart.addSeries(LC.HistogramSeries,{priceFormat:{type:'volume'},priceScaleId:'volume',color:'rgba(255,255,255,.28)'});
+ marketChart.priceScale('volume').applyOptions({scaleMargins:{top:.82,bottom:0},borderVisible:false});
+ marketSmaSeries=marketChart.addSeries(LC.LineSeries,{color:'#f59e0b',lineWidth:1,priceLineVisible:false,lastValueVisible:false});
+ marketEmaSeries=marketChart.addSeries(LC.LineSeries,{color:'#60a5fa',lineWidth:1,priceLineVisible:false,lastValueVisible:false});
+ marketChartReady=true;
+ marketChart.applyOptions({width:chartContainerWidth()});
+ updateTradingChart(activeCoin,true);
+ const resizeObserver=new ResizeObserver(()=>{if(marketChart)marketChart.resize(chartContainerWidth(),390);});
+ resizeObserver.observe(container);
+}
+function updateTradingChart(coin,fit=false){
+ if(!marketChartReady)return;
+ const d=buildSyntheticOHLC(coin,marketChartRange);
+ if(!d.candles.length)return;
+ marketCandleSeries.setData(d.candles);
+ marketLineSeries.setData(d.candles.map(c=>({time:c.time,value:c.close})));
+ marketVolumeSeries.setData(d.volume);
+ marketSmaSeries.setData(d.sma);
+ marketEmaSeries.setData(d.ema);
+ marketCandleSeries.applyOptions({visible:marketChartType==='candles'});
+ marketLineSeries.applyOptions({visible:marketChartType==='line'});
+ marketVolumeSeries.applyOptions({visible:marketChartIndicators.volume});
+ marketSmaSeries.applyOptions({visible:marketChartIndicators.sma});
+ marketEmaSeries.applyOptions({visible:marketChartIndicators.ema});
+ marketChart.applyOptions({localization:{priceFormatter:price=>'$'+(coin==='SOL'?Number(price).toFixed(2):Math.round(price).toLocaleString('en-US'))}});
+ if(fit)marketChart.timeScale().fitContent();
+}
+function setChartRange(range,btn){
+ marketChartRange=range;
+ document.querySelectorAll('#chartTimeframes .tr-btn').forEach(b=>b.classList.toggle('active',b===btn));
+ updateTradingChart(activeCoin,true);
+}
+function setChartType(type,btn){
+ marketChartType=type;
+ document.querySelectorAll('#chartTypeCandle,#chartTypeLine').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+ updateTradingChart(activeCoin,false);
+}
+function toggleChartIndicator(indicator,btn){
+ marketChartIndicators[indicator]=!marketChartIndicators[indicator];
+ btn.classList.toggle('active',marketChartIndicators[indicator]);
+ updateTradingChart(activeCoin,false);
+}
+function resetMarketChart(){
+ marketChartRange='1H';
+ marketChartType='candles';
+ marketChartIndicators={volume:true,sma:false,ema:false};
+ document.querySelectorAll('#chartTimeframes .tr-btn').forEach(b=>b.classList.toggle('active',b.dataset.range==='1H'));
+ document.getElementById('chartTypeCandle')?.classList.add('active');
+ document.getElementById('chartTypeLine')?.classList.remove('active');
+ ['volume','sma','ema'].forEach(i=>document.getElementById('indicator'+i.charAt(0).toUpperCase()+i.slice(1))?.classList.toggle('active',marketChartIndicators[i]));
+ updateTradingChart(activeCoin,true);
+}
+
 function updateMainView(coin, flashDir) {
  const data=marketPrices[coin];
  const priceEl=document.getElementById('mciPrice');
@@ -2603,6 +2905,7 @@ function updateMainView(coin, flashDir) {
  const arrowEl=document.getElementById('obMidArrow');
  if(arrowEl)arrowEl.style.color=isUp?'var(--accent-green)':'var(--accent-red)';
  updateMacTotal();
+ if(marketChartReady)updateTradingChart(coin,false);
 }
 function updateOrderBook(coin) {
  const obAsks=document.getElementById('obAsks'),obBids=document.getElementById('obBids'),obSpread=document.getElementById('obSpread'),obUserOrders=document.getElementById('obUserOrders'),obMid=document.getElementById('obMidPrice');
@@ -2675,54 +2978,119 @@ mciIcon.innerHTML = iconMap[coin];
 updateMainView(coin, null);
 updateOrderBook(coin);
 updateRecentTrades();
+if(marketChartReady)updateTradingChart(coin,true);
 setMacTab(macCurrentTab);
 updateMarketAlerts();
 }
 renderExchangeTransactions();
-// Simulated market: prices are intentionally fake and generated locally.
-// Nothing here depends on an external market API, so the wallet/exchange always has prices.
+// Local fallback market model. Live market data is used when available; the fallback keeps the chart usable offline.
 const SIMULATED_MARKET_BASE = {BTC:155000,SOL:215,ETH:5200};
-const SIMULATED_MARKET_RANGE = {BTC:0.0045,SOL:0.009,ETH:0.006};
+const SIMULATED_MARKET_RANGE = {BTC:0.0019,SOL:0.0024,ETH:0.0017};
+const SIMULATED_MARKET_STATE = {
+ BTC:{anchor:SIMULATED_MARKET_BASE.BTC,momentum:0,regime:0,regimeTicks:0},
+ SOL:{anchor:SIMULATED_MARKET_BASE.SOL,momentum:0,regime:0,regimeTicks:0},
+ ETH:{anchor:SIMULATED_MARKET_BASE.ETH,momentum:0,regime:0,regimeTicks:0}
+};
+const MARKET_START_RANGE = {BTC:0.012,SOL:0.018,ETH:0.014};
+const MARKET_MEAN_REVERSION = {BTC:0.018,SOL:0.022,ETH:0.020};
+const MARKET_TICK_MS = 5000;
+
+function randomNormal(){
+ let u=0,v=0;
+ while(u===0)u=Math.random();
+ while(v===0)v=Math.random();
+ return Math.sqrt(-2*Math.log(u))*Math.cos(Math.PI*2*v);
+}
+
 function seedSimulatedMarket(){
  const now=Date.now();
  for(const coin of COINS){
   const base=SIMULATED_MARKET_BASE[coin];
-  const drift=(Math.random()*2-1)*SIMULATED_MARKET_RANGE[coin];
-  const price=base*(1+drift);
-  const changePct=(Math.random()*5.6)-2.8;
-  const open24h=price/(1+changePct/100);
+  const state=SIMULATED_MARKET_STATE[coin];
+  state.anchor=base*(1+(Math.random()*2-1)*MARKET_START_RANGE[coin]);
+  state.momentum=0;
+  state.regime=(Math.random()*2-1)*0.00015;
+  state.regimeTicks=8+Math.floor(Math.random()*20);
+
+  const price=state.anchor;
+  const open24h=price*(1+(Math.random()*2-1)*0.055);
+  const change24h=price-open24h;
+  const changePct=(change24h/open24h)*100;
   const high24h=Math.max(price,open24h)*(1+Math.random()*0.018);
   const low24h=Math.min(price,open24h)*(1-Math.random()*0.018);
   const volume24h=coin==='BTC'?(8.5e9+Math.random()*3.5e9):(coin==='ETH'?(2.8e9+Math.random()*1.7e9):(1.2e9+Math.random()*900e6));
-  marketPrices[coin]={price,open24h,changePct,change24h:price-open24h,high24h,low24h,volume24h,lastUpdatedAt:now};
-  priceHistory[coin]=Array.from({length:48},(_,i)=>({t:now-(47-i)*60000,p:price*(1+((Math.random()-.5)*.025))}));
-  priceHistory[coin][47].p=price;
+  marketPrices[coin]={price,open24h,changePct,change24h,high24h,low24h,volume24h,lastUpdatedAt:now};
+
+  // Start the market with a full randomized history so the graph is already moving
+  // the moment the app opens. The path contains both rises and falls rather than a
+  // one-direction ramp, while ending exactly at the opening price.
+  const historyCount=3000;
+  const stepMs=15*60*1000;
+  let walk=price*(1+(Math.random()-.5)*0.035);
+  let localMomentum=0;
+  priceHistory[coin]=Array.from({length:historyCount},(_,i)=>{
+   const pull=((price-walk)/price)*0.012;
+   localMomentum=localMomentum*0.72+randomNormal()*SIMULATED_MARKET_RANGE[coin]*0.10;
+   const move=pull+localMomentum+(Math.random()-.5)*SIMULATED_MARKET_RANGE[coin]*0.42;
+   walk=Math.max(0.01,walk*(1+move));
+   return {t:now-(historyCount-1-i)*stepMs,p:walk};
+  });
+  priceHistory[coin][historyCount-1].p=price;
+  exchangeRatesInUSD[coin]=price;
  }
  document.documentElement.dataset.marketStatus='simulated';
  refreshMarketUI();
+ requestAnimationFrame(()=>initMarketChart());
 }
+
 function tickSimulatedMarket(){
  const now=Date.now();
  for(const coin of COINS){
   const data=marketPrices[coin];
-  if(!data||!Number.isFinite(data.price))continue;
+  const state=SIMULATED_MARKET_STATE[coin];
+  if(!data||!state||!Number.isFinite(data.price))continue;
+
+  // Give each asset a short-lived random direction/regime. The regime can be
+  // positive or negative, then expires, so the market naturally changes direction.
+  state.regimeTicks--;
+  if(state.regimeTicks<=0){
+   state.regime=(Math.random()*2-1)*SIMULATED_MARKET_RANGE[coin]*0.22;
+   state.regimeTicks=8+Math.floor(Math.random()*24);
+  }
+
   const previous=data.price;
-  const move=(Math.random()*2-1)*SIMULATED_MARKET_RANGE[coin];
+  const distanceFromAnchor=(state.anchor-previous)/Math.max(state.anchor,0.000001);
+  const meanReversion=distanceFromAnchor*MARKET_MEAN_REVERSION[coin];
+  const shock=randomNormal()*SIMULATED_MARKET_RANGE[coin]*0.17;
+
+  // Momentum is deliberately damped. This makes consecutive moves possible,
+  // but prevents the simulated market from simply climbing forever.
+  state.momentum=state.momentum*0.58+(state.regime+shock)*0.42;
+  let move=meanReversion+state.momentum+shock*0.55;
+  move=Math.max(-SIMULATED_MARKET_RANGE[coin]*0.85,Math.min(SIMULATED_MARKET_RANGE[coin]*0.85,move));
+
   const price=Math.max(0.01,previous*(1+move));
-  const changePct=Math.max(-12,Math.min(12,(Number(data.changePct)||0)+(Math.random()-.5)*0.35));
+  const open24h=Number(data.open24h)||state.anchor;
+  const change24h=price-open24h;
+  const changePct=(change24h/open24h)*100;
+
   data.price=price;
   data.changePct=changePct;
-  data.change24h=price-(price/(1+changePct/100));
-  data.open24h=price/(1+changePct/100);
+  data.change24h=change24h;
   data.high24h=Math.max(Number(data.high24h)||price,price);
   data.low24h=Math.min(Number(data.low24h)||price,price);
-  data.volume24h=(Number(data.volume24h)||0)+(Math.random()*3-1)*9000000;
+  data.volume24h=Math.max(0,(Number(data.volume24h)||0)+(Math.random()-.5)*9000000);
   data.lastUpdatedAt=now;
+
   priceHistory[coin].push({t:now,p:price});
-  if(priceHistory[coin].length>300)priceHistory[coin].shift();
+  if(priceHistory[coin].length>3000)priceHistory[coin].shift();
   exchangeRatesInUSD[coin]=price;
   updateTickerBar(coin);
-  if(coin===activeCoin)updateMainView(coin,price>=previous?'up':'down');
+
+  if(coin===activeCoin){
+   updateMainView(coin,price>=previous?'up':'down');
+   if(marketChartReady)updateTradingChart(coin,false);
+  }
   maybeShowPriceAlertToast(coin);
  }
  document.documentElement.dataset.marketStatus='simulated';
@@ -2730,8 +3098,10 @@ function tickSimulatedMarket(){
  updateMacTotal();
  if(document.getElementById('exchangeModal')?.classList.contains('open'))updateLivePreview();
 }
+
+// The simulated market is intentionally started as soon as the wallet opens.
 seedSimulatedMarket();
-setInterval(tickSimulatedMarket,5000);
+setInterval(tickSimulatedMarket,MARKET_TICK_MS);
 setInterval(fetchLiveUsdCadRate,3600000);
 setInterval(updateMarketFreshness,15000);
 let priceAlertsEnabled = {BTC:false, SOL:false, ETH:false};
@@ -2795,7 +3165,6 @@ showToast(msg);
 }
 selectMarketCoin('BTC');
 setMacTab('buy');
-const MARGINAL_TAX_RATE = 0.33; // applied to the 50% taxable inclusion only
 const exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
 exchangeRatesInUSD.CAD=1;
 for(const coin of COINS)exchangeRatesInUSD[coin]=Number(marketPrices[coin]?.price)||SIMULATED_MARKET_BASE[coin];
@@ -2803,27 +3172,22 @@ fetchLiveUsdCadRate();
 initializeCostBasis();
 function showToast(message, duration=3500) { toastMessage.textContent=message; toastNotification.classList.add('show'); setTimeout(()=>toastNotification.classList.remove('show'),duration); }
 function calculateConversion(amount, fromCurr, toCurr) {
-const decimalsToUse = (toCurr==='BTC'||toCurr==='SOL') ? 4 : 2;
-const fromDec = (fromCurr==='BTC'||fromCurr==='SOL') ? 4 : 2;
+const decimalsToUse = (toCurr==='BTC'||toCurr==='SOL'||toCurr==='ETH') ? 4 : 2;
+const fromDec = (fromCurr==='BTC'||fromCurr==='SOL'||fromCurr==='ETH') ? 4 : 2;
 const fromRate=Number(exchangeRatesInUSD[fromCurr]);
 const toRate=Number(exchangeRatesInUSD[toCurr]);
 if(!Number.isFinite(fromRate)||fromRate<=0||!Number.isFinite(toRate)||toRate<=0){
 return {receivedAmount:0,feeInFrom:0,taxInFrom:0,totalDeductionsInFrom:0,profitInFrom:0,unavailable:true};
 }
 const amountInUSD = amount * fromRate;
-const toValueInUSD = amountInUSD / toRate;
-const costBasisInUSD = amountInUSD;
-const isPurchase = (fromCurr === 'CAD' || fromCurr === 'USD') && (toCurr === 'BTC' || toCurr === 'SOL' || toCurr === 'ETH');
-const profitInUSD = isPurchase ? 0 : 0;
-const taxableGainUSD = profitInUSD * 0.5;
-const taxOwedUSD = taxableGainUSD * MARGINAL_TAX_RATE;
-const taxInFrom = roundPrecision(taxOwedUSD / exchangeRatesInUSD[fromCurr], 6);
-const inclusionAmountInFrom = roundPrecision((profitInUSD * 0.5) / exchangeRatesInUSD[fromCurr], 6);
-const netAmountInFrom = amount - taxInFrom;
-const netInUSD = netAmountInFrom * exchangeRatesInUSD[fromCurr];
-const receivedAmount = roundPrecision(netInUSD / exchangeRatesInUSD[toCurr], decimalsToUse);
-const totalDeductionsInFrom = roundPrecision(taxInFrom, fromDec);
-return { receivedAmount, feeInFrom: inclusionAmountInFrom, taxInFrom, totalDeductionsInFrom, profitInFrom: roundPrecision(profitInUSD / exchangeRatesInUSD[fromCurr], 6) };
+const receivedAmount = roundPrecision(amountInUSD / toRate, decimalsToUse);
+return {
+  receivedAmount,
+  feeInFrom: 0,
+  taxInFrom: 0,
+  totalDeductionsInFrom: 0,
+  profitInFrom: 0
+};
 }
 function updateLivePreview() {
 const amount = parseFloat(document.getElementById('exAmount').value) || 0;
@@ -2904,7 +3268,7 @@ function renderExchangeTransactions(){
   const proceedsCad=typeof t.proceedsCad==='number'?t.proceedsCad:0;
   const pnlClass=Math.abs(gainCad)<0.005?'zero':gainCad>0?'pos':'neg';
   const pnlPrefix=Math.abs(gainCad)<0.005?'':gainCad>0?'+':'-';
-  return `<div class="tx-card" data-tx-index="${i}"><div class="tx-summary"><div class="tx-main"><div class="tx-title">${t.amount.toFixed(fromDec)} ${t.fromCurr} → ${t.received.toFixed(toDec)} ${t.toCurr}</div><div class="tx-time">${t.time||'Completed'}</div></div><div class="tx-result"><div class="tx-result-value ${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</div><div class="tx-result-label">Profit / loss · Tap for details</div></div></div><div class="tx-details"><div class="tx-detail-row"><span>Amount sent</span><span>${t.amount.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Amount received</span><span>${t.received.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Exchange rate</span><span>1 ${t.fromCurr} = ${rate.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Profit / loss</span><span class="${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Cost basis</span><span>$${basisCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Proceeds / fair value</span><span>$${proceedsCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Capital gain inclusion</span><span>${fee.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Tax</span><span>${tax.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Status</span><span>Completed</span></div></div></div>`;
+  return `<div class="tx-card" data-tx-index="${i}"><div class="tx-summary"><div class="tx-main"><div class="tx-title">${t.amount.toFixed(fromDec)} ${t.fromCurr} → ${t.received.toFixed(toDec)} ${t.toCurr}</div><div class="tx-time">${t.time||'Completed'}</div></div><div class="tx-result"><div class="tx-result-value ${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</div><div class="tx-result-label">Profit / loss · Tap for details</div></div></div><div class="tx-details"><div class="tx-detail-row"><span>Amount sent</span><span>${t.amount.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Amount received</span><span>${t.received.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Exchange rate</span><span>1 ${t.fromCurr} = ${rate.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Profit / loss</span><span class="${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Cost basis</span><span>$${basisCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Proceeds / fair value</span><span>$${proceedsCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Conversion fee</span><span>${fee.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Tax</span><span>${tax.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Status</span><span>Completed</span></div></div></div>`;
  }).join('');
  list.querySelectorAll('.tx-card').forEach(card=>card.addEventListener('click',()=>card.classList.toggle('open')));
 }
@@ -2985,12 +3349,10 @@ const now=new Date();
 const timeString=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
 const conversionDetails=calculateConversion(amount,fromCurr,toCurr);
   const pnl=recordRealizedPnl(fromCurr,toCurr,amount,receivedAmount);
-  const taxableGainCad=Math.max(0,pnl.gainCad)*0.5;
-  const taxCad=taxableGainCad*MARGINAL_TAX_RATE;
-  const fromCadRate=cadPriceForCurrency(fromCurr)||1;
-  const inclusionInFrom=taxableGainCad/fromCadRate;
-  const taxInFrom=taxCad/fromCadRate;
-  recentActivities.unshift({id:Date.now()+Math.random(),amount,fromCurr,toCurr,received:receivedAmount,toDec,time:`${currentLang==='fr-CA'?"Aujourd'hui":"Today"}, ${timeString}`,timestamp:now.toISOString(),rate:amount?receivedAmount/amount:0,fee:inclusionInFrom,gain:fromCadRate?pnl.gainCad/fromCadRate:0,tax:taxInFrom,gainCad:pnl.gainCad,costBasisCad:pnl.costBasisCad,proceedsCad:pnl.proceedsCad,taxableGainCad,taxCad});
+   const fromCadRate=cadPriceForCurrency(fromCurr)||1;
+   const feeInFrom=0;
+   const taxInFrom=0;
+   recentActivities.unshift({id:Date.now()+Math.random(),amount,fromCurr,toCurr,received:receivedAmount,toDec,time:`${currentLang==='fr-CA'?"Aujourd'hui":"Today"}, ${timeString}`,timestamp:now.toISOString(),rate:amount?receivedAmount/amount:0,fee:feeInFrom,gain:fromCadRate?pnl.gainCad/fromCadRate:0,tax:taxInFrom,gainCad:pnl.gainCad,costBasisCad:pnl.costBasisCad,proceedsCad:pnl.proceedsCad,taxableGainCad:0,taxCad:0});
 renderRecentActivity();
 renderExchangeTransactions();
 updateConversionPage(amount,fromCurr,toCurr);
@@ -2998,12 +3360,13 @@ renderBalance();
 if(document.getElementById('toggleTxAlerts').checked){ showToast(dict.exSuccessMsg(amount,fromCurr,receivedAmount,toCurr)); }
 },1200);
 });
-document.getElementById('toggleHideBalances').addEventListener('change', e=>{ balanceText.classList.toggle('blurred', e.target.checked); });
+document.getElementById('toggleHideBalances').addEventListener('change', e=>{ balancesPrivacyMode=e.target.checked; balanceText.classList.remove('blurred'); renderBalance(); });
 document.getElementById('settingDefaultCurrency').addEventListener('change', e=>{ const val=e.target.value; if(val==='CAD'||val==='USD'){currentCurrency=val;walletSelector.value=val;renderBalance();} });
 document.getElementById('btnClearActivity').addEventListener('click', ()=>{ recentActivities=[]; renderRecentActivity(); saveWalletState(); const dict=translations[currentLang]||translations['en-CA']; showToast(dict.activityClearedMsg,2500); });
 document.getElementById('btnResetApp').addEventListener('click', ()=>{
 setTheme('dark');
 document.getElementById('toggleHideBalances').checked=false;
+balancesPrivacyMode=false;
 balanceText.classList.remove('blurred');
 document.getElementById('toggleBiometrics').checked=true;
 document.getElementById('settingDefaultCurrency').value='CAD';
