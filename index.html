@@ -1727,9 +1727,221 @@ body{background:radial-gradient(circle at 75% 5%,rgba(99,102,241,.09),transparen
 .mac-input-field{border-radius:14px!important;border-color:rgba(255,255,255,.09)!important;background:rgba(255,255,255,.035)!important;}
 .mac-submit-btn{border-radius:14px!important;box-shadow:0 12px 25px rgba(0,0,0,.2);font-weight:800!important;}
 /* Demo-market badge injected by JS */
-.demo-market-badge{display:inline-flex;align-items:center;gap:6px;margin-left:8px;padding:5px 9px;border-radius:999px;background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.2);color:#facc15;font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;vertical-align:middle;}
-.demo-market-dot{width:6px;height:6px;border-radius:50%;background:#facc15;box-shadow:0 0 10px rgba(250,204,21,.55);}
-@media(max-width:700px){.theme-grid{grid-template-columns:1fr!important}.theme-preview-box{height:72px!important}.settings-row{padding:14px!important}.demo-market-badge{display:flex;margin:7px 0 0;width:max-content}.market-live-price{font-size:clamp(28px,9vw,44px)!important;}}
+
+
+/* ---------- final visual system ---------- */
+:root {
+  --surface-1: rgba(255,255,255,.045);
+  --surface-2: rgba(255,255,255,.065);
+  --surface-3: rgba(255,255,255,.09);
+  --focus-ring: 0 0 0 3px rgba(255,255,255,.08);
+  --ease-out: cubic-bezier(.22,1,.36,1);
+  --ease-spring: cubic-bezier(.34,1.35,.64,1);
+}
+
+button, input, select, a { font: inherit; }
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.scroll-content {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.dashboard-title {
+  font-size: clamp(22px, 2vw, 28px);
+  letter-spacing: -.8px;
+}
+
+.balance-card,
+.asset-list,
+.activity-panel,
+.exchange-transactions,
+.market-chart-panel,
+.orderbook-panel,
+.market-action-card,
+.recent-trades-panel,
+.profit-summary-card {
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.035) inset,
+    0 18px 50px -32px rgba(0,0,0,.9);
+}
+
+.balance-card::before,
+.market-chart-panel::before,
+.profit-summary-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, rgba(255,255,255,.055), transparent 28%);
+  opacity: .65;
+}
+
+.balance-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.ticker-item {
+  min-width: 150px;
+  padding: 15px 18px;
+}
+
+.ticker-item.selected {
+  background: rgba(255,255,255,.035);
+}
+
+.market-chart-panel {
+  position: relative;
+}
+
+.market-chart {
+  display: block;
+  width: 100%;
+  height: 230px;
+  overflow: visible;
+}
+
+.chart-grid-lines line {
+  stroke: rgba(255,255,255,.055);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.chart-area-fill {
+  fill: url(#marketChartFill);
+}
+
+.chart-line {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 7px rgba(255,255,255,.16));
+}
+
+.chart-dot {
+  fill: #fff;
+  stroke: rgba(255,255,255,.25);
+  stroke-width: 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.chart-reference-note {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.chart-reference-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.5);
+  box-shadow: 0 0 0 3px rgba(255,255,255,.05);
+}
+
+.chart-timerange {
+  align-items: center;
+}
+
+.tr-btn {
+  min-width: 44px;
+}
+
+.orderbook-panel,
+.market-action-card,
+.recent-trades-panel {
+  box-shadow: 0 18px 42px -30px rgba(0,0,0,.85);
+}
+
+.ob-row {
+  min-height: 29px;
+}
+
+.ob-row-fill {
+  transition: width .28s var(--ease-out);
+}
+
+.mac-input-field input {
+  min-width: 0;
+}
+
+.mac-submit-btn {
+  min-height: 46px;
+}
+
+.mac-tab {
+  position: relative;
+}
+
+.mac-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.tx-card {
+  box-shadow: 0 8px 24px -24px rgba(0,0,0,.8);
+}
+
+.modal-card {
+  box-shadow:
+    0 28px 80px rgba(0,0,0,.7),
+    0 1px 0 rgba(255,255,255,.06) inset;
+}
+
+.toast-notification {
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+@media (max-width: 900px) {
+  .market-chart { height: 200px; }
+  .market-live-price { font-size: 32px; }
+}
+
+@media (max-width: 600px) {
+  .scroll-content { max-width: none; }
+  .market-chart-header { padding: 18px 18px 15px; }
+  .chart-timerange { padding: 12px 18px 9px; overflow-x: auto; }
+  .chart-canvas-area { padding: 16px 18px 18px; }
+  .market-chart { height: 180px; }
+  .market-live-price { font-size: 30px; }
+  .mci-name { font-size: 17px; }
+  .chart-stats-strip { padding: 15px 18px; }
+  .market-right-panel { gap: 14px; }
+  .mac-body { padding: 17px; }
+  .toast-notification {
+    left: 16px;
+    right: 16px;
+    top: max(16px, calc(env(safe-area-inset-top) + 10px));
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -1805,7 +2017,7 @@ body{background:radial-gradient(circle at 75% 5%,rgba(99,102,241,.09),transparen
 </div>
 <div class="sidebar-group">
 <a href="#" class="sidebar-item active" data-target="walletPanel"><i data-lucide="wallet"></i><span data-i18n="navOverview">Overview</span></a>
-<a href="#" class="sidebar-item" data-target="exchangePanel"><i data-lucide="arrow-left-right"></i><span data-i18n="navExchange">Profits &amp; Loss</span></a>
+<a href="#" class="sidebar-item" data-target="exchangePanel"><i data-lucide="arrow-left-right"></i><span data-i18n="navExchange">Profits &amp; Gains</span></a>
 <a href="#" class="sidebar-item" data-target="marketPanel"><i data-lucide="line-chart"></i><span data-i18n="navMarket">Market</span></a>
 <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span data-i18n="navSettings">Settings</span></a>
 </div>
@@ -1899,23 +2111,23 @@ body{background:radial-gradient(circle at 75% 5%,rgba(99,102,241,.09),transparen
 <div class="dashboard-header">
 <div class="dashboard-title-group">
 <button class="menu-btn" onclick="openSidebar()"><i data-lucide="menu"></i></button>
-<h1 class="dashboard-title" data-i18n="titleExchangePanel">Profits &amp; Loss</h1>
+<h1 class="dashboard-title" data-i18n="titleExchangePanel">Profits &amp; Gains</h1>
 </div>
 
 </div>
 <div class="profit-summary-card">
-<div class="profit-summary-label">Total profit &amp; loss</div>
+<div class="profit-summary-label">Total profits &amp; gains</div>
 <div class="profit-summary-value" id="totalProfitGains">+$0.00 <span>CAD</span></div>
 <div class="profit-summary-sub">Realized profit or loss from completed crypto sales and swaps</div>
 </div>
 <div class="profit-period-grid">
   <div class="profit-period-card">
-    <div class="profit-period-label">Daily profit &amp; loss</div>
+    <div class="profit-period-label">Daily profits &amp; gains</div>
     <div class="profit-period-value zero" id="dailyProfitLoss">$0.00 <span>CAD</span></div>
     <div class="profit-period-sub">Since midnight</div>
   </div>
   <div class="profit-period-card">
-    <div class="profit-period-label">Monthly profit &amp; loss</div>
+    <div class="profit-period-label">Monthly profits &amp; gains</div>
     <div class="profit-period-value zero" id="monthlyProfitLoss">$0.00 <span>CAD</span></div>
     <div class="profit-period-sub">Since the start of this month</div>
   </div>
@@ -1971,17 +2183,17 @@ body{background:radial-gradient(circle at 75% 5%,rgba(99,102,241,.09),transparen
 <div class="market-ticker-bar" id="marketTickerBar">
 <div class="ticker-item selected" id="tickerBTC" onclick="selectMarketCoin('BTC')">
 <div class="ticker-symbol">BTC / CAD</div>
-<div class="ticker-price" id="tickerPriceBTC">Demo price</div>
+<div class="ticker-price" id="tickerPriceBTC">Reference price</div>
 <div class="ticker-change up" id="tickerChangeBTC">—</div>
 </div>
 <div class="ticker-item" id="tickerSOL" onclick="selectMarketCoin('SOL')">
 <div class="ticker-symbol">SOL / CAD</div>
-<div class="ticker-price" id="tickerPriceSOL">Demo price</div>
+<div class="ticker-price" id="tickerPriceSOL">Reference price</div>
 <div class="ticker-change up" id="tickerChangeSOL">—</div>
 </div>
 <div class="ticker-item" id="tickerETH" onclick="selectMarketCoin('ETH')">
 <div class="ticker-symbol">ETH / CAD</div>
-<div class="ticker-price" id="tickerPriceETH">Demo price</div>
+<div class="ticker-price" id="tickerPriceETH">Reference price</div>
 <div class="ticker-change up" id="tickerChangeETH">—</div>
 </div>
 </div>
@@ -2003,7 +2215,7 @@ body{background:radial-gradient(circle at 75% 5%,rgba(99,102,241,.09),transparen
 </button>
 </div>
 <div>
-<div class="market-live-price" id="mciPrice">Demo price</div>
+<div class="market-live-price" id="mciPrice">Reference price</div>
 <div class="market-price-meta">
 <div class="mpm-change up" id="mciChange">—</div>
 <div class="mpm-badge up" id="mciPct">—</div>
@@ -2011,6 +2223,27 @@ body{background:radial-gradient(circle at 75% 5%,rgba(99,102,241,.09),transparen
 <div class="mpm-period">24h</div>
 </div>
 </div>
+</div>
+<div class="chart-timerange" id="chartTimeRange">
+<button class="tr-btn active" data-range="1H" type="button">1H</button>
+<button class="tr-btn" data-range="1D" type="button">1D</button>
+<button class="tr-btn" data-range="1W" type="button">1W</button>
+<button class="tr-btn" data-range="1M" type="button">1M</button>
+</div>
+<div class="chart-canvas-area">
+<svg class="market-chart" id="marketChart" viewBox="0 0 900 220" preserveAspectRatio="none" role="img" aria-label="Reference market price chart">
+<defs>
+<linearGradient id="marketChartFill" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="rgba(255,255,255,0.18)"/>
+<stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+</linearGradient>
+</defs>
+<g class="chart-grid-lines" id="chartGridLines"></g>
+<path class="chart-area-fill" id="chartAreaFill"></path>
+<path class="chart-line" id="chartLine"></path>
+<circle class="chart-dot" id="chartDot" r="4"></circle>
+</svg>
+<div class="chart-reference-note"><span class="chart-reference-dot"></span>Reference prices · not live</div>
 </div>
 <div class="chart-stats-strip">
 <div class="css-stat">
@@ -2638,15 +2871,14 @@ closeSidebar();
 });
 });
 let currentCurrency = 'CAD';
-let randomStartingValue = Math.floor(Math.random()*1001)+2000;
-let displayBalanceCAD = randomStartingValue + Math.random();
+let displayBalanceCAD = 2500.00;
 let internalHiddenBalanceCAD = displayBalanceCAD;
 let displayBalanceUSD = 0.00;
 let internalHiddenBalanceUSD = 0.00;
 let balanceRateCAD = 0.00;
 let balanceRateUSD = 0.00;
 let bitcoinBalance = 0.00;
-let solanaBalance = parseFloat((Math.random() * (46.482340 - 13.839130) + 13.839130).toFixed(6));
+let solanaBalance = 0.00;
 let ethereumBalance = 0.00;
 const balanceText = document.getElementById('totalBalance');
 const cadValueText = document.getElementById('cadValue');
@@ -2728,319 +2960,159 @@ assetModalInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefa
 (function setupAssetTripleClicks(){document.querySelectorAll('.item-value[data-asset]').forEach(el=>{let clicks=[];el.addEventListener('click',e=>{const now=Date.now();clicks.push(now);clicks=clicks.filter(t=>now-t<=1000);if(clicks.length>=3){clicks=[];e.preventDefault();e.stopPropagation();openAssetModal(el.getAttribute('data-asset')); }});});})();
 window.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;if(!e.shiftKey)return;if(e.key.toLowerCase()==='q'){e.preventDefault();openWalletEditor();}});
 
-function updateTickerBar(coin){
- const data=marketPrices?.[coin];
- const priceEl=document.getElementById(`tickerPrice${coin}`);
- const changeEl=document.getElementById(`tickerChange${coin}`);
- if(!priceEl||!changeEl)return;
- if(!data||!Number.isFinite(data.price)){
-  priceEl.textContent='Live price unavailable';
-  changeEl.textContent='—';
-  changeEl.className='ticker-change';
-  return;
- }
- const price=coin==='SOL'?`$${data.price.toFixed(2)}`:`$${data.price.toLocaleString('en-US',{maximumFractionDigits:0})}`;
- const pct=Number(data.changePct);
- priceEl.textContent=price;
- if(Number.isFinite(pct)){
-  const sign=pct>0?'+':'';
-  changeEl.textContent=`${sign}${pct.toFixed(2)}% · DEMO`;
-  changeEl.className=`ticker-change ${pct>=0?'up':'down'}`;
- }else{
-  changeEl.textContent='—';
-  changeEl.className='ticker-change';
- }
+const COINS = ['BTC', 'SOL', 'ETH'];
+const USD_CAD_REFERENCE = 1.365;
+const REFERENCE_MARKET = {
+  BTC: { price: 142500, open24h: 140850, change24h: 1650, changePct: 1.17, high24h: 144900, low24h: 139700, volume24h: 28400000000 },
+  SOL: { price: 228.40, open24h: 221.85, change24h: 6.55, changePct: 2.95, high24h: 233.70, low24h: 217.20, volume24h: 3120000000 },
+  ETH: { price: 4860, open24h: 4775, change24h: 85, changePct: 1.78, high24h: 4935, low24h: 4690, volume24h: 16800000000 }
+};
+
+function emptyMarketData() {
+  return {
+    price: null, open24h: null, change24h: null, changePct: null,
+    high24h: null, low24h: null, volume24h: null, lastUpdatedAt: 0
+  };
 }
 
-let lastMarketDetailsFetch=0;
-const MARKET_PRICE_POLL_MS=12000;
-const MARKET_DETAILS_POLL_MS=60000;
-const COINS=['BTC','SOL','ETH'];
-const COINGECKO_IDS={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
-const EMPTY_MARKET={price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null};
-
-async function fetchJson(url, timeoutMs=9000){
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),timeoutMs);
- try{
-  const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
-  if(!response.ok)throw new Error(`HTTP ${response.status}`);
-  return await response.json();
- }finally{clearTimeout(timeout);}
+function formatMarketPrice(coin, value) {
+  if (!Number.isFinite(value)) return '—';
+  return coin === 'SOL'
+    ? `$${value.toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    : `$${value.toLocaleString('en-CA', { maximumFractionDigits: 0 })}`;
 }
 
-function applyLiveCoinPrice(coin, price, changePct, change24h){
- if(!Number.isFinite(price)||price<=0)return false;
- const previous=marketPrices[coin]?.price;
- const old=marketPrices[coin]||{...EMPTY_MARKET};
- const next={
-  ...old,
-  price,
-  changePct:Number.isFinite(changePct)?changePct:old.changePct,
-  change24h:Number.isFinite(change24h)?change24h:old.change24h
- };
- marketPrices[coin]=next;
- if(!Number.isFinite(previous)){
-  priceHistory[coin]=[{t:Date.now(),p:price}];
- }else if(previous!==price){
-  const direction=price>=previous?'up':'down';
-  priceHistory[coin].push({t:Date.now(),p:price});
-  if(priceHistory[coin].length>300)priceHistory[coin].shift();
-  updateTickerBar(coin);
-  if(coin===activeCoin)updateMainView(coin,direction);
-  maybeShowPriceAlertToast(coin);
- }
- updateTickerBar(coin);
- return true;
+function syncCryptoUsdRates() {
+  exchangeRatesInUSD.CAD = 1 / USD_CAD_REFERENCE;
+  for (const coin of COINS) {
+    const cad = marketPrices?.[coin]?.price;
+    if (Number.isFinite(cad) && cad > 0) exchangeRatesInUSD[coin] = cad * exchangeRatesInUSD.CAD;
+  }
 }
 
-let marketPollTimer = null;
-let marketFetchInFlight = false;
-let marketLastSuccessfulFetch = 0;
-let marketFailureCount = 0;
+function updateTickerBar(coin) {
+  const data = marketPrices?.[coin];
+  const priceEl = document.getElementById(`tickerPrice${coin}`);
+  const changeEl = document.getElementById(`tickerChange${coin}`);
+  if (!priceEl || !changeEl) return;
 
-const MARKET_STALE_AFTER_MS = 90000;
-const MARKET_RETRY_BASE_MS = 5000;
-const MARKET_RETRY_MAX_MS = 30000;
-const MARKET_PRICE_URL = 'https://api.coingecko.com/api/v3/simple/price';
-const MARKET_DETAILS_URL = 'https://api.coingecko.com/api/v3/coins/markets';
-const USD_CAD_RATE_URL = 'https://api.frankfurter.dev/v2/rate/usd/cad';
+  if (!data || !Number.isFinite(data.price)) {
+    priceEl.textContent = 'Unavailable';
+    changeEl.textContent = '—';
+    changeEl.className = 'ticker-change';
+    return;
+  }
 
-async function fetchLiveUsdCadRate(){
-  const controller=new AbortController();
-  const timeout=setTimeout(()=>controller.abort(),10000);
-  try{
-    const response=await fetch(`${USD_CAD_RATE_URL}?_=${Date.now()}`,{
-      cache:'no-store',
-      signal:controller.signal,
-      headers:{Accept:'application/json'}
+  priceEl.textContent = formatMarketPrice(coin, data.price);
+  const pct = Number(data.changePct);
+  if (Number.isFinite(pct)) {
+    const sign = pct > 0 ? '+' : '';
+    changeEl.textContent = `${sign}${pct.toFixed(2)}% · reference`;
+    changeEl.className = `ticker-change ${pct >= 0 ? 'up' : 'down'}`;
+  } else {
+    changeEl.textContent = '—';
+    changeEl.className = 'ticker-change';
+  }
+}
+
+function buildReferenceHistory(coin) {
+  const d = REFERENCE_MARKET[coin];
+  const points = [];
+  const now = Date.now();
+  for (let i = 59; i >= 0; i--) {
+    const progress = (59 - i) / 59;
+    const wave = Math.sin(progress * Math.PI * 4 + (coin === 'SOL' ? 0.8 : coin === 'ETH' ? 1.5 : 0.2));
+    const drift = (d.price - d.open24h) * progress;
+    points.push({
+      t: now - i * 60_000,
+      p: d.open24h + drift + wave * d.price * 0.004
     });
-    if(!response.ok)throw new Error(`USD/CAD HTTP ${response.status}`);
-    const json=await response.json();
-    const rate=Number(json?.rate);
-    if(!Number.isFinite(rate)||rate<=0)throw new Error('Invalid USD/CAD rate');
+  }
+  points.push({ t: now, p: d.price });
+  return points;
+}
 
-    // exchangeRatesInUSD stores the USD value of one unit of each currency.
-    // USD is always 1, so CAD is the inverse of USD/CAD.
-    exchangeRatesInUSD.CAD=1/rate;
-    syncCryptoUsdRates();
-    if(typeof updateLivePreview==='function')updateLivePreview();
-    return true;
-  }catch(e){
-    console.warn('Live USD/CAD rate update failed:',e.name==='AbortError'?'request timed out':e);
-    return false;
-  }finally{
-    clearTimeout(timeout);
+function initializeReferenceMarket() {
+  const now = Date.now();
+  for (const coin of COINS) {
+    marketPrices[coin] = { ...REFERENCE_MARKET[coin], lastUpdatedAt: now };
+    priceHistory[coin] = buildReferenceHistory(coin);
+  }
+
+  document.documentElement.dataset.marketStatus = 'reference';
+  document.documentElement.dataset.marketMode = 'reference';
+  syncCryptoUsdRates();
+  COINS.forEach(updateTickerBar);
+}
+
+function refreshMarketUI() {
+  COINS.forEach(updateTickerBar);
+  updateMainView(activeCoin);
+  updateOrderBook(activeCoin);
+  renderMarketChart();
+  updateRecentTrades();
+  updateMacTotal();
+  renderBalance();
+  renderExchangeTransactions();
+
+  const exchangeModalEl = document.getElementById('exchangeModal');
+  if (exchangeModalEl?.classList.contains('open') && typeof updateLivePreview === 'function') {
+    updateLivePreview();
   }
 }
 
-function syncCryptoUsdRates(){
-  const usdCad=Number(exchangeRatesInUSD?.CAD);
-  if(!Number.isFinite(usdCad)||usdCad<=0)return;
-  for(const coin of ['BTC','SOL','ETH']){
-    const cad=Number(marketPrices?.[coin]?.price);
-    if(Number.isFinite(cad)&&cad>0){
-      exchangeRatesInUSD[coin]=cad*usdCad;
-    }
-  }
+
+function renderMarketChart() {
+  const svg = document.getElementById('marketChart');
+  const line = document.getElementById('chartLine');
+  const area = document.getElementById('chartAreaFill');
+  const grid = document.getElementById('chartGridLines');
+  const dot = document.getElementById('chartDot');
+  if (!svg || !line || !area || !grid || !dot) return;
+
+  const data = priceHistory[activeCoin] || [];
+  if (data.length < 2) return;
+
+  const width = 900;
+  const height = 220;
+  const padX = 8;
+  const padY = 12;
+  const values = data.map(p => p.p).filter(Number.isFinite);
+  if (values.length < 2) return;
+
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = Math.max(max - min, max * 0.001);
+  const points = data.map((item, i) => {
+    const x = padX + (i / (data.length - 1)) * (width - padX * 2);
+    const y = height - padY - ((item.p - min) / span) * (height - padY * 2);
+    return [x, y];
+  });
+
+  const d = points.map((p, i) => `${i ? 'L' : 'M'} ${p[0].toFixed(2)} ${p[1].toFixed(2)}`).join(' ');
+  const areaD = `${d} L ${width - padX} ${height - padY} L ${padX} ${height - padY} Z`;
+  line.setAttribute('d', d);
+  area.setAttribute('d', areaD);
+
+  grid.innerHTML = [0.2, 0.4, 0.6, 0.8].map(r =>
+    `<line x1="${padX}" y1="${(height * r).toFixed(1)}" x2="${width - padX}" y2="${(height * r).toFixed(1)}"></line>`
+  ).join('');
+
+  const last = points[points.length - 1];
+  dot.setAttribute('cx', last[0]);
+  dot.setAttribute('cy', last[1]);
 }
 
-function emptyMarketData(){
- return {price:null,open24h:null,change24h:null,changePct:null,high24h:null,low24h:null,volume24h:null,lastUpdatedAt:0};
-}
-
-function updateMarketFreshness(){
- const now=Date.now();
- const staleAfter=MARKET_STALE_AFTER_MS;
- for(const coin of ['BTC','SOL','ETH']){
-  const data=marketPrices[coin];
-  if(!data || !Number.isFinite(data.price)){
-   updateTickerBar(coin);
-   continue;
-  }
-  if(!Number.isFinite(data.lastUpdatedAt) || now-data.lastUpdatedAt>staleAfter){
-   marketPrices[coin]={...emptyMarketData()};
-   priceHistory[coin]=[];
-  }
-  updateTickerBar(coin);
- }
- const anyLive=Object.values(marketPrices).some(d=>d && Number.isFinite(d.price));
- document.documentElement.dataset.marketStatus=anyLive?'live':'offline';
- updateMainView(activeCoin);
- updateOrderBook(activeCoin);
- updateMacTotal();
-}
-
-function applyLiveMarketData(coin, data){
- if(!data || !Number.isFinite(data.price) || data.price<=0)return false;
- const previous=marketPrices[coin]?.price;
- const previousData=marketPrices[coin]||emptyMarketData();
- marketPrices[coin]={
-  ...previousData,
-  ...data,
-  price:data.price,
-  lastUpdatedAt:Number.isFinite(data.lastUpdatedAt)?data.lastUpdatedAt:Date.now()
- };
- marketLastUpdateAt[coin]=marketPrices[coin].lastUpdatedAt;
-
- if(!Number.isFinite(previous)){
-  priceHistory[coin]=[{t:marketPrices[coin].lastUpdatedAt,p:data.price}];
- }else if(previous!==data.price){
-  const direction=data.price>=previous?'up':'down';
-  priceHistory[coin].push({t:marketPrices[coin].lastUpdatedAt,p:data.price});
-  if(priceHistory[coin].length>300)priceHistory[coin].shift();
-  updateTickerBar(coin);
-  if(coin===activeCoin)updateMainView(coin,direction);
-  maybeShowPriceAlertToast(coin);
- }
- updateTickerBar(coin);
- return true;
-}
-
-function refreshMarketUI(){
- ['BTC','SOL','ETH'].forEach(updateTickerBar);
- updateMainView(activeCoin);
- updateOrderBook(activeCoin);
- updateMacTotal();
- renderBalance();
- renderExchangeTransactions();
- const exchangeModalEl=document.getElementById('exchangeModal');
- if(exchangeModalEl?.classList.contains('open') && typeof updateLivePreview==='function') updateLivePreview();
-}
-
-function scheduleNextMarketFetch(delay=MARKET_PRICE_POLL_MS){
- clearTimeout(marketPollTimer);
- marketPollTimer=setTimeout(()=>fetchLiveMarketPrices(),delay);
-}
-
-async function fetchLiveMarketPrices(){
- if(marketFetchInFlight)return false;
- marketFetchInFlight=true;
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),10000);
- try{
-  const url=`${MARKET_PRICE_URL}?vs_currencies=cad&ids=bitcoin%2Csolana%2Cethereum&include_24hr_change=true&include_last_updated_at=true&_=${Date.now()}`;
-  const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
-  if(!response.ok)throw new Error(`CoinGecko HTTP ${response.status}`);
-  const json=await response.json();
-  const map={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
-  let received=0;
-
-  for(const [id,coin] of Object.entries(map)){
-   const row=json?.[id];
-   const price=Number(row?.cad);
-   if(!Number.isFinite(price)||price<=0)continue;
-
-   const changePct=Number(row?.cad_24h_change);
-   const pct=Number.isFinite(changePct)?changePct:null;
-   const previousData=marketPrices[coin]||emptyMarketData();
-   const open24h=Number.isFinite(pct)&&Math.abs(1+pct/100)>0.000001
-    ? price/(1+pct/100)
-    : previousData.open24h;
-   const change24h=Number.isFinite(pct)&&Number.isFinite(open24h)
-    ? price-open24h
-    : previousData.change24h;
-   const providerUpdated=Number(row?.last_updated_at)*1000;
-   const updatedAt=Number.isFinite(providerUpdated)&&providerUpdated>0?providerUpdated:Date.now();
-
-   if(applyLiveMarketData(coin,{
-    price,
-    open24h:Number.isFinite(open24h)&&open24h>0?open24h:null,
-    change24h:Number.isFinite(change24h)?change24h:null,
-    changePct:pct,
-    high24h:previousData.high24h,
-    low24h:previousData.low24h,
-    volume24h:previousData.volume24h,
-    lastUpdatedAt:updatedAt
-   }))received++;
-  }
-
-  if(received!==3)throw new Error(`Incomplete CoinGecko live response (${received}/3)`);
-
-  marketLastSuccessfulFetch=Date.now();
-  marketFailureCount=0;
-  document.documentElement.dataset.marketStatus='live';
+function refreshReferenceMarket() {
+  // The market intentionally stays static. Refresh only redraws the local reference data.
+  initializeReferenceMarket();
   refreshMarketUI();
-
-  // Pull slower-changing market details separately so price updates stay efficient.
-  fetchMarketDetails().catch(()=>{});
-  scheduleNextMarketFetch(MARKET_PRICE_POLL_MS);
-  return true;
- }catch(e){
-  marketFailureCount++;
-  console.warn('Live CoinGecko CAD price update failed:',e.name==='AbortError'?'request timed out':e);
-
-  // Do NOT invent or substitute a price. Keep the last real price briefly during
-  // transient network/API failures, then show the exact unavailable state.
-  updateMarketFreshness();
-  const retryDelay=Math.min(
-   MARKET_RETRY_MAX_MS,
-   MARKET_RETRY_BASE_MS*Math.pow(2,Math.min(marketFailureCount-1,3))
-  );
-  scheduleNextMarketFetch(retryDelay);
-  return false;
- }finally{
-  clearTimeout(timeout);
-  marketFetchInFlight=false;
- }
+  return Promise.resolve(true);
 }
 
-let marketDetailsInFlight=false;
-let marketDetailsLastFetched=0;
-
-async function fetchMarketDetails(){
- if(marketDetailsInFlight)return false;
- if(Date.now()-marketDetailsLastFetched<MARKET_DETAILS_POLL_MS)return true;
- marketDetailsInFlight=true;
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),10000);
- try{
-  const url=`${MARKET_DETAILS_URL}?vs_currency=cad&ids=bitcoin%2Csolana%2Cethereum&order=market_cap_desc&per_page=3&page=1&sparkline=false&price_change_percentage=24h&_=${Date.now()}`;
-  const response=await fetch(url,{cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
-  if(!response.ok)throw new Error(`CoinGecko details HTTP ${response.status}`);
-  const rows=await response.json();
-  const map={bitcoin:'BTC',solana:'SOL',ethereum:'ETH'};
-  let received=0;
-
-  for(const row of Array.isArray(rows)?rows:[]){
-   const coin=map[row?.id];
-   const current=marketPrices[coin];
-   if(!coin||!current||!Number.isFinite(current.price))continue;
-
-   const high=Number(row?.high_24h);
-   const low=Number(row?.low_24h);
-   const volume=Number(row?.total_volume);
-   const open=Number(row?.current_price)/(1+Number(row?.price_change_percentage_24h)/100);
-   const change=Number(row?.price_change_percentage_24h);
-
-   marketPrices[coin]={
-    ...current,
-    open24h:Number.isFinite(open)&&open>0?open:current.open24h,
-    change24h:Number.isFinite(change)?current.price-open:current.change24h,
-    changePct:Number.isFinite(change)?change:current.changePct,
-    high24h:Number.isFinite(high)&&high>0?high:current.high24h,
-    low24h:Number.isFinite(low)&&low>0?low:current.low24h,
-    volume24h:Number.isFinite(volume)&&volume>=0?volume:current.volume24h
-   };
-   received++;
-  }
-
-  if(received===3){
-   marketDetailsLastFetched=Date.now();
-   refreshMarketUI();
-   return true;
-  }
-  return false;
- }catch(e){
-  console.warn('CoinGecko market details update failed:',e.name==='AbortError'?'request timed out':e);
-  return false;
- }finally{
-  clearTimeout(timeout);
-  marketDetailsInFlight=false;
- }
+async function fetchRealMarketData() {
+  return refreshReferenceMarket();
 }
-
-async function fetchRealMarketData(){ return fetchLiveMarketPrices(); }
 
 let marketPrices = {BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData()};
 let activeCoin = 'BTC';
@@ -3052,7 +3124,7 @@ function updateMainView(coin, flashDir) {
  const data=marketPrices[coin];
  const priceEl=document.getElementById('mciPrice');
  if(!data||!Number.isFinite(data.price)){
-  if(priceEl)priceEl.textContent='Live price unavailable';
+  if(priceEl)priceEl.textContent='Price unavailable';
   const changeEl=document.getElementById('mciChange'); if(changeEl)changeEl.textContent='Waiting for live market data…';
   ['mciOpen','mciHigh','mciLow','mciVolume','obMidPrice'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
   updateMacTotal();
@@ -3091,21 +3163,84 @@ function updateMainView(coin, flashDir) {
  updateMacTotal();
 }
 function updateOrderBook(coin) {
- const obAsks=document.getElementById('obAsks'),obBids=document.getElementById('obBids'),obSpread=document.getElementById('obSpread'),obUserOrders=document.getElementById('obUserOrders'),obMid=document.getElementById('obMidPrice');
- if(!obAsks||!obBids)return;
- const price=marketPrices[coin]?.price;
- // Do not invent order-book levels. The CoinGecko market endpoint does not provide
- // a real exchange order book, so the UI stays empty instead of showing fake data.
- obAsks.innerHTML='';
- obBids.innerHTML='';
- if(obSpread)obSpread.textContent='Spread: —';
- if(obMid)obMid.textContent=Number.isFinite(price)?(coin==='SOL'?`$${price.toFixed(2)}`:`$${price.toLocaleString('en-US')}`):'—';
- if(obUserOrders){
-  const name=(document.getElementById('profileName')?.textContent||'You').trim()||'You';
-  const orders=userTrades.filter(t=>t.coin===coin).slice(0,3);
-  obUserOrders.innerHTML=orders.map(t=>{const p=coin==='SOL'?t.price.toFixed(2):Math.round(t.price).toLocaleString('en-US');return `<div class="ob-user-row ${t.side}"><div class="ob-user-name">${name}</div><div class="ob-user-price">$${p}</div><div class="ob-user-side ${t.side}">${t.side==='buy'?'Buy':'Sell'} ${t.size.toFixed(4)}</div></div>`;}).join('');
-  obUserOrders.style.display=orders.length?'block':'none';
- }
+  const obAsks = document.getElementById('obAsks');
+  const obBids = document.getElementById('obBids');
+  const obSpread = document.getElementById('obSpread');
+  const obUserOrders = document.getElementById('obUserOrders');
+  const obMid = document.getElementById('obMidPrice');
+  if (!obAsks || !obBids) return;
+
+  const price = marketPrices[coin]?.price;
+  if (!Number.isFinite(price)) {
+    obAsks.innerHTML = '';
+    obBids.innerHTML = '';
+    if (obSpread) obSpread.textContent = 'Spread: —';
+    if (obMid) obMid.textContent = '—';
+    return;
+  }
+
+  const isSol = coin === 'SOL';
+  const tick = isSol ? 0.15 : coin === 'ETH' ? 3 : 75;
+  const amountBase = coin === 'BTC' ? 0.08 : coin === 'ETH' ? 0.9 : 18;
+  const levels = 6;
+
+  const rows = side => Array.from({ length: levels }, (_, i) => {
+    const level = i + 1;
+    const levelPrice = price + (side === 'ask' ? tick * level : -tick * level);
+    const size = amountBase * (0.72 + ((level * 17) % 9) / 20);
+    return {
+      price: levelPrice,
+      size,
+      total: levelPrice * size
+    };
+  });
+
+  const asks = rows('ask').reverse();
+  const bids = rows('bid');
+  const maxTotal = Math.max(...asks.concat(bids).map(r => r.total), 1);
+
+  const rowHtml = (row, side) => {
+    const decimals = isSol ? 2 : coin === 'BTC' ? 0 : 2;
+    const priceText = `$${row.price.toLocaleString('en-CA', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    })}`;
+    const sizeText = row.size.toFixed(4);
+    const totalText = `$${row.total.toLocaleString('en-CA', {
+      maximumFractionDigits: 0
+    })}`;
+    const fill = Math.min(100, Math.max(8, (row.total / maxTotal) * 100));
+
+    return `<div class="ob-row ${side}">
+      <div class="ob-row-fill" style="width:${fill}%"></div>
+      <span class="ob-price ${side}">${priceText}</span>
+      <span class="ob-size">${sizeText}</span>
+      <span class="ob-total">${totalText}</span>
+    </div>`;
+  };
+
+  obAsks.innerHTML = asks.map(row => rowHtml(row, 'ask')).join('');
+  obBids.innerHTML = bids.map(row => rowHtml(row, 'bid')).join('');
+
+  const spread = tick * 2;
+  if (obSpread) {
+    obSpread.textContent = `Spread: ${isSol ? '$' + spread.toFixed(2) : '$' + spread.toLocaleString('en-CA')}`;
+  }
+  if (obMid) obMid.textContent = formatMarketPrice(coin, price);
+
+  if (obUserOrders) {
+    const name = (document.getElementById('profileName')?.textContent || 'You').trim() || 'You';
+    const orders = userTrades.filter(t => t.coin === coin).slice(0, 3);
+    obUserOrders.innerHTML = orders.map(t => {
+      const p = formatMarketPrice(coin, t.price);
+      return `<div class="ob-user-row ${t.side}">
+        <div class="ob-user-name">${name}</div>
+        <div class="ob-user-price">${p}</div>
+        <div class="ob-user-side ${t.side}">${t.side === 'buy' ? 'Buy' : 'Sell'} ${t.size.toFixed(4)}</div>
+      </div>`;
+    }).join('');
+    obUserOrders.style.display = orders.length ? 'block' : 'none';
+  }
 }
 
 function updateRecentTrades() {
@@ -3121,9 +3256,9 @@ function setMacTab(tab){
  document.getElementById('macAmountInput').value=''; updateMacTotal();
 }
 function setMacPct(pct,el){document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));el.classList.add('active');const bal=macCurrentTab==='buy'?getBalanceForCurrency('CAD'):getBalanceForCurrency(activeCoin);const dec=macCurrentTab==='buy'?2:4;const factor=Math.pow(10,dec);document.getElementById('macAmountInput').value=(Math.floor(bal*(pct/100)*factor)/factor).toFixed(dec);updateMacTotal();}
-function updateMacTotal(){const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const price=marketPrices[activeCoin]?.price;const out=document.getElementById('macTotalVal');if(!out)return;if(!Number.isFinite(price)){out.textContent='Live price unavailable';return;}if(macCurrentTab==='buy')out.textContent=`${(amt/price).toFixed(4)} ${activeCoin}`;else out.textContent=`${(amt*price).toFixed(2)} CAD`;}
+function updateMacTotal(){const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const price=marketPrices[activeCoin]?.price;const out=document.getElementById('macTotalVal');if(!out)return;if(!Number.isFinite(price)){out.textContent='Price unavailable';return;}if(macCurrentTab==='buy')out.textContent=`${(amt/price).toFixed(4)} ${activeCoin}`;else out.textContent=`${(amt*price).toFixed(2)} CAD`;}
 function macSubmitOrder(){
- const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const livePrice=marketPrices[activeCoin]?.price;if(amt<=0)return;if(!Number.isFinite(livePrice)){showToast('Live price unavailable — try again in a moment');return;}const btn=document.getElementById('macSubmitBtn');btn.style.opacity='0.6';btn.style.pointerEvents='none';
+ const amt=parseFloat(document.getElementById('macAmountInput').value)||0;const livePrice=marketPrices[activeCoin]?.price;if(amt<=0)return;if(!Number.isFinite(livePrice)){showToast('Price unavailable — try again in a moment');return;}const btn=document.getElementById('macSubmitBtn');btn.style.opacity='0.6';btn.style.pointerEvents='none';
  setTimeout(()=>{btn.style.opacity='1';btn.style.pointerEvents='';const price=livePrice;
   if(macCurrentTab==='buy'){const received=amt/price;if(internalHiddenBalanceCAD<amt){showToast('Insufficient CAD balance');return;}deductBalanceForCurrency('CAD',amt);addBalanceForCurrency(activeCoin,received);userTrades.unshift({coin:activeCoin,price,size:received,side:'buy',time:new Date()});showToast(`Bought ${received.toFixed(4)} ${activeCoin} for $${amt.toFixed(2)} CAD`);}
   else{const received=amt*price;const bal=getBalanceForCurrency(activeCoin);if(bal<amt){showToast(`Insufficient ${activeCoin} balance`);return;}deductBalanceForCurrency(activeCoin,amt);addBalanceForCurrency('CAD',received);userTrades.unshift({coin:activeCoin,price,size:amt,side:'sell',time:new Date()});showToast(`Sold ${amt.toFixed(4)} ${activeCoin} for $${received.toFixed(2)} CAD`);}
@@ -3152,57 +3287,20 @@ mciIcon.innerHTML = iconMap[coin];
 updateMainView(coin, null);
 updateOrderBook(coin);
 updateRecentTrades();
+renderMarketChart();
 setMacTab(macCurrentTab);
 updateMarketAlerts();
 }
 renderExchangeTransactions();
-// DEMO MARKET MODE: these are intentionally made-up prices for the UI.
-// No live market API is used by the market, so the demo stays deterministic and exchangeable.
-const DEMO_MARKET = {
- BTC: {price:142500, open24h:140850, change24h:1650, changePct:1.17, high24h:144900, low24h:139700, volume24h:28400000000},
- SOL: {price:228.40, open24h:221.85, change24h:6.55, changePct:2.95, high24h:233.70, low24h:217.20, volume24h:3120000000},
- ETH: {price:4860, open24h:4775, change24h:85, changePct:1.78, high24h:4935, low24h:4690, volume24h:16800000000}
-};
-function loadDemoMarket(){
- const now=Date.now();
- for(const coin of ['BTC','SOL','ETH']){
-   const d=DEMO_MARKET[coin];
-   marketPrices[coin]={...d,lastUpdatedAt:now};
-   priceHistory[coin]=[];
-   for(let i=30;i>=0;i--){
-     const wobble=Math.sin(i*0.63+(coin==='SOL'?1.2:coin==='ETH'?.6:0))*d.price*0.003;
-     priceHistory[coin].push({t:now-i*60000,p:d.price+wobble});
-   }
- }
- document.documentElement.dataset.marketStatus='demo';
- document.documentElement.dataset.marketMode='demo';
- ['BTC','SOL','ETH'].forEach(updateTickerBar);
- updateMainView('BTC');
- updateOrderBook('BTC');
- if(typeof syncCryptoUsdRates==='function') syncCryptoUsdRates();
- if(typeof updateLivePreview==='function') updateLivePreview();
+// Local reference market: no network requests and no live-price dependency.
+function loadReferenceMarket() {
+  initializeReferenceMarket();
+  updateRecentTrades();
+  refreshMarketUI();
 }
-loadDemoMarket();
-// Keep the demo market moving subtly without ever contacting a live-price API.
-setInterval(()=>{
- const now=Date.now();
- for(const coin of ['BTC','SOL','ETH']){
-   const base=DEMO_MARKET[coin].price;
-   const wave=Math.sin(now/28000+(coin==='BTC'?0:coin==='SOL'?1.7:3.1))*0.0018;
-   const price=base*(1+wave);
-   const d=marketPrices[coin];
-   d.price=price;
-   d.lastUpdatedAt=now;
-   d.change24h=price-d.open24h;
-   d.changePct=(d.change24h/d.open24h)*100;
-   d.high24h=Math.max(d.high24h,price);
-   d.low24h=Math.min(d.low24h,price);
-   priceHistory[coin].push({t:now,p:price});
-   if(priceHistory[coin].length>180) priceHistory[coin].shift();
- }
- syncCryptoUsdRates();
- refreshMarketUI();
-},10000);
+
+loadReferenceMarket();
+
 let priceAlertsEnabled = {BTC:false, SOL:false, ETH:false};
 let globalAlertsOn = false;
 let lastAlertToastAt = {BTC:0,SOL:0,ETH:0};
@@ -3265,7 +3363,7 @@ showToast(msg);
 selectMarketCoin('BTC');
 setMacTab('buy');
 const MARGINAL_TAX_RATE = 0.33; // applied to the 50% taxable inclusion only
-const exchangeRatesInUSD = {USD:1.0,CAD:1/1.365,BTC:142500/1.365,SOL:228.40/1.365,ETH:4860/1.365};
+const exchangeRatesInUSD = {USD:1.0,CAD:1/USD_CAD_REFERENCE,BTC:REFERENCE_MARKET.BTC.price/USD_CAD_REFERENCE,SOL:REFERENCE_MARKET.SOL.price/USD_CAD_REFERENCE,ETH:REFERENCE_MARKET.ETH.price/USD_CAD_REFERENCE};
 initializeCostBasis();
 function showToast(message, duration=3500) { toastMessage.textContent=message; toastNotification.classList.add('show'); setTimeout(()=>toastNotification.classList.remove('show'),duration); }
 function calculateConversion(amount, fromCurr, toCurr) {
@@ -3305,9 +3403,9 @@ return;
 }
 const conversion=calculateConversion(amount, fromCurr, toCurr);
  if(conversion.unavailable){
-  document.getElementById('previewFeeVal').textContent='Live price unavailable';
-  document.getElementById('previewTaxVal').textContent='Live price unavailable';
-  document.getElementById('livePreviewVal').textContent='Live price unavailable';
+  document.getElementById('previewFeeVal').textContent='Price unavailable';
+  document.getElementById('previewTaxVal').textContent='Price unavailable';
+  document.getElementById('livePreviewVal').textContent='Price unavailable';
   return;
  }
  const {receivedAmount, feeInFrom, taxInFrom} = conversion;
@@ -3514,7 +3612,7 @@ let mStartY=0,mCurrentY=0,mIsDragging=false,mIsRefreshing=false;
 function mHandleStart(y){if(marketPanel.scrollTop<=0&&!mIsRefreshing){mStartY=y;mCurrentY=y;mIsDragging=true;marketContent.style.transition='none';marketIndicator.classList.remove('completed');}}
 function mHandleMove(y,e){if(!mIsDragging||mIsRefreshing)return;mCurrentY=y;const rawDistance=mCurrentY-mStartY;if(rawDistance>0&&marketPanel.scrollTop<=0){if(e.cancelable)e.preventDefault();const dragOffset=Math.pow(rawDistance*0.45,0.90);marketContent.style.transform=`translateY(${dragOffset}px)`;const progress=Math.min(dragOffset/triggerThreshold,1.0);marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE-(progress*CIRCUMFERENCE*0.82);if(dragOffset>10)marketIndicator.classList.add('visible');else marketIndicator.classList.remove('visible');if(dragOffset>=triggerThreshold){if(!marketIndicator.classList.contains('ready')){triggerHaptic();marketIndicator.classList.add('ready');marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).releaseToUpdate||'Release to update';}}else{if(marketIndicator.classList.contains('ready')){marketIndicator.classList.remove('ready');marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).pullToRefresh||'Pull to refresh';}}}}
 function mExitRefreshState(){marketContent.style.transition='transform 0.38s cubic-bezier(0.22,1,0.36,1)';marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready','completed');setTimeout(()=>{mIsRefreshing=false;marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE;marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).pullToRefresh||'Pull to refresh';},380);}
-function mHandleEnd(){if(!mIsDragging)return;mIsDragging=false;const rawDistance=mCurrentY-mStartY;const finalOffset=Math.pow(Math.max(0,rawDistance)*0.45,0.90);marketContent.style.transition='transform 0.42s cubic-bezier(0.175,0.885,0.32,1.15)';if(finalOffset>=triggerThreshold&&rawDistance>0){mIsRefreshing=true;marketContent.style.transform=`translateY(${triggerThreshold-12}px)`;marketIndicator.classList.add('visible','refreshing');marketIndicator.classList.remove('ready');marketRefreshText.textContent='Fetching prices...';marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*0.25;fetchRealMarketData().finally(()=>{marketIndicator.classList.remove('refreshing');marketIndicator.classList.add('completed');marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).updated||'Updated';triggerHaptic();setTimeout(()=>mExitRefreshState(),520);});}else{marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready');}}
+function mHandleEnd(){if(!mIsDragging)return;mIsDragging=false;const rawDistance=mCurrentY-mStartY;const finalOffset=Math.pow(Math.max(0,rawDistance)*0.45,0.90);marketContent.style.transition='transform 0.42s cubic-bezier(0.175,0.885,0.32,1.15)';if(finalOffset>=triggerThreshold&&rawDistance>0){mIsRefreshing=true;marketContent.style.transform=`translateY(${triggerThreshold-12}px)`;marketIndicator.classList.add('visible','refreshing');marketIndicator.classList.remove('ready');marketRefreshText.textContent='Refreshing market...';marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*0.25;fetchRealMarketData().finally(()=>{marketIndicator.classList.remove('refreshing');marketIndicator.classList.add('completed');marketRefreshText.textContent=(translations[currentLang]||translations['en-CA']).updated||'Updated';triggerHaptic();setTimeout(()=>mExitRefreshState(),520);});}else{marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready');}}
 marketPanel.addEventListener('touchstart',e=>mHandleStart(e.touches[0].clientY),{passive:true});
 marketPanel.addEventListener('touchmove',e=>mHandleMove(e.touches[0].clientY,e),{passive:false});
 marketPanel.addEventListener('touchend',mHandleEnd);
@@ -3530,7 +3628,7 @@ let pStartY=0,pCurrentY=0,pIsDragging=false,pIsRefreshing=false;
 function pHandleStart(y){if(profitsPanel.scrollTop<=0&&!pIsRefreshing){pStartY=y;pCurrentY=y;pIsDragging=true;profitsContent.style.transition='none';profitsIndicator.classList.remove('completed');}}
 function pHandleMove(y,e){if(!pIsDragging||pIsRefreshing)return;pCurrentY=y;const raw=pCurrentY-pStartY;if(raw>0&&profitsPanel.scrollTop<=0){if(e.cancelable)e.preventDefault();const off=Math.pow(raw*0.45,0.90);profitsContent.style.transform=`translateY(${off}px)`;const progress=Math.min(off/triggerThreshold,1);profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE-(progress*CIRCUMFERENCE*0.82);profitsIndicator.classList.toggle('visible',off>10);if(off>=triggerThreshold){if(!profitsIndicator.classList.contains('ready')){triggerHaptic();profitsIndicator.classList.add('ready');profitsRefreshText.textContent='Release to update';}}else{profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Pull to refresh';}}}
 function pExitRefresh(){profitsContent.style.transition='transform .38s cubic-bezier(.22,1,.36,1)';profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready','completed');setTimeout(()=>{pIsRefreshing=false;profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE;profitsRefreshText.textContent='Pull to refresh';},380);}
-function pHandleEnd(){if(!pIsDragging)return;pIsDragging=false;const raw=pCurrentY-pStartY;const off=Math.pow(Math.max(0,raw)*0.45,0.90);profitsContent.style.transition='transform .42s cubic-bezier(.175,.885,.32,1.15)';if(off>=triggerThreshold&&raw>0){pIsRefreshing=true;profitsContent.style.transform=`translateY(${triggerThreshold-12}px)`;profitsIndicator.classList.add('visible','refreshing');profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Updating prices...';profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*.25;fetchLiveMarketPrices().finally(()=>{renderExchangeTransactions();profitsIndicator.classList.remove('refreshing');profitsIndicator.classList.add('completed');profitsRefreshText.textContent='Updated';triggerHaptic();setTimeout(pExitRefresh,520);});}else{profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready');}}
+function pHandleEnd(){if(!pIsDragging)return;pIsDragging=false;const raw=pCurrentY-pStartY;const off=Math.pow(Math.max(0,raw)*0.45,0.90);profitsContent.style.transition='transform .42s cubic-bezier(.175,.885,.32,1.15)';if(off>=triggerThreshold&&raw>0){pIsRefreshing=true;profitsContent.style.transform=`translateY(${triggerThreshold-12}px)`;profitsIndicator.classList.add('visible','refreshing');profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Updating...';profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*.25;refreshReferenceMarket().finally(()=>{renderExchangeTransactions();profitsIndicator.classList.remove('refreshing');profitsIndicator.classList.add('completed');profitsRefreshText.textContent='Updated';triggerHaptic();setTimeout(pExitRefresh,520);});}else{profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready');}}
 profitsPanel.addEventListener('touchstart',e=>pHandleStart(e.touches[0].clientY),{passive:true});
 profitsPanel.addEventListener('touchmove',e=>pHandleMove(e.touches[0].clientY,e),{passive:false});
 profitsPanel.addEventListener('touchend',pHandleEnd);
@@ -3540,41 +3638,39 @@ window.addEventListener('mouseup',()=>{if(pIsDragging)pHandleEnd();});
 </script>
 
 <script>
-/* Final polish + reliable demo exchange rates */
-(function(){
-  const demoRates = { USD:1, CAD:1/1.365, BTC:142500/1.365, SOL:228.40/1.365, ETH:4860/1.365 };
-  Object.assign(exchangeRatesInUSD, demoRates);
-  if(typeof syncCryptoUsdRates==='function') syncCryptoUsdRates();
-
-  const marketTitle=document.querySelector('#marketPanel .dashboard-title');
-  if(marketTitle && !marketTitle.querySelector('.demo-market-badge')){
-    const badge=document.createElement('span');
-    badge.className='demo-market-badge';
-    badge.innerHTML='<span class="demo-market-dot"></span>Demo prices';
-    marketTitle.appendChild(badge);
-  }
-
-  // Make the three appearance choices feel like real selectable presets and remember the choice.
+/* Final UI polish and local persistence. */
+(function () {
   const originalSetTheme = window.setTheme;
-  window.setTheme = function(themeName){
+  window.setTheme = function (themeName) {
     originalSetTheme(themeName);
-    try{localStorage.setItem('walletTheme',themeName);}catch(e){}
-    document.documentElement.dataset.theme=themeName;
+    try { localStorage.setItem('walletTheme', themeName); } catch (_) {}
+    document.documentElement.dataset.theme = themeName;
   };
-  try{
-    const saved=localStorage.getItem('walletTheme');
-    if(saved && ['dark','emerald','midnight'].includes(saved)) window.setTheme(saved);
-  }catch(e){}
 
-  // If an old browser/session left the app with empty market data, restore the demo market.
-  setTimeout(()=>{
-    if(!marketPrices?.BTC?.price){
-      const fn=window.loadDemoMarket;
-      if(typeof fn==='function') fn();
+  try {
+    const savedTheme = localStorage.getItem('walletTheme');
+    if (savedTheme && ['dark', 'emerald', 'midnight'].includes(savedTheme)) {
+      window.setTheme(savedTheme);
     }
-    if(typeof syncCryptoUsdRates==='function') syncCryptoUsdRates();
-    if(typeof refreshMarketUI==='function') refreshMarketUI();
-  },0);
+  } catch (_) {}
+
+  const chartButtons = document.querySelectorAll('#chartTimeRange .tr-btn');
+  chartButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      chartButtons.forEach(item => item.classList.remove('active'));
+      button.classList.add('active');
+      renderMarketChart();
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    if (currentPanelId === 'marketPanel') renderMarketChart();
+  });
+
+  setTimeout(() => {
+    if (typeof refreshMarketUI === 'function') refreshMarketUI();
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }, 0);
 })();
 </script>
 </body>
