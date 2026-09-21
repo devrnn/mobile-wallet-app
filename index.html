@@ -1688,6 +1688,48 @@ input, select, textarea, button {
   }
 }
 
+
+/* ===== POLISHED APPEARANCE / DEMO MARKET UI ===== */
+body{background:radial-gradient(circle at 75% 5%,rgba(99,102,241,.09),transparent 28%),radial-gradient(circle at 15% 90%,rgba(52,211,153,.055),transparent 30%),var(--bg-main);}
+.main-dashboard{background:linear-gradient(180deg,rgba(255,255,255,.012),transparent 24%);}
+.scroll-content{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.16) transparent;}
+.asset-list,.exchange-transactions,.activity-panel,.market-chart-panel,.orderbook-panel,.market-action-card,.recent-trades-panel{border:1px solid rgba(255,255,255,.075)!important;box-shadow:0 18px 50px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(18px);}
+.dashboard-header{padding-bottom:22px!important;}
+.dashboard-title{letter-spacing:-.04em!important;font-weight:800!important;}
+.panel-header{border-bottom:1px solid rgba(255,255,255,.06)!important;padding-bottom:14px!important;margin-bottom:2px;}
+.theme-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important;}
+.theme-card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015))!important;border:1px solid rgba(255,255,255,.07)!important;border-radius:20px!important;padding:12px!important;box-shadow:0 12px 35px rgba(0,0,0,.18);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease!important;}
+.theme-card::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 35%,rgba(255,255,255,.07),transparent 65%);transform:translateX(-120%);transition:transform .65s ease;pointer-events:none;}
+.theme-card:hover::after{transform:translateX(120%);}
+.theme-card:hover{transform:translateY(-4px)!important;border-color:rgba(255,255,255,.18)!important;box-shadow:0 20px 45px rgba(0,0,0,.28)!important;}
+.theme-card.active{border-color:rgba(255,255,255,.55)!important;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 20px 50px rgba(0,0,0,.3)!important;}
+.theme-preview-box{height:82px!important;border-radius:14px!important;position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 8px 20px rgba(0,0,0,.25);}
+.theme-preview-box::before{content:"";position:absolute;width:90px;height:90px;border-radius:50%;right:-15px;top:-40px;background:rgba(255,255,255,.13);filter:blur(2px);}
+.theme-preview-box.dark{background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.22),transparent 35%),linear-gradient(135deg,#27272e,#0d0d11 72%)!important;}
+.theme-preview-box.emerald{background:radial-gradient(circle at 78% 18%,rgba(52,211,153,.42),transparent 36%),linear-gradient(135deg,#064e3b,#071d19 70%)!important;}
+.theme-preview-box.midnight{background:radial-gradient(circle at 78% 18%,rgba(168,85,247,.42),transparent 36%),linear-gradient(135deg,#30204d,#11142e 70%)!important;}
+.theme-label{padding:3px 3px 1px!important;font-size:13px!important;}
+.settings-row{border-radius:16px!important;margin:4px 0;padding:16px!important;transition:background .2s ease,transform .2s ease;}
+.settings-row:hover{background:rgba(255,255,255,.025);transform:translateX(2px);}
+.settings-select{border:1px solid rgba(255,255,255,.09)!important;background:rgba(255,255,255,.045)!important;border-radius:12px!important;min-height:42px!important;padding:0 14px!important;}
+.switch .slider{box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 4px 12px rgba(0,0,0,.22);}
+.market-ticker-bar{gap:10px!important;padding:8px!important;border:1px solid rgba(255,255,255,.07)!important;background:rgba(255,255,255,.025)!important;box-shadow:0 15px 40px rgba(0,0,0,.18);backdrop-filter:blur(18px);}
+.ticker-item{border:1px solid transparent!important;border-radius:16px!important;padding:13px 15px!important;transition:all .22s ease!important;}
+.ticker-item:hover{background:rgba(255,255,255,.035)!important;transform:translateY(-1px);}
+.ticker-item.selected{background:linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.025))!important;border-color:rgba(255,255,255,.11)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}
+.market-chart-panel,.orderbook-panel,.market-action-card,.recent-trades-panel{border-radius:22px!important;overflow:hidden;}
+.market-live-price{letter-spacing:-.045em!important;font-weight:800!important;}
+.market-price-meta{gap:8px!important;}
+.mpm-badge{border-radius:999px!important;padding:5px 9px!important;}
+.ob-mid-row{background:linear-gradient(90deg,rgba(255,255,255,.025),rgba(255,255,255,.055),rgba(255,255,255,.025))!important;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);}
+.mac-tabs{padding:5px!important;background:rgba(255,255,255,.035)!important;border-radius:14px!important;}
+.mac-tab{border-radius:10px!important;}
+.mac-input-field{border-radius:14px!important;border-color:rgba(255,255,255,.09)!important;background:rgba(255,255,255,.035)!important;}
+.mac-submit-btn{border-radius:14px!important;box-shadow:0 12px 25px rgba(0,0,0,.2);font-weight:800!important;}
+/* Demo-market badge injected by JS */
+.demo-market-badge{display:inline-flex;align-items:center;gap:6px;margin-left:8px;padding:5px 9px;border-radius:999px;background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.2);color:#facc15;font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;vertical-align:middle;}
+.demo-market-dot{width:6px;height:6px;border-radius:50%;background:#facc15;box-shadow:0 0 10px rgba(250,204,21,.55);}
+@media(max-width:700px){.theme-grid{grid-template-columns:1fr!important}.theme-preview-box{height:72px!important}.settings-row{padding:14px!important}.demo-market-badge{display:flex;margin:7px 0 0;width:max-content}.market-live-price{font-size:clamp(28px,9vw,44px)!important;}}
 </style>
 </head>
 <body>
@@ -1929,17 +1971,17 @@ input, select, textarea, button {
 <div class="market-ticker-bar" id="marketTickerBar">
 <div class="ticker-item selected" id="tickerBTC" onclick="selectMarketCoin('BTC')">
 <div class="ticker-symbol">BTC / CAD</div>
-<div class="ticker-price" id="tickerPriceBTC">Live price unavailable</div>
+<div class="ticker-price" id="tickerPriceBTC">Demo price</div>
 <div class="ticker-change up" id="tickerChangeBTC">—</div>
 </div>
 <div class="ticker-item" id="tickerSOL" onclick="selectMarketCoin('SOL')">
 <div class="ticker-symbol">SOL / CAD</div>
-<div class="ticker-price" id="tickerPriceSOL">Live price unavailable</div>
+<div class="ticker-price" id="tickerPriceSOL">Demo price</div>
 <div class="ticker-change up" id="tickerChangeSOL">—</div>
 </div>
 <div class="ticker-item" id="tickerETH" onclick="selectMarketCoin('ETH')">
 <div class="ticker-symbol">ETH / CAD</div>
-<div class="ticker-price" id="tickerPriceETH">Live price unavailable</div>
+<div class="ticker-price" id="tickerPriceETH">Demo price</div>
 <div class="ticker-change up" id="tickerChangeETH">—</div>
 </div>
 </div>
@@ -1961,7 +2003,7 @@ input, select, textarea, button {
 </button>
 </div>
 <div>
-<div class="market-live-price" id="mciPrice">Live price unavailable</div>
+<div class="market-live-price" id="mciPrice">Demo price</div>
 <div class="market-price-meta">
 <div class="mpm-change up" id="mciChange">—</div>
 <div class="mpm-badge up" id="mciPct">—</div>
@@ -2702,7 +2744,7 @@ function updateTickerBar(coin){
  priceEl.textContent=price;
  if(Number.isFinite(pct)){
   const sign=pct>0?'+':'';
-  changeEl.textContent=`${sign}${pct.toFixed(2)}%`;
+  changeEl.textContent=`${sign}${pct.toFixed(2)}% · DEMO`;
   changeEl.className=`ticker-change ${pct>=0?'up':'down'}`;
  }else{
   changeEl.textContent='—';
@@ -3114,16 +3156,53 @@ setMacTab(macCurrentTab);
 updateMarketAlerts();
 }
 renderExchangeTransactions();
-// HARD LIVE-PRICE LOCK: crypto prices start as unavailable and can ONLY be
-// populated by a successful live API response. No generated/cached/fallback price.
-marketPrices = {BTC:emptyMarketData(),SOL:emptyMarketData(),ETH:emptyMarketData()};
-['BTC','SOL','ETH'].forEach(coin => updateTickerBar(coin));
-updateMainView('BTC');
-updateOrderBook('BTC');
-fetchLiveUsdCadRate();
-fetchLiveMarketPrices();
-setInterval(fetchLiveUsdCadRate, 3600000);
-setInterval(updateMarketFreshness, 15000);
+// DEMO MARKET MODE: these are intentionally made-up prices for the UI.
+// No live market API is used by the market, so the demo stays deterministic and exchangeable.
+const DEMO_MARKET = {
+ BTC: {price:142500, open24h:140850, change24h:1650, changePct:1.17, high24h:144900, low24h:139700, volume24h:28400000000},
+ SOL: {price:228.40, open24h:221.85, change24h:6.55, changePct:2.95, high24h:233.70, low24h:217.20, volume24h:3120000000},
+ ETH: {price:4860, open24h:4775, change24h:85, changePct:1.78, high24h:4935, low24h:4690, volume24h:16800000000}
+};
+function loadDemoMarket(){
+ const now=Date.now();
+ for(const coin of ['BTC','SOL','ETH']){
+   const d=DEMO_MARKET[coin];
+   marketPrices[coin]={...d,lastUpdatedAt:now};
+   priceHistory[coin]=[];
+   for(let i=30;i>=0;i--){
+     const wobble=Math.sin(i*0.63+(coin==='SOL'?1.2:coin==='ETH'?.6:0))*d.price*0.003;
+     priceHistory[coin].push({t:now-i*60000,p:d.price+wobble});
+   }
+ }
+ document.documentElement.dataset.marketStatus='demo';
+ document.documentElement.dataset.marketMode='demo';
+ ['BTC','SOL','ETH'].forEach(updateTickerBar);
+ updateMainView('BTC');
+ updateOrderBook('BTC');
+ if(typeof syncCryptoUsdRates==='function') syncCryptoUsdRates();
+ if(typeof updateLivePreview==='function') updateLivePreview();
+}
+loadDemoMarket();
+// Keep the demo market moving subtly without ever contacting a live-price API.
+setInterval(()=>{
+ const now=Date.now();
+ for(const coin of ['BTC','SOL','ETH']){
+   const base=DEMO_MARKET[coin].price;
+   const wave=Math.sin(now/28000+(coin==='BTC'?0:coin==='SOL'?1.7:3.1))*0.0018;
+   const price=base*(1+wave);
+   const d=marketPrices[coin];
+   d.price=price;
+   d.lastUpdatedAt=now;
+   d.change24h=price-d.open24h;
+   d.changePct=(d.change24h/d.open24h)*100;
+   d.high24h=Math.max(d.high24h,price);
+   d.low24h=Math.min(d.low24h,price);
+   priceHistory[coin].push({t:now,p:price});
+   if(priceHistory[coin].length>180) priceHistory[coin].shift();
+ }
+ syncCryptoUsdRates();
+ refreshMarketUI();
+},10000);
 let priceAlertsEnabled = {BTC:false, SOL:false, ETH:false};
 let globalAlertsOn = false;
 let lastAlertToastAt = {BTC:0,SOL:0,ETH:0};
@@ -3186,8 +3265,7 @@ showToast(msg);
 selectMarketCoin('BTC');
 setMacTab('buy');
 const MARGINAL_TAX_RATE = 0.33; // applied to the 50% taxable inclusion only
-const exchangeRatesInUSD = {USD:1.0,CAD:0,BTC:0,SOL:0,ETH:0};
-fetchLiveUsdCadRate();
+const exchangeRatesInUSD = {USD:1.0,CAD:1/1.365,BTC:142500/1.365,SOL:228.40/1.365,ETH:4860/1.365};
 initializeCostBasis();
 function showToast(message, duration=3500) { toastMessage.textContent=message; toastNotification.classList.add('show'); setTimeout(()=>toastNotification.classList.remove('show'),duration); }
 function calculateConversion(amount, fromCurr, toCurr) {
@@ -3459,6 +3537,45 @@ profitsPanel.addEventListener('touchend',pHandleEnd);
 profitsPanel.addEventListener('mousedown',e=>pHandleStart(e.clientY));
 window.addEventListener('mousemove',e=>{if(pIsDragging)pHandleMove(e.clientY,e);});
 window.addEventListener('mouseup',()=>{if(pIsDragging)pHandleEnd();});
+</script>
+
+<script>
+/* Final polish + reliable demo exchange rates */
+(function(){
+  const demoRates = { USD:1, CAD:1/1.365, BTC:142500/1.365, SOL:228.40/1.365, ETH:4860/1.365 };
+  Object.assign(exchangeRatesInUSD, demoRates);
+  if(typeof syncCryptoUsdRates==='function') syncCryptoUsdRates();
+
+  const marketTitle=document.querySelector('#marketPanel .dashboard-title');
+  if(marketTitle && !marketTitle.querySelector('.demo-market-badge')){
+    const badge=document.createElement('span');
+    badge.className='demo-market-badge';
+    badge.innerHTML='<span class="demo-market-dot"></span>Demo prices';
+    marketTitle.appendChild(badge);
+  }
+
+  // Make the three appearance choices feel like real selectable presets and remember the choice.
+  const originalSetTheme = window.setTheme;
+  window.setTheme = function(themeName){
+    originalSetTheme(themeName);
+    try{localStorage.setItem('walletTheme',themeName);}catch(e){}
+    document.documentElement.dataset.theme=themeName;
+  };
+  try{
+    const saved=localStorage.getItem('walletTheme');
+    if(saved && ['dark','emerald','midnight'].includes(saved)) window.setTheme(saved);
+  }catch(e){}
+
+  // If an old browser/session left the app with empty market data, restore the demo market.
+  setTimeout(()=>{
+    if(!marketPrices?.BTC?.price){
+      const fn=window.loadDemoMarket;
+      if(typeof fn==='function') fn();
+    }
+    if(typeof syncCryptoUsdRates==='function') syncCryptoUsdRates();
+    if(typeof refreshMarketUI==='function') refreshMarketUI();
+  },0);
+})();
 </script>
 </body>
 </html>
