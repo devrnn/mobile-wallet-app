@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root {
 --bg-main: #070709;
@@ -1494,6 +1495,62 @@ overflow: hidden;
 @media (prefers-reduced-motion:reduce){.market-live-price.tick-up,.market-live-price.tick-down{animation:none}.ticker-item,.mac-pct,.mac-submit-btn{transition:none}}
 </style>
 
+
+<style id="wallet-security-transfer-styles">
+/* Added wallet features: transaction history, QR send/receive, PIN lock, trade confirmation. */
+.card-actions.feature-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.card-actions.feature-actions .action-btn{min-width:0;padding:12px 8px;font-size:12px}
+.card-actions.feature-actions .action-btn i{width:14px;height:14px}
+@media(max-width:600px){.card-actions.feature-actions{grid-template-columns:1fr 1fr 1fr;gap:7px}.card-actions.feature-actions .action-btn{font-size:11px;padding:11px 5px}}
+.feature-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid rgba(52,211,153,.18);background:rgba(52,211,153,.07);border-radius:999px;color:var(--accent-green);font-size:10px;font-weight:800;letter-spacing:.2px}
+.feature-badge i{width:12px;height:12px}
+.tx-history-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:20px;padding:20px;box-shadow:0 12px 32px -16px rgba(0,0,0,.6)}
+.tx-history-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.tx-history-filters{display:flex;gap:7px;flex-wrap:wrap}
+.tx-filter{border:1px solid var(--border-subtle);background:rgba(255,255,255,.035);color:var(--text-muted);border-radius:999px;padding:7px 10px;font-size:10px;font-weight:750;cursor:pointer}
+.tx-filter.active{background:#fff;color:#08080a;border-color:#fff}
+.tx-history-clear{border:1px solid rgba(248,113,113,.2);background:rgba(248,113,113,.07);color:var(--accent-red);border-radius:9px;padding:8px 10px;font-size:10px;font-weight:800;cursor:pointer}
+.tx-history-list{display:flex;flex-direction:column;gap:9px}
+.tx-history-row{border:1px solid var(--border-subtle);background:rgba(255,255,255,.025);border-radius:15px;padding:13px 14px;display:flex;justify-content:space-between;gap:14px;align-items:center}
+.tx-history-left{display:flex;align-items:center;gap:11px;min-width:0}
+.tx-history-icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.045);border:1px solid var(--border-subtle);flex-shrink:0}
+.tx-history-icon i{width:16px;height:16px}
+.tx-history-title{font-size:12.5px;font-weight:750;color:#fff;overflow-wrap:anywhere}
+.tx-history-meta{font-size:10.5px;color:var(--text-muted);margin-top:3px;overflow-wrap:anywhere}
+.tx-history-right{text-align:right;flex-shrink:0;min-width:112px}
+.tx-history-amount{font-size:13px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.tx-history-amount.in{color:var(--accent-green)} .tx-history-amount.out{color:var(--accent-red)}
+.tx-history-status{margin-top:3px;font-size:9px;color:var(--text-muted);font-weight:700}
+.tx-empty-state{text-align:center;color:var(--text-muted);padding:38px 8px;font-size:12px}
+.qr-layout{display:grid;grid-template-columns:170px minmax(0,1fr);gap:18px;align-items:center;margin-bottom:16px}
+.qr-box{width:170px;height:170px;border-radius:16px;background:#fff;padding:10px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.qr-box img{max-width:100%;height:auto}
+.qr-address{font-size:11px;line-height:1.55;color:#fff;word-break:break-all;background:rgba(255,255,255,.03);border:1px solid var(--border-subtle);border-radius:12px;padding:12px}
+.feature-note{font-size:10px;line-height:1.5;color:var(--text-muted);margin-top:8px}
+.feature-inline-actions{display:flex;gap:8px;flex-wrap:wrap}
+.feature-inline-actions .modal-btn{width:auto;flex:1;min-width:120px}
+.scan-preview{width:100%;border-radius:14px;background:#050508;border:1px solid var(--border-subtle);overflow:hidden;margin:0 0 12px;aspect-ratio:4/3;object-fit:cover;display:block}
+.scan-status{font-size:10px;color:var(--text-muted);padding:9px 11px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--border-subtle);margin-bottom:12px}
+.confirm-summary{background:rgba(255,255,255,.025);border:1px solid var(--border-subtle);border-radius:16px;padding:14px;margin-bottom:16px}
+.confirm-summary-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;font-size:11px;border-bottom:1px solid rgba(255,255,255,.045)}
+.confirm-summary-row:last-child{border-bottom:0;padding-bottom:0}.confirm-summary-row:first-child{padding-top:0}
+.confirm-summary-row span:first-child{color:var(--text-muted)} .confirm-summary-row span:last-child{color:#fff;font-weight:750;text-align:right;word-break:break-word}
+.confirm-total{font-size:18px!important;font-weight:850!important;color:#fff!important}
+.security-card{background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.018));border:1px solid var(--border-subtle);border-radius:18px;padding:16px;margin-top:14px}
+.security-status{font-size:10px;color:var(--text-muted);margin-top:5px;line-height:1.45}
+.pin-pad-dots{display:flex;justify-content:center;gap:9px;margin:6px 0 16px}
+.pin-dot{width:10px;height:10px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:transparent;transition:.15s ease}
+.pin-dot.filled{background:#fff;border-color:#fff;box-shadow:0 0 10px rgba(255,255,255,.18)}
+.pin-input{letter-spacing:.45em;text-align:center!important;font-size:22px!important}
+.lock-overlay{position:fixed;inset:0;z-index:650;background:rgba(5,5,8,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.lock-overlay.open{opacity:1;pointer-events:auto}
+.lock-card{width:min(360px,100%);background:linear-gradient(180deg,#151519,#0f0f13);border:1px solid rgba(255,255,255,.09);border-radius:24px;padding:26px;box-shadow:0 26px 80px rgba(0,0,0,.6);text-align:center}
+.lock-icon{width:54px;height:54px;border-radius:17px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09)}
+.lock-icon i{width:23px;height:23px}.lock-title{font-size:20px;font-weight:850;letter-spacing:-.4px}.lock-sub{font-size:11px;color:var(--text-muted);margin-top:7px;margin-bottom:18px;line-height:1.5}
+.lock-error{display:none;color:var(--accent-red);font-size:10px;font-weight:700;margin-top:9px}
+@media(max-width:650px){.qr-layout{grid-template-columns:1fr}.qr-box{margin:0 auto}.tx-history-row{align-items:flex-start}.tx-history-right{min-width:92px}.tx-history-amount{font-size:12px}}
+</style>
+
 </head>
 <body>
 <div class="intro" aria-hidden="true">
@@ -1570,6 +1627,7 @@ overflow: hidden;
 <a href="#" class="sidebar-item active" data-target="walletPanel"><i data-lucide="wallet"></i><span data-i18n="navOverview">Overview</span></a>
 <a href="#" class="sidebar-item" data-target="exchangePanel"><i data-lucide="arrow-left-right"></i><span data-i18n="navExchange">Exchange</span></a>
 <a href="#" class="sidebar-item" data-target="marketPanel"><i data-lucide="candlestick-chart"></i><span data-i18n="navMarket">Market</span></a>
+<a href="#" class="sidebar-item" data-target="transactionsPanel"><i data-lucide="history"></i><span data-i18n="navTransactions">Transactions</span></a>
 <a href="#" class="sidebar-item" data-target="profitsPanel"><i data-lucide="chart-no-axes-combined"></i><span data-i18n="navProfits">Profits & Loss</span></a>
 <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span data-i18n="navSettings">Settings</span></a>
 </div>
@@ -1604,9 +1662,10 @@ overflow: hidden;
 <div>
 <div class="main-balance" id="totalBalance">$1,000.00<span class="currency-label">CAD</span></div>
 </div>
-<div class="card-actions">
+<div class="card-actions feature-actions">
 <button class="action-btn primary" id="exchangeBtn"><i data-lucide="arrow-left-right"></i><span data-i18n="btnExchange">Exchange</span></button>
-<a class="action-btn" id="transferBtn" href="https://mobile.rbcroyalbank.com/mb/mxweb/rbc/download-ip-en.html" target="_blank" rel="noopener noreferrer"><i data-lucide="arrow-up-right"></i><span data-i18n="btnTransfer">Transfer</span></a>
+<button class="action-btn" id="sendBtn"><i data-lucide="arrow-up-right"></i><span>Send</span></button>
+<button class="action-btn" id="receiveBtn"><i data-lucide="qr-code"></i><span>Receive</span></button>
 </div>
 <div class="edit-panel" id="walletEditPanel">
 <div class="edit-panel-title"><i data-lucide="pencil"></i><span data-i18n="editWalletPrefix">Edit</span> <span id="editWalletName">CAD</span> <span data-i18n="editWalletSuffix">Wallet</span></div>
@@ -1806,6 +1865,31 @@ overflow: hidden;
 </div>
 </div>
 </section>
+<section class="page-panel" id="transactionsPanel">
+<div class="scroll-content" id="transactionsScroll">
+<div class="dashboard-header">
+<div class="dashboard-title-group">
+<button class="menu-btn" onclick="openSidebar()"><i data-lucide="menu"></i></button>
+<h1 class="dashboard-title">Transaction History</h1>
+</div>
+<span class="feature-badge"><i data-lucide="shield-check"></i>Local demo ledger</span>
+</div>
+<div class="tx-history-card">
+<div class="tx-history-toolbar">
+<div class="tx-history-filters" id="txHistoryFilters">
+<button class="tx-filter active" type="button" data-filter="all">All</button>
+<button class="tx-filter" type="button" data-filter="send">Sent</button>
+<button class="tx-filter" type="button" data-filter="receive">Received</button>
+<button class="tx-filter" type="button" data-filter="trade">Trades</button>
+<button class="tx-filter" type="button" data-filter="exchange">Exchanges</button>
+</div>
+<button class="tx-history-clear" id="txHistoryClearBtn" type="button">Clear history</button>
+</div>
+<div id="txHistoryList" class="tx-history-list"></div>
+</div>
+<div class="feature-note">This UI records demo wallet actions locally in this browser. It is not a blockchain explorer or custody service.</div>
+</div>
+</section>
 <section class="page-panel" id="settingsPanel">
 <div class="scroll-content">
 <div class="dashboard-header">
@@ -1840,6 +1924,17 @@ overflow: hidden;
 <div class="settings-row">
 <div class="settings-info"><div class="settings-title" data-i18n="secBiometricsTitle">Biometric Authentication</div><div class="settings-desc" data-i18n="secBiometricsDesc">Require Face ID / Touch ID when opening wallet</div></div>
 <label class="switch"><input type="checkbox" id="toggleBiometrics" checked><span class="slider"></span></label>
+</div>
+<div class="settings-row">
+<div class="settings-info"><div class="settings-title">PIN Lock</div><div class="settings-desc" id="pinLockDesc">Lock this wallet with a 4-digit PIN.</div></div>
+<label class="switch"><input type="checkbox" id="togglePinLock"><span class="slider"></span></label>
+</div>
+<div class="settings-row">
+<div class="settings-info"><div class="settings-title">Wallet Lock Controls</div><div class="settings-desc" id="pinStatusText">No PIN configured.</div></div>
+<div class="feature-inline-actions" style="width:min(230px,48%);">
+<button class="settings-select" id="setPinBtn" type="button">Set PIN</button>
+<button class="settings-select" id="lockNowBtn" type="button">Lock Now</button>
+</div>
 </div>
 </div>
 <div class="asset-list">
@@ -1941,6 +2036,116 @@ overflow: hidden;
 </div>
 </section>
 </main>
+
+<div class="modal-overlay" id="receiveModal">
+<div class="modal-card">
+<div class="modal-title">Receive with QR</div>
+<div class="modal-field" style="margin-bottom:14px;">
+<label>Asset</label>
+<div class="input-row"><select id="receiveAsset"><option value="SOL">SOL</option><option value="BTC">BTC</option><option value="ETH">ETH</option></select></div>
+</div>
+<div class="qr-layout">
+<div class="qr-box" id="receiveQr"></div>
+<div>
+<div class="item-subtitle" style="margin-bottom:6px;">Demo receive address</div>
+<div class="qr-address" id="receiveAddressText">—</div>
+<div class="feature-note">Show this QR code to the sender. This demo address is not a real on-chain deposit address.</div>
+</div>
+</div>
+<div class="feature-inline-actions">
+<button class="modal-btn" id="copyReceiveAddressBtn" type="button"><i data-lucide="copy"></i>Copy address</button>
+<button class="modal-btn" id="recordDemoReceiveBtn" type="button" style="background:rgba(52,211,153,.12);color:#fff;border:1px solid rgba(52,211,153,.2);"><i data-lucide="arrow-down-left"></i>Record demo receive</button>
+</div>
+<div class="modal-field" style="margin-top:14px;">
+<label>Amount received</label>
+<div class="input-row"><input type="number" id="receiveAmount" min="0" step="any" placeholder="0.00" inputmode="decimal"><span class="currency-label" id="receiveAmountUnit">SOL</span></div>
+</div>
+</div>
+</div>
+<div class="modal-overlay" id="sendModal">
+<div class="modal-card">
+<div class="modal-title">Send</div>
+<div class="modal-field" style="margin-bottom:10px;">
+<label>Asset</label>
+<div class="input-row"><select id="sendAsset"><option value="SOL">SOL</option><option value="BTC">BTC</option><option value="ETH">ETH</option></select></div>
+</div>
+<div class="modal-field" style="margin-bottom:10px;">
+<label>Recipient address</label>
+<div class="input-row"><input type="text" id="sendAddress" placeholder="Paste a wallet address or scan a QR" style="text-align:left;"></div>
+</div>
+<div class="feature-inline-actions" style="margin-bottom:12px;">
+<button class="modal-btn" id="scanQrBtn" type="button" style="background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.1);"><i data-lucide="scan-line"></i>Scan QR</button>
+<button class="modal-btn" id="pasteQrBtn" type="button" style="background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.1);"><i data-lucide="clipboard"></i>Paste</button>
+</div>
+<div class="modal-field" style="margin-bottom:10px;">
+<label>Amount</label>
+<div class="input-row"><input type="number" id="sendAmount" min="0" step="any" placeholder="0.00" inputmode="decimal"><span class="currency-label" id="sendAmountUnit">SOL</span></div>
+<span class="field-subtext" id="sendAvailableBalance">Available: 0.00 SOL</span>
+</div>
+<div class="feature-note">Sending here updates the local demo balance and ledger. No blockchain transaction is broadcast.</div>
+<div id="sendError" class="exchange-error"></div>
+<button class="modal-btn" id="sendSubmitBtn" type="button"><i data-lucide="arrow-up-right"></i>Review Send</button>
+</div>
+</div>
+<div class="modal-overlay" id="scanModal">
+<div class="modal-card">
+<div class="modal-title">Scan Recipient QR</div>
+<video class="scan-preview" id="qrVideo" autoplay muted playsinline></video>
+<div class="scan-status" id="scanStatus">Starting camera…</div>
+<div class="modal-field" style="margin-bottom:12px;">
+<label>QR payload / address</label>
+<div class="input-row"><input type="text" id="manualQrPayload" placeholder="Paste QR text here" style="text-align:left;"></div>
+</div>
+<div style="display:flex;gap:10px;">
+<button class="modal-btn" id="useManualQrBtn" type="button">Use value</button>
+<button class="modal-btn" id="closeScanBtn" type="button" style="background:rgba(255,255,255,.08);color:#fff;">Close</button>
+</div>
+</div>
+</div>
+<div class="modal-overlay" id="pinModal">
+<div class="modal-card">
+<div class="modal-title" id="pinModalTitle">Set PIN</div>
+<div class="modal-field" id="pinCurrentRow" style="display:none;margin-bottom:10px;">
+<label>Current PIN</label>
+<div class="input-row"><input class="pin-input" type="password" id="pinCurrentInput" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="••••"></div>
+</div>
+<div class="modal-field" style="margin-bottom:10px;">
+<label>New 4-digit PIN</label>
+<div class="input-row"><input class="pin-input" type="password" id="pinNewInput" inputmode="numeric" autocomplete="new-password" maxlength="4" placeholder="••••"></div>
+</div>
+<div class="modal-field" style="margin-bottom:10px;">
+<label>Confirm PIN</label>
+<div class="input-row"><input class="pin-input" type="password" id="pinConfirmInput" inputmode="numeric" autocomplete="new-password" maxlength="4" placeholder="••••"></div>
+</div>
+<div class="error-text" id="pinError"></div>
+<div style="display:flex;gap:10px;">
+<button class="modal-btn" id="pinCancelBtn" type="button" style="background:rgba(255,255,255,.08);color:#fff;">Cancel</button>
+<button class="modal-btn" id="pinSaveBtn" type="button">Save PIN</button>
+</div>
+</div>
+</div>
+<div class="lock-overlay" id="walletLockOverlay">
+<div class="lock-card">
+<div class="lock-icon"><i data-lucide="lock-keyhole"></i></div>
+<div class="lock-title">Wallet Locked</div>
+<div class="lock-sub">Enter your 4-digit PIN to return to the wallet.</div>
+<div class="modal-field"><div class="input-row"><input class="pin-input" type="password" id="unlockPinInput" inputmode="numeric" autocomplete="current-password" maxlength="4" placeholder="••••"></div></div>
+<button class="modal-btn" id="unlockWalletBtn" type="button" style="margin-top:12px;">Unlock Wallet</button>
+<div class="lock-error" id="unlockPinError">Incorrect PIN. Try again.</div>
+<div class="feature-note">Demo security only: this PIN protects the interface in this browser. It does not secure funds on a real blockchain.</div>
+</div>
+</div>
+<div class="modal-overlay" id="tradeConfirmModal">
+<div class="modal-card">
+<div class="modal-title">Review &amp; Confirm Trade</div>
+<div class="confirm-summary" id="tradeConfirmSummary"></div>
+<div class="feature-note" style="margin-bottom:14px;">Nothing is executed until you press Confirm. Review the asset, amount, price, fees, and expected result.</div>
+<div style="display:flex;gap:10px;">
+<button class="modal-btn" id="tradeConfirmCancel" type="button" style="background:rgba(255,255,255,.08);color:#fff;">Back</button>
+<button class="modal-btn" id="tradeConfirmSubmit" type="button">Confirm Trade</button>
+</div>
+</div>
+</div>
 <div class="modal-overlay" id="exchangeModal">
 <div class="modal-card">
 <div class="modal-title" data-i18n="modalExTitle">Exchange</div>
@@ -1995,7 +2200,7 @@ const translations = {
 'en-CA': {
 pullToRefresh:"Pull to refresh",updatingBalance:"Updating balance...",updated:"Updated",releaseToUpdate:"Release to update",
 menuLabel:"Menu",navOverview:"Overview",navExchange:"Exchange",navProfits:"Profits & Loss",navMarket:"Market",navSettings:"Settings",
-titleWallet:"Wallet",totalBalanceTitle:"Total Balance",btnExchange:"Exchange",btnTransfer:"Transfer",
+titleWallet:"Wallet",totalBalanceTitle:"Total Balance",btnExchange:"Exchange",btnTransfer:"Transfer",navTransactions:"Transactions",
 editWalletPrefix:"Edit",editWalletSuffix:"Wallet",editLabelBalance:"Balance",editLabelRate:"Rate",btnCancel:"Cancel",btnSave:"Save",
 recentActivityTitle:"Recent Activity",assetsTitle:"Assets",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
 titleExchangePanel:"Exchange",conversionFeesTitle:"Conversion Fees & Tax",
@@ -2026,7 +2231,7 @@ exSuccessMsg:(amt,from,rec,to)=>`${amt.toFixed(2)} ${from} exchanged to ${rec.to
 'en-US': {
 pullToRefresh:"Pull to refresh",updatingBalance:"Updating balance...",updated:"Updated",releaseToUpdate:"Release to update",
 menuLabel:"Menu",navOverview:"Overview",navExchange:"Exchange",navProfits:"Profits & Loss",navMarket:"Market",navSettings:"Settings",
-titleWallet:"Wallet",totalBalanceTitle:"Total Balance",btnExchange:"Exchange",btnTransfer:"Transfer",
+titleWallet:"Wallet",totalBalanceTitle:"Total Balance",btnExchange:"Exchange",btnTransfer:"Transfer",navTransactions:"Transactions",
 editWalletPrefix:"Edit",editWalletSuffix:"Wallet",editLabelBalance:"Balance",editLabelRate:"Rate",btnCancel:"Cancel",btnSave:"Save",
 recentActivityTitle:"Recent Activity",assetsTitle:"Assets",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
 titleExchangePanel:"Exchange",conversionFeesTitle:"Conversion Fees & Tax",
@@ -2057,7 +2262,7 @@ exSuccessMsg:(amt,from,rec,to)=>`${amt.toFixed(2)} ${from} exchanged to ${rec.to
 'fr-CA': {
 pullToRefresh:"Tirer pour actualiser",updatingBalance:"Mise à jour du solde...",updated:"Mis à jour",releaseToUpdate:"Relâcher pour mettre à jour",
 menuLabel:"Menu",navOverview:"Aperçu",navExchange:"Échange",navProfits:"Profits et pertes",navMarket:"Marché",navSettings:"Paramètres",
-titleWallet:"Portefeuille",totalBalanceTitle:"Solde Total",btnExchange:"Échanger",btnTransfer:"Transférer",
+titleWallet:"Portefeuille",totalBalanceTitle:"Solde Total",btnExchange:"Échanger",btnTransfer:"Transférer",navTransactions:"Transactions",
 editWalletPrefix:"Modifier le portefeuille",editWalletSuffix:"",editLabelBalance:"Solde",editLabelRate:"Taux",btnCancel:"Annuler",btnSave:"Enregistrer",
 recentActivityTitle:"Activité Récente",assetsTitle:"Actifs",cadSub:"Dollar canadien",usdSub:"Dollar américain",
 titleExchangePanel:"Échange",conversionFeesTitle:"Frais de Conversion et Taxes",
@@ -2810,49 +3015,62 @@ function updateMacTotal(){
   const total=macCurrentTab==='buy'?(price>0?amt/price:0):amt*price;
   document.getElementById('macTotalVal').textContent=macCurrentTab==='buy'?`${total.toFixed(4)} ${activeCoin}`:`${total.toFixed(2)} CAD`;
 }
+let pendingMarketTrade = null;
 function macSubmitOrder(){
   const amt=parseFloat(document.getElementById('macAmountInput').value)||0;
-  if(amt<=0)return;
-  const btn=document.getElementById('macSubmitBtn');
   const coin=activeCoin;
   const price=marketPrices[coin]?.price||0;
-  if(!btn||!price)return;
-  btn.style.opacity='0.6';
-  btn.style.pointerEvents='none';
+  if(amt<=0||!price)return;
+  const available=macCurrentTab==='buy'?getBalanceForCurrency('CAD'):getBalanceForCurrency(coin);
+  if(amt>available+1e-9){showToast(macCurrentTab==='buy'?'Insufficient CAD balance':`Insufficient ${coin} balance`);return;}
+  const received=macCurrentTab==='buy'?(amt/price):(amt*price);
+  pendingSend=null; pendingExchangeTrade=null; pendingMarketTrade={tab:macCurrentTab,amt,coin,price,received};
+  openTradeConfirmation({
+    confirmLabel:macCurrentTab==='buy'?`Confirm Buy ${coin}`:`Confirm Sell ${coin}`,
+    rows:[
+      {label:'Side',value:macCurrentTab==='buy'?`Buy ${coin}`:`Sell ${coin}`},
+      {label:'Market price',value:realisticPrice(coin,price)},
+      {label:'Amount',value:macCurrentTab==='buy'?`${amt.toFixed(2)} CAD`:`${amt.toFixed(4)} ${coin}`},
+      {label:macCurrentTab==='buy'?'Estimated receive':'Estimated proceeds',value:macCurrentTab==='buy'?`${received.toFixed(4)} ${coin}`:`${received.toFixed(2)} CAD`,emphasis:true}
+    ]
+  });
+}
+function executePendingMarketTrade(){
+  const p=pendingMarketTrade;
+  if(!p)return;
+  tradeConfirmSubmit.classList.add('loading');
   setTimeout(()=>{
     try{
-      if(macCurrentTab==='buy'){
-        if(getBalanceForCurrency('CAD')<amt){showToast('Insufficient CAD balance');return;}
-        const received=amt/price;
-        deductBalanceForCurrency('CAD',amt);
-        addBalanceForCurrency(coin,received);
-        userTrades.unshift({coin,price,size:received,side:'buy',time:new Date()});
+      if(p.tab==='buy'){
+        if(getBalanceForCurrency('CAD')<p.amt-1e-9){showToast('Insufficient CAD balance');return;}
+        deductBalanceForCurrency('CAD',p.amt);
+        addBalanceForCurrency(p.coin,p.received);
+        userTrades.unshift({coin:p.coin,price:p.price,size:p.received,side:'buy',time:new Date()});
         if(userTrades.length>20)userTrades.pop();
-        recordMarketOrderActivity(amt,'CAD',coin,received);
-        renderBalance();
-        updateOrderBook(coin);
-        showToast(`Bought ${received.toFixed(4)} ${coin} for $${amt.toFixed(2)} CAD`);
+        recordMarketOrderActivity(p.amt,'CAD',p.coin,p.received);
+        window.addTransactionRecord({type:'trade',timestamp:new Date().toISOString(),side:'buy',coin:p.coin,amount:p.amt,quoteCurrency:'CAD',received:p.received,price:p.price});
+        renderBalance(); updateOrderBook(p.coin);
+        showToast(`Bought ${p.received.toFixed(4)} ${p.coin} for $${p.amt.toFixed(2)} CAD`);
       }else{
-        const bal=getBalanceForCurrency(coin);
-        if(bal<amt){showToast(`Insufficient ${coin} balance`);return;}
-        const received=amt*price;
-        deductBalanceForCurrency(coin,amt);
-        addBalanceForCurrency('CAD',received);
-        userTrades.unshift({coin,price,size:amt,side:'sell',time:new Date()});
+        const bal=getBalanceForCurrency(p.coin);
+        if(bal<p.amt-1e-9){showToast(`Insufficient ${p.coin} balance`);return;}
+        deductBalanceForCurrency(p.coin,p.amt);
+        addBalanceForCurrency('CAD',p.received);
+        userTrades.unshift({coin:p.coin,price:p.price,size:p.amt,side:'sell',time:new Date()});
         if(userTrades.length>20)userTrades.pop();
-        recordMarketOrderActivity(amt,coin,'CAD',received);
-        renderBalance();
-        updateOrderBook(coin);
-        showToast(`Sold ${amt.toFixed(4)} ${coin} for $${received.toFixed(2)} CAD`);
+        recordMarketOrderActivity(p.amt,p.coin,'CAD',p.received);
+        window.addTransactionRecord({type:'trade',timestamp:new Date().toISOString(),side:'sell',coin:p.coin,amount:p.amt,quoteCurrency:'CAD',received:p.received,price:p.price});
+        renderBalance(); updateOrderBook(p.coin);
+        showToast(`Sold ${p.amt.toFixed(4)} ${p.coin} for $${p.received.toFixed(2)} CAD`);
       }
       document.getElementById('macAmountInput').value='';
       document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));
       updateMacTotal();
+      renderTransactionHistory();
     }finally{
-      btn.style.opacity='1';
-      btn.style.pointerEvents='';
+      tradeConfirmSubmit.classList.remove('loading'); tradeConfirmModal.classList.remove('open'); pendingMarketTrade=null;
     }
-  },700);
+  },350);
 }
 
 
@@ -3123,6 +3341,7 @@ function pushExchangeTransaction(amount, fromCurr, toCurr, receivedAmount, timeL
   };
   recentActivities.unshift({...activityRecord});
   profitLossActivities.unshift({...activityRecord});
+  window.addTransactionRecord({type:'exchange',timestamp:activityRecord.timestamp,fromCurr,toCurr,amount:Number(amount),received:Number(receivedAmount),feeCad:Number(activityRecord.feeCad||0),gainCad:Number(activityRecord.gainCad||0)});
   if(recentActivities.length>100) recentActivities.length=100;
   if(profitLossActivities.length>200) profitLossActivities.length=200;
   renderRecentActivity(); renderExchangeTransactions();
@@ -3228,6 +3447,23 @@ function recordMarketOrderActivity(amount, fromCurr, toCurr, receivedAmount) {
 window.addEventListener('load', ()=>{
   if(typeof renderExchangeTransactions==='function') renderExchangeTransactions();
 });
+let pendingExchangeTrade = null;
+const tradeConfirmModal = document.getElementById('tradeConfirmModal');
+const tradeConfirmSummary = document.getElementById('tradeConfirmSummary');
+const tradeConfirmSubmit = document.getElementById('tradeConfirmSubmit');
+const tradeConfirmCancel = document.getElementById('tradeConfirmCancel');
+
+function openTradeConfirmation(data){
+  tradeConfirmSummary.innerHTML = data.rows.map(r=>`<div class="confirm-summary-row"><span>${r.label}</span><span class="${r.emphasis?'confirm-total':''}">${r.value}</span></div>`).join('');
+  tradeConfirmSubmit.textContent = data.confirmLabel || 'Confirm Trade';
+  tradeConfirmSubmit.classList.remove('loading');
+  tradeConfirmModal.classList.add('open');
+  lucide.createIcons();
+}
+function closeTradeConfirmation(){ tradeConfirmModal.classList.remove('open'); pendingExchangeTrade=null; pendingMarketTrade=null; }
+tradeConfirmCancel.addEventListener('click',closeTradeConfirmation);
+tradeConfirmModal.addEventListener('click',e=>{if(e.target===tradeConfirmModal)closeTradeConfirmation();});
+
 confirmExchangeBtn.addEventListener('click', ()=>{
   const amount=parseFloat(exAmountInput.value)||0;
   const fromCurr=exFromSelect.value;
@@ -3238,16 +3474,41 @@ confirmExchangeBtn.addEventListener('click', ()=>{
   if(amount<=0 || amount>availableBalance+1e-9){exError.textContent=dict.exErrorText;exError.style.display='block';return;}
   const conversion=calculateConversion(amount,fromCurr,toCurr);
   if(conversion.unavailable){exError.textContent='Market price unavailable. Please try again.';exError.style.display='block';return;}
-  exError.style.display='none'; confirmExchangeBtn.classList.add('loading');
-  setTimeout(()=>{
-    confirmExchangeBtn.classList.remove('loading'); exchangeModal.classList.remove('open'); document.body.classList.remove('exchange-modal-open');
-    deductBalanceForCurrency(fromCurr,amount); addBalanceForCurrency(toCurr,conversion.receivedAmount);
-    const now=new Date(); const timeString=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    pushExchangeTransaction(amount,fromCurr,toCurr,conversion.receivedAmount,`${currentLang==='fr-CA'?"Aujourd'hui":'Today'}, ${timeString}`);
-    updateConversionPage(amount,fromCurr,toCurr); renderBalance(); updateAvailableBalanceSubtext(); updateLivePreview();
-    if(document.getElementById('toggleTxAlerts')?.checked) showToast(dict.exSuccessMsg(amount,fromCurr,conversion.receivedAmount,toCurr));
-  },450);
+  exError.style.display='none';
+  pendingSend=null; pendingMarketTrade=null; pendingExchangeTrade={amount,fromCurr,toCurr,conversion};
+  const feeText=`${conversion.feeInFrom.toFixed(fromCurr==='BTC'||fromCurr==='SOL'||fromCurr==='ETH'?6:2)} ${fromCurr}`;
+  const receiveText=`${conversion.receivedAmount.toFixed(toCurr==='BTC'||toCurr==='SOL'||toCurr==='ETH'?6:2)} ${toCurr}`;
+  openTradeConfirmation({
+    confirmLabel:'Confirm Exchange',
+    rows:[
+      {label:'From',value:`${amount.toFixed(fromCurr==='BTC'||fromCurr==='SOL'||fromCurr==='ETH'?6:2)} ${fromCurr}`},
+      {label:'To',value:toCurr},
+      {label:'Trading fee',value:feeText},
+      {label:'Price impact',value:`${Number(conversion.impactPct||0).toFixed(4)}%`},
+      {label:'Estimated receive',value:receiveText,emphasis:true}
+    ]
+  });
 });
+
+tradeConfirmSubmit.addEventListener('click',()=>{
+  if(pendingExchangeTrade){
+    const p=pendingExchangeTrade;
+    tradeConfirmSubmit.classList.add('loading');
+    setTimeout(()=>{
+      const conversion=p.conversion;
+      deductBalanceForCurrency(p.fromCurr,p.amount); addBalanceForCurrency(p.toCurr,conversion.receivedAmount);
+      const now=new Date(); const timeString=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      pushExchangeTransaction(p.amount,p.fromCurr,p.toCurr,conversion.receivedAmount,`${currentLang==='fr-CA'?"Aujourd'hui":'Today'}, ${timeString}`);
+      updateConversionPage(p.amount,p.fromCurr,p.toCurr); renderBalance(); updateAvailableBalanceSubtext(); updateLivePreview();
+      tradeConfirmSubmit.classList.remove('loading'); tradeConfirmModal.classList.remove('open'); exchangeModal.classList.remove('open'); document.body.classList.remove('exchange-modal-open'); pendingExchangeTrade=null;
+      const dict=translations[currentLang]||translations['en-CA'];
+      if(document.getElementById('toggleTxAlerts')?.checked) showToast(dict.exSuccessMsg(p.amount,p.fromCurr,conversion.receivedAmount,p.toCurr));
+    },450);
+  } else if(pendingMarketTrade){
+    executePendingMarketTrade();
+  }
+});
+
 document.getElementById('toggleHideBalances').addEventListener('change', e=>{ if(e.target.checked){balanceText.textContent='-';balanceText.classList.remove('blurred');} else {renderBalance();} });
 document.getElementById('settingDefaultCurrency').addEventListener('change', e=>{ const val=e.target.value; if(val==='CAD'||val==='USD'){currentCurrency=val;walletSelector.value=val;renderBalance();} });
 function clearRecentActivity(){ recentActivities=[]; renderRecentActivity(); const dict=translations[currentLang]||translations['en-CA']; showToast(dict.activityClearedMsg,2500); }
@@ -3272,6 +3533,13 @@ renderBalance();
 updateMarketAlerts();
 const dict=translations[currentLang]||translations['en-CA'];
 showToast(dict.settingsResetMsg,2500);
+
+localStorage.removeItem('wallet_demo_transaction_history_v1');
+localStorage.removeItem('wallet_demo_pin_hash_v1');
+localStorage.removeItem('wallet_demo_pin_enabled_v1');
+if(typeof window.refreshPinSettingsUI==='function')window.refreshPinSettingsUI();
+if(typeof window.renderTransactionHistory==='function')window.renderTransactionHistory();
+
 });
 const walletPanel = document.getElementById('walletPanel');
 const content = document.getElementById('walletScroll');
@@ -3892,5 +4160,183 @@ window.addEventListener('load',()=>{ syncExchangeConverter(); updateExchangeConv
   setInterval(()=>{if(ready&&document.getElementById('marketPanel')?.classList.contains('active'))scheduleDraw();},900);
 })();
 </script>
+
+<script id="wallet-feature-runtime">
+(function initWalletFeatureRuntime(){
+  const TX_KEY='wallet_demo_transaction_history_v1';
+  const PIN_HASH_KEY='wallet_demo_pin_hash_v1';
+  const PIN_ENABLED_KEY='wallet_demo_pin_enabled_v1';
+  let activeTxFilter='all';
+
+  window.transactionHistory=[];
+  try{const raw=localStorage.getItem(TX_KEY);const parsed=raw?JSON.parse(raw):[];if(Array.isArray(parsed))window.transactionHistory=parsed;}catch(_){window.transactionHistory=[];}
+
+  function saveTransactionHistory(){try{localStorage.setItem(TX_KEY,JSON.stringify(window.transactionHistory.slice(0,250)));}catch(_){} }
+  function addTransactionRecord(record){
+    const item={id:`tx-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,timestamp:new Date().toISOString(),status:'Completed',...record};
+    window.transactionHistory.unshift(item);window.transactionHistory=window.transactionHistory.slice(0,250);saveTransactionHistory();renderTransactionHistory();
+    return item;
+  }
+  window.addTransactionRecord=addTransactionRecord;
+
+  function formatTxTime(ts){const d=new Date(ts);if(Number.isNaN(d.getTime()))return 'Unknown time';return d.toLocaleString(currentLang==='fr-CA'?'fr-CA':'en-CA',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'});}
+  function txMeta(tx){
+    if(tx.type==='send')return `${tx.asset} • ${tx.address}`;
+    if(tx.type==='receive')return `${tx.asset} • ${tx.address}`;
+    if(tx.type==='trade')return `${tx.side==='buy'?'Buy':'Sell'} ${tx.coin} @ ${Number(tx.price||0).toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2})} CAD`;
+    return `${tx.fromCurr} → ${tx.toCurr}`;
+  }
+  function txTitle(tx){
+    if(tx.type==='send')return `Sent ${tx.asset}`;
+    if(tx.type==='receive')return `Received ${tx.asset}`;
+    if(tx.type==='trade')return `${tx.side==='buy'?'Bought':'Sold'} ${tx.coin}`;
+    return `Exchanged ${tx.fromCurr} to ${tx.toCurr}`;
+  }
+  function txIcon(tx){return tx.type==='send'?'arrow-up-right':tx.type==='receive'?'arrow-down-left':tx.type==='trade'?'candlestick-chart':'arrow-left-right';}
+  function txAmount(tx){
+    if(tx.type==='send')return {text:`-${Number(tx.amount||0).toLocaleString('en-CA',{maximumFractionDigits:6})} ${tx.asset}`,kind:'out'};
+    if(tx.type==='receive')return {text:`+${Number(tx.amount||0).toLocaleString('en-CA',{maximumFractionDigits:6})} ${tx.asset}`,kind:'in'};
+    if(tx.type==='trade')return tx.side==='buy'?{text:`+${Number(tx.received||0).toFixed(4)} ${tx.coin}`,kind:'in'}:{text:`-${Number(tx.amount||0).toFixed(4)} ${tx.coin}`,kind:'out'};
+    return {text:`+${Number(tx.received||0).toLocaleString('en-CA',{maximumFractionDigits:6})} ${tx.toCurr}`,kind:'in'};
+  }
+  function renderTransactionHistory(){
+    const list=document.getElementById('txHistoryList');if(!list)return;
+    const rows=window.transactionHistory.filter(tx=>activeTxFilter==='all'||tx.type===activeTxFilter).slice(0,100);
+    if(!rows.length){list.innerHTML='<div class="tx-empty-state">No transactions match this filter yet.</div>';lucide.createIcons();return;}
+    list.innerHTML=rows.map(tx=>{const amt=txAmount(tx);return `<div class="tx-history-row"><div class="tx-history-left"><div class="tx-history-icon"><i data-lucide="${txIcon(tx)}"></i></div><div><div class="tx-history-title">${txTitle(tx)}</div><div class="tx-history-meta">${txMeta(tx)}<br>${formatTxTime(tx.timestamp)}</div></div></div><div class="tx-history-right"><div class="tx-history-amount ${amt.kind}">${amt.text}</div><div class="tx-history-status">${tx.status||'Completed'}</div></div></div>`;}).join('');
+    lucide.createIcons();
+  }
+  window.renderTransactionHistory=renderTransactionHistory;
+
+  document.querySelectorAll('#txHistoryFilters .tx-filter').forEach(btn=>btn.addEventListener('click',()=>{activeTxFilter=btn.dataset.filter||'all';document.querySelectorAll('#txHistoryFilters .tx-filter').forEach(b=>b.classList.toggle('active',b===btn));renderTransactionHistory();}));
+  document.getElementById('txHistoryClearBtn')?.addEventListener('click',()=>{window.transactionHistory=[];saveTransactionHistory();renderTransactionHistory();showToast('Transaction history cleared',2500);});
+
+  function receiveAddress(asset){
+    return {
+      BTC:'demo1btc4v7wq6m0walletaddress9c2',
+      SOL:'DemoSOL7n4Qx2K6m9wP5r8T3y1uA4e',
+      ETH:'0xDeMoWallet0000000000000000000000003a'
+    }[asset]||'';
+  }
+  function qrPayload(asset,address){return `walletdemo://receive?asset=${encodeURIComponent(asset)}&address=${encodeURIComponent(address)}`;}
+  function renderReceiveQR(){
+    const asset=document.getElementById('receiveAsset')?.value||'SOL';const address=receiveAddress(asset);const box=document.getElementById('receiveQr');if(!box)return;
+    box.innerHTML='';
+    if(typeof QRCode==='function'){new QRCode(box,{text:qrPayload(asset,address),width:150,height:150,colorDark:'#111111',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});}
+    document.getElementById('receiveAddressText').textContent=address;document.getElementById('receiveAmountUnit').textContent=asset;
+    lucide.createIcons();
+  }
+  document.getElementById('receiveAsset')?.addEventListener('change',()=>{document.getElementById('receiveAmount').value='';renderReceiveQR();});
+  document.getElementById('receiveBtn')?.addEventListener('click',()=>{document.getElementById('receiveModal').classList.add('open');renderReceiveQR();});
+  document.getElementById('receiveModal')?.addEventListener('click',e=>{if(e.target.id==='receiveModal')e.target.classList.remove('open');});
+  document.getElementById('copyReceiveAddressBtn')?.addEventListener('click',async()=>{const t=document.getElementById('receiveAddressText').textContent;try{await navigator.clipboard.writeText(t);showToast('Receive address copied',2200);}catch(_){showToast('Copy is unavailable in this browser',2200);}});
+  document.getElementById('recordDemoReceiveBtn')?.addEventListener('click',()=>{
+    const asset=document.getElementById('receiveAsset').value;const amount=Number(document.getElementById('receiveAmount').value)||0;if(amount<=0){showToast('Enter a receive amount');return;}
+    addBalanceForCurrency(asset,amount);renderBalance();window.addTransactionRecord({type:'receive',asset,amount,address:receiveAddress(asset)});showToast(`Recorded ${amount.toFixed(asset==='SOL'||asset==='BTC'||asset==='ETH'?6:2)} ${asset} received`);document.getElementById('receiveAmount').value='';
+  });
+
+  const sendModal=document.getElementById('sendModal');
+  function updateSendBalance(){const a=document.getElementById('sendAsset').value;const b=getBalanceForCurrency(a);document.getElementById('sendAmountUnit').textContent=a;document.getElementById('sendAvailableBalance').textContent=`Available: ${b.toFixed(a==='SOL'||a==='BTC'||a==='ETH'?6:2)} ${a}`;}
+  document.getElementById('sendAsset')?.addEventListener('change',updateSendBalance);
+  document.getElementById('sendBtn')?.addEventListener('click',()=>{sendModal.classList.add('open');updateSendBalance();document.getElementById('sendAddress').focus();});
+  sendModal?.addEventListener('click',e=>{if(e.target===sendModal)sendModal.classList.remove('open');});
+
+  function applyQrPayload(raw){
+    let value=String(raw||'').trim();if(!value)return false;
+    try{if(value.startsWith('walletdemo://')){const u=new URL(value);const asset=u.searchParams.get('asset');const address=u.searchParams.get('address');if(asset&&document.getElementById('sendAsset'))document.getElementById('sendAsset').value=asset;if(address)document.getElementById('sendAddress').value=address;return !!address;}}
+    catch(_){}
+    try{const parsed=JSON.parse(value);if(parsed.address){if(parsed.asset&&document.getElementById('sendAsset'))document.getElementById('sendAsset').value=parsed.asset;document.getElementById('sendAddress').value=parsed.address;return true;}}
+    catch(_){}
+    document.getElementById('sendAddress').value=value;return true;
+  }
+  document.getElementById('pasteQrBtn')?.addEventListener('click',async()=>{try{const t=await navigator.clipboard.readText();if(applyQrPayload(t))showToast('Recipient loaded from clipboard',2200);}catch(_){showToast('Clipboard access is unavailable',2200);}});
+
+  const scanModal=document.getElementById('scanModal'),video=document.getElementById('qrVideo'),scanStatus=document.getElementById('scanStatus');let scanStream=null,scanTimer=null;
+  function stopScan(){if(scanTimer){clearInterval(scanTimer);scanTimer=null;}if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null;}if(video)video.srcObject=null;}
+  async function startScan(){
+    scanStatus.textContent='Starting camera…';
+    if(!('mediaDevices' in navigator)||!navigator.mediaDevices.getUserMedia){scanStatus.textContent='Camera access is not available. Paste the QR text below instead.';return;}
+    if(!('BarcodeDetector' in window)){scanStatus.textContent='This browser does not support QR detection. Paste the QR text below instead.';return;}
+    try{
+      scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});video.srcObject=scanStream;await video.play();
+      const detector=new BarcodeDetector({formats:['qr_code']});scanStatus.textContent='Point the camera at a recipient QR code.';
+      scanTimer=setInterval(async()=>{try{const codes=await detector.detect(video);if(codes?.[0]?.rawValue){applyQrPayload(codes[0].rawValue);scanStatus.textContent='QR detected. Recipient loaded.';stopScan();setTimeout(()=>scanModal.classList.remove('open'),450);}}catch(_){}},280);
+    }catch(_){scanStatus.textContent='Camera permission was denied or unavailable. Paste the QR text below instead.';stopScan();}
+  }
+  document.getElementById('scanQrBtn')?.addEventListener('click',()=>{scanModal.classList.add('open');startScan();});
+  document.getElementById('closeScanBtn')?.addEventListener('click',()=>{stopScan();scanModal.classList.remove('open');});
+  document.getElementById('useManualQrBtn')?.addEventListener('click',()=>{const raw=document.getElementById('manualQrPayload').value;if(applyQrPayload(raw)){stopScan();scanModal.classList.remove('open');showToast('Recipient loaded',2000);}});
+  scanModal?.addEventListener('click',e=>{if(e.target===scanModal){stopScan();scanModal.classList.remove('open');}});
+
+  const sendError=document.getElementById('sendError');
+  document.getElementById('sendSubmitBtn')?.addEventListener('click',()=>{
+    const asset=document.getElementById('sendAsset').value,address=document.getElementById('sendAddress').value.trim(),amount=Number(document.getElementById('sendAmount').value)||0,balance=getBalanceForCurrency(asset);
+    if(!address){sendError.textContent='Enter a recipient address or scan a QR code.';sendError.style.display='block';return;}
+    if(amount<=0||amount>balance+1e-9){sendError.textContent=`Insufficient ${asset} balance.`;sendError.style.display='block';return;}
+    sendError.style.display='none';
+    pendingMarketTrade=null; pendingExchangeTrade=null; pendingSend={asset,address,amount};
+    openTradeConfirmation({confirmLabel:`Confirm Send ${asset}`,rows:[{label:'Recipient',value:address},{label:'Amount',value:`-${amount.toFixed(asset==='SOL'||asset==='BTC'||asset==='ETH'?6:2)} ${asset}`,emphasis:true},{label:'Status',value:'Local demo transfer'}]});
+  });
+  let pendingSend=null;
+  tradeConfirmCancel?.addEventListener('click',()=>{pendingSend=null;});
+  tradeConfirmModal?.addEventListener('click',e=>{if(e.target===tradeConfirmModal)pendingSend=null;});
+  const baseTradeHandler=tradeConfirmSubmit;
+  tradeConfirmSubmit.addEventListener('click',()=>{});
+
+  const originalConfirmClickMarker = tradeConfirmSubmit;
+  // Extend the existing trade-confirm button by wrapping only when a pending send exists.
+  tradeConfirmSubmit.addEventListener('click',()=>{
+    if(!pendingSend)return;
+    const p=pendingSend;tradeConfirmSubmit.classList.add('loading');
+    setTimeout(()=>{
+      deductBalanceForCurrency(p.asset,p.amount);renderBalance();window.addTransactionRecord({type:'send',asset:p.asset,amount:p.amount,address:p.address});
+      tradeConfirmSubmit.classList.remove('loading');tradeConfirmModal.classList.remove('open');pendingSend=null;sendModal.classList.remove('open');
+      document.getElementById('sendAmount').value='';document.getElementById('sendAddress').value='';showToast(`Sent ${p.amount.toFixed(p.asset==='SOL'||p.asset==='BTC'||p.asset==='ETH'?6:2)} ${p.asset}`);updateSendBalance();
+    },350);
+  });
+
+  // PIN lock.
+  async function hashPin(pin){
+    const data=new TextEncoder().encode(String(pin));
+    if(window.crypto?.subtle){const dig=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(dig)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+    return btoa(String(pin));
+  }
+  const togglePinLock=document.getElementById('togglePinLock'),pinStatusText=document.getElementById('pinStatusText');
+  const setPinBtn=document.getElementById('setPinBtn'),lockNowBtn=document.getElementById('lockNowBtn'),pinModal=document.getElementById('pinModal');
+  const pinModalTitle=document.getElementById('pinModalTitle'),pinCurrentRow=document.getElementById('pinCurrentRow'),pinCurrentInput=document.getElementById('pinCurrentInput'),pinNewInput=document.getElementById('pinNewInput'),pinConfirmInput=document.getElementById('pinConfirmInput'),pinError=document.getElementById('pinError');
+  const lockOverlay=document.getElementById('walletLockOverlay'),unlockPinInput=document.getElementById('unlockPinInput'),unlockBtn=document.getElementById('unlockWalletBtn'),unlockError=document.getElementById('unlockPinError');
+  let walletLocked=false;
+  function pinConfigured(){return !!localStorage.getItem(PIN_HASH_KEY);}
+  function pinEnabled(){return localStorage.getItem(PIN_ENABLED_KEY)==='1' && pinConfigured();}
+  function refreshPinSettingsUI(){const configured=pinConfigured(),enabled=pinEnabled();togglePinLock.checked=enabled;pinStatusText.textContent=configured?(enabled?'PIN lock is enabled.':'PIN is set but lock is disabled.'):'No PIN configured.';setPinBtn.textContent=configured?'Change PIN':'Set PIN';}
+  function showPinModal(){pinModalTitle.textContent=pinConfigured()?'Change PIN':'Set PIN';pinCurrentRow.style.display=pinConfigured()?'block':'none';pinCurrentInput.value='';pinNewInput.value='';pinConfirmInput.value='';pinError.style.display='none';pinModal.classList.add('open');setTimeout(()=>{(pinConfigured()?pinCurrentInput:pinNewInput).focus();},50);}
+  window.refreshPinSettingsUI=refreshPinSettingsUI;
+  setPinBtn?.addEventListener('click',showPinModal);
+  document.getElementById('pinCancelBtn')?.addEventListener('click',()=>pinModal.classList.remove('open'));
+  pinModal?.addEventListener('click',e=>{if(e.target===pinModal)pinModal.classList.remove('open');});
+  document.getElementById('pinSaveBtn')?.addEventListener('click',async()=>{
+    const current=pinCurrentInput.value.trim(),next=pinNewInput.value.trim(),confirm=pinConfirmInput.value.trim();
+    if(pinConfigured() && (await hashPin(current))!==localStorage.getItem(PIN_HASH_KEY)){pinError.textContent='Current PIN is incorrect.';pinError.style.display='block';return;}
+    if(!/^\d{4}$/.test(next)){pinError.textContent='PIN must be exactly 4 digits.';pinError.style.display='block';return;}
+    if(next!==confirm){pinError.textContent='PIN entries do not match.';pinError.style.display='block';return;}
+    localStorage.setItem(PIN_HASH_KEY,await hashPin(next));localStorage.setItem(PIN_ENABLED_KEY,'1');pinModal.classList.remove('open');refreshPinSettingsUI();showToast('PIN lock enabled',2200);
+  });
+  togglePinLock?.addEventListener('change',()=>{if(togglePinLock.checked){if(pinConfigured()){localStorage.setItem(PIN_ENABLED_KEY,'1');refreshPinSettingsUI();}else{togglePinLock.checked=false;showPinModal();}}else{localStorage.setItem(PIN_ENABLED_KEY,'0');refreshPinSettingsUI();}});
+  function setWalletLocked(locked){walletLocked=locked;lockOverlay.classList.toggle('open',locked);if(locked){unlockPinInput.value='';unlockError.style.display='none';setTimeout(()=>unlockPinInput.focus(),80);}}
+  lockNowBtn?.addEventListener('click',()=>{if(!pinConfigured()){showPinModal();return;}localStorage.setItem(PIN_ENABLED_KEY,'1');refreshPinSettingsUI();setWalletLocked(true);});
+  async function unlockWallet(){const entered=unlockPinInput.value.trim();if((await hashPin(entered))===localStorage.getItem(PIN_HASH_KEY)){setWalletLocked(false);showToast('Wallet unlocked',1800);}else{unlockError.style.display='block';unlockPinInput.value='';unlockPinInput.focus();}}
+  unlockBtn?.addEventListener('click',unlockWallet);unlockPinInput?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();unlockWallet();}});
+  refreshPinSettingsUI();
+  if(pinEnabled())setWalletLocked(true);
+
+  // Keep the history page visible as soon as a trade/exchange/send/receive is recorded.
+  window.renderTransactionHistory?.();
+  document.querySelectorAll('.sidebar-item[data-target="transactionsPanel"]').forEach(item=>item.addEventListener('click',()=>setTimeout(()=>window.renderTransactionHistory?.(),0)));
+
+  // A successful exchange was historically added before this runtime loads; no migration is needed.
+  lucide.createIcons();
+})();
+</script>
+
 </body>
 </html>
