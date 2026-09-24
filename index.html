@@ -2378,8 +2378,8 @@ body.theme-light .lock-card .modal-btn{background:#11161e!important;color:#fff!i
   /* Use the reference's more relaxed mobile proportions rather than oversized
      desktop-sized elements squeezed into a phone. */
   .scroll-content{
-    padding-left:16px!important;
-    padding-right:16px!important;
+    padding-left:20px!important;
+    padding-right:20px!important;
     padding-top:calc(16px + env(safe-area-inset-top))!important;
     padding-bottom:calc(24px + env(safe-area-inset-bottom))!important;
   }
@@ -2402,6 +2402,42 @@ body.theme-light .lock-card .modal-btn{background:#11161e!important;color:#fff!i
     width:0!important;
     height:0!important;
     display:none!important;
+  }
+}
+</style>
+
+<style id="mobile-natural-zoom-pass">
+/* Slightly zoom the mobile dashboard back from the edge so cards, outlines,
+   shadows and surrounding space remain visible. This is intentionally subtle. */
+@media (max-width: 768px){
+  .main-dashboard{
+    zoom: .94;
+    width: 106.383%;
+    max-width: 106.383%;
+  }
+  .main-dashboard .page-panel{
+    max-width: 100%;
+  }
+  html,body{
+    overflow-x:hidden!important;
+    scrollbar-width:none!important;
+    -ms-overflow-style:none!important;
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  .main-dashboard::-webkit-scrollbar,
+  .page-panel::-webkit-scrollbar{
+    width:0!important;
+    height:0!important;
+    display:none!important;
+  }
+}
+
+@media (max-width: 380px){
+  .main-dashboard{
+    zoom:.92;
+    width:108.696%;
+    max-width:108.696%;
   }
 }
 </style>
