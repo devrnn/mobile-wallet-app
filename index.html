@@ -1842,6 +1842,79 @@ body.theme-light .sidebar{background:#fff;border-right-color:#dfe4eb}.theme-ligh
 }
 </style>
 
+<style id="wallet-transfer-mobile-center-fix">
+/* Keep transfer/QR/confirmation dialogs centered on phones instead of bottom-sheeting. */
+@media(max-width:600px){
+  #receiveModal,
+  #sendModal,
+  #scanModal,
+  #tradeConfirmModal{
+    align-items:center!important;
+    justify-content:center!important;
+    padding:12px!important;
+  }
+
+  #receiveModal .modal-card,
+  #sendModal .modal-card,
+  #scanModal .modal-card,
+  #tradeConfirmModal .modal-card{
+    width:min(100%,380px)!important;
+    max-width:380px!important;
+    max-height:calc(100dvh - 24px)!important;
+    margin:auto!important;
+    padding:20px!important;
+  }
+
+  #sendModal .feature-note{
+    margin-top:10px!important;
+    margin-bottom:14px!important;
+    padding-right:2px;
+  }
+
+  #sendModal #sendError{
+    margin-bottom:12px!important;
+  }
+
+  #tradeConfirmModal .confirm-summary{
+    margin-bottom:16px!important;
+  }
+
+  #tradeConfirmModal .modal-card > .feature-note{
+    margin-top:10px!important;
+    margin-bottom:16px!important;
+  }
+
+  #scanModal .scan-status{
+    margin-top:2px!important;
+    margin-bottom:14px!important;
+    line-height:1.45!important;
+  }
+
+  #scanModal .modal-field{
+    margin-bottom:14px!important;
+  }
+
+  #receiveModal .qr-layout{
+    justify-items:center;
+    text-align:center;
+    gap:14px;
+  }
+
+  #receiveModal .qr-layout > div:last-child{
+    width:100%;
+  }
+
+  #receiveModal .qr-address{
+    text-align:center;
+    margin:0 auto;
+  }
+
+  #receiveModal .feature-note{
+    margin-top:10px!important;
+  }
+}
+</style>
+
 <style id="final-fit-and-contrast-fix">
 /* Final universal fit + contrast pass: every panel stays inside the viewport. */
 html,body{width:100%;max-width:100%;overflow:hidden}
@@ -3389,89 +3462,6 @@ body {
     font-size:10px !important;
   }
 }
-<style id="targeted-mobile-send-receive-fixes">
-/* Targeted mobile fixes: center only the affected send/receive/scan/trade flows. */
-@media (max-width:600px){
-  #receiveModal,
-  #sendModal,
-  #scanModal,
-  #tradeConfirmModal{
-    align-items:center !important;
-    justify-content:center !important;
-    padding:12px !important;
-  }
-
-  #receiveModal .modal-card,
-  #sendModal .modal-card,
-  #scanModal .modal-card,
-  #tradeConfirmModal .modal-card{
-    width:min(380px, calc(100vw - 24px)) !important;
-    max-width:calc(100vw - 24px) !important;
-    max-height:calc(100dvh - 24px) !important;
-    padding:20px !important;
-    margin:0 !important;
-  }
-
-  /* Restore a clean, centered receive QR presentation on phones. */
-  #receiveModal .qr-layout{
-    display:flex !important;
-    flex-direction:column !important;
-    align-items:center !important;
-    justify-content:center !important;
-    gap:14px !important;
-    text-align:center !important;
-  }
-  #receiveModal .qr-box{
-    width:174px !important;
-    height:174px !important;
-    padding:10px !important;
-    flex:0 0 174px !important;
-    margin:0 auto !important;
-    border-radius:16px !important;
-  }
-  #receiveModal .qr-box img,
-  #receiveModal .qr-box canvas{
-    width:154px !important;
-    height:154px !important;
-    max-width:154px !important;
-  }
-  #receiveModal .qr-layout > div:last-child{width:100% !important;min-width:0 !important;}
-  #receiveModal .qr-address{font-size:11px !important;line-height:1.45 !important;text-align:center !important;}
-  #receiveModal .feature-note{margin-top:9px !important;line-height:1.45 !important;}
-  #receiveModal .feature-inline-actions{width:100% !important;max-width:none !important;margin-top:12px !important;}
-
-  /* Send form spacing: keep labels/content from touching the next control. */
-  #sendModal .modal-field{margin-bottom:15px !important;}
-  #sendModal .modal-field label{margin-bottom:7px !important;}
-  #sendModal .feature-inline-actions{width:100% !important;max-width:none !important;gap:8px !important;margin:2px 0 16px !important;}
-  #sendModal .feature-inline-actions .modal-btn{min-width:0 !important;flex:1 1 0 !important;padding:12px 8px !important;line-height:1.15 !important;}
-  #sendModal .feature-note{margin:10px 0 14px !important;line-height:1.5 !important;}
-  #sendModal #sendSubmitBtn{margin-top:2px !important;}
-
-  /* Camera scanner: centered, large enough to actually aim at a QR code. */
-  #scanModal .modal-title{margin-bottom:14px !important;}
-  #scanModal .scan-preview{
-    width:100% !important;
-    aspect-ratio:1 / 1 !important;
-    max-height:48vh !important;
-    margin:0 auto 12px !important;
-    object-fit:cover !important;
-    border-radius:16px !important;
-  }
-  #scanModal .scan-status{text-align:center !important;line-height:1.4 !important;margin-bottom:14px !important;}
-  #scanModal .modal-field{margin-bottom:14px !important;}
-  #scanModal .modal-field label{margin-bottom:7px !important;}
-
-  /* Review & Confirm: center the modal and give the summary/button area breathing room. */
-  #tradeConfirmModal .modal-title{margin-bottom:14px !important;}
-  #tradeConfirmModal .confirm-summary{margin-bottom:14px !important;}
-  #tradeConfirmModal .confirm-summary-row{padding:9px 0 !important;line-height:1.35 !important;}
-  #tradeConfirmModal .feature-note{margin:10px 0 16px !important;line-height:1.5 !important;}
-  #tradeConfirmModal .confirm-summary-live{margin-top:10px !important;}
-  #tradeConfirmModal .modal-card > div:last-child{gap:9px !important;}
-}
-</style>
-<style>
 </style>
 </head>
 <body>
@@ -6132,78 +6122,102 @@ window.addEventListener('load',()=>{ syncExchangeConverter(); updateExchangeConv
   const sendModal=document.getElementById('sendModal');
   function updateSendBalance(){const a=document.getElementById('sendAsset').value;const b=getBalanceForCurrency(a);document.getElementById('sendAmountUnit').textContent=a;document.getElementById('sendAvailableBalance').textContent=`Available: ${b.toFixed(a==='SOL'||a==='BTC'||a==='ETH'?6:2)} ${a}`;}
   document.getElementById('sendAsset')?.addEventListener('change',updateSendBalance);
-  document.getElementById('sendBtn')?.addEventListener('click',()=>{sendModal.classList.add('open');updateSendBalance();if(window.matchMedia('(min-width:601px)').matches){setTimeout(()=>document.getElementById('sendAddress')?.focus(),80);}});
+  document.getElementById('sendBtn')?.addEventListener('click',()=>{
+    sendModal.classList.add('open');
+    updateSendBalance();
+    if(window.matchMedia?.('(min-width:601px)').matches)setTimeout(()=>document.getElementById('sendAddress')?.focus(),80);
+  });
   sendModal?.addEventListener('click',e=>{if(e.target===sendModal)sendModal.classList.remove('open');});
 
   function applyQrPayload(raw){
     let value=String(raw||'').trim();if(!value)return false;
-    try{if(value.startsWith('walletdemo://')){const u=new URL(value);const asset=u.searchParams.get('asset');const address=u.searchParams.get('address');if(asset&&document.getElementById('sendAsset'))document.getElementById('sendAsset').value=asset;if(address)document.getElementById('sendAddress').value=address;return !!address;}}
-    catch(_){}
-    try{const parsed=JSON.parse(value);if(parsed.address){if(parsed.asset&&document.getElementById('sendAsset'))document.getElementById('sendAsset').value=parsed.asset;document.getElementById('sendAddress').value=parsed.address;return true;}}
-    catch(_){}
+    try{
+      if(value.startsWith('walletdemo://') || value.startsWith('wallet://')){
+        const u=new URL(value);
+        const asset=u.searchParams.get('asset');
+        const address=u.searchParams.get('address');
+        if(asset&&document.getElementById('sendAsset'))document.getElementById('sendAsset').value=asset;
+        if(address){
+          document.getElementById('sendAddress').value=address;
+          updateSendBalance();
+          return true;
+        }
+      }
+    }catch(_){}
+    try{
+      const parsed=JSON.parse(value);
+      if(parsed.address){
+        if(parsed.asset&&document.getElementById('sendAsset'))document.getElementById('sendAsset').value=parsed.asset;
+        document.getElementById('sendAddress').value=parsed.address;
+        updateSendBalance();
+        return true;
+      }
+    }catch(_){}
     document.getElementById('sendAddress').value=value;return true;
   }
   document.getElementById('pasteQrBtn')?.addEventListener('click',async()=>{try{const t=await navigator.clipboard.readText();if(applyQrPayload(t))showToast('Recipient loaded from clipboard',2200);}catch(_){showToast('Clipboard access is unavailable',2200);}});
 
-  const scanModal=document.getElementById('scanModal'),video=document.getElementById('qrVideo'),scanStatus=document.getElementById('scanStatus');
-  let scanStream=null,scanTimer=null,scanFrame=0,scanCanvas=null,scanCtx=null;
+  const scanModal=document.getElementById('scanModal'),video=document.getElementById('qrVideo'),scanStatus=document.getElementById('scanStatus');let scanStream=null,scanTimer=null,scanCanvas=null,scanCtx=null,scanBusy=false;
   function stopScan(){
     if(scanTimer){clearInterval(scanTimer);scanTimer=null;}
-    if(scanFrame){cancelAnimationFrame(scanFrame);scanFrame=0;}
+    scanBusy=false;
     if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null;}
     if(video)video.srcObject=null;
-  }
-  function finishQr(raw){
-    if(!raw)return;
-    if(applyQrPayload(raw)){
-      scanStatus.textContent='QR detected. Recipient loaded.';
-      stopScan();
-      setTimeout(()=>scanModal.classList.remove('open'),450);
-    }
-  }
-  function startJsQrLoop(){
-    if(!video || !window.jsQR)return false;
-    if(!scanCanvas)scanCanvas=document.createElement('canvas');
-    if(!scanCtx)scanCtx=scanCanvas.getContext('2d',{willReadFrequently:true});
-    const tick=()=>{
-      if(!scanModal.classList.contains('open') || !scanStream){scanFrame=0;return;}
-      const w=video.videoWidth,h=video.videoHeight;
-      if(w&&h){
-        const maxW=720;
-        const scale=Math.min(1,maxW/w);
-        const cw=Math.max(1,Math.round(w*scale)),ch=Math.max(1,Math.round(h*scale));
-        if(scanCanvas.width!==cw||scanCanvas.height!==ch){scanCanvas.width=cw;scanCanvas.height=ch;}
-        scanCtx.drawImage(video,0,0,cw,ch);
-        const image=scanCtx.getImageData(0,0,cw,ch);
-        const code=window.jsQR(image.data,cw,ch,{inversionAttempts:'dontInvert'});
-        if(code?.data){finishQr(code.data);return;}
-      }
-      scanFrame=requestAnimationFrame(tick);
-    };
-    scanFrame=requestAnimationFrame(tick);
-    return true;
   }
   async function startScan(){
     stopScan();
     scanStatus.textContent='Starting camera…';
-    if(!navigator.mediaDevices?.getUserMedia){scanStatus.textContent='Camera access is not available. Paste the QR text below instead.';return;}
+    if(!('mediaDevices' in navigator)||!navigator.mediaDevices.getUserMedia){
+      scanStatus.textContent='Camera access is not available. Paste the QR text below instead.';
+      return;
+    }
+    const hasNativeDetector='BarcodeDetector' in window;
+    const hasJsQr=typeof window.jsQR==='function';
+    if(!hasNativeDetector&&!hasJsQr){
+      scanStatus.textContent='QR scanning is not available in this browser. Paste the QR text below instead.';
+      return;
+    }
     try{
-      scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
+      scanStream=await navigator.mediaDevices.getUserMedia({
+        video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},
+        audio:false
+      });
       video.srcObject=scanStream;
       await video.play();
-      if('BarcodeDetector' in window){
+      scanStatus.textContent='Point the camera at a recipient QR code.';
+      if(!hasNativeDetector){
+        scanCanvas=document.createElement('canvas');
+        scanCtx=scanCanvas.getContext('2d',{willReadFrequently:true});
+      }
+      const detector=hasNativeDetector?new BarcodeDetector({formats:['qr_code']}):null;
+      scanTimer=setInterval(async()=>{
+        if(scanBusy||!video.videoWidth||!video.videoHeight)return;
+        scanBusy=true;
         try{
-          const detector=new BarcodeDetector({formats:['qr_code']});
-          scanStatus.textContent='Point the camera at a recipient QR code.';
-          scanTimer=setInterval(async()=>{try{const codes=await detector.detect(video);if(codes?.[0]?.rawValue)finishQr(codes[0].rawValue);}catch(_){}},220);
-          return;
-        }catch(_){}
-      }
-      if(startJsQrLoop()){
-        scanStatus.textContent='Point the camera at a recipient QR code.';
-      }else{
-        scanStatus.textContent='Camera is open. QR detection is unavailable here; paste the QR text below.';
-      }
+          let rawValue='';
+          if(detector){
+            const codes=await detector.detect(video);
+            rawValue=codes?.[0]?.rawValue||'';
+          }else{
+            if(scanCanvas.width!==video.videoWidth||scanCanvas.height!==video.videoHeight){
+              scanCanvas.width=video.videoWidth;
+              scanCanvas.height=video.videoHeight;
+            }
+            scanCtx.drawImage(video,0,0,scanCanvas.width,scanCanvas.height);
+            const frame=scanCtx.getImageData(0,0,scanCanvas.width,scanCanvas.height);
+            const result=window.jsQR(frame.data,frame.width,frame.height,{inversionAttempts:'attemptBoth'});
+            rawValue=result?.data||'';
+          }
+          if(rawValue && applyQrPayload(rawValue)){
+            scanStatus.textContent='QR detected. Recipient loaded.';
+            stopScan();
+            setTimeout(()=>scanModal.classList.remove('open'),450);
+          }
+        }catch(_){
+        }finally{
+          scanBusy=false;
+        }
+      },300);
     }catch(_){
       scanStatus.textContent='Camera permission was denied or unavailable. Paste the QR text below instead.';
       stopScan();
@@ -6220,7 +6234,6 @@ window.addEventListener('load',()=>{ syncExchangeConverter(); updateExchangeConv
     if(!address){sendError.textContent='Enter a recipient address or scan a QR code.';sendError.style.display='block';return;}
     if(amount<=0||amount>balance+1e-9){sendError.textContent=`Insufficient ${asset} balance.`;sendError.style.display='block';return;}
     sendError.style.display='none';
-    document.activeElement?.blur();
     pendingMarketTrade=null; pendingExchangeTrade=null; pendingSend={asset,address,amount};
     openTradeConfirmation({confirmLabel:`Confirm Send ${asset}`,rows:[{label:'Recipient',value:address},{label:'Amount',value:`-${amount.toFixed(asset==='SOL'||asset==='BTC'||asset==='ETH'?6:2)} ${asset}`,emphasis:true},{label:'Status',value:'Transfer'}]});
   });
