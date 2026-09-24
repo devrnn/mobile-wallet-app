@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="EISA Wallet">
+<meta name="apple-mobile-web-app-title" content="Wallet">
 <meta name="theme-color" content="#070709" id="themeColorMeta">
 <meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -3347,6 +3347,45 @@ body {
   .sidebar {
     height: 100dvh !important;
     max-height: 100dvh !important;
+  }
+}
+</style>
+
+<style id="final-market-label-alignment-fix">
+/* Keep market quick-trade and exchange MAX labels vertically centered with their controls. */
+.mac-pct {
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  line-height:1 !important;
+  box-sizing:border-box !important;
+}
+.max-exchange-btn,
+.max-btn {
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  line-height:1 !important;
+  box-sizing:border-box !important;
+  vertical-align:middle !important;
+}
+@media (max-width:768px) {
+  .mac-pct {
+    min-height:40px !important;
+    padding:0 8px !important;
+    font-size:11px !important;
+    font-weight:700 !important;
+  }
+  .mac-tab { line-height:1 !important; }
+  .max-exchange-btn {
+    min-height:30px !important;
+    padding:0 9px !important;
+    font-size:10px !important;
+  }
+  .max-btn {
+    min-height:30px !important;
+    padding:0 8px !important;
+    font-size:10px !important;
   }
 }
 </style>
