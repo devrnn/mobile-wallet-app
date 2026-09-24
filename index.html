@@ -2199,7 +2199,17 @@ input,select,textarea{
   .page-panel{
     height:100%;
   }
-  .sidebar,
+  .sidebar{
+    /* Keep the drawer hidden on iPhone/iPad until the menu button is tapped.
+       Do not replace the translateX(-100%) mobile drawer transform with
+       translateZ(0), which would make the sidebar permanently visible. */
+    -webkit-transform:translate3d(-100%,0,0);
+    transform:translate3d(-100%,0,0);
+  }
+  .sidebar.open{
+    -webkit-transform:translate3d(0,0,0);
+    transform:translate3d(0,0,0);
+  }
   .sidebar-overlay,
   .modal-overlay,
   .lock-overlay{
