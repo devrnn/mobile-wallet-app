@@ -11,6 +11,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="EISA Wallet">
+<meta name="theme-color" content="#070709" id="themeColorMeta">
+<meta name="format-detection" content="telephone=no">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1302,7 +1305,6 @@ overflow: hidden;
 .sim-flow-badge { margin-left:auto; font-size:10px; color:var(--text-muted); letter-spacing:.04em; text-transform:uppercase; }
 .mac-available{font-size:11px;color:var(--text-muted);margin-top:7px;text-align:right;min-height:14px}.mac-available strong{color:var(--text-primary)}
 </style>
-  <link rel="stylesheet" href="./market.css">
 <style id="realistic-market-styles">
 .market-chart-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 24px;border-bottom:1px solid var(--border-subtle);background:rgba(255,255,255,.012)}
 .chart-timeframes{display:flex;gap:3px}.chart-timeframes .tr-btn{min-width:42px;padding:6px 9px}
@@ -1984,6 +1986,287 @@ button,input,select,textarea{max-width:100%;min-width:0}
 .profit-summary-value.neg,.profit-period-value.neg,.tx-result-value.neg{color:var(--accent-red)!important}
 .theme-light .profit-summary-value.zero,.theme-light .profit-period-value.zero,.theme-light .tx-result-value.zero{color:#151a22!important}
 </style>
+
+<style id="live-confirm-price-fix">
+.confirm-summary-live{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:8px;color:var(--text-muted);font-size:9px;font-weight:750;letter-spacing:.1px}
+.confirm-summary-live i{width:12px;height:12px;color:var(--accent-green)}
+.theme-light .confirm-summary-live{color:#6b7787}
+</style>
+<style id="recent-activity-tab-fix">
+.recent-activity-card{width:100%;max-width:100%;min-width:0}
+.recent-activity-page .tx-history-toolbar{align-items:flex-start}
+.recent-activity-page .tx-history-list{width:100%;min-width:0}
+.recent-activity-page .tx-history-row{min-width:0}
+.recent-activity-page .tx-history-meta{max-width:100%}
+.theme-light .recent-activity-page .panel-title{color:#151a22!important}
+.theme-light .recent-activity-page .feature-note{color:#697383!important}
+.theme-light .recent-activity-page .tx-history-card{background:#fff!important;border-color:#dde3ea!important}
+.theme-light .recent-activity-page .tx-history-row{background:#f8fafc;border-color:#e0e5eb}
+.theme-light .recent-activity-page .tx-history-title{color:#151a22!important}
+.theme-light .recent-activity-page .tx-history-meta,.theme-light .recent-activity-page .tx-history-status{color:#697383!important}
+.theme-light .recent-activity-page .tx-history-amount{color:#151a22}
+.theme-light .recent-activity-page .tx-history-amount.in{color:var(--accent-green)!important}
+.theme-light .recent-activity-page .tx-history-amount.out{color:var(--accent-red)!important}
+@media(max-width:600px){
+  .recent-activity-page .tx-history-toolbar{flex-direction:column;gap:10px}
+  .recent-activity-page .tx-history-clear{width:100%;justify-content:center}
+  .recent-activity-page .tx-history-row{padding:11px 10px;gap:9px}
+  .recent-activity-page .tx-history-right{min-width:0;max-width:44%}
+  .recent-activity-page .tx-history-title{font-size:12px}
+  .recent-activity-page .tx-history-meta{font-size:9.5px;line-height:1.4}
+  .recent-activity-page .tx-history-amount{font-size:12px}
+}
+</style>
+<style id="apple-device-fit-fix">
+/* Apple device / Safari fitting pass. Keeps the app inside notches, home indicators,
+   dynamic browser chrome, iPhone landscape cutouts, and iPad split-screen widths. */
+html{
+  width:100%;
+  min-width:0;
+  height:100%;
+  min-height:-webkit-fill-available;
+  background:var(--bg-main);
+  overflow:hidden;
+  overscroll-behavior:none;
+}
+body{
+  width:100%;
+  max-width:100vw;
+  min-width:0;
+  height:100dvh;
+  min-height:100vh;
+  min-height:-webkit-fill-available;
+  max-height:100dvh;
+  margin:0;
+  overflow:hidden;
+  overscroll-behavior:none;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  -webkit-touch-callout:none;
+}
+.main-dashboard,
+.page-panel{
+  min-width:0;
+  max-width:100%;
+  overscroll-behavior:contain;
+}
+.page-panel{
+  -webkit-overflow-scrolling:touch;
+}
+.scroll-content{
+  padding-left:max(clamp(10px,2.4vw,32px), calc(env(safe-area-inset-left) + 10px));
+  padding-right:max(clamp(10px,2.4vw,32px), calc(env(safe-area-inset-right) + 10px));
+  padding-top:max(clamp(18px,3vw,40px), calc(env(safe-area-inset-top) + 18px));
+  padding-bottom:max(clamp(28px,4vw,48px), calc(env(safe-area-inset-bottom) + 28px));
+}
+.sidebar{
+  padding-left:max(20px, calc(env(safe-area-inset-left) + 20px));
+  padding-right:max(20px, calc(env(safe-area-inset-right) + 20px));
+  padding-top:max(24px, calc(env(safe-area-inset-top) + 18px));
+  padding-bottom:max(14px, calc(env(safe-area-inset-bottom) + 14px));
+}
+.sidebar-profile{
+  padding-bottom:max(14px, calc(env(safe-area-inset-bottom) + 12px));
+}
+.modal-overlay,
+.lock-overlay,
+.sidebar-overlay{
+  padding-top:env(safe-area-inset-top);
+  padding-right:env(safe-area-inset-right);
+  padding-bottom:env(safe-area-inset-bottom);
+  padding-left:env(safe-area-inset-left);
+}
+.modal-overlay{
+  box-sizing:border-box;
+}
+.modal-card,
+.account-modal-card,
+.lock-card{
+  max-width:calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right) - 24px);
+  max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
+  overflow-x:hidden;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+img,svg,canvas,video,iframe{max-width:100%;}
+button,
+.action-btn,
+.settings-select,
+.modal-btn,
+.menu-btn,
+.sidebar-item,
+.tr-btn,
+.mac-tab,
+.mac-pct,
+.mac-submit-btn{
+  -webkit-user-select:none;
+  user-select:none;
+  touch-action:manipulation;
+}
+input,select,textarea{
+  max-width:100%;
+  min-width:0;
+  -webkit-appearance:none;
+  appearance:none;
+}
+/* Prevent Safari from zooming the page when focusing controls. */
+@media (pointer:coarse){
+  input,select,textarea{font-size:16px!important;}
+}
+
+/* iPhone / narrow Safari */
+@media (max-width:600px){
+  .main-dashboard{width:100%;}
+  .dashboard-header{width:100%;min-width:0;}
+  .dashboard-title-group{min-width:0;max-width:100%;}
+  .dashboard-title{min-width:0;overflow-wrap:anywhere;}
+  .top-row-grid,
+  .market-main-view,
+  .market-right-panel,
+  .profit-period-grid,
+  .theme-grid,
+  .exchange-grid{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+  }
+  .top-row-grid>*,
+  .market-main-view>*,
+  .market-right-panel>*,
+  .profit-period-grid>*,
+  .theme-grid>*,
+  .exchange-grid>*{
+    min-width:0;
+    max-width:100%;
+  }
+  .balance-card,
+  .asset-list,
+  .activity-panel,
+  .profit-summary-card,
+  .profit-period-card,
+  .exchange-transactions,
+  .market-chart-panel,
+  .orderbook-panel,
+  .market-action-card,
+  .recent-trades-panel,
+  .tx-history-card{
+    width:100%;
+  }
+  .market-ticker-bar{
+    width:100%;
+    max-width:100%;
+    overflow-x:auto;
+    overscroll-behavior-x:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .ticker-item{min-width:0;}
+  .qr-layout{min-width:0;}
+  .qr-layout>*{min-width:0;max-width:100%;}
+  .qr-address{overflow-wrap:anywhere;word-break:break-word;}
+}
+
+/* iPad portrait / split view: avoid desktop-density overflow while keeping the sidebar model. */
+@media (min-width:601px) and (max-width:1024px){
+  .sidebar{width:220px;}
+  .scroll-content{padding-left:20px;padding-right:20px;}
+  .top-row-grid{grid-template-columns:minmax(0,1fr)!important;}
+  .market-main-view{grid-template-columns:minmax(0,1fr)!important;}
+  .market-right-panel{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;min-width:0;}
+  .orderbook-panel,.market-action-card,.recent-trades-panel{min-width:0;}
+  .profit-period-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+
+/* iPhone landscape: reclaim height and respect the left/right camera cutouts. */
+@media (max-width:900px) and (orientation:landscape){
+  .scroll-content{
+    padding-top:max(10px, calc(env(safe-area-inset-top) + 10px));
+    padding-bottom:max(16px, calc(env(safe-area-inset-bottom) + 16px));
+  }
+  .dashboard-header{margin-bottom:12px!important;}
+  .tv-chart-stage{height:min(52dvh,300px)!important;min-height:220px;}
+  .market-chart-panel{min-height:0;}
+}
+
+/* Mobile Safari's browser UI can change viewport height while the page is open. */
+@supports (height:100svh){
+  body{min-height:100svh;}
+}
+@supports (-webkit-touch-callout:none){
+  body{
+    height:100dvh;
+    min-height:-webkit-fill-available;
+  }
+  .page-panel{
+    height:100%;
+  }
+  .sidebar,
+  .sidebar-overlay,
+  .modal-overlay,
+  .lock-overlay{
+    -webkit-transform:translateZ(0);
+    transform:translateZ(0);
+  }
+  .modal-card,
+  .account-modal-card,
+  .lock-card{
+    -webkit-overflow-scrolling:touch;
+  }
+}
+</style>
+<style id="fit-and-contrast-patch">
+html,body{overflow-x:hidden;max-width:100%}
+input,textarea{-webkit-user-select:text!important;user-select:text!important}
+.main-balance,.item-title,.item-subtitle,.profile-name{max-width:100%;overflow-wrap:anywhere}
+.modal-card{max-height:calc(100dvh - 24px);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.toast-notification{max-width:calc(100vw - 32px);right:max(16px,env(safe-area-inset-right))}
+@media(max-width:600px){.toast-notification{left:16px;right:16px;justify-content:center}}
+@media(max-width:700px){
+  body .market-ticker-bar{grid-template-columns:repeat(3,minmax(0,1fr))!important;overflow:hidden}
+  body .ticker-item{min-width:0!important;padding:10px 8px!important;border-right:1px solid var(--border-subtle)!important;border-bottom:0!important}
+  body .ticker-item:last-child{border-right:0!important}
+  body .ticker-item::before{left:8px}
+  body .ticker-price{font-size:11.5px!important;white-space:nowrap}
+  body .ticker-change{font-size:9.5px!important}
+  body .ticker-symbol{font-size:8.5px!important;white-space:nowrap}
+  body .ob-price,body .ob-size,body .ob-total,body .rt-price,body .rt-size,body .rt-time{font-size:10.5px!important}
+}
+@media(max-height:560px){.balance-card{min-height:0}.modal-card{padding:16px}.lock-card{padding:18px}}
+@media(max-width:360px){
+  .card-actions.feature-actions .action-btn span{font-size:10.5px}
+  .theme-grid{grid-template-columns:1fr!important}
+  .dashboard-title{font-size:19px!important}
+}
+body.theme-light .balance-title-row,
+body.theme-light .profile-name,
+body.theme-light .theme-label,
+body.theme-light .preview-row.highlight,
+body.theme-light .modal-field select,
+body.theme-light .modal-field input,
+body.theme-light .pin-input,
+body.theme-light .edit-row input,
+body.theme-light .wallet-selector,
+body.theme-light .account-edit-btn,
+body.theme-light .max-btn,
+body.theme-light .mac-tab:hover:not(.active){color:#151a22}
+body.theme-light .tx-filter.active{color:#fff}
+body.theme-light .item-value:not(.pos):not(.neg){color:#151a22}
+body.theme-light .cost-card .cost-val:not([style*="color"]){color:#151a22!important}
+body.theme-light .cost-card .cost-label{color:#697383!important}
+body.theme-light .cost-card .cost-row:last-child .cost-label{color:#151a22!important}
+body.theme-light .currency-label{color:rgba(21,26,34,.5)}
+body.theme-light .toast-notification{background:#fff;color:#151a22;border-color:#dde3ea;box-shadow:0 12px 30px rgba(22,31,44,.15)}
+body.theme-light .sidebar-close-btn{color:#697383}
+body.theme-light .modal-field input::placeholder,
+body.theme-light .pin-input::placeholder{color:#9aa4b2}
+body.theme-light .modal-field select option,
+body.theme-light .wallet-selector option{background:#fff;color:#151a22}
+body.theme-light .max-btn{background:#e9edf2;border-color:#d4dbe4}
+body.theme-light .balance-card{border-color:#dde3ea}
+body.theme-light .modal-card .modal-btn:not([style*="background"]):not(.loading){background:#11161e!important;color:#fff!important;border-color:#11161e!important}
+body.theme-light .modal-card .modal-btn[style*="background"]{background:#eef1f5!important;color:#151a22!important;border:1px solid #d7dee7!important}
+body.theme-light .lock-card .modal-btn{background:#11161e!important;color:#fff!important}
+</style>
+
 </head>
 <body>
 <div class="intro" aria-hidden="true">
@@ -2060,6 +2343,7 @@ button,input,select,textarea{max-width:100%;min-width:0}
 <a href="#" class="sidebar-item active" data-target="walletPanel"><i data-lucide="wallet"></i><span data-i18n="navOverview">Overview</span></a>
 <a href="#" class="sidebar-item" data-target="marketPanel"><i data-lucide="candlestick-chart"></i><span data-i18n="navMarket">Market</span></a>
 <a href="#" class="sidebar-item" data-target="profitsPanel"><i data-lucide="chart-no-axes-combined"></i><span data-i18n="navProfits">Profits & Loss</span></a>
+<a href="#" class="sidebar-item" data-target="recentActivityPage"><i data-lucide="history"></i><span>Recent Activity</span></a>
 <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span data-i18n="navSettings">Settings</span></a>
 </div>
 </div>
@@ -2286,9 +2570,6 @@ button,input,select,textarea{max-width:100%;min-width:0}
 
 </div>
 </section>
-</div>
-</div>
-</section>
 
 <section class="page-panel" id="settingsPanel">
 <div class="scroll-content">
@@ -2365,6 +2646,26 @@ button,input,select,textarea{max-width:100%;min-width:0}
 <div class="settings-info"><div class="settings-title" data-i18n="dataResetTitle">Reset Settings</div><div class="settings-desc" data-i18n="dataResetDesc">Restore settings and preferences to default</div></div>
 <button class="settings-btn-danger" id="btnResetApp" data-i18n="btnRstSet">Reset Settings</button>
 </div>
+</div>
+</div>
+</section>
+<section class="page-panel recent-activity-page" id="recentActivityPage">
+<div class="scroll-content" id="recentActivityScroll">
+<div class="dashboard-header">
+<div class="dashboard-title-group">
+<button class="menu-btn" type="button" onclick="openSidebar()"><i data-lucide="menu"></i></button>
+<h1 class="dashboard-title">Recent Activity</h1>
+</div>
+</div>
+<div class="tx-history-card recent-activity-card">
+<div class="tx-history-toolbar">
+<div>
+<div class="panel-title" style="font-size:14px;color:var(--text-main);font-weight:800;">Recent Activity</div>
+<div class="feature-note" style="margin-top:4px;">Receives, purchases, sales, sends, and exchanges recorded by this wallet.</div>
+</div>
+<button class="tx-history-clear" id="recentActivityClearBtn" type="button"><i data-lucide="trash-2" style="width:13px;height:13px;vertical-align:-2px;"></i> Clear</button>
+</div>
+<div class="tx-history-list" id="recentActivityTabList"></div>
 </div>
 </div>
 </section>
@@ -2474,7 +2775,7 @@ button,input,select,textarea{max-width:100%;min-width:0}
 <div class="input-row"><input type="number" id="sendAmount" min="0" step="any" placeholder="0.00" inputmode="decimal"><span class="currency-label" id="sendAmountUnit">SOL</span></div>
 <span class="field-subtext" id="sendAvailableBalance">Available: 0.00 SOL</span>
 </div>
-<div class="feature-note">Sending here updates the demo balance locally. No blockchain transaction is broadcast.</div>
+<div class="feature-note">Review the recipient and amount carefully before sending.</div>
 <div id="sendError" class="exchange-error"></div>
 <button class="modal-btn" id="sendSubmitBtn" type="button"><i data-lucide="arrow-up-right"></i>Review Send</button>
 </div>
@@ -2524,7 +2825,6 @@ button,input,select,textarea{max-width:100%;min-width:0}
 <div class="modal-field"><div class="input-row"><input class="pin-input" type="password" id="unlockPinInput" inputmode="numeric" autocomplete="current-password" maxlength="4" placeholder="••••"></div></div>
 <button class="modal-btn" id="unlockWalletBtn" type="button" style="margin-top:12px;">Unlock Wallet</button>
 <div class="lock-error" id="unlockPinError">Incorrect PIN. Try again.</div>
-<div class="feature-note">Demo security only: this PIN protects the interface in this browser. It does not secure funds on a real blockchain.</div>
 </div>
 </div>
 <div class="modal-overlay" id="tradeConfirmModal">
@@ -2583,7 +2883,7 @@ button,input,select,textarea{max-width:100%;min-width:0}
 </div>
 </div>
 <div class="toast-notification" id="toastNotification">
-<i data-lucide="check-circle"></i>=
+<i data-lucide="check-circle"></i>
 <span id="toastMessage">Exchange completed successfully!</span>
 </div>
 <script>
@@ -2702,6 +3002,10 @@ const useLight = themeName === 'light';
 document.body.classList.toggle('theme-light', useLight);
 [darkCard, lightCard].forEach(c => { if(!c)return; c.classList.toggle('active', (useLight && c===lightCard) || (!useLight && c===darkCard)); const icon=c.querySelector('.theme-check-icon'); if(icon)icon.style.display=((useLight && c===lightCard) || (!useLight && c===darkCard))?'inline-block':'none'; });
 try{localStorage.setItem('wallet_theme', useLight?'light':'dark');}catch(_){ }
+const themeMeta=document.getElementById('themeColorMeta');
+if(themeMeta) themeMeta.setAttribute('content', useLight ? '#f4f6f9' : '#070709');
+const appleStatus=document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+if(appleStatus) appleStatus.setAttribute('content', useLight ? 'default' : 'black-translucent');
 if(typeof window.scheduleMarketChartDraw==='function')window.scheduleMarketChartDraw();
 }
 const sidebar = document.getElementById('sidebar');
@@ -3423,13 +3727,16 @@ function macSubmitOrder(){
       {label:macCurrentTab==='buy'?'Estimated receive':'Estimated proceeds',value:macCurrentTab==='buy'?`${received.toFixed(4)} ${coin}`:`${received.toFixed(2)} CAD`,emphasis:true}
     ]
   });
+  startTradeConfirmPriceUpdates();
 }
 function executePendingMarketTrade(){
   const p=pendingMarketTrade;
   if(!p)return;
+  syncPendingMarketTradePrice();
   tradeConfirmSubmit.classList.add('loading');
   setTimeout(()=>{
     try{
+      syncPendingMarketTradePrice();
       if(p.tab==='buy'){
         if(getBalanceForCurrency('CAD')<p.amt-1e-9){showToast('Insufficient CAD balance');return;}
         deductBalanceForCurrency('CAD',p.amt);
@@ -3831,15 +4138,55 @@ const tradeConfirmModal = document.getElementById('tradeConfirmModal');
 const tradeConfirmSummary = document.getElementById('tradeConfirmSummary');
 const tradeConfirmSubmit = document.getElementById('tradeConfirmSubmit');
 const tradeConfirmCancel = document.getElementById('tradeConfirmCancel');
+let tradeConfirmPriceTimer = null;
 
+function stopTradeConfirmPriceUpdates(){
+  if(tradeConfirmPriceTimer){clearInterval(tradeConfirmPriceTimer);tradeConfirmPriceTimer=null;}
+}
+function syncPendingMarketTradePrice(){
+  const p=pendingMarketTrade;
+  if(!p || !marketPrices[p.coin] || !Number.isFinite(marketPrices[p.coin].price) || marketPrices[p.coin].price<=0)return false;
+  p.price=marketPrices[p.coin].price;
+  p.received=p.tab==='buy'?(p.amt/p.price):(p.amt*p.price);
+  return true;
+}
+function renderPendingMarketTradeConfirmation(){
+  const p=pendingMarketTrade;
+  if(!p)return;
+  syncPendingMarketTradePrice();
+  const priceText=realisticPrice(p.coin,p.price);
+  const resultText=p.tab==='buy'?`${p.received.toFixed(4)} ${p.coin}`:`${p.received.toFixed(2)} CAD`;
+  tradeConfirmSummary.innerHTML=[
+    `<div class="confirm-summary-row"><span>Side</span><span>${p.tab==='buy'?`Buy ${p.coin}`:`Sell ${p.coin}`}</span></div>`,
+    `<div class="confirm-summary-row"><span>Market price</span><span data-live-confirm-price>${priceText}</span></div>`,
+    `<div class="confirm-summary-row"><span>Amount</span><span>${p.tab==='buy'?`${p.amt.toFixed(2)} CAD`:`${p.amt.toFixed(4)} ${p.coin}`}</span></div>`,
+    `<div class="confirm-summary-row"><span>${p.tab==='buy'?'Estimated receive':'Estimated proceeds'}</span><span class="confirm-total" data-live-confirm-result>${resultText}</span></div>`,
+    `<div class="confirm-summary-live"><i data-lucide="activity"></i><span>Live market price</span></div>`
+  ].join('');
+  lucide.createIcons();
+}
+function startTradeConfirmPriceUpdates(){
+  stopTradeConfirmPriceUpdates();
+  renderPendingMarketTradeConfirmation();
+  tradeConfirmPriceTimer=setInterval(()=>{
+    if(!tradeConfirmModal.classList.contains('open')||!pendingMarketTrade){stopTradeConfirmPriceUpdates();return;}
+    if(syncPendingMarketTradePrice()){
+      const priceEl=tradeConfirmSummary.querySelector('[data-live-confirm-price]');
+      const resultEl=tradeConfirmSummary.querySelector('[data-live-confirm-result]');
+      if(priceEl)priceEl.textContent=realisticPrice(pendingMarketTrade.coin,pendingMarketTrade.price);
+      if(resultEl)resultEl.textContent=pendingMarketTrade.tab==='buy'?`${pendingMarketTrade.received.toFixed(4)} ${pendingMarketTrade.coin}`:`${pendingMarketTrade.received.toFixed(2)} CAD`;
+    }
+  },350);
+}
 function openTradeConfirmation(data){
+  stopTradeConfirmPriceUpdates();
   tradeConfirmSummary.innerHTML = data.rows.map(r=>`<div class="confirm-summary-row"><span>${r.label}</span><span class="${r.emphasis?'confirm-total':''}">${r.value}</span></div>`).join('');
   tradeConfirmSubmit.textContent = data.confirmLabel || 'Confirm Trade';
   tradeConfirmSubmit.classList.remove('loading');
   tradeConfirmModal.classList.add('open');
   lucide.createIcons();
 }
-function closeTradeConfirmation(){ tradeConfirmModal.classList.remove('open'); pendingExchangeTrade=null; pendingMarketTrade=null; }
+function closeTradeConfirmation(){stopTradeConfirmPriceUpdates();tradeConfirmModal.classList.remove('open');pendingExchangeTrade=null;pendingMarketTrade=null;}
 tradeConfirmCancel.addEventListener('click',closeTradeConfirmation);
 tradeConfirmModal.addEventListener('click',e=>{if(e.target===tradeConfirmModal)closeTradeConfirmation();});
 
@@ -4290,7 +4637,7 @@ window.addEventListener('load',()=>{ syncExchangeConverter(); updateExchangeConv
         <span class="tv-toolbar-divider"></span>
         <button class="tv-tool" id="tvReset" type="button">Reset</button>
         <button class="tv-tool tv-latest-btn" id="tvLatest" type="button">Latest</button>
-        <span class="tv-toolbar-spacer"></span><span class="tv-chart-status" id="tvChartStatus">Simulated market</span>
+        <span class="tv-toolbar-spacer"></span><span class="tv-chart-status" id="tvChartStatus">Live market</span>
       </div>
       <div class="tv-chart-stage" id="tvChartStage" aria-label="Interactive market chart">
         <canvas class="market-canvas" id="marketChart"></canvas>
@@ -4444,17 +4791,31 @@ window.addEventListener('load',()=>{ syncExchangeConverter(); updateExchangeConv
     if(tx.type==='trade')return tx.side==='buy'?{text:`+${Number(tx.received||0).toFixed(4)} ${tx.coin}`,kind:'in'}:{text:`-${Number(tx.amount||0).toFixed(4)} ${tx.coin}`,kind:'out'};
     return {text:`+${Number(tx.received||0).toLocaleString('en-CA',{maximumFractionDigits:6})} ${tx.toCurr}`,kind:'in'};
   }
+  function buildTransactionRows(rows){
+    if(!rows.length)return '<div class="tx-empty-state">No recent activity yet.</div>';
+    return rows.map(tx=>{const amt=txAmount(tx);return `<div class="tx-history-row"><div class="tx-history-left"><div class="tx-history-icon"><i data-lucide="${txIcon(tx)}"></i></div><div><div class="tx-history-title">${txTitle(tx)}</div><div class="tx-history-meta">${txMeta(tx)}<br>${formatTxTime(tx.timestamp)}</div></div></div><div class="tx-history-right"><div class="tx-history-amount ${amt.kind}">${amt.text}</div><div class="tx-history-status">${tx.status||'Completed'}</div></div></div>`;}).join('');
+  }
+  function renderRecentActivityTab(){
+    const list=document.getElementById('recentActivityTabList');
+    if(!list)return;
+    list.innerHTML=buildTransactionRows(window.transactionHistory.slice(0,100));
+    lucide.createIcons();
+  }
   function renderTransactionHistory(){
-    const list=document.getElementById('txHistoryList');if(!list)return;
-    const rows=window.transactionHistory.filter(tx=>activeTxFilter==='all'||tx.type===activeTxFilter).slice(0,100);
-    if(!rows.length){list.innerHTML='<div class="tx-empty-state">No transactions match this filter yet.</div>';lucide.createIcons();return;}
-    list.innerHTML=rows.map(tx=>{const amt=txAmount(tx);return `<div class="tx-history-row"><div class="tx-history-left"><div class="tx-history-icon"><i data-lucide="${txIcon(tx)}"></i></div><div><div class="tx-history-title">${txTitle(tx)}</div><div class="tx-history-meta">${txMeta(tx)}<br>${formatTxTime(tx.timestamp)}</div></div></div><div class="tx-history-right"><div class="tx-history-amount ${amt.kind}">${amt.text}</div><div class="tx-history-status">${tx.status||'Completed'}</div></div></div>`;}).join('');
+    const list=document.getElementById('txHistoryList');
+    if(list){
+      const rows=window.transactionHistory.filter(tx=>activeTxFilter==='all'||tx.type===activeTxFilter).slice(0,100);
+      list.innerHTML=buildTransactionRows(rows);
+    }
+    renderRecentActivityTab();
     lucide.createIcons();
   }
   window.renderTransactionHistory=renderTransactionHistory;
+  window.renderRecentActivityTab=renderRecentActivityTab;
 
   document.querySelectorAll('#txHistoryFilters .tx-filter').forEach(btn=>btn.addEventListener('click',()=>{activeTxFilter=btn.dataset.filter||'all';document.querySelectorAll('#txHistoryFilters .tx-filter').forEach(b=>b.classList.toggle('active',b===btn));renderTransactionHistory();}));
   document.getElementById('txHistoryClearBtn')?.addEventListener('click',()=>{window.transactionHistory=[];saveTransactionHistory();renderTransactionHistory();showToast('Transaction history cleared',2500);});
+  document.getElementById('recentActivityClearBtn')?.addEventListener('click',()=>{window.transactionHistory=[];saveTransactionHistory();renderTransactionHistory();showToast('Recent activity cleared',2500);});
 
   const RECEIVE_SOL_ADDRESS='7YQ9mL4rP8sT2vW6xN3cK5jH1fG8dR4bZ6uA9eS2';
   let receiveAutoTimer=null;
@@ -4544,7 +4905,7 @@ window.addEventListener('load',()=>{ syncExchangeConverter(); updateExchangeConv
     if(amount<=0||amount>balance+1e-9){sendError.textContent=`Insufficient ${asset} balance.`;sendError.style.display='block';return;}
     sendError.style.display='none';
     pendingMarketTrade=null; pendingExchangeTrade=null; pendingSend={asset,address,amount};
-    openTradeConfirmation({confirmLabel:`Confirm Send ${asset}`,rows:[{label:'Recipient',value:address},{label:'Amount',value:`-${amount.toFixed(asset==='SOL'||asset==='BTC'||asset==='ETH'?6:2)} ${asset}`,emphasis:true},{label:'Status',value:'Local demo transfer'}]});
+    openTradeConfirmation({confirmLabel:`Confirm Send ${asset}`,rows:[{label:'Recipient',value:address},{label:'Amount',value:`-${amount.toFixed(asset==='SOL'||asset==='BTC'||asset==='ETH'?6:2)} ${asset}`,emphasis:true},{label:'Status',value:'Transfer'}]});
   });
   let pendingSend=null;
   tradeConfirmCancel?.addEventListener('click',()=>{pendingSend=null;});
@@ -4600,6 +4961,7 @@ window.addEventListener('load',()=>{ syncExchangeConverter(); updateExchangeConv
 
   // Keep the history page visible as soon as a trade/exchange/send/receive is recorded.
   window.renderTransactionHistory?.();
+  window.renderRecentActivityTab?.();
   
   // A successful exchange was historically added before this runtime loads; no migration is needed.
   lucide.createIcons();
