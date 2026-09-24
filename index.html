@@ -2378,8 +2378,8 @@ body.theme-light .lock-card .modal-btn{background:#11161e!important;color:#fff!i
   /* Use the reference's more relaxed mobile proportions rather than oversized
      desktop-sized elements squeezed into a phone. */
   .scroll-content{
-    padding-left:20px!important;
-    padding-right:20px!important;
+    padding-left:16px!important;
+    padding-right:16px!important;
     padding-top:calc(16px + env(safe-area-inset-top))!important;
     padding-bottom:calc(24px + env(safe-area-inset-bottom))!important;
   }
@@ -2405,47 +2405,534 @@ body.theme-light .lock-card .modal-btn{background:#11161e!important;color:#fff!i
   }
 }
 </style>
+<style id="final-responsive-fit">
+/* =========================================================
+   RESPONSIVE FIT PATCH
+   Keeps every component inside the actual viewport.
+   Small phones get compact components instead of giant
+   desktop-sized cards/notifications.
+   ========================================================= */
 
-<style id="mobile-natural-zoom-pass">
-/* Match the mobile sizing proportions of the supplied reference. */
-@media (max-width: 768px){
-  .main-dashboard{
-    zoom: 1;
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.main-dashboard,
+.page-panel,
+.scroll-content {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.scroll-content > *,
+.top-row-grid > *,
+.market-main-view > *,
+.market-chart-panel,
+.market-right-panel,
+.activity-panel,
+.asset-list,
+.exchange-transactions,
+.profit-summary-card,
+.cost-card,
+.theme-card {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Notifications / toast: size to content, but never exceed the screen. */
+.toast-notification {
+  width: max-content;
+  max-width: min(420px, calc(100vw - 24px));
+  min-width: 0;
+  right: max(12px, env(safe-area-inset-right));
+  left: auto;
+  padding: 12px 16px;
+  gap: 9px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.toast-notification span {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@media (max-width: 600px) {
+  .toast-notification {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: calc(100vw - 24px);
+    justify-content: flex-start;
+    padding: 11px 14px;
+    font-size: clamp(11px, 3.2vw, 13px);
+    border-radius: 13px;
+  }
+
+  .toast-notification i {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+  }
+}
+
+/* Very small iPhones / Android phones. */
+@media (max-width: 380px) {
+  .scroll-content {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  .dashboard-header {
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .dashboard-title {
+    font-size: clamp(18px, 5.4vw, 21px) !important;
+    min-width: 0;
+  }
+
+  .menu-btn {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+  }
+
+  .balance-card {
+    padding: 16px !important;
+    min-height: 180px !important;
+    border-radius: 17px;
+  }
+
+  .main-balance {
+    font-size: clamp(25px, 8.5vw, 34px) !important;
+    letter-spacing: -0.8px;
+  }
+
+  .card-actions {
+    gap: 7px;
+  }
+
+  .action-btn {
+    min-width: 0;
+    padding: 10px 5px;
+    font-size: 11px;
+    gap: 5px;
+  }
+
+  .action-btn i {
+    width: 13px;
+    height: 13px;
+  }
+
+  .asset-list,
+  .activity-panel,
+  .exchange-transactions,
+  .profit-summary-card,
+  .cost-card {
+    padding: 14px !important;
+    border-radius: 16px;
+  }
+
+  .list-item {
+    padding: 10px 7px;
+    margin: 0 -7px;
+  }
+
+  .item-left {
+    gap: 9px;
+    min-width: 0;
+  }
+
+  .item-title {
+    font-size: 12px;
+  }
+
+  .item-subtitle {
+    font-size: 10px;
+  }
+
+  .item-right {
+    min-width: 0;
+    max-width: 45%;
+  }
+
+  .item-value {
+    font-size: 11.5px;
+    overflow-wrap: anywhere;
+  }
+
+  .currency-label {
+    font-size: 9px;
+  }
+
+  .icon-wrapper,
+  .bitcoin-icon,
+  .solana-icon,
+  .eth-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+  }
+
+  .bitcoin-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .solana-icon svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .eth-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .profit-summary-value {
+    font-size: clamp(23px, 7.5vw, 29px);
+  }
+
+  .profit-period-grid {
+    gap: 7px !important;
+  }
+
+  .profit-period-card {
+    padding: 11px !important;
+  }
+
+  .profit-period-value {
+    font-size: clamp(15px, 5vw, 18px) !important;
+    overflow-wrap: anywhere;
+  }
+
+  .profit-period-sub {
+    overflow-wrap: anywhere;
+  }
+
+  .exchange-transactions {
+    margin-top: 14px;
+  }
+
+  .tx-summary {
+    grid-template-columns: minmax(0, 1fr) minmax(72px, 38%) !important;
+    gap: 7px !important;
+    padding: 11px !important;
+  }
+
+  .tx-result {
+    min-width: 72px !important;
+  }
+
+  .tx-title {
+    font-size: 11px !important;
+  }
+
+  .tx-time {
+    font-size: 9.5px !important;
+  }
+
+  .tx-result-value {
+    font-size: 11px !important;
+  }
+
+  .tx-result-label {
+    font-size: 9px !important;
+  }
+
+  .market-chart-header {
+    padding: 14px 12px 12px;
+  }
+
+  .market-coin-identity {
+    gap: 8px;
+  }
+
+  .mci-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+  }
+
+  .mci-icon svg {
+    width: 21px;
+    height: 21px;
+  }
+
+  .mci-name {
+    font-size: 15px;
+  }
+
+  .mci-symbol {
+    font-size: 10px;
+  }
+
+  .market-live-price {
+    font-size: clamp(23px, 7.5vw, 30px);
+    letter-spacing: -0.7px;
+  }
+
+  .chart-timerange {
+    padding: 10px 12px 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .chart-timerange::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tr-btn {
+    padding: 5px 8px;
+    font-size: 10px;
+    flex: 0 0 auto;
+  }
+
+  .chart-canvas-area {
+    padding: 12px;
+  }
+
+  .market-canvas {
+    height: clamp(145px, 48vw, 190px);
+  }
+
+  .chart-stats-strip {
+    padding: 12px;
+    gap: 11px 0 !important;
+  }
+
+  .css-stat {
+    padding-right: 8px;
+    min-width: 0;
+  }
+
+  .css-value {
+    font-size: 11px;
+    overflow-wrap: anywhere;
+  }
+
+  .css-label {
+    font-size: 8px;
+  }
+}
+
+/* Phones: use the full available content width, not desktop widths. */
+@media (max-width: 600px) {
+  .scroll-content {
+    width: 100%;
+    max-width: 100%;
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+
+  .top-row-grid {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px;
+  }
+
+  .balance-card,
+  .asset-list,
+  .activity-panel,
+  .exchange-transactions,
+  .profit-summary-card,
+  .cost-card,
+  .market-chart-panel,
+  .orderbook-panel {
     width: 100%;
     max-width: 100%;
   }
-  .main-dashboard .page-panel{
-    max-width: 100%;
-  }
-  html,body{
-    overflow-x:hidden!important;
-    scrollbar-width:none!important;
-    -ms-overflow-style:none!important;
-  }
-  html::-webkit-scrollbar,
-  body::-webkit-scrollbar,
-  .main-dashboard::-webkit-scrollbar,
-  .page-panel::-webkit-scrollbar{
-    width:0!important;
-    height:0!important;
-    display:none!important;
+
+  .panel-header,
+  .transactions-header,
+  .balance-header-row {
+    min-width: 0;
+    gap: 8px;
   }
 
-  .scroll-content{
-    padding-left:16px!important;
-    padding-right:16px!important;
-    padding-top:calc(20px + env(safe-area-inset-top))!important;
-    padding-bottom:calc(32px + env(safe-area-inset-bottom))!important;
+  .panel-title,
+  .transactions-header > *,
+  .balance-title-row {
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
-  .dashboard-header{margin-bottom:20px!important;}
-  .dashboard-title{font-size:22px!important;}
-  .balance-card{
-    padding:22px!important;
-    min-height:210px!important;
-    border-radius:20px!important;
+
+  .wallet-selector {
+    max-width: 45%;
+    min-width: 0;
   }
-  .main-balance{font-size:clamp(30px,9vw,42px)!important;}
-  .top-row-grid{gap:16px!important;}
+
+  .market-ticker-bar {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .market-main-view {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .market-right-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .modal-card {
+    width: min(380px, calc(100vw - 24px)) !important;
+    max-width: calc(100vw - 24px) !important;
+    padding: 18px !important;
+    border-radius: 18px;
+  }
+
+  .edit-panel {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .edit-row input,
+  .modal-field,
+  .modal-field input,
+  .modal-field select,
+  .modal-btn {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .theme-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .settings-row {
+    gap: 12px;
+  }
+
+  .settings-info {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .settings-title,
+  .settings-desc {
+    overflow-wrap: anywhere;
+  }
+
+  .settings-select,
+  .settings-btn-danger {
+    flex: 0 0 auto;
+    max-width: 46%;
+  }
+}
+
+/* Tablets / small laptops: don't let desktop cards become excessively wide. */
+@media (min-width: 601px) and (max-width: 1100px) {
+  .scroll-content {
+    padding-left: clamp(20px, 4vw, 40px);
+    padding-right: clamp(20px, 4vw, 40px);
+  }
+
+  .balance-card {
+    padding: clamp(20px, 3vw, 28px);
+  }
+
+  .main-balance {
+    font-size: clamp(32px, 4vw, 42px);
+  }
+}
+
+/* Prevent long strings, addresses and values from creating horizontal overflow. */
+.item-title,
+.item-subtitle,
+.item-value,
+.main-balance,
+.tx-title,
+.tx-time,
+.tx-result-value,
+.tx-result-label,
+.tx-detail-row span,
+.settings-title,
+.settings-desc,
+.field-subtext {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+input,
+select,
+button,
+textarea {
+  max-width: 100%;
+}
+</style>
+
+<style id="compact-swipe-toast">
+/* Compact notifications: never let a toast cover the dashboard on small screens. */
+.toast-notification{
+  box-sizing:border-box!important;
+  width:max-content!important;
+  max-width:min(360px,calc(100vw - 32px))!important;
+  min-width:0!important;
+  padding:9px 12px!important;
+  gap:8px!important;
+  border-radius:11px!important;
+  font-size:12px!important;
+  line-height:1.25!important;
+  top:max(10px,calc(env(safe-area-inset-top) + 8px))!important;
+  right:max(10px,calc(env(safe-area-inset-right) + 10px))!important;
+  left:auto!important;
+}
+.toast-notification i{
+  width:15px!important;height:15px!important;
+  min-width:15px!important;flex:0 0 15px!important;
+}
+.toast-notification span{
+  min-width:0!important;
+  max-width:290px!important;
+  overflow-wrap:anywhere!important;
+}
+@media(max-width:600px){
+  .toast-notification{
+    max-width:calc(100vw - 20px)!important;
+    width:max-content!important;
+    padding:8px 11px!important;
+    font-size:11px!important;
+    line-height:1.2!important;
+    border-radius:10px!important;
+    top:max(8px,calc(env(safe-area-inset-top) + 6px))!important;
+    right:max(10px,calc(env(safe-area-inset-right) + 10px))!important;
+  }
+  .toast-notification span{max-width:calc(100vw - 58px)!important}
+}
+@media(max-width:380px){
+  .toast-notification{
+    max-width:calc(100vw - 16px)!important;
+    padding:7px 9px!important;
+    font-size:10.5px!important;
+  }
+  .toast-notification i{width:14px!important;height:14px!important;min-width:14px!important}
+}
+.toast-notification.toast-swiping{
+  transition:none!important;
+  opacity:.8!important;
+}
+.toast-notification.toast-dismissed{
+  pointer-events:none!important;
+  transition:transform .18s ease,opacity .18s ease!important;
+  transform:translate3d(0,-120%,0)!important;
+  opacity:0!important;
 }
 </style>
 </head>
@@ -4016,7 +4503,6 @@ var realisticMarketStarted = false;
 
 const MARGINAL_TAX_RATE = 0.33; // applied to the 50% taxable inclusion only
 initializeCostBasis();
-function showToast(message, duration=3500) { toastMessage.textContent=message; toastNotification.classList.add('show'); setTimeout(()=>toastNotification.classList.remove('show'),duration); }
 function getLiveUsdRate(curr) {
   if (curr === 'USD') return 1;
   if (curr === 'CAD') return 1 / (Number(exchangeRatesInUSD.CAD) || 1.386);
@@ -4171,6 +4657,65 @@ const exToSelect = document.getElementById('exTo');
 const livePreviewVal = document.getElementById('livePreviewVal');
 const toastNotification = document.getElementById('toastNotification');
 const toastMessage = document.getElementById('toastMessage');
+let toastHideTimer = null;
+let toastTouchStartY = 0;
+let toastTouchCurrentY = 0;
+let toastTouching = false;
+
+function hideToastNow() {
+  clearTimeout(toastHideTimer);
+  toastNotification.classList.remove('show', 'toast-swiping');
+  toastNotification.classList.add('toast-dismissed');
+  setTimeout(() => toastNotification.classList.remove('toast-dismissed'), 190);
+}
+
+function showToast(message, duration=3500) {
+  clearTimeout(toastHideTimer);
+  toastNotification.classList.remove('toast-dismissed', 'toast-swiping');
+  toastNotification.style.transform = '';
+  toastMessage.textContent = message;
+  toastNotification.classList.add('show');
+  toastHideTimer = setTimeout(() => toastNotification.classList.remove('show'), duration);
+}
+
+if (toastNotification) {
+  toastNotification.addEventListener('touchstart', (e) => {
+    if (!e.touches || !e.touches[0]) return;
+    toastTouchStartY = e.touches[0].clientY;
+    toastTouchCurrentY = toastTouchStartY;
+    toastTouching = true;
+    toastNotification.classList.add('toast-swiping');
+    clearTimeout(toastHideTimer);
+  }, {passive:true});
+
+  toastNotification.addEventListener('touchmove', (e) => {
+    if (!toastTouching || !e.touches || !e.touches[0]) return;
+    toastTouchCurrentY = e.touches[0].clientY;
+    const dy = toastTouchCurrentY - toastTouchStartY;
+    if (dy < 0) toastNotification.style.transform = `translate3d(0, ${dy}px, 0)`;
+  }, {passive:true});
+
+  toastNotification.addEventListener('touchend', () => {
+    if (!toastTouching) return;
+    const dy = toastTouchCurrentY - toastTouchStartY;
+    toastTouching = false;
+    toastNotification.classList.remove('toast-swiping');
+    if (dy < -35) {
+      hideToastNow();
+    } else {
+      toastNotification.style.transform = '';
+      toastHideTimer = setTimeout(() => toastNotification.classList.remove('show'), 3500);
+    }
+  }, {passive:true});
+
+  toastNotification.addEventListener('touchcancel', () => {
+    toastTouching = false;
+    toastNotification.classList.remove('toast-swiping');
+    toastNotification.style.transform = '';
+    toastHideTimer = setTimeout(() => toastNotification.classList.remove('show'), 3500);
+  }, {passive:true});
+}
+
 exAmountInput.addEventListener('input', updateLivePreview);
 maxBtn.addEventListener('click', setMaxExchangeAmount);
 exFromSelect.addEventListener('change', ()=>{ exAmountInput.value=''; updateAvailableBalanceSubtext(); updateLivePreview(); });
@@ -5089,7 +5634,7 @@ window.addEventListener('load',()=>{ syncExchangeConverter(); updateExchangeConv
     openTradeConfirmation({confirmLabel:`Confirm Send ${asset}`,rows:[{label:'Recipient',value:address},{label:'Amount',value:`-${amount.toFixed(asset==='SOL'||asset==='BTC'||asset==='ETH'?6:2)} ${asset}`,emphasis:true},{label:'Status',value:'Transfer'}]});
   });
   let pendingSend=null;
-  tradeConfirmCancel?.addEventListener('click',()=>{pendingSend=null;});
+  document.getElementById('tradeConfirmCancel')?.addEventListener('click',()=>{pendingSend=null;});
   tradeConfirmModal?.addEventListener('click',e=>{if(e.target===tradeConfirmModal)pendingSend=null;});
   const baseTradeHandler=tradeConfirmSubmit;
   tradeConfirmSubmit.addEventListener('click',()=>{});
