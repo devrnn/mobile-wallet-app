@@ -4958,62 +4958,26 @@ button,
   }
 }
 </style>
-<style id="overview-tokens-only-fix">
-/* Overview: show crypto tokens only in the Tokens card.
-   CAD/USD remain available in the main balance and wallet selector. */
-.asset-list .overview-fiat-token-row {
-  display: none !important;
-}
-</style>
 
 
-<style id="ios-home-screen-viewport-fix">
-/* iOS Home Screen / standalone mode: use the actual app viewport.
-   Safari and the Home Screen web app do not expose the same viewport height. */
-@media (display-mode: standalone) {
-  html {
-    height: 100% !important;
-    min-height: 100% !important;
-    max-height: none !important;
+<style id="final-mobile-vertical-fix">
+/* FINAL MOBILE VERTICAL ALIGNMENT FIX */
+@media (max-width: 768px) {
+  .scroll-content {
+    padding-top: 10px !important;
   }
-
-  body {
-    height: 100% !important;
-    min-height: 100% !important;
-    max-height: none !important;
-  }
-
-  .main-dashboard {
-    height: 100% !important;
-    min-height: 100% !important;
-    max-height: none !important;
-  }
-
-  .page-panel {
-    height: 100% !important;
-    min-height: 100% !important;
-  }
-
-  .sidebar {
-    height: 100% !important;
-    min-height: 100% !important;
-    max-height: none !important;
-  }
-
-  .intro {
-    height: 100% !important;
-    min-height: 100% !important;
-    max-height: none !important;
+  .dashboard-header {
+    margin-top: 0 !important;
+    margin-bottom: 16px !important;
   }
 }
 
-/* iOS Safari standalone fallback for older versions that do not expose
-   display-mode consistently. */
-@supports (-webkit-touch-callout: none) {
-  @media (display-mode: standalone) {
-    body {
-      padding-bottom: env(safe-area-inset-bottom) !important;
-    }
+@media (max-width: 600px) {
+  .scroll-content {
+    padding-top: 8px !important;
+  }
+  .dashboard-header {
+    margin-top: 0 !important;
   }
 }
 </style>
@@ -5153,7 +5117,7 @@ button,
 <div id="activityList"></div>
 </div>
 <div class="asset-list">
-<div class="panel-header"><span class="panel-title" data-i18n="assetsTitle">Tokens</span></div>
+<div class="panel-header"><span class="panel-title" data-i18n="assetsTitle">Assets</span></div>
 <div class="list-item">
 <div class="item-left">
 <div class="bitcoin-icon"><svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="32" fill="#F7931A"/><path d="M46.101 27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4 5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.876-1.439 5.766c-0.764-0.174-1.514-0.346-2.242-0.525l0.004-0.018-4.842-1.209-0.934 3.75s2.605 0.597 2.55 0.634c1.422 0.355 1.679 1.296 1.636 2.042l-1.638 6.571c0.098 0.025 0.225 0.061 0.365 0.117l-0.37-0.092-2.296 9.205c-0.174 0.432-0.615 1.08-1.609 0.833 0.035 0.051-2.55-0.637-2.55-0.637l-1.743 4.019 4.569 1.139c0.85 0.213 1.683 0.436 2.504 0.647l-1.453 5.833 3.507 0.875 1.438-5.768c0.958 0.26 1.888 0.5 2.8 0.726l-1.433 5.741 3.511 0.876 1.453-5.823c5.987 1.133 10.489 0.676 12.383-4.738 1.527-4.36-0.076-6.875-3.226-8.515 2.294-0.53 4.022-2.039 4.483-5.155zm-8.022 11.249c-1.085 4.36-8.426 2.003-10.806 1.412l1.928-7.729c2.38 0.594 10.01 1.77 8.878 6.317zm1.086-11.312c-0.989 3.966-7.106 1.951-9.088 1.457l1.748-7.01c1.982 0.494 8.354 1.416 7.34 5.553z" fill="#FFFFFF"/></svg></div>
@@ -5169,11 +5133,11 @@ button,
 <div class="item-left"><div class="eth-icon"><svg viewBox="0 0 256 417" xmlns="http://www.w3.org/2000/svg"><path d="M127.9611 0L125.1661 9.5V285.168L127.9611 287.958L255.9231 212.32L127.9611 0" fill="#343434"/><path d="M127.962 0L0 212.32L127.962 287.959V154.158V0" fill="#8C8C8C"/><path d="M127.9611 312.1866L126.3861 314.1066V415.4956L127.9611 420.0006L255.9991 236.5866L127.9611 312.1866" fill="#3C3C3B"/><path d="M127.962 420.0001V312.1861L0 236.5861L127.962 420.0001" fill="#8C8C8C"/><path d="M127.9611 287.9584L255.9231 212.3204L127.9611 154.1584V287.9584" fill="#141414"/><path d="M0 212.3208L127.962 287.9588V154.1588L0 212.3208" fill="#393939"/></svg></div><div><div class="item-title">Ethereum</div><div class="item-subtitle">ETH</div></div></div>
 <div class="item-right"><div class="item-value" id="ethAssetValue" data-asset="ETH">0.0000<span class="currency-label">ETH</span></div></div>
 </div>
-<div class="list-item overview-fiat-token-row" hidden>
+<div class="list-item">
 <div class="item-left"><div class="icon-wrapper"><i data-lucide="dollar-sign"></i></div><div><div class="item-title">CAD</div><div class="item-subtitle" data-i18n="cadSub">Canadian Dollar</div></div></div>
 <div class="item-right"><div class="item-value" id="cadValue" data-asset="CAD">1,000.00<span class="currency-label">CAD</span></div></div>
 </div>
-<div class="list-item overview-fiat-token-row" hidden>
+<div class="list-item">
 <div class="item-left"><div class="icon-wrapper"><i data-lucide="dollar-sign"></i></div><div><div class="item-title">USD</div><div class="item-subtitle" data-i18n="usdSub">United States Dollar</div></div></div>
 <div class="item-right"><div class="item-value" id="usdValue" data-asset="USD">0.00<span class="currency-label">USD</span></div></div>
 </div>
@@ -5644,7 +5608,7 @@ pullToRefresh:"Pull to refresh",updatingBalance:"Updating balance...",updated:"U
 menuLabel:"Menu",navOverview:"Overview",navExchange:"Exchange",navProfits:"Profits & Loss",navMarket:"Market",navSettings:"Settings",
 titleWallet:"Wallet",totalBalanceTitle:"Total Balance",btnExchange:"Exchange",btnTransfer:"Transfer",navTransactions:"Transactions",
 editWalletPrefix:"Edit",editWalletSuffix:"Wallet",editLabelBalance:"Balance",editLabelRate:"Rate",btnCancel:"Cancel",btnSave:"Save",
-recentActivityTitle:"Recent Activity",assetsTitle:"Tokens",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
+recentActivityTitle:"Recent Activity",assetsTitle:"Assets",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
 titleExchangePanel:"Exchange",conversionFeesTitle:"Trade Cost Breakdown",
 exSentTitle:"Amount Sent",exSentSub:"Exchange Base Amount",
 exFeeTitle:"Trading Fee",exFeeSub:"A small trading fee is charged on each completed exchange",
@@ -5675,7 +5639,7 @@ pullToRefresh:"Pull to refresh",updatingBalance:"Updating balance...",updated:"U
 menuLabel:"Menu",navOverview:"Overview",navExchange:"Exchange",navProfits:"Profits & Loss",navMarket:"Market",navSettings:"Settings",
 titleWallet:"Wallet",totalBalanceTitle:"Total Balance",btnExchange:"Exchange",btnTransfer:"Transfer",navTransactions:"Transactions",
 editWalletPrefix:"Edit",editWalletSuffix:"Wallet",editLabelBalance:"Balance",editLabelRate:"Rate",btnCancel:"Cancel",btnSave:"Save",
-recentActivityTitle:"Recent Activity",assetsTitle:"Tokens",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
+recentActivityTitle:"Recent Activity",assetsTitle:"Assets",cadSub:"Canadian Dollar",usdSub:"United States Dollar",
 titleExchangePanel:"Exchange",conversionFeesTitle:"Trade Cost Breakdown",
 exSentTitle:"Amount Sent",exSentSub:"Exchange Base Amount",
 exFeeTitle:"Trading Fee",exFeeSub:"Only 50% of your profit is taxable",
@@ -5706,7 +5670,7 @@ pullToRefresh:"Tirer pour actualiser",updatingBalance:"Mise à jour du solde..."
 menuLabel:"Menu",navOverview:"Aperçu",navExchange:"Échange",navProfits:"Profits et pertes",navMarket:"Marché",navSettings:"Paramètres",
 titleWallet:"Portefeuille",totalBalanceTitle:"Solde Total",btnExchange:"Échanger",btnTransfer:"Transférer",navTransactions:"Transactions",
 editWalletPrefix:"Modifier le portefeuille",editWalletSuffix:"",editLabelBalance:"Solde",editLabelRate:"Taux",btnCancel:"Annuler",btnSave:"Enregistrer",
-recentActivityTitle:"Activité Récente",assetsTitle:"Jetons",cadSub:"Dollar canadien",usdSub:"Dollar américain",
+recentActivityTitle:"Activité Récente",assetsTitle:"Actifs",cadSub:"Dollar canadien",usdSub:"Dollar américain",
 titleExchangePanel:"Échange",conversionFeesTitle:"Répartition des coûts de trading",
 exSentTitle:"Montant Envoyé",exSentSub:"Montant de base de l'échange",
 exFeeTitle:"Frais de négociation",exFeeSub:"Des frais de négociation sont appliqués à chaque échange",
