@@ -4423,6 +4423,43 @@ button,
 }
 
 /* Respect reduced-motion without disabling functionality. */
+.slider,
+.slider:before{
+  transition:
+    transform .22s var(--ui-ease),
+    background-color .18s var(--ui-ease-soft),
+    border-color .18s var(--ui-ease-soft) !important;
+}
+
+.success-icon{
+  transition:
+    opacity .22s var(--ui-ease-soft),
+    transform .22s var(--ui-ease) !important;
+}
+
+.activity-delete-icon{
+  transition:
+    transform .24s var(--ui-ease),
+    background-color .18s var(--ui-ease-soft) !important;
+}
+
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible{
+  outline:2px solid rgba(255,255,255,.28);
+  outline-offset:2px;
+}
+
+body.theme-light button:focus-visible,
+body.theme-light select:focus-visible,
+body.theme-light input:focus-visible,
+body.theme-light textarea:focus-visible,
+body.theme-light [role="button"]:focus-visible{
+  outline-color:rgba(22,31,44,.28);
+}
+
 @media (prefers-reduced-motion:reduce){
   *,
   *::before,
@@ -5081,6 +5118,782 @@ body.theme-light .account-switcher-icon{background:#eef2f6;border-color:#dbe1e8;
 @media(max-width:768px){.profile-editor{left:8px;right:8px;bottom:calc(100% + 8px);max-height:min(52vh,360px);overflow-y:auto;}.account-switcher-list{max-height:min(38vh,260px);}}
 </style>
 
+
+<style id="wallet-polish-pass">
+:root{
+  --ui-ease:cubic-bezier(.22,1,.36,1);
+  --ui-ease-soft:cubic-bezier(.25,.8,.25,1);
+  --ui-fast:.16s;
+  --ui-med:.24s;
+  --ui-slow:.32s;
+  --ui-radius:18px;
+  --ui-radius-sm:13px;
+  --ui-control-h:46px;
+}
+
+html{
+  -webkit-text-size-adjust:100%;
+  text-rendering:optimizeLegibility;
+  scroll-behavior:auto;
+}
+
+body{
+  font-variant-numeric:tabular-nums;
+  letter-spacing:0;
+  overscroll-behavior:none;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  -webkit-user-select:none;
+  user-select:none;
+}
+
+.main-dashboard{
+  isolation:isolate;
+}
+
+.page-panel{
+  overscroll-behavior-y:contain;
+  scrollbar-gutter:stable;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,.12) transparent;
+}
+
+.page-panel::-webkit-scrollbar{
+  width:8px;
+}
+
+.page-panel::-webkit-scrollbar-track{
+  background:transparent;
+}
+
+.page-panel::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.10);
+  border:2px solid transparent;
+  border-radius:999px;
+  background-clip:padding-box;
+}
+
+.scroll-content{
+  will-change:auto !important;
+  transform:none;
+}
+
+.dashboard-title{
+  letter-spacing:-.72px;
+}
+
+.dashboard-title-group{
+  min-width:0;
+}
+
+.balance-card,
+.asset-list,
+.activity-panel,
+.exchange-transactions,
+.profit-summary-card,
+.cost-card,
+.market-ticker-bar,
+.market-chart-panel,
+.orderbook-panel,
+.market-action-card,
+.recent-trades-panel,
+.tx-history-card,
+.security-card,
+.lock-card,
+.theme-card{
+  border-radius:var(--ui-radius) !important;
+}
+
+.balance-card,
+.asset-list,
+.activity-panel,
+.exchange-transactions,
+.profit-summary-card,
+.cost-card,
+.market-chart-panel,
+.orderbook-panel,
+.market-action-card,
+.recent-trades-panel,
+.tx-history-card,
+.security-card,
+.lock-card{
+  box-shadow:
+    0 18px 40px -28px rgba(0,0,0,.72),
+    inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+
+.balance-card{
+  overflow:hidden;
+  transform:translateZ(0);
+}
+
+.balance-card:hover{
+  transform:translateY(-2px) translateZ(0) !important;
+}
+
+.sidebar-item,
+.action-btn,
+.modal-btn,
+.menu-btn,
+.account-edit-btn,
+.contact-action,
+.asset-manager-action,
+.wallet-inline-btn,
+.tr-btn,
+.tv-tool,
+.max-btn,
+.settings-btn-danger,
+.theme-card{
+  transition:
+    background-color var(--ui-fast) var(--ui-ease-soft),
+    border-color var(--ui-fast) var(--ui-ease-soft),
+    color var(--ui-fast) var(--ui-ease-soft),
+    box-shadow var(--ui-fast) var(--ui-ease-soft),
+    opacity var(--ui-fast) var(--ui-ease-soft),
+    transform var(--ui-med) var(--ui-ease);
+}
+
+.sidebar-item,
+.action-btn{
+  will-change:auto;
+}
+
+.sidebar-item:hover{
+  transform:translateX(2px) !important;
+}
+
+.sidebar-item:hover i{
+  transform:none !important;
+}
+
+.action-btn:hover{
+  transform:translateY(-1px) !important;
+}
+
+.action-btn:hover i{
+  transform:none !important;
+}
+
+.action-btn:active,
+.modal-btn:active,
+.menu-btn:active,
+.account-edit-btn:active{
+  transform:translateY(1px) scale(.985) !important;
+}
+
+.theme-card:hover{
+  transform:translateY(-1px) !important;
+}
+
+.theme-card.active{
+  box-shadow:0 10px 24px -18px rgba(0,0,0,.65) !important;
+}
+
+.list-item,
+.tx-card,
+.contact-card,
+.asset-manager-row{
+  transition:
+    background-color var(--ui-fast) var(--ui-ease-soft),
+    border-color var(--ui-fast) var(--ui-ease-soft),
+    transform var(--ui-med) var(--ui-ease);
+}
+
+.list-item:hover{
+  transform:translateX(1px) !important;
+}
+
+.list-item:hover .icon-wrapper,
+.list-item:hover .bitcoin-icon,
+.list-item:hover .solana-icon,
+.list-item:hover .eth-icon{
+  transform:none !important;
+}
+
+.modal-overlay,
+.lock-overlay,
+.sidebar-overlay{
+  transition:opacity var(--ui-med) var(--ui-ease-soft) !important;
+}
+
+.modal-card,
+.lock-card{
+  transition:
+    transform var(--ui-slow) var(--ui-ease),
+    opacity var(--ui-med) var(--ui-ease-soft),
+    box-shadow var(--ui-med) var(--ui-ease-soft) !important;
+}
+
+.modal-overlay .modal-card,
+.lock-overlay .lock-card{
+  transform:translateY(8px) scale(.985) !important;
+}
+
+.modal-overlay.open .modal-card,
+.lock-overlay.open .lock-card{
+  transform:translateY(0) scale(1) !important;
+}
+
+.modal-field,
+.edit-row input,
+.settings-select,
+.account-email-edit-row input,
+.modal-card textarea{
+  transition:
+    background-color var(--ui-fast) var(--ui-ease-soft),
+    border-color var(--ui-fast) var(--ui-ease-soft),
+    box-shadow var(--ui-fast) var(--ui-ease-soft) !important;
+}
+
+.modal-field:focus-within,
+.edit-row input:focus-visible,
+.account-email-edit-row input:focus-visible,
+.modal-card textarea:focus-visible{
+  box-shadow:0 0 0 3px rgba(255,255,255,.055) !important;
+}
+
+.tr-btn:hover,
+.tv-tool:hover{
+  transform:none !important;
+}
+
+.page-panel.panel-enter{
+  animation:walletPanelEnter .24s var(--ui-ease) both !important;
+}
+
+@keyframes walletPanelEnter{
+  from{opacity:0;transform:translate3d(0,7px,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+
+.pull-indicator{
+  transition:
+    transform .30s var(--ui-ease),
+    opacity .20s var(--ui-ease-soft) !important;
+}
+
+.refresh-capsule{
+  transition:
+    background-color .20s var(--ui-ease-soft),
+    border-color .20s var(--ui-ease-soft),
+    box-shadow .24s var(--ui-ease-soft),
+    transform .24s var(--ui-ease) !important;
+}
+
+.sidebar{
+  transition:transform .30s var(--ui-ease) !important;
+}
+
+.profile-editor{
+  transition:
+    opacity .18s var(--ui-ease-soft),
+    transform .24s var(--ui-ease) !important;
+}
+
+.account-switcher-btn{
+  transition:
+    background-color var(--ui-fast) var(--ui-ease-soft),
+    border-color var(--ui-fast) var(--ui-ease-soft),
+    transform var(--ui-fast) var(--ui-ease) !important;
+}
+
+.toast-notification{
+  will-change:auto !important;
+  transition:
+    transform .26s var(--ui-ease),
+    opacity .20s var(--ui-ease-soft) !important;
+  box-shadow:
+    0 16px 38px -22px rgba(0,0,0,.78),
+    0 1px 0 rgba(255,255,255,.05) inset !important;
+}
+
+.toast-notification.toast-swiping{
+  transition:none !important;
+}
+
+.toast-notification.toast-dismissed{
+  transition:transform .18s var(--ui-ease),opacity .16s var(--ui-ease-soft) !important;
+}
+
+.market-live-price.flash-up,
+.market-live-price.flash-down{
+  transition:color .18s ease !important;
+}
+
+.market-ticker-bar{
+  box-shadow:0 14px 32px -24px rgba(0,0,0,.72) !important;
+}
+
+.ticker-item.selected::after{
+  transition:opacity .18s var(--ui-ease-soft) !important;
+}
+
+.chart-canvas-area,
+.tv-chart-stage,
+.market-canvas{
+  transform:translateZ(0);
+}
+
+.tv-chart-stage{
+  border-radius:14px;
+}
+
+.menu-btn{
+  flex:0 0 auto;
+}
+
+.profile-avatar,
+.account-avatar-lg,
+.icon-wrapper,
+.bitcoin-icon,
+.solana-icon,
+.eth-icon,
+.contact-avatar,
+.asset-manager-icon{
+  transform:translateZ(0);
+}
+
+.feature-inline-actions,
+.card-actions{
+  align-items:stretch;
+}
+
+.card-actions .action-btn,
+.feature-inline-actions .modal-btn{
+  min-height:var(--ui-control-h);
+}
+
+@media (min-width:769px){
+  .scroll-content{
+    width:100%;
+    max-width:1540px;
+    margin-inline:auto;
+  }
+
+  .top-row-grid{
+    align-items:stretch;
+  }
+
+  .market-main-view{
+    align-items:start;
+  }
+}
+
+@media (hover:hover){
+  .sidebar-item:hover{
+    color:#fff;
+    background-color:rgba(255,255,255,.045);
+  }
+
+  .action-btn:not(.primary):hover{
+    background:rgba(255,255,255,.075);
+  }
+
+  .modal-btn:hover{
+    transform:translateY(-1px) !important;
+  }
+
+  .contact-action:hover,
+  .asset-manager-action:hover,
+  .wallet-inline-btn:hover,
+  .settings-btn-danger:hover,
+  .max-btn:hover{
+    transform:translateY(-1px) !important;
+  }
+}
+
+@media (hover:none){
+  .sidebar-item:hover,
+  .action-btn:hover,
+  .modal-btn:hover,
+  .menu-btn:hover,
+  .list-item:hover,
+  .tx-card:hover,
+  .theme-card:hover,
+  .contact-action:hover,
+  .asset-manager-action:hover,
+  .wallet-inline-btn:hover{
+    transform:none !important;
+  }
+}
+
+@media (max-width:768px){
+  .page-panel{
+    scrollbar-width:none;
+  }
+
+  .page-panel::-webkit-scrollbar{
+    display:none;
+  }
+
+  .scroll-content{
+    padding-top:max(18px,calc(env(safe-area-inset-top) + 10px)) !important;
+    padding-bottom:max(34px,calc(env(safe-area-inset-bottom) + 24px)) !important;
+  }
+
+  .dashboard-header{
+    min-height:40px;
+  }
+
+  .balance-card,
+  .asset-list,
+  .activity-panel,
+  .exchange-transactions,
+  .profit-summary-card,
+  .cost-card{
+    box-shadow:
+      0 16px 32px -26px rgba(0,0,0,.68),
+      inset 0 1px 0 rgba(255,255,255,.03) !important;
+  }
+
+  .balance-card{
+    padding:19px !important;
+  }
+
+  .main-balance{
+    letter-spacing:-1.15px !important;
+  }
+
+  .action-btn{
+    border-radius:13px !important;
+  }
+
+  .market-ticker-bar{
+    margin-bottom:18px;
+  }
+
+  .ticker-item{
+    padding:12px 16px;
+  }
+
+  .market-chart-panel,
+  .orderbook-panel,
+  .market-action-card,
+  .recent-trades-panel{
+    border-radius:18px !important;
+  }
+
+  .market-chart-header{
+    gap:8px;
+  }
+
+  .market-live-price{
+    line-height:1.02;
+  }
+
+  .chart-timeframe-row{
+    overflow-x:auto;
+    scrollbar-width:none;
+    overscroll-behavior-x:contain;
+  }
+
+  .chart-timeframe-row::-webkit-scrollbar{
+    display:none;
+  }
+
+  .tr-btn{
+    min-height:34px;
+    padding-inline:11px;
+  }
+
+  .chart-canvas-area{
+    overflow:hidden;
+  }
+
+  .account-page-panel .account-page-layout{
+    width:min(760px,100%);
+    margin-inline:auto;
+  }
+
+  .account-page-panel .account-modal-card{
+    margin-inline:auto;
+  }
+
+  .contact-actions{
+    align-items:stretch;
+  }
+
+  .contact-action,
+  .asset-manager-action{
+    min-height:34px;
+  }
+
+  .toast-notification{
+    top:max(10px,calc(env(safe-area-inset-top) + 8px)) !important;
+    right:max(10px,env(safe-area-inset-right)) !important;
+    left:auto !important;
+    max-width:min(330px,calc(100vw - 20px)) !important;
+    padding:8px 11px !important;
+    gap:7px !important;
+    border-radius:11px !important;
+    font-size:11px !important;
+    line-height:1.25 !important;
+  }
+
+  .toast-notification i{
+    width:14px !important;
+    height:14px !important;
+    min-width:14px !important;
+  }
+
+  .toast-notification span{
+    max-width:calc(100vw - 60px);
+  }
+
+  .profile-editor{
+    max-height:min(50vh,360px);
+  }
+}
+
+@media (max-width:600px){
+  .scroll-content{
+    padding-left:max(14px,env(safe-area-inset-left)) !important;
+    padding-right:max(14px,env(safe-area-inset-right)) !important;
+  }
+
+  .dashboard-title{
+    font-size:clamp(20px,5.4vw,23px) !important;
+  }
+
+  .balance-header-row{
+    gap:9px;
+  }
+
+  .wallet-selector{
+    min-width:0 !important;
+    max-width:48% !important;
+  }
+
+  .main-balance{
+    font-size:clamp(32px,10vw,42px) !important;
+  }
+
+  .item-title{
+    font-size:13px;
+  }
+
+  .item-subtitle{
+    font-size:11px;
+  }
+
+  .item-value{
+    font-size:13px;
+  }
+
+  .currency-label{
+    font-size:10px;
+  }
+
+  .profit-summary-value{
+    font-size:28px;
+  }
+
+  .tx-summary{
+    gap:9px;
+  }
+
+  .modal-overlay,
+  .lock-overlay{
+    padding:
+      max(12px,env(safe-area-inset-top))
+      max(12px,env(safe-area-inset-right))
+      max(12px,env(safe-area-inset-bottom))
+      max(12px,env(safe-area-inset-left)) !important;
+  }
+
+  .modal-card,
+  #receiveModal .modal-card,
+  #sendModal .modal-card,
+  #scanModal .modal-card,
+  #tradeConfirmModal .modal-card{
+    width:min(460px,calc(100vw - 28px)) !important;
+    max-height:calc(100dvh - 28px) !important;
+    border-radius:20px !important;
+  }
+
+  #receiveModal .qr-box{
+    width:min(205px,58vw) !important;
+    height:min(205px,58vw) !important;
+  }
+}
+
+@media (max-width:380px){
+  .scroll-content{
+    padding-left:max(12px,env(safe-area-inset-left)) !important;
+    padding-right:max(12px,env(safe-area-inset-right)) !important;
+  }
+
+  .balance-card{
+    padding:17px !important;
+  }
+
+  .main-balance{
+    font-size:clamp(30px,10vw,38px) !important;
+  }
+
+  .card-actions.feature-actions{
+    gap:10px !important;
+  }
+
+  .card-actions.feature-actions .action-btn{
+    min-height:44px !important;
+    padding-inline:6px !important;
+  }
+}
+
+@media (max-height:700px) and (max-width:900px){
+  .scroll-content{
+    padding-top:max(14px,env(safe-area-inset-top)) !important;
+    padding-bottom:max(26px,env(safe-area-inset-bottom)) !important;
+  }
+
+  .dashboard-header{
+    margin-bottom:15px !important;
+  }
+
+  .balance-card{
+    padding:17px !important;
+  }
+
+  .modal-card,
+  #receiveModal .modal-card,
+  #sendModal .modal-card,
+  #scanModal .modal-card,
+  #tradeConfirmModal .modal-card{
+    max-height:calc(100dvh - 24px) !important;
+    padding:17px !important;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,
+  *::before,
+  *::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+
+  .intro{
+    display:none !important;
+  }
+}
+
+@media (max-width:768px) and (prefers-reduced-motion:no-preference){
+  .intro .liquid{
+    animation-duration:20s !important;
+  }
+
+  .intro .liquid2{
+    animation-duration:26s !important;
+  }
+
+  .intro .reflection{
+    animation-duration:18s !important;
+  }
+
+  .intro .orb{
+    animation-duration:1.35s,9s !important;
+  }
+}
+
+/* Light appearance: same geometry and motion, softer contrast. */
+body.theme-light .page-panel{
+  scrollbar-color:rgba(22,31,44,.14) transparent;
+}
+
+body.theme-light .page-panel::-webkit-scrollbar-thumb{
+  background:rgba(22,31,44,.12);
+  background-clip:padding-box;
+}
+
+body.theme-light .balance-card,
+body.theme-light .asset-list,
+body.theme-light .activity-panel,
+body.theme-light .exchange-transactions,
+body.theme-light .profit-summary-card,
+body.theme-light .cost-card,
+body.theme-light .market-chart-panel,
+body.theme-light .orderbook-panel,
+body.theme-light .market-action-card,
+body.theme-light .recent-trades-panel,
+body.theme-light .tx-history-card,
+body.theme-light .security-card,
+body.theme-light .lock-card{
+  box-shadow:
+    0 18px 40px -30px rgba(22,31,44,.22),
+    inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+
+body.theme-light .action-btn:not(.primary){
+  background:#f8fafc;
+}
+
+body.theme-light .action-btn:not(.primary):hover{
+  background:#f1f4f7;
+}
+
+body.theme-light .tr-btn:hover,
+body.theme-light .tv-tool:hover{
+  background:#f3f6f9 !important;
+}
+
+body.theme-light .toast-notification{
+  box-shadow:
+    0 16px 38px -22px rgba(22,31,44,.26),
+    inset 0 1px 0 rgba(255,255,255,.92) !important;
+}
+
+body.theme-light .profile-editor{
+  box-shadow:
+    0 18px 48px -22px rgba(22,31,44,.26),
+    inset 0 1px 0 rgba(255,255,255,.92);
+}
+
+/* Keep the splash intentionally brief so it feels like an entrance, not a gate. */
+.intro{
+  animation-duration:1.05s !important;
+  animation-delay:3.15s !important;
+}
+
+.intro-welcome{
+  animation:
+    welcomeEntrance .72s var(--ui-ease) .9s forwards,
+    welcomeExit .42s var(--ui-ease-soft) 2.7s forwards !important;
+}
+
+.intro .liquid{
+  animation-duration:15s !important;
+}
+
+.intro .liquid2{
+  animation-duration:20s !important;
+}
+
+.intro .reflection{
+  animation-duration:14s !important;
+}
+
+.intro .highlight{
+  animation-duration:8s !important;
+}
+
+.intro .wLight{
+  animation:
+    wLightEntrance 1.1s ease-out .55s forwards,
+    wLightMove 6.5s ease-in-out 1.6s infinite !important;
+}
+</style>
+
 </head>
 <body>\n<script id="contacts-data-migration-final">
 (function(){
@@ -5195,11 +6008,15 @@ body.theme-light .account-switcher-icon{background:#eef2f6;border-color:#dbe1e8;
     document.body.style.touchAction = '';
     intro.style.pointerEvents = 'none';
   };
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    unlock();
+    return;
+  }
   lock();
   intro.addEventListener('animationend', e => {
     if (e.animationName === 'introOutro') unlock();
   });
-  setTimeout(unlock, 8500);
+  setTimeout(unlock, 5200);
 })();
 </script>
 <div class="pull-indicator" id="pullIndicator">
@@ -7279,7 +8096,7 @@ function triggerHaptic(){if('vibrate' in navigator)navigator.vibrate(10);}
 function handleStart(y){if(walletPanel.scrollTop<=0&&!isRefreshing){startY=y;currentY=y;isDragging=true;content.style.transition='none';indicator.classList.remove('completed');}}
 function handleMove(y,e){if(!isDragging||isRefreshing)return;currentY=y;const rawDistance=currentY-startY;const dict=translations[currentLang]||translations['en-CA'];if(rawDistance>0&&walletPanel.scrollTop<=0){if(e.cancelable)e.preventDefault();const dragOffset=Math.pow(rawDistance*0.45,0.90);content.style.transform=`translateY(${dragOffset}px)`;const progress=Math.min(dragOffset/triggerThreshold,1.0);spinnerArc.style.strokeDashoffset=CIRCUMFERENCE-(progress*CIRCUMFERENCE*0.82);if(dragOffset>10)indicator.classList.add('visible');else indicator.classList.remove('visible');if(dragOffset>=triggerThreshold){if(!indicator.classList.contains('ready')){triggerHaptic();indicator.classList.add('ready');refreshText.textContent=dict.releaseToUpdate;}}else{if(indicator.classList.contains('ready')){indicator.classList.remove('ready');refreshText.textContent=dict.pullToRefresh;}}}}
 function exitRefreshState(){content.style.transition='transform 0.38s cubic-bezier(0.22,1,0.36,1)';content.style.transform='translateY(0)';indicator.classList.remove('visible','ready','completed');setTimeout(()=>{isRefreshing=false;refreshText.textContent=(translations[currentLang]||translations['en-CA']).pullToRefresh;spinnerArc.style.strokeDashoffset=CIRCUMFERENCE;},380);}
-function handleEnd(){if(!isDragging)return;isDragging=false;const rawDistance=currentY-startY;const finalOffset=Math.pow(Math.max(0,rawDistance)*0.45,0.90);const dict=translations[currentLang]||translations['en-CA'];content.style.transition='transform 0.42s cubic-bezier(0.175,0.885,0.32,1.15)';if(finalOffset>=triggerThreshold&&rawDistance>0){isRefreshing=true;content.style.transform=`translateY(${triggerThreshold-12}px)`;indicator.classList.add('visible','refreshing');indicator.classList.remove('ready');refreshText.textContent=dict.updatingBalance;spinnerArc.style.strokeDashoffset=CIRCUMFERENCE*0.25;setTimeout(()=>{indicator.classList.remove('refreshing');indicator.classList.add('completed');refreshText.textContent=dict.updated;triggerHaptic();if(currentCurrency==='CAD')displayBalanceCAD=internalHiddenBalanceCAD;else if(currentCurrency==='USD')displayBalanceUSD=internalHiddenBalanceUSD;persistAccountingState();renderBalance();setTimeout(()=>exitRefreshState(),420);},300);}else{content.style.transform='translateY(0)';indicator.classList.remove('visible','ready');}}
+function handleEnd(){if(!isDragging)return;isDragging=false;const rawDistance=currentY-startY;const finalOffset=Math.pow(Math.max(0,rawDistance)*0.45,0.90);const dict=translations[currentLang]||translations['en-CA'];content.style.transition='transform 0.42s cubic-bezier(0.22,1,0.36,1)';if(finalOffset>=triggerThreshold&&rawDistance>0){isRefreshing=true;content.style.transform=`translateY(${triggerThreshold-12}px)`;indicator.classList.add('visible','refreshing');indicator.classList.remove('ready');refreshText.textContent=dict.updatingBalance;spinnerArc.style.strokeDashoffset=CIRCUMFERENCE*0.25;setTimeout(()=>{indicator.classList.remove('refreshing');indicator.classList.add('completed');refreshText.textContent=dict.updated;triggerHaptic();if(currentCurrency==='CAD')displayBalanceCAD=internalHiddenBalanceCAD;else if(currentCurrency==='USD')displayBalanceUSD=internalHiddenBalanceUSD;persistAccountingState();renderBalance();setTimeout(()=>exitRefreshState(),420);},300);}else{content.style.transform='translateY(0)';indicator.classList.remove('visible','ready');}}
 walletPanel.addEventListener('touchstart',e=>handleStart(e.touches[0].clientY),{passive:true});
 walletPanel.addEventListener('touchmove',e=>handleMove(e.touches[0].clientY,e),{passive:false});
 walletPanel.addEventListener('touchend',handleEnd);
@@ -7295,7 +8112,7 @@ let pStartY=0,pCurrentY=0,pIsDragging=false,pIsRefreshing=false;
 function pHandleStart(y){if(profitsPanel.scrollTop<=0&&!pIsRefreshing){pStartY=y;pCurrentY=y;pIsDragging=true;profitsContent.style.transition='none';profitsIndicator.classList.remove('completed');}}
 function pHandleMove(y,e){if(!pIsDragging||pIsRefreshing)return;pCurrentY=y;const raw=pCurrentY-pStartY;if(raw>0&&profitsPanel.scrollTop<=0){if(e.cancelable)e.preventDefault();const off=Math.pow(raw*0.45,0.90);profitsContent.style.transform=`translateY(${off}px)`;const progress=Math.min(off/triggerThreshold,1);profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE-(progress*CIRCUMFERENCE*0.82);profitsIndicator.classList.toggle('visible',off>10);if(off>=triggerThreshold){if(!profitsIndicator.classList.contains('ready')){triggerHaptic();profitsIndicator.classList.add('ready');profitsRefreshText.textContent='Release to update';}}else{profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Pull to refresh';}}}
 function pExitRefresh(){profitsContent.style.transition='transform .38s cubic-bezier(.22,1,.36,1)';profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready','completed');setTimeout(()=>{pIsRefreshing=false;profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE;profitsRefreshText.textContent='Pull to refresh';},380);}
-function pHandleEnd(){if(!pIsDragging)return;pIsDragging=false;const raw=pCurrentY-pStartY;const off=Math.pow(Math.max(0,raw)*0.45,0.90);profitsContent.style.transition='transform .42s cubic-bezier(.175,.885,.32,1.15)';if(off>=triggerThreshold&&raw>0){pIsRefreshing=true;profitsContent.style.transform=`translateY(${triggerThreshold-12}px)`;profitsIndicator.classList.add('visible','refreshing');profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Updating portfolio...';profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*.25;Promise.resolve().then(()=>{refreshMarketUI();renderExchangeTransactions();profitsIndicator.classList.remove('refreshing');profitsIndicator.classList.add('completed');profitsRefreshText.textContent='Updated';triggerHaptic();setTimeout(pExitRefresh,520);});}else{profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready');}}
+function pHandleEnd(){if(!pIsDragging)return;pIsDragging=false;const raw=pCurrentY-pStartY;const off=Math.pow(Math.max(0,raw)*0.45,0.90);profitsContent.style.transition='transform .42s cubic-bezier(.22,1,.36,1)';if(off>=triggerThreshold&&raw>0){pIsRefreshing=true;profitsContent.style.transform=`translateY(${triggerThreshold-12}px)`;profitsIndicator.classList.add('visible','refreshing');profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Updating portfolio...';profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*.25;Promise.resolve().then(()=>{refreshMarketUI();renderExchangeTransactions();profitsIndicator.classList.remove('refreshing');profitsIndicator.classList.add('completed');profitsRefreshText.textContent='Updated';triggerHaptic();setTimeout(pExitRefresh,520);});}else{profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready');}}
 profitsPanel.addEventListener('touchstart',e=>pHandleStart(e.touches[0].clientY),{passive:true});
 profitsPanel.addEventListener('touchmove',e=>pHandleMove(e.touches[0].clientY,e),{passive:false});
 profitsPanel.addEventListener('touchend',pHandleEnd);
@@ -7311,7 +8128,7 @@ let mStartY=0,mCurrentY=0,mIsDragging=false,mIsRefreshing=false;
 function mHandleStart(y){if(marketPanel.scrollTop<=0&&!mIsRefreshing){mStartY=y;mCurrentY=y;mIsDragging=true;marketContent.style.transition='none';marketIndicator.classList.remove('completed');}}
 function mHandleMove(y,e){if(!mIsDragging||mIsRefreshing)return;mCurrentY=y;const raw=mCurrentY-mStartY;if(raw>0&&marketPanel.scrollTop<=0){if(e.cancelable)e.preventDefault();const off=Math.pow(raw*0.45,0.90);marketContent.style.transform=`translateY(${off}px)`;const progress=Math.min(off/triggerThreshold,1);marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE-(progress*CIRCUMFERENCE*0.82);marketIndicator.classList.toggle('visible',off>10);if(off>=triggerThreshold){if(!marketIndicator.classList.contains('ready')){triggerHaptic();marketIndicator.classList.add('ready');marketRefreshText.textContent='Release to update';}}else{marketIndicator.classList.remove('ready');marketRefreshText.textContent='Pull to refresh';}}}
 function mExitRefresh(){marketContent.style.transition='transform .38s cubic-bezier(.22,1,.36,1)';marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready','completed');setTimeout(()=>{mIsRefreshing=false;marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE;marketRefreshText.textContent='Pull to refresh';},380);}
-function mHandleEnd(){if(!mIsDragging)return;mIsDragging=false;const raw=mCurrentY-mStartY;const off=Math.pow(Math.max(0,raw)*0.45,0.90);marketContent.style.transition='transform .42s cubic-bezier(.175,.885,.32,1.15)';if(off>=triggerThreshold&&raw>0){mIsRefreshing=true;marketContent.style.transform=`translateY(${triggerThreshold-12}px)`;marketIndicator.classList.add('visible','refreshing');marketIndicator.classList.remove('ready');marketRefreshText.textContent='Updating market...';marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*.25;setTimeout(()=>{if(typeof refreshMarketUI==='function')refreshMarketUI();marketIndicator.classList.remove('refreshing');marketIndicator.classList.add('completed');marketRefreshText.textContent='Updated';triggerHaptic();setTimeout(mExitRefresh,420);},220);}else{marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready');}}
+function mHandleEnd(){if(!mIsDragging)return;mIsDragging=false;const raw=mCurrentY-mStartY;const off=Math.pow(Math.max(0,raw)*0.45,0.90);marketContent.style.transition='transform .42s cubic-bezier(.22,1,.36,1)';if(off>=triggerThreshold&&raw>0){mIsRefreshing=true;marketContent.style.transform=`translateY(${triggerThreshold-12}px)`;marketIndicator.classList.add('visible','refreshing');marketIndicator.classList.remove('ready');marketRefreshText.textContent='Updating market...';marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*.25;setTimeout(()=>{if(typeof refreshMarketUI==='function')refreshMarketUI();marketIndicator.classList.remove('refreshing');marketIndicator.classList.add('completed');marketRefreshText.textContent='Updated';triggerHaptic();setTimeout(mExitRefresh,420);},220);}else{marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready');}}
 marketPanel.addEventListener('touchstart',e=>mHandleStart(e.touches[0].clientY),{passive:true});
 marketPanel.addEventListener('touchmove',e=>mHandleMove(e.touches[0].clientY,e),{passive:false});
 marketPanel.addEventListener('touchend',mHandleEnd);
@@ -7566,7 +8383,6 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
       const wick=Math.max(base*vol*(0.28+Math.random()*0.34),body*(0.35+Math.random()*0.9));
       out.push({t:aligned-(n-1-i)*step,o,c,hi:Math.max(o,c)+wick*(0.55+Math.random()*0.45),lo:Math.min(o,c)-wick*(0.55+Math.random()*0.45),v:80+Math.random()*160});
     }
-    // Anchor the most recent close exactly to the simulated market price.
     out[out.length-1].c=base;out[out.length-1].hi=Math.max(out[out.length-1].hi,base);out[out.length-1].lo=Math.min(out[out.length-1].lo,base);
     series[coin][range]=out;
     return out;
@@ -8699,7 +9515,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
       dragging=false;
       const raw=currentY-startY;
       const offset=Math.pow(Math.max(0,raw)*.45,.90);
-      content.style.transition='transform .42s cubic-bezier(.175,.885,.32,1.15)';
+      content.style.transition='transform .42s cubic-bezier(.22,1,.36,1)';
       if(offset>=threshold && raw>0){
         refreshing=true;
         content.style.transform=`translateY(${threshold-12}px)`;
