@@ -4960,14 +4960,18 @@ button,
 </style>
 
 <style id="wallet-enhancements-style">
-.wallet-inline-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:rgba(255,255,255,.045);color:#d7dbe5;font:700 10px Inter,system-ui,sans-serif;cursor:pointer;transition:.18s ease;white-space:nowrap}.wallet-inline-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);transform:translateY(-1px)}.wallet-inline-btn.prominent{padding:9px 12px;font-size:11px;color:#fff}.wallet-inline-btn i{width:13px;height:13px}
+.wallet-inline-btn{display:inline-flex;align-items:center;gap:5px;min-height:28px;padding:5px 8px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:rgba(255,255,255,.045);color:#d7dbe5;font:700 9.5px Inter,system-ui,sans-serif;cursor:pointer;transition:.18s ease;white-space:nowrap}.wallet-inline-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);transform:translateY(-1px)}.wallet-inline-btn.prominent{padding:6px 9px;font-size:10px;min-height:28px;color:#fff}.wallet-inline-btn i{width:11px;height:11px}
 .address-book-hero{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;margin-bottom:18px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.018));border:1px solid var(--border-subtle);border-radius:18px}.address-book-hero-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:0 0 40px;border-radius:13px;background:rgba(52,211,153,.09);border:1px solid rgba(52,211,153,.18);color:var(--accent-green)}.address-book-hero-icon i{width:19px;height:19px}.address-book-hero-title{font-size:13px;font-weight:800;color:#fff}.address-book-hero-sub{margin-top:4px;font-size:11px;line-height:1.5;color:var(--text-muted)}.contact-count{min-width:24px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--border-subtle);color:var(--text-muted);font-size:10px;font-weight:700;text-align:center}.contact-card{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border-subtle)}.contact-card:last-child{border-bottom:0}.contact-avatar{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#24242b,#151519);border:1px solid rgba(255,255,255,.08);font-size:12px;font-weight:850;color:#fff;flex:0 0 38px}.contact-main{flex:1;min-width:0}.contact-handle{font-size:13px;font-weight:800;color:#fff}.contact-meta{margin-top:3px;font-size:10.5px;color:var(--text-muted);overflow-wrap:anywhere}.contact-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.contact-action{padding:7px 9px;border-radius:9px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#dfe3ec;font-size:10px;font-weight:750;cursor:pointer}.contact-action:hover{background:rgba(255,255,255,.08)}.contact-action.primary{background:#fff;color:#0b0b0d;border-color:#fff}.contact-empty{padding:24px 0;color:var(--text-muted);font-size:12px;text-align:center}.asset-manager-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border-subtle)}.asset-manager-row:last-child{border-bottom:0}.asset-manager-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.045);border:1px solid var(--border-subtle);font-weight:850;color:#fff;flex:0 0 40px}.asset-manager-main{flex:1;min-width:0}.asset-manager-name{font-size:13px;font-weight:800;color:#fff}.asset-manager-meta{margin-top:3px;font-size:10.5px;color:var(--text-muted)}.asset-manager-value{text-align:right;font-variant-numeric:tabular-nums}.asset-manager-balance{font-size:12px;font-weight:800;color:#fff}.asset-manager-cad{margin-top:3px;font-size:10px;color:var(--text-muted)}.asset-manager-actions{display:flex;gap:6px;margin-left:6px}.asset-manager-action{padding:7px 8px;border-radius:9px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#dfe3ec;font-size:10px;font-weight:750;cursor:pointer}.asset-manager-action:hover{background:rgba(255,255,255,.08)}.asset-manager-action.danger{color:#ff9b9b}.asset-manager-note{margin-top:12px;color:var(--text-muted);font-size:10px;line-height:1.45}
-.tx-status-card{max-width:430px}.tx-status-head{display:flex;align-items:center;gap:14px}.tx-status-icon{width:46px;height:46px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);color:#fff;flex:0 0 46px}.tx-status-icon i{width:21px;height:21px}.tx-status-icon.success{background:rgba(52,211,153,.09);border-color:rgba(52,211,153,.2);color:var(--accent-green)}.tx-status-icon.warning{background:rgba(251,191,36,.09);border-color:rgba(251,191,36,.2);color:#fbbf24}.tx-status-sub{font-size:11px;color:var(--text-muted)}.tx-status-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px}.tx-status-step{padding:10px;border-radius:12px;border:1px solid var(--border-subtle);background:rgba(255,255,255,.02);text-align:center}.tx-status-step-dot{width:10px;height:10px;border-radius:50%;margin:0 auto 7px;background:#41414a}.tx-status-step-label{font-size:9.5px;color:var(--text-muted);font-weight:750}.tx-status-step.active{border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.045)}.tx-status-step.active .tx-status-step-dot{background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.06)}.tx-status-step.complete{border-color:rgba(52,211,153,.18);background:rgba(52,211,153,.045)}.tx-status-step.complete .tx-status-step-dot{background:var(--accent-green)}.tx-status-summary{margin-top:16px;border:1px solid var(--border-subtle);border-radius:13px;background:rgba(255,255,255,.025);padding:11px 13px}.tx-status-summary-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:11px}.tx-status-summary-row span:first-child{color:var(--text-muted)}.tx-status-summary-row span:last-child{color:#fff;font-weight:700;text-align:right;overflow-wrap:anywhere}.tx-status-note{margin-top:12px}
 .send-security-preview{margin-top:10px;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025)}.send-security-head{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;color:#fff}.send-security-head i{width:14px;height:14px}.send-security-badge{margin-left:auto;padding:4px 7px;border-radius:7px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px}.send-security-badge.trusted{background:rgba(52,211,153,.1);color:var(--accent-green)}.send-security-badge.review{background:rgba(251,191,36,.1);color:#fbbf24}.send-security-badge.blocked{background:rgba(248,113,113,.1);color:var(--accent-red)}.send-security-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:10.5px}.send-security-row span:first-child{color:var(--text-muted)}.send-security-row span:last-child{color:#fff;font-weight:650;text-align:right;overflow-wrap:anywhere}.send-security-advice{margin-top:6px;font-size:10px;line-height:1.45;color:var(--text-muted)}
 .asset-manager-hero{margin-bottom:18px}
 @media(max-width:600px){.dashboard-header:has(.wallet-inline-btn){align-items:flex-start}.wallet-inline-btn.prominent{padding:8px 10px}.address-book-hero{padding:15px}.contact-card{align-items:flex-start}.contact-actions{max-width:120px}.asset-manager-row{align-items:flex-start}.asset-manager-actions{flex-direction:column}.tx-status-steps{gap:6px}.tx-status-step{padding:9px 6px}}
-body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#dfe4ea;color:#293140}body.theme-light .wallet-inline-btn.prominent{background:#101418;color:#fff;border-color:#101418}body.theme-light .address-book-hero{background:linear-gradient(135deg,#fff,#f6f8fb);border-color:#e2e7ee}body.theme-light .contact-avatar,body.theme-light .asset-manager-icon{background:#f1f4f8;border-color:#dfe4ea;color:#1d2430}body.theme-light .contact-action,body.theme-light .asset-manager-action{background:#f6f8fb;border-color:#dfe4ea;color:#28303c}body.theme-light .send-security-preview,body.theme-light .tx-status-summary{background:#f7f9fb;border-color:#e2e7ee}
+body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#dfe4ea;color:#293140}body.theme-light .wallet-inline-btn.prominent{background:#101418;color:#fff;border-color:#101418}body.theme-light .address-book-hero{background:linear-gradient(135deg,#fff,#f6f8fb);border-color:#e2e7ee}body.theme-light .contact-avatar,body.theme-light .asset-manager-icon{background:#f1f4f8;border-color:#dfe4ea;color:#1d2430}body.theme-light .contact-action,body.theme-light .asset-manager-action{background:#f6f8fb;border-color:#dfe4ea;color:#28303c}body.theme-light .send-security-preview{background:#f7f9fb;border-color:#e2e7ee}
 </style>
+
+<style id="all-tab-refresh-style">
+.tab-pull-indicator{z-index:100}
+</style>
+
 </head>
 <body>
 <div class="intro" aria-hidden="true">
@@ -5046,7 +5050,6 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 <a href="#" class="sidebar-item" data-target="profitsPanel"><i data-lucide="chart-no-axes-combined"></i><span data-i18n="navProfits">Profits & Loss</span></a>
 <a href="#" class="sidebar-item" data-target="recentActivityPage"><i data-lucide="history"></i><span>Recent Activity</span></a>
 <a href="#" class="sidebar-item" data-target="addressBookPanel"><i data-lucide="contact"></i><span>Address Book</span></a>
-<a href="#" class="sidebar-item" data-target="assetsPanel"><i data-lucide="coins"></i><span>Assets</span></a>
 <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span data-i18n="navSettings">Settings</span></a>
 </div>
 </div>
@@ -5283,13 +5286,6 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 </div>
 <button class="wallet-inline-btn prominent" id="addAddressBookContactBtn" type="button"><i data-lucide="plus"></i>Add Contact</button>
 </div>
-<div class="address-book-hero">
-<div class="address-book-hero-icon"><i data-lucide="shield-check"></i></div>
-<div>
-<div class="address-book-hero-title">Saved recipients</div>
-<div class="address-book-hero-sub">Save trusted recipients once, then use them during Send. Addresses stay on this device.</div>
-</div>
-</div>
 <div class="asset-list">
 <div class="panel-header"><span class="panel-title">Contacts</span><span class="contact-count" id="addressBookCount">0</span></div>
 <div id="addressBookList"></div>
@@ -5310,7 +5306,7 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 <div class="address-book-hero-icon"><i data-lucide="coins"></i></div>
 <div>
 <div class="address-book-hero-title">Token management</div>
-<div class="address-book-hero-sub">Add custom tokens with a local CAD price, balance, and precision. Custom prices are manually maintained in this demo wallet.</div>
+<div class="address-book-hero-sub">Add custom tokens with a local CAD price, balance, and precision. Custom prices are manually maintained in this wallet.</div>
 </div>
 </div>
 <div class="asset-list">
@@ -5514,7 +5510,7 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 </div>
 <div class="modal-field" style="margin-bottom:10px;">
 <label>Recipient address</label>
-<div class="input-row"><input type="text" id="sendAddress" placeholder="Paste a wallet address or scan a QR" style="text-align:left;"></div>
+<div class="input-row"><input type="text" id="sendAddress" value="@" placeholder="@4zau" autocomplete="off" maxlength="32" spellcheck="false" style="text-align:left;"></div>
 </div>
 <div class="feature-inline-actions" style="margin-bottom:12px;">
 <button class="modal-btn" id="scanQrBtn" type="button" style="background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.1);"><i data-lucide="scan-line"></i>Scan QR</button>
@@ -5620,28 +5616,12 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 <button class="modal-btn" id="confirmExchangeBtn"><span data-i18n="btnConfirmEx">Confirm Exchange</span></button>
 </div>
 </div>
-<div class="modal-overlay" id="txStatusModal" aria-live="polite">
-<div class="modal-card tx-status-card">
-<div class="tx-status-head">
-<div class="tx-status-icon" id="txStatusIcon"><i data-lucide="loader-circle"></i></div>
-<div>
-<div class="modal-title" style="text-align:left;margin-bottom:4px;" id="txStatusTitle">Transaction processing</div>
-<div class="tx-status-sub" id="txStatusSub">Preparing transaction…</div>
-</div>
-</div>
-<div class="tx-status-steps" id="txStatusSteps"></div>
-<div class="tx-status-summary" id="txStatusSummary"></div>
-<div class="feature-note tx-status-note">This wallet is running locally, so the status flow is simulated and no blockchain transaction is broadcast.</div>
-<button class="modal-btn" id="txStatusDoneBtn" type="button" style="margin-top:14px;display:none;">Done</button>
-</div>
-</div>
-
 <div class="modal-overlay" id="addressBookEditModal">
 <div class="modal-card">
 <div class="modal-title" id="addressBookEditTitle">Add Contact</div>
 <div class="modal-field" style="margin-bottom:10px;">
-<label>Handle / name</label>
-<div class="input-row"><input type="text" id="addressBookHandleInput" placeholder="@4zau" autocomplete="off" maxlength="32" style="text-align:left;"></div>
+<label>Name (optional)</label>
+<div class="input-row"><input type="text" id="addressBookNameInput" placeholder="e.g. Alex" autocomplete="off" maxlength="50" style="text-align:left;"></div>
 </div>
 <div class="modal-field" style="margin-bottom:10px;">
 <label>Asset</label>
@@ -5649,7 +5629,7 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 </div>
 <div class="modal-field" style="margin-bottom:10px;">
 <label>Wallet address</label>
-<div class="input-row"><input type="text" id="addressBookAddressInput" placeholder="Paste recipient address" autocomplete="off" maxlength="200" style="text-align:left;"></div>
+<div class="input-row"><input type="text" id="addressBookAddressInput" value="@" placeholder="@4zau" autocomplete="off" maxlength="32" spellcheck="false" style="text-align:left;"></div>
 </div>
 <div class="modal-field" style="margin-bottom:14px;">
 <label>Note (optional)</label>
@@ -7729,10 +7709,24 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   });
 
   const sendModal=document.getElementById('sendModal');
+  function normalizeRecipientIdentity(value){
+    let raw=String(value??'').trim().replace(/^@+/,'').replace(/[^A-Za-z0-9._-]/g,'').slice(0,31);
+    return raw ? `@${raw}` : '@';
+  }
+  const sendAddressInput=document.getElementById('sendAddress');
+  function normalizeSendAddress(){
+    if(!sendAddressInput)return;
+    const raw=String(sendAddressInput.value||'');
+    const body=raw.trim().replace(/^@+/,'').replace(/[^A-Za-z0-9._-]/g,'').slice(0,31);
+    sendAddressInput.value='@'+body;
+  }
+  sendAddressInput?.addEventListener('focus',()=>{if(!sendAddressInput.value.trim())sendAddressInput.value='@';setTimeout(()=>{try{sendAddressInput.setSelectionRange(sendAddressInput.value.length,sendAddressInput.value.length);}catch(_){ }},0);});
+  sendAddressInput?.addEventListener('input',normalizeSendAddress);
   function updateSendBalance(){const a=document.getElementById('sendAsset')?.value; if(!a)return; const b=Number(getBalanceForCurrency(a)||0); const dec=displayAssetDecimals(a); const unit=document.getElementById('sendAmountUnit'); const avail=document.getElementById('sendAvailableBalance'); if(unit)unit.textContent=a; if(avail)avail.textContent=`Available: ${b.toFixed(dec)} ${a}`;}
   document.getElementById('sendAsset')?.addEventListener('change',updateSendBalance);
   document.getElementById('sendBtn')?.addEventListener('click',()=>{
     sendModal.classList.add('open');
+    if(sendAddressInput&&!sendAddressInput.value.trim())sendAddressInput.value='@';
     updateSendBalance();
     if(window.matchMedia?.('(min-width:601px)').matches)setTimeout(()=>document.getElementById('sendAddress')?.focus(),80);
   });
@@ -7747,7 +7741,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
         const address=u.searchParams.get('address');
         if(asset&&document.getElementById('sendAsset'))document.getElementById('sendAsset').value=asset;
         if(address){
-          document.getElementById('sendAddress').value=address;
+          document.getElementById('sendAddress').value=normalizeRecipientIdentity(address);
           updateSendBalance();
           return true;
         }
@@ -7757,12 +7751,12 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
       const parsed=JSON.parse(value);
       if(parsed.address){
         if(parsed.asset&&document.getElementById('sendAsset'))document.getElementById('sendAsset').value=parsed.asset;
-        document.getElementById('sendAddress').value=parsed.address;
+        document.getElementById('sendAddress').value=normalizeRecipientIdentity(parsed.address);
         updateSendBalance();
         return true;
       }
     }catch(_){}
-    document.getElementById('sendAddress').value=value;return true;
+    document.getElementById('sendAddress').value=normalizeRecipientIdentity(value);return true;
   }
   document.getElementById('pasteQrBtn')?.addEventListener('click',async()=>{try{const t=await navigator.clipboard.readText();if(applyQrPayload(t))showToast('Recipient loaded from clipboard',2200);}catch(_){showToast('Clipboard access is unavailable',2200);}});
 
@@ -7840,7 +7834,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   const sendError=document.getElementById('sendError');
   document.getElementById('sendSubmitBtn')?.addEventListener('click',()=>{
     const asset=document.getElementById('sendAsset').value,address=document.getElementById('sendAddress').value.trim(),amount=Number(document.getElementById('sendAmount').value)||0,balance=getBalanceForCurrency(asset);
-    if(!address){sendError.textContent='Enter a recipient address or scan a QR code.';sendError.style.display='block';return;}
+    if(!/^@[A-Za-z0-9._-]{2,31}$/.test(address)){sendError.textContent='Enter a recipient address like @4zau.';sendError.style.display='block';return;}
     if(amount<=0||amount>balance+1e-9){sendError.textContent=`Insufficient ${asset} balance.`;sendError.style.display='block';return;}
     sendError.style.display='none';
     pendingMarketTrade=null; pendingExchangeTrade=null; pendingSend={asset,address,amount};
@@ -7870,7 +7864,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
             showToast(`Cost basis unavailable for ${p.asset}`);return;
           }
         }
-        renderBalance();window.addTransactionRecord({type:'send',asset:p.asset,amount:p.amount,address:p.address});persistAccountingState();showToast(`Sent ${p.amount.toFixed(dec)} ${p.asset}`);updateSendBalance();pendingSend=null;sendModal.classList.remove('open');document.getElementById('sendAmount').value='';document.getElementById('sendAddress').value='';
+        renderBalance();window.addTransactionRecord({type:'send',asset:p.asset,amount:p.amount,address:p.address});persistAccountingState();showToast(`Sent ${p.amount.toFixed(dec)} ${p.asset}`);updateSendBalance();pendingSend=null;sendModal.classList.remove('open');document.getElementById('sendAmount').value='';document.getElementById('sendAddress').value='@';
       }finally{tradeConfirmSubmit.classList.remove('loading');tradeConfirmModal.classList.remove('open');}
     },350);
   });
@@ -7923,14 +7917,12 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   'use strict';
 
   const CUSTOM_ASSET_STORAGE_KEY = 'wallet_demo_custom_assets_v1';
-  const ADDRESS_BOOK_STORAGE_KEY = 'wallet_demo_address_book_v1';
-  const TX_STATUS_TIMING = [650, 800, 700];
+  const ADDRESS_BOOK_STORAGE_KEY = 'wallet_demo_address_book_v2';
   const BUILT_IN_CRYPTO = ['BTC','SOL','ETH'];
   let customAssets = Object.create(null);
   let addressBook = [];
   let editingContactId = null;
   let editingAssetSymbol = null;
-  let statusTimerIds = [];
   let latestSecurityContext = null;
 
   function safeJsonParse(raw, fallback) {
@@ -7946,6 +7938,40 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   function customMeta(symbol){return customAssets[normalizeSymbol(symbol)] || null;}
   function cryptoList(){return Array.from(CRYPTO_ASSETS);}
   function allWalletAssetSymbols(){return ['CAD','USD',...cryptoList()];}
+  function renderDynamicAssetOptions(){
+    const cryptoSymbols = cryptoList().filter(symbol => isCryptoAsset(symbol));
+    const walletCrypto = cryptoSymbols.length ? cryptoSymbols : ['SOL','BTC','ETH'];
+
+    const fillSelect = (id, symbols, fallback) => {
+      const el = document.getElementById(id);
+      if(!el) return;
+      const current = el.value;
+      const list = Array.from(new Set(symbols));
+      el.innerHTML = list.map(symbol => `<option value="${esc(symbol)}">${esc(symbol)}</option>`).join('');
+      if(list.includes(current)) el.value = current;
+      else if(fallback && list.includes(fallback)) el.value = fallback;
+      else if(list.length) el.value = list[0];
+    };
+
+    // Sending is crypto-only in this wallet. Keep custom crypto assets available.
+    fillSelect('sendAsset', walletCrypto, 'SOL');
+
+    // Address-book contacts can be saved against any wallet crypto asset.
+    fillSelect('addressBookAssetInput', walletCrypto, 'SOL');
+
+    // Exchange can use fiat or any crypto asset, including custom assets.
+    const exchangeAssets = ['CAD','USD',...walletCrypto];
+    fillSelect('exFrom', exchangeAssets, 'CAD');
+    fillSelect('exTo', exchangeAssets.filter(symbol => symbol !== document.getElementById('exFrom')?.value), 'SOL');
+
+    // Keep the exchange pair distinct if a previous selection became invalid.
+    const from = document.getElementById('exFrom');
+    const to = document.getElementById('exTo');
+    if(from && to && from.value === to.value){
+      const alternative = exchangeAssets.find(symbol => symbol !== from.value);
+      if(alternative) to.value = alternative;
+    }
+  }
 
   function loadCustomAssets(){
     const raw=safeJsonParse(localStorage.getItem(CUSTOM_ASSET_STORAGE_KEY),null);
@@ -7999,177 +8025,46 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     try{localStorage.setItem(CUSTOM_ASSET_STORAGE_KEY,JSON.stringify(serial));}catch(_){ }
   }
 
+  function normalizeContactAddress(value){
+    let raw=String(value??'').trim();
+    raw=raw.replace(/^@+/, '').replace(/[^A-Za-z0-9._-]/g,'');
+    return raw ? `@${raw.slice(0,31)}` : '@';
+  }
+  function contactName(contact){return String(contact?.name||'').trim();}
+  function contactAddress(contact){return normalizeContactAddress(contact?.address||contact?.handle||'');}
+  function contactLabel(contact){return contactName(contact)||contactAddress(contact);}
   function seedAddressBook(){
     return [
-      {id:'contact-4zau',handle:'@4zau',asset:'SOL',address:'',note:'',createdAt:new Date().toISOString()},
-      {id:'contact-kkwaji',handle:'@kkwaji',asset:'SOL',address:'',note:'',createdAt:new Date().toISOString()},
-      {id:'contact-abdullahkh',handle:'@abdullahkh',asset:'SOL',address:'',note:'',createdAt:new Date().toISOString()}
+      {id:'contact-4zau',address:'@4zau',handle:'@4zau',name:'',asset:'SOL',note:'',createdAt:new Date().toISOString()},
+      {id:'contact-kkwaji',address:'@kkwaji',handle:'@kkwaji',name:'',asset:'SOL',note:'',createdAt:new Date().toISOString()},
+      {id:'contact-abdullahkh',address:'@abdullahkh',handle:'@abdullahkh',name:'',asset:'SOL',note:'',createdAt:new Date().toISOString()}
     ];
   }
   function loadAddressBook(){
-    const parsed=safeJsonParse(localStorage.getItem(ADDRESS_BOOK_STORAGE_KEY),null);
+    const newKey=ADDRESS_BOOK_STORAGE_KEY;
+    const legacyKey='wallet_demo_address_book_v1';
+    let parsed=safeJsonParse(localStorage.getItem(newKey),null);
+    if(!Array.isArray(parsed))parsed=safeJsonParse(localStorage.getItem(legacyKey),null);
     if(Array.isArray(parsed)){
-      addressBook=parsed.map((row,i)=>({
-        id:String(row?.id||`contact-${Date.now()}-${i}`),
-        handle:String(row?.handle||'').trim().slice(0,32),
-        asset:normalizeSymbol(row?.asset||'SOL'),
-        address:String(row?.address||'').trim().slice(0,200),
-        note:String(row?.note||'').trim().slice(0,80),
-        createdAt:row?.createdAt||new Date().toISOString()
-      })).filter(row=>row.handle);
+      addressBook=parsed.map((row,i)=>{
+        const legacyHandle=String(row?.handle||'').trim();
+        const address=normalizeContactAddress(legacyHandle||row?.address||'');
+        return {
+          id:String(row?.id||`contact-${Date.now()}-${i}`),
+          address,
+          handle:address,
+          name:String(row?.name||'').trim().slice(0,50),
+          asset:normalizeSymbol(row?.asset||'SOL'),
+          note:String(row?.note||'').trim().slice(0,80),
+          createdAt:row?.createdAt||new Date().toISOString()
+        };
+      }).filter(row=>row.address!=='@');
     } else addressBook=seedAddressBook();
     if(!addressBook.length)addressBook=seedAddressBook();
     saveAddressBook();
   }
-  function saveAddressBook(){try{localStorage.setItem(ADDRESS_BOOK_STORAGE_KEY,JSON.stringify(addressBook.slice(0,100)));}catch(_){ }}
-
-  // Load persisted feature state before patching global accounting helpers.
-  loadCustomAssets();
-  loadAddressBook();
-
-  // Dynamic asset precision/prices/balances. Built-ins continue to use the existing wallet logic.
-  const baseAssetDecimals = assetDecimals;
-  const baseDisplayAssetDecimals = displayAssetDecimals;
-  const baseNormalizeAssetAmount = normalizeAssetAmount;
-  const baseLiveCadPrice = liveCadPrice;
-  const baseGetLiveUsdRate = getLiveUsdRate;
-  const baseGetBalanceForCurrency = getBalanceForCurrency;
-  const baseAddBalanceForCurrency = addBalanceForCurrency;
-  const baseDeductBalanceForCurrency = deductBalanceForCurrency;
-  const baseRenderBalance = renderBalance;
-  const baseUpdateAvailableBalanceSubtext = updateAvailableBalanceSubtext;
-  const baseUpdateLivePreview = updateLivePreview;
-  const baseSetMaxExchangeAmount = setMaxExchangeAmount;
-  const baseUpdateSendBalance = typeof updateSendBalance==='function'?updateSendBalance:null;
-  const baseUpdateConversionPage = updateConversionPage;
-  const basePushExchangeTransaction = pushExchangeTransaction;
-
-  assetDecimals = function(curr){
-    const m=customMeta(curr);
-    return m ? m.decimals : baseAssetDecimals(curr);
-  };
-  displayAssetDecimals = function(curr){
-    const m=customMeta(curr);
-    return m ? Math.min(m.decimals,8) : baseDisplayAssetDecimals(curr);
-  };
-  normalizeAssetAmount = function(curr,value){
-    const n=Number(value); if(!Number.isFinite(n))return 0;
-    return Number(n.toFixed(assetDecimals(curr)));
-  };
-  liveCadPrice = function(curr){
-    const m=customMeta(curr); if(m)return Number(m.priceCad)||0;
-    return baseLiveCadPrice(curr);
-  };
-  getLiveUsdRate = function(curr){
-    const m=customMeta(curr);
-    if(m){const fx=Number(exchangeRatesInUSD?.CAD)||1.386; return m.priceCad>0?m.priceCad/fx:0;}
-    return baseGetLiveUsdRate(curr);
-  };
-  getBalanceForCurrency = function(curr){
-    const m=customMeta(curr); if(m)return normalizeAssetAmount(curr,m.balance);
-    return baseGetBalanceForCurrency(curr);
-  };
-  addBalanceForCurrency = function(curr,amount){
-    const m=customMeta(curr);
-    if(!m)return baseAddBalanceForCurrency(curr,amount);
-    const amt=Number(amount); if(!Number.isFinite(amt)||amt<0)return false;
-    m.balance=normalizeAssetAmount(curr,m.balance+amt);
-    saveCustomAssets();
-    try{persistAccountingState();}catch(_){ }
-    return true;
-  };
-  deductBalanceForCurrency = function(curr,amount){
-    const m=customMeta(curr);
-    if(!m)return baseDeductBalanceForCurrency(curr,amount);
-    const amt=Number(amount); if(!Number.isFinite(amt)||amt<0)return false;
-    if(amt>m.balance+1e-10)return false;
-    m.balance=normalizeAssetAmount(curr,Math.max(0,m.balance-amt));
-    saveCustomAssets();
-    try{persistAccountingState();}catch(_){ }
-    return true;
-  };
-
-  // Persist custom metadata/lots alongside the wallet's existing accounting state.
-  const basePersistAccountingState = persistAccountingState;
-  persistAccountingState = function(){
-    try{basePersistAccountingState();}catch(_){ }
-    saveCustomAssets();
-    try{
-      localStorage.setItem(ADDRESS_BOOK_STORAGE_KEY,JSON.stringify(addressBook.slice(0,100)));
-    }catch(_){ }
-  };
-
-  // Make the existing exchange/send preview functions respect custom asset precision.
-  updateAvailableBalanceSubtext = function(){
-    const sel=document.getElementById('exFrom'),el=document.getElementById('availableBalanceSubtext');
-    if(!sel||!el)return;
-    const curr=sel.value, bal=getBalanceForCurrency(curr), dec=displayAssetDecimals(curr);
-    const prefix=currentLang==='fr-CA'?'Disponible :':'Available:';
-    el.textContent=`${prefix} ${Number(bal).toFixed(dec)} ${curr}`;
-  };
-  setMaxExchangeAmount = function(){
-    const sel=document.getElementById('exFrom');
-    if(!sel)return;
-    const curr=sel.value, bal=getBalanceForCurrency(curr), dec=assetDecimals(curr);
-    const factor=Math.pow(10,dec); const safeBal=bal>0?(Math.floor(bal*factor)/factor).toFixed(dec):'';
-    const input=document.getElementById('exAmount'); if(input)input.value=safeBal;
-    updateLivePreview();
-  };
-  updateLivePreview = function(){
-    const amount=Number(document.getElementById('exAmount')?.value)||0;
-    const fromCurr=document.getElementById('exFrom')?.value;
-    const toCurr=document.getElementById('exTo')?.value;
-    if(!fromCurr||!toCurr)return;
-    const fromDec=displayAssetDecimals(fromCurr),toDec=displayAssetDecimals(toCurr);
-    if(fromCurr===toCurr){
-      document.getElementById('previewFeeVal').textContent=`0.00 ${fromCurr}`;
-      document.getElementById('previewTaxVal').textContent='0.00%';
-      document.getElementById('livePreviewVal').textContent=`${amount.toFixed(toDec)} ${toCurr}`;
-      return;
-    }
-    const conversion=calculateConversion(amount,fromCurr,toCurr);
-    if(conversion.unavailable){
-      document.getElementById('previewFeeVal').textContent='Price unavailable';
-      document.getElementById('previewTaxVal').textContent='—';
-      document.getElementById('livePreviewVal').textContent='Price unavailable'; return;
-    }
-    document.getElementById('previewFeeVal').textContent=`${conversion.feeInFrom.toFixed(fromDec)} ${fromCurr}`;
-    document.getElementById('previewTaxVal').textContent=`${conversion.impactPct.toFixed(2)}%`;
-    document.getElementById('livePreviewVal').textContent=`${conversion.receivedAmount.toFixed(toDec)} ${toCurr}`;
-  };
-  updateConversionPage = function(amt,fromCurr,toCurr){
-    baseUpdateConversionPage(amt,fromCurr,toCurr);
-    const conversion=calculateConversion(amt,fromCurr,toCurr);
-    const d=displayAssetDecimals(toCurr),fd=displayAssetDecimals(fromCurr);
-    const baseSent=document.getElementById('baseSentVal'),fee=document.getElementById('feeVal'),tax=document.getElementById('taxVal'),net=document.getElementById('netYieldVal');
-    if(baseSent)baseSent.innerHTML=`- ${Number(amt).toFixed(fd)}<span class="currency-label">${fromCurr}</span>`;
-    if(fee)fee.innerHTML=`- ${Number(conversion.feeInFrom||0).toFixed(fd)}<span class="currency-label">${fromCurr}</span>`;
-    if(tax)tax.innerHTML=`- 0.00<span class="currency-label">${fromCurr}</span>`;
-    if(net)net.innerHTML=`+ ${Number(conversion.receivedAmount||0).toFixed(d)}<span class="currency-label">${toCurr}</span>`;
-  };
-  pushExchangeTransaction = function(amount,fromCurr,toCurr,receivedAmount,timeLabel,conversionSnapshot=null){
-    return basePushExchangeTransaction(amount,fromCurr,toCurr,receivedAmount,timeLabel,conversionSnapshot);
-  };
-
-  function renderDynamicAssetOptions(){
-    const selects=[document.getElementById('sendAsset'),document.getElementById('exFrom'),document.getElementById('exTo'),document.getElementById('addressBookAssetInput')].filter(Boolean);
-    const current=selects.map(sel=>sel.value);
-    const all=allWalletAssetSymbols();
-    selects.forEach((sel,i)=>{
-      const keep=current[i]&&all.includes(current[i])?current[i]:sel.value;
-      sel.innerHTML='';
-      const options=sel.id==='exTo'?[...all]:sel.id==='exFrom'?[...all]:all.filter(s=>isCryptoAsset(s));
-      for(const symbol of options){
-        const opt=document.createElement('option');
-        opt.value=symbol;
-        opt.textContent=customMeta(symbol)?`${customMeta(symbol).name} (${symbol})`:symbol;
-        sel.appendChild(opt);
-      }
-      if(options.includes(keep))sel.value=keep; else if(options.length)sel.value=options[0];
-    });
-    updateAvailableBalanceSubtext();
-    if(baseUpdateSendBalance)updateSendBalance();
-    updateLivePreview();
+  function saveAddressBook(){
+    try{localStorage.setItem(ADDRESS_BOOK_STORAGE_KEY,JSON.stringify(addressBook.slice(0,100)));}catch(_){ }
   }
 
   function renderCustomAssetRows(){
@@ -8306,76 +8201,97 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     if(del)deleteCustomAsset(del.dataset.deleteCustomAsset);
   });
 
-  // Address Book UI + seeded contacts.
+  // Address Book UI. A contact's wallet address is its @identity; Name is optional display text.
   function saveContact(data){
+    const address=normalizeContactAddress(data.address);
+    const record={address,handle:address,name:String(data.name||'').trim().slice(0,50),asset:normalizeSymbol(data.asset||'SOL'),note:String(data.note||'').trim().slice(0,80)};
     if(editingContactId){
-      const idx=addressBook.findIndex(c=>c.id===editingContactId); if(idx>=0)addressBook[idx]={...addressBook[idx],...data};
+      const idx=addressBook.findIndex(c=>c.id===editingContactId);
+      if(idx>=0)addressBook[idx]={...addressBook[idx],...record};
     }else{
-      addressBook.unshift({id:`contact-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,createdAt:new Date().toISOString(),...data});
+      addressBook.unshift({id:`contact-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,createdAt:new Date().toISOString(),...record});
     }
     saveAddressBook();renderAddressBook();renderSecurityPreview();
   }
   function openContactModal(contact=null){
     editingContactId=contact?.id||null;
+    const address=contact?contactAddress(contact):'@';
     document.getElementById('addressBookEditTitle').textContent=contact?'Edit Contact':'Add Contact';
-    document.getElementById('addressBookHandleInput').value=contact?.handle||'';
+    document.getElementById('addressBookNameInput').value=contactName(contact);
     document.getElementById('addressBookAssetInput').value=contact?.asset||'SOL';
-    document.getElementById('addressBookAddressInput').value=contact?.address||'';
+    document.getElementById('addressBookAddressInput').value=address || '@';
     document.getElementById('addressBookNoteInput').value=contact?.note||'';
     document.getElementById('addressBookEditError').style.display='none';
     document.getElementById('addressBookEditModal').classList.add('open');
-    setTimeout(()=>document.getElementById('addressBookHandleInput').focus(),40);
+    setTimeout(()=>document.getElementById('addressBookAddressInput').focus(),40);
   }
   function closeContactModal(){document.getElementById('addressBookEditModal').classList.remove('open');editingContactId=null;}
   function renderAddressBook(){
     const list=document.getElementById('addressBookList'),count=document.getElementById('addressBookCount');
     if(count)count.textContent=addressBook.length;
     if(!list)return;
-    if(!addressBook.length){list.innerHTML='<div class="contact-empty">No saved contacts yet.</div>';return;}
+    if(!addressBook.length){list.innerHTML='<div class="contact-empty">No contacts yet. Add someone you want to send to.</div>';return;}
     list.innerHTML=addressBook.map(c=>{
-      const initials=(c.handle.replace(/^@/,'').slice(0,2)||'?').toUpperCase();
-      const meta=c.address?`${esc(c.asset)} · ${esc(c.address)}`:`${esc(c.asset)} · No address saved yet`;
-      return `<div class="contact-card" data-contact-id="${esc(c.id)}"><div class="contact-avatar">${esc(initials)}</div><div class="contact-main"><div class="contact-handle">${esc(c.handle)}</div><div class="contact-meta">${meta}</div>${c.note?`<div class="contact-meta">${esc(c.note)}</div>`:''}</div><div class="contact-actions"><button class="contact-action primary" type="button" data-use-contact="${esc(c.id)}">Use</button><button class="contact-action" type="button" data-edit-contact="${esc(c.id)}">Edit</button><button class="contact-action" type="button" data-delete-contact="${esc(c.id)}">Delete</button></div></div>`;
+      const address=contactAddress(c);
+      const label=contactLabel(c);
+      const initials=(String(label).replace(/^@/,'').slice(0,2)||'?').toUpperCase();
+      const meta=`${esc(c.asset)} · ${esc(address)}`;
+      return `<div class="contact-card" data-contact-id="${esc(c.id)}"><div class="contact-avatar">${esc(initials)}</div><div class="contact-main"><div class="contact-handle">${esc(label)}</div><div class="contact-meta">${meta}</div>${c.note?`<div class="contact-meta">${esc(c.note)}</div>`:''}</div><div class="contact-actions"><button class="contact-action primary" type="button" data-use-contact="${esc(c.id)}">Use</button><button class="contact-action" type="button" data-edit-contact="${esc(c.id)}">Edit</button><button class="contact-action" type="button" data-delete-contact="${esc(c.id)}">Delete</button></div></div>`;
     }).join('');
     lucide.createIcons();
   }
   function useContact(id){
     const c=addressBook.find(row=>row.id===id);if(!c)return;
     const sendModal=document.getElementById('sendModal');
-    const sendAsset=document.getElementById('sendAsset'),sendAddress=document.getElementById('sendAddress');
+    const sendAsset=document.getElementById('sendAsset'),sendAddress=document.getElementById('sendAddress'),sendAmount=document.getElementById('sendAmount');
     if(sendAsset && allWalletAssetSymbols().includes(c.asset) && isCryptoAsset(c.asset))sendAsset.value=c.asset;
-    if(sendAddress)sendAddress.value=c.address||'';
-    renderDynamicAssetOptions();updateSendBalance();closeAddressBookPanel();sendModal?.classList.add('open');
-    if(c.address)showToast(`${c.handle} loaded as recipient`,2000);else showToast(`${c.handle} selected — add their wallet address`,2400);
+    if(sendAddress)sendAddress.value=contactAddress(c);
+    if(sendAmount)sendAmount.value='';
+    renderDynamicAssetOptions();enhancementUpdateSendBalance();closeAddressBookPanel();sendModal?.classList.add('open');
+    setTimeout(()=>sendAmount?.focus(),100);
+    showToast(`${contactLabel(c)} loaded as recipient`,2000);
   }
   function closeAddressBookPanel(){
     const panel=document.getElementById('addressBookPanel');
-    const nav=document.querySelector('[data-target="walletPanel"]');
     if(panel)panel.classList.remove('active');
-    if(nav)nav.click();
+    document.querySelectorAll('.sidebar-item[data-target]').forEach(item=>item.classList.toggle('active',item.dataset.target==='walletPanel'));
+    document.getElementById('walletPanel')?.classList.add('active');
+    if(typeof window.setActivePanel==='function')window.setActivePanel('walletPanel');
   }
   document.getElementById('addAddressBookContactBtn')?.addEventListener('click',()=>openContactModal());
   document.getElementById('openAddressBookFromSendBtn')?.addEventListener('click',()=>{document.getElementById('sendModal')?.classList.remove('open');document.querySelector('[data-target="addressBookPanel"]')?.click();});
   document.getElementById('addressBookCancelBtn')?.addEventListener('click',closeContactModal);
   document.getElementById('addressBookEditModal')?.addEventListener('click',e=>{if(e.target.id==='addressBookEditModal')closeContactModal();});
+  const contactAddressInput=document.getElementById('addressBookAddressInput');
+  function normalizeAtInput(input){
+    if(!input)return;
+    const raw=String(input.value||'');
+    const hadAt=raw.trim().startsWith('@');
+    let body=raw.trim().replace(/^@+/,'').replace(/[^A-Za-z0-9._-]/g,'').slice(0,31);
+    input.value='@'+body;
+    if(!hadAt && raw.trim() && input.selectionStart!==null){
+      const pos=Math.min(input.value.length,input.selectionStart+1);
+      try{input.setSelectionRange(pos,pos);}catch(_){ }
+    }
+  }
+  contactAddressInput?.addEventListener('focus',()=>{if(!contactAddressInput.value.trim())contactAddressInput.value='@';setTimeout(()=>{try{contactAddressInput.setSelectionRange(contactAddressInput.value.length,contactAddressInput.value.length);}catch(_){ }},0);});
+  contactAddressInput?.addEventListener('input',()=>normalizeAtInput(contactAddressInput));
   document.getElementById('addressBookSaveBtn')?.addEventListener('click',()=>{
     const err=document.getElementById('addressBookEditError');
-    const rawHandle=String(document.getElementById('addressBookHandleInput').value||'').trim();
-    const handle=rawHandle.startsWith('@')?rawHandle:`@${rawHandle}`;
+    const name=String(document.getElementById('addressBookNameInput').value||'').trim().slice(0,50);
     const asset=normalizeSymbol(document.getElementById('addressBookAssetInput').value||'SOL');
-    const address=String(document.getElementById('addressBookAddressInput').value||'').trim();
+    const address=normalizeContactAddress(document.getElementById('addressBookAddressInput').value||'@');
     const note=String(document.getElementById('addressBookNoteInput').value||'').trim().slice(0,80);
-    if(!/^@[A-Za-z0-9._-]{2,31}$/.test(handle)){err.textContent='Enter a valid handle, such as @4zau.';err.style.display='block';return;}
+    if(!/^@[A-Za-z0-9._-]{2,31}$/.test(address)){err.textContent='Enter an address like @4zau.';err.style.display='block';return;}
     if(!isCryptoAsset(asset)){err.textContent='Choose a crypto asset.';err.style.display='block';return;}
-    if(!address){err.textContent='Add a wallet address before saving the contact.';err.style.display='block';return;}
-    if(addressBook.some(c=>c.id!==editingContactId&&c.handle.toLowerCase()===handle.toLowerCase())){err.textContent='That handle is already in your address book.';err.style.display='block';return;}
-    saveContact({handle,asset,address,note});closeContactModal();showToast(`${handle} saved`,2200);
+    if(addressBook.some(c=>c.id!==editingContactId&&contactAddress(c).toLowerCase()===address.toLowerCase())){err.textContent='That wallet address is already in your contacts.';err.style.display='block';return;}
+    saveContact({name,address,asset,note});closeContactModal();showToast(`${name||address} saved`,2200);
   });
   document.getElementById('addressBookList')?.addEventListener('click',e=>{
     const use=e.target.closest('[data-use-contact]'),edit=e.target.closest('[data-edit-contact]'),del=e.target.closest('[data-delete-contact]');
     if(use)useContact(use.dataset.useContact);
     if(edit){const c=addressBook.find(row=>row.id===edit.dataset.editContact);if(c)openContactModal(c);}
-    if(del){const c=addressBook.find(row=>row.id===del.dataset.deleteContact);if(c&&confirm(`Delete ${c.handle} from your address book?`)){addressBook=addressBook.filter(row=>row.id!==c.id);saveAddressBook();renderAddressBook();showToast(`${c.handle} removed`,2000);}}
+    if(del){const c=addressBook.find(row=>row.id===del.dataset.deleteContact);if(c&&confirm(`Delete ${contactLabel(c)} from your contacts?`)){addressBook=addressBook.filter(row=>row.id!==c.id);saveAddressBook();renderAddressBook();showToast(`${contactLabel(c)} removed`,2000);}}
   });
 
   // Security preview for Send: format checks + saved-contact matching + self-address + large-transfer warning.
@@ -8394,8 +8310,8 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     if(own&&a===own){return {level:'blocked',label:'Blocked',icon:'shield-x',contact:null,format:'Matches your receive address',advice:'You are trying to send to this wallet’s own receive address.'};}
     if(/[\s\r\n]/.test(a)){return {level:'blocked',label:'Blocked',icon:'shield-x',contact,format:'Contains spaces or line breaks',advice:'Use the exact wallet address without extra whitespace.'};}
     if(/^https?:\/\//i.test(a)){return {level:'blocked',label:'Blocked',icon:'shield-x',contact,format:'Website URL, not an address',advice:'Open the destination separately and paste its wallet address, not a web link.'};}
-    const plausible=a.length>=20&&a.length<=128;
-    if(contact){level='trusted';label='Trusted';icon='shield-check';advice=`Matches saved contact ${contact.handle}. Still verify the amount before confirming.`;}
+    const plausible=/^@[A-Za-z0-9._-]{2,31}$/.test(a) || (a.length>=20&&a.length<=128);
+    if(contact){level='trusted';label='Trusted';icon='shield-check';advice=`Matches saved contact ${contactLabel(contact)} (${contactAddress(contact)}). Still verify the amount before confirming.`;}
     else if(!plausible){level='review';label='Review';icon='shield-alert';advice='The address length looks unusual. This wallet can only perform a basic local format check.';}
     if(balance>0 && amount>=balance*0.9 && level==='trusted'){level='review';label='Review';icon='shield-alert';advice=`Saved contact, but this sends ${((amount/balance)*100).toFixed(0)}% of your available ${asset}.`}
     return {level,label,icon,contact,format:plausible?'Basic format looks plausible':'Unusual address length',advice};
@@ -8405,7 +8321,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     const {asset,address,amount}=latestSecurityContext;
     const a=assessRecipient(asset,address,amount);
     let old=summary.querySelector('.send-security-preview'); if(old)old.remove();
-    const contactRow=a.contact?`<div class="send-security-row"><span>Saved contact</span><span>${esc(a.contact.handle)}</span></div>`:'';
+    const contactRow=a.contact?`<div class="send-security-row"><span>Saved contact</span><span>${esc(contactLabel(a.contact))} · ${esc(contactAddress(a.contact))}</span></div>`:'';
     const html=`<div class="send-security-preview"><div class="send-security-head"><i data-lucide="${a.icon}"></i><span>Security preview</span><span class="send-security-badge ${a.level}">${a.label}</span></div><div class="send-security-row"><span>Recipient check</span><span>${esc(a.format)}</span></div>${contactRow}<div class="send-security-row"><span>Transfer</span><span>${Number(amount).toFixed(displayAssetDecimals(asset))} ${esc(asset)}</span></div><div class="send-security-advice">${esc(a.advice)}</div></div>`;
     summary.insertAdjacentHTML('beforeend',html);lucide.createIcons();
     const submit=document.getElementById('tradeConfirmSubmit');
@@ -8429,48 +8345,8 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   }
   tradeConfirmModalEl?.addEventListener('click',()=>setTimeout(renderSecurityPreview,0));
 
-  // Transaction status screen. addTransactionRecord remains the source of truth; the status flow is a local UX layer.
-  const originalAddTransactionRecord = window.addTransactionRecord;
-  function clearStatusTimers(){statusTimerIds.forEach(clearTimeout);statusTimerIds=[];}
-  function formatTxSummary(record){
-    if(record.type==='send')return `<div class="tx-status-summary-row"><span>Sent</span><span>${Number(record.amount||0).toFixed(displayAssetDecimals(record.asset))} ${esc(record.asset)}</span></div><div class="tx-status-summary-row"><span>Recipient</span><span>${esc(record.address||'—')}</span></div>`;
-    if(record.type==='exchange')return `<div class="tx-status-summary-row"><span>Exchange</span><span>${esc(record.amount)} ${esc(record.fromCurr)} → ${esc(record.received)} ${esc(record.toCurr)}</span></div><div class="tx-status-summary-row"><span>Realized P/L</span><span>${Number(record.gainCad||0)>=0?'+':'-'}$${Math.abs(Number(record.gainCad||0)).toFixed(2)} CAD</span></div>`;
-    if(record.type==='trade')return `<div class="tx-status-summary-row"><span>Trade</span><span>${esc(record.side||'trade')} ${esc(record.coin||'')}</span></div><div class="tx-status-summary-row"><span>Amount</span><span>${esc(record.amount)} ${esc(record.quoteCurrency||record.coin||'')}</span></div>`;
-    return `<div class="tx-status-summary-row"><span>Type</span><span>${esc(record.type||'transaction')}</span></div>`;
-  }
-  function setStatusStage(stage,record){
-    const title=document.getElementById('txStatusTitle'),sub=document.getElementById('txStatusSub'),icon=document.getElementById('txStatusIcon'),steps=document.querySelectorAll('#txStatusSteps .tx-status-step'),done=document.getElementById('txStatusDoneBtn');
-    steps.forEach((el,i)=>{el.classList.toggle('active',i===stage);el.classList.toggle('complete',i<stage||stage===3);});
-    if(stage===0){title.textContent='Transaction processing';sub.textContent='Preparing local transaction record…';icon.className='tx-status-icon';icon.innerHTML='<i data-lucide="loader-circle"></i>';done.style.display='none';}
-    else if(stage===1){title.textContent='Confirming transaction';sub.textContent='Checking balances and recording transaction details…';icon.className='tx-status-icon';icon.innerHTML='<i data-lucide="refresh-cw"></i>';done.style.display='none';}
-    else {title.textContent='Transaction completed';sub.textContent='The wallet has recorded this transaction successfully.';icon.className='tx-status-icon success';icon.innerHTML='<i data-lucide="check-circle-2"></i>';done.style.display='block';}
-    if(stage===3){title.textContent='Transaction needs review';sub.textContent='The wallet recorded the transaction, but its local status needs your attention.';icon.className='tx-status-icon warning';icon.innerHTML='<i data-lucide="triangle-alert"></i>';}
-    lucide.createIcons();
-  }
-  function showTransactionStatus(record){
-    if(!record||!['send','exchange','trade'].includes(record.type))return;
-    clearStatusTimers();
-    const steps=document.getElementById('txStatusSteps');steps.innerHTML=['Processing','Confirming','Completed'].map((label,i)=>`<div class="tx-status-step" data-status-index="${i}"><div class="tx-status-step-dot"></div><div class="tx-status-step-label">${label}</div></div>`).join('');
-    document.getElementById('txStatusSummary').innerHTML=formatTxSummary(record);
-    document.getElementById('txStatusModal').classList.add('open');
-    setStatusStage(0,record);
-    statusTimerIds.push(setTimeout(()=>setStatusStage(1,record),TX_STATUS_TIMING[0]));
-    statusTimerIds.push(setTimeout(()=>setStatusStage(2,record),TX_STATUS_TIMING[0]+TX_STATUS_TIMING[1]));
-  }
-  window.addTransactionRecord = function(record){
-    const item=originalAddTransactionRecord(record);
-    if(item && ['send','exchange','trade'].includes(item.type)){
-      item.statusFlow=[{status:'Processing',timestamp:new Date().toISOString()},{status:'Confirming',timestamp:new Date(Date.now()+TX_STATUS_TIMING[0]).toISOString()},{status:'Completed',timestamp:new Date(Date.now()+TX_STATUS_TIMING[0]+TX_STATUS_TIMING[1]).toISOString()}];
-      try{saveTransactionHistory();}catch(_){ }
-      showTransactionStatus(item);
-    }
-    return item;
-  };
-  document.getElementById('txStatusDoneBtn')?.addEventListener('click',()=>{clearStatusTimers();document.getElementById('txStatusModal').classList.remove('open');});
-  document.getElementById('txStatusModal')?.addEventListener('click',e=>{if(e.target.id==='txStatusModal'){clearStatusTimers();e.currentTarget.classList.remove('open');}});
-
   // Enhancement-scope helper. The base send runtime keeps its own private helper.
-  function updateSendBalance(){
+  function enhancementUpdateSendBalance(){
     const a=document.getElementById('sendAsset')?.value;
     if(!a)return;
     const b=Number(getBalanceForCurrency(a)||0);
@@ -8492,7 +8368,6 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     if(e.key!=='Escape')return;
     if(document.getElementById('customAssetModal')?.classList.contains('open'))closeCustomAssetModal();
     if(document.getElementById('addressBookEditModal')?.classList.contains('open'))closeContactModal();
-    if(document.getElementById('txStatusModal')?.classList.contains('open')){clearStatusTimers();document.getElementById('txStatusModal').classList.remove('open');}
   });
 
   // Seeded contact list gets an initial render without requiring a refresh.
@@ -8508,6 +8383,143 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   });
 })();
 </script>
+
+<script id="all-tab-pull-refresh">
+(function(){
+  const existing = new Set(['walletPanel','marketPanel','profitsPanel']);
+  const configs = {
+    recentActivityPage: {
+      label:'Updating activity...',
+      refresh: function(){
+        if(typeof window.renderTransactionHistory==='function') window.renderTransactionHistory();
+        if(typeof window.renderRecentActivityTab==='function') window.renderRecentActivityTab();
+        if(typeof window.renderRecentActivity==='function') window.renderRecentActivity();
+      }
+    },
+    addressBookPanel: {
+      label:'Updating contacts...',
+      refresh: function(){
+        if(typeof window.renderAddressBook==='function') window.renderAddressBook();
+      }
+    },
+    settingsPanel: {
+      label:'Updating settings...',
+      refresh: function(){
+        if(typeof window.updateMarketAlerts==='function') window.updateMarketAlerts();
+        if(typeof window.updateAvailableBalanceSubtext==='function') window.updateAvailableBalanceSubtext();
+        if(typeof window.refreshPinSettingsUI==='function') window.refreshPinSettingsUI();
+        if(typeof window.persistUiSettings==='function') window.persistUiSettings();
+      }
+    }
+  };
+
+  function makeIndicator(panelId){
+    const panel=document.getElementById(panelId);
+    if(!panel || existing.has(panelId) || panel.querySelector('.tab-pull-indicator')) return;
+    const indicator=document.createElement('div');
+    const key=panelId.replace(/[^a-z0-9]/gi,'');
+    indicator.className='pull-indicator tab-pull-indicator';
+    indicator.id=key+'PullIndicator';
+    indicator.innerHTML='<div class="refresh-capsule"><div class="spinner-box"><svg class="spinner-svg" viewBox="0 0 24 24"><circle class="spinner-bg" cx="12" cy="12" r="8.5"></circle><circle class="spinner-arc" cx="12" cy="12" r="8.5"></circle></svg><div class="success-icon"><i data-lucide="check"></i></div></div><span class="refresh-text">Pull to refresh</span></div>';
+    panel.insertBefore(indicator,panel.firstChild);
+    if(window.lucide) window.lucide.createIcons({nodes:[indicator]});
+  }
+
+  function wire(panelId,cfg){
+    const panel=document.getElementById(panelId);
+    if(!panel || !cfg) return;
+    makeIndicator(panelId);
+    const content=panel.querySelector('.scroll-content') || panel.firstElementChild;
+    const indicator=panel.querySelector('.tab-pull-indicator');
+    const spinner=indicator?.querySelector('.spinner-arc');
+    const label=indicator?.querySelector('.refresh-text');
+    if(!content || !indicator || !spinner || !label) return;
+
+    let startY=0,currentY=0,dragging=false,refreshing=false;
+    const threshold=80, circumference=53.4;
+
+    function reset(){
+      content.style.transition='transform .38s cubic-bezier(.22,1,.36,1)';
+      content.style.transform='translateY(0)';
+      indicator.classList.remove('visible','ready','refreshing','completed');
+      setTimeout(()=>{
+        refreshing=false;
+        spinner.style.strokeDashoffset=circumference;
+        label.textContent='Pull to refresh';
+      },380);
+    }
+
+    function start(y){
+      if(panel.scrollTop<=0 && !refreshing){
+        startY=y; currentY=y; dragging=true;
+        content.style.transition='none';
+        indicator.classList.remove('completed');
+      }
+    }
+
+    function move(y,e){
+      if(!dragging || refreshing) return;
+      currentY=y;
+      const raw=currentY-startY;
+      if(raw>0 && panel.scrollTop<=0){
+        if(e.cancelable) e.preventDefault();
+        const offset=Math.pow(raw*.45,.90);
+        content.style.transform=`translateY(${offset}px)`;
+        const progress=Math.min(offset/threshold,1);
+        spinner.style.strokeDashoffset=circumference-(progress*circumference*.82);
+        indicator.classList.toggle('visible',offset>10);
+        if(offset>=threshold){
+          if(!indicator.classList.contains('ready')){
+            if('vibrate' in navigator) navigator.vibrate(10);
+            indicator.classList.add('ready');
+            label.textContent='Release to update';
+          }
+        }else{
+          indicator.classList.remove('ready');
+          label.textContent='Pull to refresh';
+        }
+      }
+    }
+
+    function end(){
+      if(!dragging) return;
+      dragging=false;
+      const raw=currentY-startY;
+      const offset=Math.pow(Math.max(0,raw)*.45,.90);
+      content.style.transition='transform .42s cubic-bezier(.175,.885,.32,1.15)';
+      if(offset>=threshold && raw>0){
+        refreshing=true;
+        content.style.transform=`translateY(${threshold-12}px)`;
+        indicator.classList.add('visible','refreshing');
+        indicator.classList.remove('ready');
+        label.textContent=cfg.label;
+        spinner.style.strokeDashoffset=circumference*.25;
+        Promise.resolve().then(()=>{
+          try{ cfg.refresh(); }catch(err){ console.warn('[TAB REFRESH]',panelId,err); }
+          indicator.classList.remove('refreshing');
+          indicator.classList.add('completed');
+          label.textContent='Updated';
+          if('vibrate' in navigator) navigator.vibrate(10);
+          setTimeout(reset,420);
+        });
+      }else{
+        content.style.transform='translateY(0)';
+        indicator.classList.remove('visible','ready');
+      }
+    }
+
+    panel.addEventListener('touchstart',e=>start(e.touches[0].clientY),{passive:true});
+    panel.addEventListener('touchmove',e=>move(e.touches[0].clientY,e),{passive:false});
+    panel.addEventListener('touchend',end);
+    panel.addEventListener('mousedown',e=>start(e.clientY));
+    window.addEventListener('mousemove',e=>{if(dragging) move(e.clientY,e);});
+    window.addEventListener('mouseup',()=>{if(dragging) end();});
+  }
+
+  Object.entries(configs).forEach(([id,cfg])=>wire(id,cfg));
+})();
+</script>
+
 </body>
 </html>
 <style>
