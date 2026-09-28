@@ -4972,80 +4972,8 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 .tab-pull-indicator{z-index:100}
 </style>
 
-
-<style id="contact-card-final-fix">
-.contact-card{display:flex;align-items:center;gap:12px}
-.contact-info{min-width:0;flex:1}
-.contact-name{font-weight:700;line-height:1.2}
-.contact-address{margin-top:3px;font-size:11px;opacity:.62;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.contact-use-btn{flex:0 0 auto}
-</style>
-
 </head>
 <body>
-
-<script id="contact-data-final-cleanup">
-(function(){
-  try{
-    const key='wallet_demo_address_book_v2';
-    const rows=JSON.parse(localStorage.getItem(key)||'[]');
-    if(Array.isArray(rows)){
-      const cleaned=rows.map(r=>{
-        if(!r || typeof r!=='object') return r;
-        const copy={...r};
-        copy.address=String(copy.address||'').trim().replace(/^@+/,'');
-        copy.handle=String(copy.handle||'').trim().replace(/^@+/,'');
-        return copy;
-      }).filter(r=>{
-        const h=String(r?.handle||'').toLowerCase();
-        const a=String(r?.address||'').toLowerCase();
-        return h!=='raomee' && a!=='raomee';
-      });
-      localStorage.setItem(key,JSON.stringify(cleaned));
-    }
-  }catch(_){}
-})();
-</script>
-
-<script id="contacts-visibility-migration">
-(function(){
-  try{
-    const key='wallet_demo_address_book_v2';
-    const wanted=[
-      {handle:'4ranc',seed:'4ranc-wallet'},
-      {handle:'3zau',seed:'3zau-wallet'},
-      {handle:'kkwaji',seed:'kkwaji-wallet'},
-      {handle:'abdullakh',seed:'abdullakh-wallet'}
-    ];
-    const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    function addr(seed){
-      let h=0,s=String(seed);
-      for(let i=0;i<s.length;i++) h=((h<<5)-h)+s.charCodeAt(i)|0;
-      let o='';
-      for(let i=0;i<10;i++){h=Math.imul(h^i,16777619);o+=chars[Math.abs(h)%chars.length];}
-      return o;
-    }
-    const now=new Date().toISOString();
-    const current=JSON.parse(localStorage.getItem(key)||'null');
-    const existing=Array.isArray(current)?current:[];
-    const keep=existing.filter(r=>String(r?.handle||'').toLowerCase()!=='raomee' && String(r?.address||'').toLowerCase()!=='@raomee');
-    wanted.forEach((w,i)=>{
-      const found=keep.find(r=>String(r?.handle||'').toLowerCase()===w.handle);
-      if(!found) keep.push({
-        id:'contact-seeded-'+w.handle,
-        address:addr(w.seed),
-        handle:w.handle,
-        name:'',
-        asset:'SOL',
-        note:'',
-        createdAt:now
-      });
-    });
-    localStorage.setItem(key,JSON.stringify(keep.slice(0,100)));
-  }catch(err){console.warn('[CONTACTS] migration failed',err);}
-})();
-</script>
-
 <div class="intro" aria-hidden="true">
   <div class="orb">
     <div class="w" aria-hidden="true">W</div>
@@ -5354,7 +5282,7 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 <div class="dashboard-header">
 <div class="dashboard-title-group">
 <button class="menu-btn" type="button" onclick="openSidebar()"><i data-lucide="menu"></i></button>
-<h1 class="dashboard-title">Contacts</h1>
+<h1 class="dashboard-title">Address Book</h1>
 </div>
 <button class="wallet-inline-btn prominent" id="addAddressBookContactBtn" type="button"><i data-lucide="plus"></i>Add Contact</button>
 </div>
@@ -5582,7 +5510,7 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 </div>
 <div class="modal-field" style="margin-bottom:10px;">
 <label>Recipient address</label>
-<div class="input-row"><input type="text" id="sendAddress" value="@" placeholder="Wallet address" autocomplete="off" maxlength="32" spellcheck="false" style="text-align:left;"></div>
+<div class="input-row"><input type="text" id="sendAddress" value="@" placeholder="@4zau" autocomplete="off" maxlength="32" spellcheck="false" style="text-align:left;"></div>
 </div>
 <div class="feature-inline-actions" style="margin-bottom:12px;">
 <button class="modal-btn" id="scanQrBtn" type="button" style="background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.1);"><i data-lucide="scan-line"></i>Scan QR</button>
@@ -5701,8 +5629,7 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 </div>
 <div class="modal-field" style="margin-bottom:10px;">
 <label>Wallet address</label>
-<div class="input-row"><input type="text" id="addressBookAddressInput" value="@" placeholder="Wallet address" autocomplete="off" maxlength="32" spellcheck="false" style="text-align:left;">
-<input id="addressBookHandleInput" type="text" placeholder="Handle (optional)" autocomplete="off"></div>
+<div class="input-row"><input type="text" id="addressBookAddressInput" value="@" placeholder="@4zau" autocomplete="off" maxlength="32" spellcheck="false" style="text-align:left;"></div>
 </div>
 <div class="modal-field" style="margin-bottom:14px;">
 <label>Note (optional)</label>
@@ -6893,7 +6820,16 @@ function renderExchangeTransactions(){
 
  // Give the monthly card a persistent starting value in the requested range.
  // Real monthly realized P&L is added on top, so trades continue to update it.
- let monthlySeed=130.33+Math.random()*(237.49-130.33);
+ const MONTHLY_PNL_KEY='wallet_monthly_pnl_seed_v1';
+ let monthlySeed=130.33;
+ try{
+   const saved=Number(localStorage.getItem(MONTHLY_PNL_KEY));
+   if(Number.isFinite(saved)&&saved>=130.33&&saved<=237.49) monthlySeed=saved;
+   else{
+     monthlySeed=130.33+Math.random()*(237.49-130.33);
+     localStorage.setItem(MONTHLY_PNL_KEY,monthlySeed.toFixed(2));
+   }
+ }catch(_){ }
  monthlyCad=monthlySeed+monthlyCad;
 
  // Main Total is today's earnings, not lifetime earnings.
@@ -8118,24 +8054,14 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   function contactName(contact){return String(contact?.name||'').trim();}
   function contactAddress(contact){return normalizeContactAddress(contact?.address||contact?.handle||'');}
   function contactLabel(contact){return contactName(contact)||contactAddress(contact);}
-  function makeSavedAddress(seed){
-    let hash=0;
-    for(let i=0;i<seed.length;i++) hash=((hash<<5)-hash)+seed.charCodeAt(i)|0;
-    const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let out='';
-    for(let i=0;i<10;i++){
-      hash=Math.imul(hash^i,16777619);
-      out+=chars[Math.abs(hash)%chars.length];
-    }
-    return out;
-  }
   function seedAddressBook(){
     const now=new Date().toISOString();
     return [
-      {id:'contact-4ranc',address:makeSavedAddress('4ranc-wallet'),handle:'4ranc',name:'',asset:'SOL',note:'',createdAt:now},
-      {id:'contact-3zau',address:makeSavedAddress('3zau-wallet'),handle:'3zau',name:'',asset:'SOL',note:'',createdAt:now},
-      {id:'contact-kkwaji',address:makeSavedAddress('kkwaji-wallet'),handle:'kkwaji',name:'',asset:'SOL',note:'',createdAt:now},
-      {id:'contact-abdullakh',address:makeSavedAddress('abdullakh-wallet'),handle:'abdullakh',name:'',asset:'SOL',note:'',createdAt:now}
+      {id:'contact-raomee',address:'@raomee',handle:'@raomee',name:'',asset:'SOL',note:'',createdAt:now},
+      {id:'contact-4ranc',address:'@4ranc',handle:'@4ranc',name:'',asset:'SOL',note:'',createdAt:now},
+      {id:'contact-3zau',address:'@3zau',handle:'@3zau',name:'',asset:'SOL',note:'',createdAt:now},
+      {id:'contact-kkwaji',address:'@kkwaji',handle:'@kkwaji',name:'',asset:'SOL',note:'',createdAt:now},
+      {id:'contact-abdullakh',address:'@abdullakh',handle:'@abdullakh',name:'',asset:'SOL',note:'',createdAt:now}
     ];
   }
   function loadAddressBook(){
@@ -8322,50 +8248,18 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   }
   function closeContactModal(){document.getElementById('addressBookEditModal').classList.remove('open');editingContactId=null;}
   function renderAddressBook(){
-    const list=document.getElementById('addressBookList');
-    if(!list) return;
-
-    if(!Array.isArray(addressBook) || !addressBook.length){
-      list.innerHTML='<div class="empty-state"><i data-lucide="contact"></i><strong>No contacts yet</strong><span>Add a contact to use it for Send.</span></div>';
-      if(window.lucide) window.lucide.createIcons({nodes:[list]});
-      return;
-    }
-
-    list.innerHTML=addressBook.map((c,index)=>{
-      const name=String(c.name||'').trim();
-      const handle=String(c.handle||'').trim().replace(/^@+/,'');
-      const address=String(c.address||'').trim().replace(/^@+/,'');
-      const title=name || (handle ? '@'+handle : address);
-      const subtitleParts=[];
-      if(name && handle) subtitleParts.push('@'+handle);
-      if(address) subtitleParts.push(address);
-      const subtitle=subtitleParts.join(' · ');
-      const safeId=String(c.id||('contact-'+index)).replace(/[^a-zA-Z0-9_-]/g,'');
-      return `
-        <div class="contact-card" data-contact-id="${esc(safeId)}">
-          <div class="contact-avatar">${esc((name||handle||address||'?').charAt(0).toUpperCase())}</div>
-          <div class="contact-info">
-            <div class="contact-name">${esc(title)}</div>
-            ${subtitle ? `<div class="contact-address">${esc(subtitle)}</div>` : ''}
-          </div>
-          <button class="contact-use-btn" type="button" data-use-contact="${esc(safeId)}">Use</button>
-        </div>`;
+    const list=document.getElementById('addressBookList'),count=document.getElementById('addressBookCount');
+    if(count)count.textContent=addressBook.length;
+    if(!list)return;
+    if(!addressBook.length){list.innerHTML='<div class="contact-empty">No contacts yet. Add someone you want to send to.</div>';return;}
+    list.innerHTML=addressBook.map(c=>{
+      const address=contactAddress(c);
+      const label=contactLabel(c);
+      const initials=(String(label).replace(/^@/,'').slice(0,2)||'?').toUpperCase();
+      const meta=`${esc(c.asset)} · ${esc(address)}`;
+      return `<div class="contact-card" data-contact-id="${esc(c.id)}"><div class="contact-avatar">${esc(initials)}</div><div class="contact-main"><div class="contact-handle">${esc(label)}</div><div class="contact-meta">${meta}</div>${c.note?`<div class="contact-meta">${esc(c.note)}</div>`:''}</div><div class="contact-actions"><button class="contact-action primary" type="button" data-use-contact="${esc(c.id)}">Use</button><button class="contact-action" type="button" data-edit-contact="${esc(c.id)}">Edit</button><button class="contact-action" type="button" data-delete-contact="${esc(c.id)}">Delete</button></div></div>`;
     }).join('');
-
-    list.querySelectorAll('[data-use-contact]').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const id=btn.getAttribute('data-use-contact');
-        const contact=addressBook.find(c=>String(c.id||'').replace(/[^a-zA-Z0-9_-]/g,'')===id);
-        if(!contact) return;
-        const address=String(contact.address||'').trim().replace(/^@+/,'');
-        const sendAddress=document.getElementById('sendRecipient');
-        if(sendAddress) sendAddress.value=address;
-        const sendPanel=document.querySelector('[data-target="sendPanel"]');
-        if(sendPanel) sendPanel.click();
-        if(typeof updateSendBalance==='function') updateSendBalance();
-      });
-    });
-    if(window.lucide) window.lucide.createIcons({nodes:[list]});
+    lucide.createIcons();
   }
   function useContact(id){
     const c=addressBook.find(row=>row.id===id);if(!c)return;
@@ -8484,9 +8378,6 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     if(avail)avail.textContent=`Available: ${b.toFixed(dec)} ${a}`;
   }
 
-  // Load persisted/seeded contacts before the first render.
-  loadAddressBook();
-
   // Re-render after the existing runtime finishes wiring its controls.
   renderAddressBook();
   renderCustomAssetRows();
@@ -8506,7 +8397,6 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   renderAddressBook();
 
   // Expose a few helpers for future wallet screens/debugging without leaking internal mutable state.
-  window.renderAddressBook = renderAddressBook;
   window.walletEnhancements = Object.freeze({
     getCustomAssets:()=>Object.fromEntries(Object.entries(customAssets).map(([k,v])=>[k,{...v}])),
     getAddressBook:()=>addressBook.map(v=>({...v})),
@@ -8651,6 +8541,29 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
 })();
 </script>
 
+
+<script id="contacts-visibility-migration">
+(function(){
+  try{
+    const key = 'wallet_address_book_v3';
+    const wanted = ['@raomee','@4ranc','@3zau','@kkwaji','@abdullakh'];
+    const raw = localStorage.getItem(key);
+    let rows = raw ? JSON.parse(raw) : null;
+    if(!Array.isArray(rows) || !wanted.every(a => rows.some(r => String(r.address||r.handle||'').toLowerCase()===a))){
+      const now = new Date().toISOString();
+      localStorage.setItem(key, JSON.stringify(wanted.map((address,i)=>({
+        id:'contact-visible-'+i+'-'+address.slice(1),
+        address,
+        handle:address,
+        name:'',
+        asset:'SOL',
+        note:'',
+        createdAt:now
+      }))));
+    }
+  }catch(_){}
+})();
+</script>
 
 </body>
 </html>
