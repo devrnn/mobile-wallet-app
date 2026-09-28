@@ -334,6 +334,13 @@ will-change: transform;
 .balance-card:hover { transform: translateY(-3px); box-shadow: 0 28px 55px -10px rgba(0,0,0,0.85), inset 0 1px 1px rgba(255,255,255,0.18); }
 .balance-header-row { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
 .balance-title-row { color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
+.wallet-selector-group { display:flex; align-items:center; justify-content:flex-end; gap:6px; min-width:0; }
+.account-wallet-selector { max-width:118px; }
+@media (max-width:600px) {
+  .wallet-selector-group { gap:5px; }
+  .wallet-selector { padding:7px 10px; font-size:11px; }
+  .account-wallet-selector { max-width:92px; }
+}
 .wallet-selector { background: rgba(255,255,255,0.05); border: 1px solid var(--border-hover); color: #ffffff; padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; outline: none; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background 0.2s ease, border-color 0.2s ease; }
 .wallet-selector:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
 .wallet-selector option { background-color: var(--bg-card); color: #ffffff; }
@@ -6088,10 +6095,16 @@ body.theme-light .profile-editor{
 <div class="balance-card">
 <div class="balance-header-row">
 <div class="balance-title-row" data-i18n="totalBalanceTitle">Total Balance</div>
+<div class="wallet-selector-group">
+<select class="wallet-selector account-wallet-selector" id="accountWalletSelector" aria-label="Select wallet">
+<option value="main">@3sa</option>
+<option value="1eisau">@1eisau</option>
+</select>
 <select class="wallet-selector" id="walletSelector" aria-label="Select currency">
 <option value="CAD">CAD Wallet</option>
 <option value="USD">USD Wallet</option>
 </select>
+</div>
 </div>
 <div>
 <div class="main-balance" id="totalBalance">$1,000.00<span class="currency-label">CAD</span></div>
@@ -8074,6 +8087,7 @@ globalAlertsOn=false;
 priceAlertsEnabled={BTC:false,SOL:false,ETH:false};
 currentCurrency='CAD';
 walletSelector.value='CAD';
+if(document.getElementById('accountWalletSelector'))document.getElementById('accountWalletSelector').value=activeWalletId;
 renderBalance();
 updateMarketAlerts();
 const dict=translations[currentLang]||translations['en-CA'];
@@ -9021,9 +9035,8 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   function seedAddressBook(){
     const now=new Date().toISOString();
     return [
-      {id:'contact-own-main',address:'7YQ9mL4rP8sT2vW6xN3cK5jH1fG8dR4bZ6uA9eS2',handle:'3sa',name:'Main Wallet',asset:'SOL',note:'My wallet',walletId:'main',isOwnWallet:true,createdAt:now},
-      {id:'contact-own-savings',address:'9SAV1NGS7WALLET4QX6M2P8R5T3N7C1K9D4F6H2J8L5',handle:'savings',name:'Savings Wallet',asset:'SOL',note:'My wallet',walletId:'savings',isOwnWallet:true,createdAt:now},
-      {id:'contact-own-trading',address:'7TRAD1NG4WALLET8Q2M6P9X3C5N1K7D4F8H2J6L9',handle:'trading',name:'Trading Wallet',asset:'SOL',note:'My wallet',walletId:'trading',isOwnWallet:true,createdAt:now},
+      {id:'contact-own-main',address:'7YQ9mL4rP8sT2vW6xN3cK5jH1fG8dR4bZ6uA9eS2',handle:'3sa',name:'',asset:'SOL',note:'My wallet',walletId:'main',isOwnWallet:true,createdAt:now},
+      {id:'contact-own-1eisau',address:makeSavedAddress('1eisau-wallet'),handle:'1eisau',name:'',asset:'SOL',note:'My wallet',walletId:'1eisau',isOwnWallet:true,createdAt:now},
       {id:'contact-4ranc',address:makeSavedAddress('4ranc-wallet'),handle:'4ranc',name:'',asset:'SOL',note:'',createdAt:now},
       {id:'contact-3zau',address:makeSavedAddress('3zau-wallet'),handle:'3zau',name:'',asset:'SOL',note:'',createdAt:now},
       {id:'contact-kkwaji',address:makeSavedAddress('kkwaji-wallet'),handle:'kkwaji',name:'',asset:'SOL',note:'',createdAt:now},
@@ -9061,6 +9074,8 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
       });
     }else addressBook=seedAddressBook();
     if(!addressBook.length)addressBook=seedAddressBook();
+    const allowedWalletIds=new Set(DEFAULT_WALLETS.map(w=>w.id));
+    addressBook=addressBook.filter(row=>!row.isOwnWallet||allowedWalletIds.has(row.walletId));
     const ownSeeded=seedAddressBook().filter(row=>row.isOwnWallet);
     for(const own of ownSeeded){
       if(!addressBook.some(row=>row.isOwnWallet&&row.walletId===own.walletId)){
@@ -9666,9 +9681,8 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
   const APP_STATE_STORAGE_KEY='wallet_demo_everything_v1';
   const MAIN_SOL_ADDRESS='7YQ9mL4rP8sT2vW6xN3cK5jH1fG8dR4bZ6uA9eS2';
   const DEFAULT_WALLETS=[
-    {id:'main',name:'Main Wallet',handle:'3sa'},
-    {id:'savings',name:'Savings Wallet',handle:'savings'},
-    {id:'trading',name:'Trading Wallet',handle:'trading'}
+    {id:'main',name:'@3sa',handle:'3sa'},
+    {id:'1eisau',name:'@1eisau',handle:'1eisau'}
   ];
   const clone=value=>{
     try{return JSON.parse(JSON.stringify(value));}catch(_){return value;}
@@ -9876,7 +9890,8 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
   };
 
   const accountWalletSelector=document.getElementById('accountSwitcherList');
-const currencySelector=document.getElementById('walletSelector');
+  const accountWalletSelect=document.getElementById('accountWalletSelector');
+  const currencySelector=document.getElementById('walletSelector');
   const sendOwnWallet=document.getElementById('sendOwnWallet');
   const sendAddress=document.getElementById('sendAddress');
   const sendAsset=document.getElementById('sendAsset');
@@ -9885,10 +9900,13 @@ const currencySelector=document.getElementById('walletSelector');
   const sendDialog=document.getElementById('sendModal');
 
   const populateWalletSelectors=()=>{
+    if(accountWalletSelect){
+      accountWalletSelect.innerHTML=walletAccounts.map(w=>`<option value="${escLocal(w.id)}">@${escLocal(w.handle)}</option>`).join('');
+      accountWalletSelect.value=activeWalletId;
+    }
     if(accountWalletSelector){
       accountWalletSelector.innerHTML=walletAccounts.map(w=>{
-        const icon=w.id==='main'?'wallet':w.id==='savings'?'piggy-bank':'candlestick-chart';
-        return `<button class="account-switcher-btn${w.id===activeWalletId?' active':''}" type="button" data-wallet-account="${escLocal(w.id)}"><span class="account-switcher-icon"><i data-lucide="${icon}"></i></span><span class="account-switcher-copy"><span class="account-switcher-name">${escLocal(w.name)}</span><span class="account-switcher-meta">@${escLocal(w.handle)} · ${escLocal(w.id===activeWalletId?'Current account':'Switch to account')}</span></span><i class="account-switcher-check" data-lucide="check"></i></button>`;
+        return `<button class="account-switcher-btn${w.id===activeWalletId?' active':''}" type="button" data-wallet-account="${escLocal(w.id)}"><span class="account-switcher-icon"><i data-lucide="wallet"></i></span><span class="account-switcher-copy"><span class="account-switcher-name">@${escLocal(w.handle)}</span><span class="account-switcher-meta">${escLocal(w.id===activeWalletId?'Current wallet':'Switch wallet')}</span></span><i class="account-switcher-check" data-lucide="check"></i></button>`;
       }).join('');
       accountWalletSelector.querySelectorAll('[data-wallet-account]').forEach(btn=>btn.addEventListener('click',e=>{
         e.stopPropagation();
@@ -9901,7 +9919,7 @@ const currencySelector=document.getElementById('walletSelector');
     }
     if(sendOwnWallet){
       const current=sendOwnWallet.value;
-      sendOwnWallet.innerHTML='<option value="">External wallet / saved contact</option>'+walletAccounts.filter(w=>w.id!==activeWalletId).map(w=>`<option value="${w.id}">${String(w.name)} • @${String(w.handle)}</option>`).join('');
+      sendOwnWallet.innerHTML='<option value="">External wallet / saved contact</option>'+walletAccounts.filter(w=>w.id!==activeWalletId).map(w=>`<option value="${w.id}">@${String(w.handle)}</option>`).join('');
       if(walletAccounts.some(w=>w.id===current&&w.id!==activeWalletId))sendOwnWallet.value=current;
       else sendOwnWallet.value='';
     }
@@ -9910,7 +9928,7 @@ const currencySelector=document.getElementById('walletSelector');
   const refreshWalletLabel=()=>{
     const w=walletAccounts.find(row=>row.id===activeWalletId);
     const name=document.getElementById('editWalletName');
-    if(name&&w)name.textContent=`${w.name} • @${w.handle}`;
+    if(name&&w)name.textContent=`@${w.handle}`;
   };
 
   const rerenderWalletUI=()=>{
@@ -9936,7 +9954,11 @@ const renderProfileAccountLabel=()=>{
 
 
   const switchWallet=(nextId)=>{
-    if(!walletAccounts.some(w=>w.id===nextId)||nextId===activeWalletId)return;
+    if(accountWalletSelect)accountWalletSelect.value=nextId;
+    if(!walletAccounts.some(w=>w.id===nextId)||nextId===activeWalletId){
+      populateWalletSelectors();
+      return;
+    }
     syncActiveWalletIntoRecord();
     activeWalletId=nextId;
     loadWalletIntoGlobals(nextId);
@@ -9944,8 +9966,10 @@ const renderProfileAccountLabel=()=>{
     rerenderWalletUI();
     renderProfileAccountLabel?.();
     saveEverything();
-    showToast(`${currentWallet().name} selected`,1800);
+    showToast(`@${currentWallet().handle} selected`,1800);
   };
+
+  accountWalletSelect?.addEventListener('change',e=>switchWallet(e.target.value));
 
   const baseOpenWalletEditor=window.openWalletEditor;
   if(typeof baseOpenWalletEditor==='function'&&!window.__multiWalletEditorWrapped){
@@ -10135,9 +10159,9 @@ const renderProfileAccountLabel=()=>{
       fromWalletId:from.id,
       toWalletId:to.id,
       internal:true,
-      walletName:to.name
+      walletName:`@${to.handle}`
     });
-    showToast(`Moved ${amount.toFixed(isCryptoAsset(asset)?6:2)} ${asset} to ${to.name}`,2600);
+    showToast(`Moved ${amount.toFixed(isCryptoAsset(asset)?6:2)} ${asset} to @${to.handle}`,2600);
     return {ok:true};
   };
 
@@ -10188,7 +10212,7 @@ const renderProfileAccountLabel=()=>{
       receiveQr.innerHTML='';
       if(typeof QRCode==='function')new QRCode(receiveQr,{text:`wallet://receive?asset=SOL&address=${encodeURIComponent(address)}`,width:150,height:150,colorDark:'#111111',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
     }
-    if(receiveStatus)receiveStatus.textContent=`Receiving into ${wallet?.name||'Main Wallet'}`;
+    if(receiveStatus)receiveStatus.textContent=`Receiving into @${wallet?.handle||'3sa'}`;
     window.lucide?.createIcons();
   };
 
@@ -10248,6 +10272,7 @@ const renderProfileAccountLabel=()=>{
     }
     if(state.ui?.currentCurrency==='USD'||state.ui?.currentCurrency==='CAD')currentCurrency=state.ui.currentCurrency;
     if(currencySelector)currencySelector.value=currentCurrency;
+    if(accountWalletSelect)accountWalletSelect.value=activeWalletId;
     populateWalletSelectors();
     rerenderWalletUI();
     setTimeout(()=>{
