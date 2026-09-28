@@ -4965,7 +4965,50 @@ button,
 .send-security-preview{margin-top:10px;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025)}.send-security-head{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;color:#fff}.send-security-head i{width:14px;height:14px}.send-security-badge{margin-left:auto;padding:4px 7px;border-radius:7px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px}.send-security-badge.trusted{background:rgba(52,211,153,.1);color:var(--accent-green)}.send-security-badge.review{background:rgba(251,191,36,.1);color:#fbbf24}.send-security-badge.blocked{background:rgba(248,113,113,.1);color:var(--accent-red)}.send-security-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:10.5px}.send-security-row span:first-child{color:var(--text-muted)}.send-security-row span:last-child{color:#fff;font-weight:650;text-align:right;overflow-wrap:anywhere}.send-security-advice{margin-top:6px;font-size:10px;line-height:1.45;color:var(--text-muted)}
 .asset-manager-hero{margin-bottom:18px}
 @media(max-width:600px){.dashboard-header:has(.wallet-inline-btn){align-items:flex-start}.wallet-inline-btn.prominent{padding:8px 10px}.address-book-hero{padding:15px}.contact-card{align-items:flex-start}.contact-actions{max-width:120px}.asset-manager-row{align-items:flex-start}.asset-manager-actions{flex-direction:column}}
-body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#dfe4ea;color:#293140}body.theme-light .wallet-inline-btn.prominent{background:#101418;color:#fff;border-color:#101418}body.theme-light .address-book-hero{background:linear-gradient(135deg,#fff,#f6f8fb);border-color:#e2e7ee}body.theme-light .contact-avatar,body.theme-light .asset-manager-icon{background:#f1f4f8;border-color:#dfe4ea;color:#1d2430}body.theme-light .contact-action,body.theme-light .asset-manager-action{background:#f6f8fb;border-color:#dfe4ea;color:#28303c}body.theme-light .send-security-preview{background:#f7f9fb;border-color:#e2e7ee}
+body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#dfe4ea;color:#293140}body.theme-light .wallet-inline-btn.prominent{background:#101418;color:#fff;border-color:#101418}
+
+.wallet-selector{
+  min-width:172px;
+  max-width:220px;
+}
+.own-wallet-picker select{
+  width:100%;
+  background:transparent;
+  border:none;
+  color:#fff;
+  font-size:14px;
+  font-weight:600;
+  outline:none;
+  cursor:pointer;
+}
+.own-wallet-picker select option{
+  background:var(--bg-card);
+  color:#fff;
+}
+#sendAddress[readonly]{
+  opacity:.72;
+  cursor:not-allowed;
+}
+.contact-action.primary{
+  min-width:58px;
+}
+body.theme-light .own-wallet-picker select,
+body.theme-light .own-wallet-picker select option{
+  color:#151a22;
+  background:#fff;
+}
+body.theme-light .own-wallet-picker select{
+  color:#151a22!important;
+}
+@media (max-width:600px){
+  .wallet-selector{
+    min-width:148px;
+    max-width:182px;
+    padding-left:10px;
+    padding-right:10px;
+  }
+}
+body.theme-light .address-book-hero{background:linear-gradient(135deg,#fff,#f6f8fb);border-color:#e2e7ee}body.theme-light .contact-avatar,body.theme-light .asset-manager-icon{background:#f1f4f8;border-color:#dfe4ea;color:#1d2430}body.theme-light .contact-action,body.theme-light .asset-manager-action{background:#f6f8fb;border-color:#dfe4ea;color:#28303c}body.theme-light .send-security-preview{background:#f7f9fb;border-color:#e2e7ee}
 </style>
 
 <style id="all-tab-refresh-style">
@@ -5007,6 +5050,34 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
     min-height:330px !important;
   }
 }
+</style>
+
+
+<style id="sidebar-account-editor-fix">
+.sidebar-profile{position:relative;cursor:pointer;user-select:none;}
+.sidebar-profile:focus-visible{outline:2px solid rgba(255,255,255,.25);outline-offset:2px;}
+.sidebar-profile.editing{background:rgba(255,255,255,.045);}
+.profile-chevron{transition:transform .22s cubic-bezier(.22,1,.36,1),opacity .18s ease;}
+.sidebar-profile.editing .profile-chevron{transform:rotate(-8deg);opacity:1;}
+.profile-editor{position:absolute;left:10px;right:10px;bottom:calc(100% + 10px);padding:14px;border:1px solid var(--border-hover);border-radius:16px;background:rgba(18,18,21,.98);box-shadow:0 18px 48px rgba(0,0,0,.48),0 3px 12px rgba(0,0,0,.3);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);opacity:0;transform:translateY(8px) scale(.985);pointer-events:none;transition:opacity .18s ease,transform .22s cubic-bezier(.22,1,.36,1);z-index:30;}
+.profile-editor.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
+.profile-editor-title{font-size:13px;font-weight:800;color:var(--text-main);margin-bottom:12px;}
+.profile-editor-label{display:block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text-muted);margin:10px 0 6px;}
+.profile-editor-label span{font-weight:500;text-transform:none;letter-spacing:0;}
+.profile-handle-input{display:flex;align-items:center;gap:7px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:10px;padding:0 11px;min-height:42px;}
+.profile-handle-input span{font-size:13px;font-weight:700;color:var(--text-muted);}
+.profile-handle-input input,.profile-editor-input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--text-main);font-size:13px;font-weight:600;padding:10px 0;}
+.profile-editor-input{box-sizing:border-box;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:10px;padding:10px 11px;}
+.profile-handle-input:focus-within,.profile-editor-input:focus{border-color:rgba(255,255,255,.28);}
+.profile-editor-actions{display:flex;gap:8px;margin-top:14px;}
+.profile-editor-btn{flex:1;min-height:40px;border-radius:10px;border:1px solid var(--border-hover);font-size:12px;font-weight:700;cursor:pointer;}
+.profile-editor-btn.cancel{background:rgba(255,255,255,.05);color:var(--text-main);}
+.profile-editor-btn.save{background:#fff;color:#0b0b0d;border-color:#fff;}
+.profile-editor-btn:active{transform:scale(.98);}
+body.theme-light .profile-editor{background:rgba(255,255,255,.98);border-color:#dfe4eb;box-shadow:0 18px 48px rgba(20,28,38,.18),0 3px 12px rgba(20,28,38,.1);}
+body.theme-light .profile-handle-input,body.theme-light .profile-editor-input{background:#f5f7fa;border-color:#dfe4eb;}
+body.theme-light .profile-editor-btn.cancel{background:#f2f5f8;border-color:#dfe4eb;color:#18202b;}
+@media(max-width:768px){.profile-editor{left:8px;right:8px;bottom:calc(100% + 8px);max-height:min(52vh,360px);overflow-y:auto;}}
 </style>
 
 </head>
@@ -5105,7 +5176,7 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
     <div class="innerShade"></div>
   </div>
   <div class="intro-welcome">
-  <div class="intro-title">Welcome <span>@3sa</span></div>
+  <div class="intro-title">Welcome <span id="introProfileHandle">@3sa</span></div>
 </div>
 </div>
 <script>
@@ -5173,13 +5244,26 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span data-i18n="navSettings">Settings</span></a>
 </div>
 </div>
-<div class="sidebar-profile" id="sidebarProfile">
+<div class="sidebar-profile" id="sidebarProfile" role="button" tabindex="0" aria-expanded="false">
 <div class="profile-avatar"><img id="profileAvatarImg" src="" alt="avatar"></div>
 <div class="profile-info">
 <div class="profile-name" id="profileName">@3sa</div>
-<div class="profile-tag">Personal Account</div>
+<div class="profile-tag" id="profileEditHint">Edit account</div>
 </div>
-<div class="profile-chevron"><i data-lucide="chevron-right"></i></div>
+<div class="profile-chevron"><i data-lucide="pencil"></i></div>
+<div class="profile-editor" id="profileEditor" aria-hidden="true">
+  <div class="profile-editor-title">Edit account</div>
+  <label class="profile-editor-label" for="accountHandleInput">Handle</label>
+  <div class="profile-handle-input">
+    <span>@</span><input id="accountHandleInput" type="text" inputmode="text" autocomplete="off" spellcheck="false" maxlength="30" placeholder="3sa">
+  </div>
+  <label class="profile-editor-label" for="accountEmailInputNew">Email <span>(optional)</span></label>
+  <input id="accountEmailInputNew" class="profile-editor-input" type="email" autocomplete="email" placeholder="Email address">
+  <div class="profile-editor-actions">
+    <button type="button" class="profile-editor-btn cancel" id="accountEditCancel">Cancel</button>
+    <button type="button" class="profile-editor-btn save" id="accountEditSave">Save</button>
+  </div>
+</div>
 </div>
 </nav>
 <main class="main-dashboard" id="dashboardContainer">
@@ -5195,9 +5279,10 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 <div class="balance-card">
 <div class="balance-header-row">
 <div class="balance-title-row" data-i18n="totalBalanceTitle">Total Balance</div>
-<select class="wallet-selector" id="walletSelector">
-<option value="CAD">CAD Wallet</option>
-<option value="USD">USD Wallet</option>
+<select class="wallet-selector" id="walletSelector" aria-label="Select wallet">
+<option value="main">Main Wallet • @3sa</option>
+<option value="savings">Savings Wallet • @savings</option>
+<option value="trading">Trading Wallet • @trading</option>
 </select>
 </div>
 <div>
@@ -5535,69 +5620,6 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 </div>
 </div>
 </section>
-<section class="page-panel account-page-panel" id="personalAccountModal">
-<div class="scroll-content" id="accountScroll">
-<div class="dashboard-header">
-<div class="dashboard-title-group">
-<button class="menu-btn" type="button" onclick="openSidebar()"><i data-lucide="menu"></i></button>
-<h1 class="dashboard-title">Personal Account</h1>
-</div>
-</div>
-<div class="account-page-layout">
-<div class="modal-card account-modal-card">
-<div class="account-header-block">
-<div class="account-avatar-lg"><img id="accountAvatarImg" src="" alt="avatar"></div>
-<div class="account-name-lg" id="accountNameLg">@3sa</div>
-<div class="account-tag-lg">Personal Account</div>
-</div>
-<div class="account-field-row">
-<div class="account-field-info">
-<div class="account-field-label">Username</div>
-<div class="account-field-value" id="accountUsernameValue">@3sa</div>
-</div>
-</div>
-<div class="account-field-row">
-<div class="account-field-info">
-<div class="account-field-label">Account Type</div>
-<div class="account-field-value">Personal Account</div>
-</div>
-</div>
-<div class="account-field-row">
-<div class="account-field-info">
-<div class="account-field-label">Email</div>
-<div class="account-field-value" id="accountEmailValue">Not provided</div>
-</div>
-<button class="account-edit-btn" id="accountEmailEditBtn" type="button" title="Change email"><i data-lucide="pencil"></i></button>
-</div>
-<div class="account-email-edit-row" id="accountEmailEditRow">
-<input type="email" id="accountEmailInput" placeholder="Enter new email">
-<button type="button" id="accountEmailSaveBtn">Save</button>
-</div>
-<div class="account-field-row">
-<div class="account-field-info">
-<div class="account-field-label">Phone Number</div>
-<div class="account-field-value" id="accountPhoneValue">Not provided</div>
-</div>
-</div>
-<div class="account-field-row">
-<div class="account-field-info">
-<div class="account-field-label">Card Number</div>
-<div class="account-field-value" id="accountCardValue">No card added</div>
-</div>
-</div>
-<div class="account-field-row">
-<div class="account-field-info">
-<div class="account-field-label">Country / Region</div>
-<div class="account-field-value">Canada</div>
-</div>
-</div>
-<div style="margin-top:18px;">
-<button class="modal-btn" id="accountModalCloseBtn" style="background:rgba(255,255,255,0.08);color:#fff;">Close</button>
-</div>
-</div>
-</div>
-</div>
-</section>
 </main>
 
 <div class="modal-overlay" id="receiveModal">
@@ -5631,6 +5653,11 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 <div class="modal-field" style="margin-bottom:10px;">
 <label>Recipient address</label>
 <div class="input-row"><input type="text" id="sendAddress" value="" placeholder="Wallet address" autocomplete="off" maxlength="64" spellcheck="false" style="text-align:left;"></div>
+</div>
+<div class="modal-field own-wallet-picker" style="margin-bottom:10px;">
+<label>My wallet</label>
+<div class="input-row"><select id="sendOwnWallet"><option value="">External wallet / saved contact</option></select></div>
+<span class="field-subtext">Move funds directly between your saved wallets.</span>
 </div>
 <div class="feature-inline-actions" style="margin-bottom:12px;">
 <button class="modal-btn" id="scanQrBtn" type="button" style="background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.1);"><i data-lucide="scan-line"></i>Scan QR</button>
@@ -5952,91 +5979,92 @@ const sidebarOverlay = document.getElementById('sidebarOverlay');
 const menuBtn = document.getElementById('menuBtn');
 const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
 function openSidebar() { sidebar.classList.add('open'); sidebarOverlay.classList.add('open'); }
-function closeSidebar() { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('open'); }
+function closeSidebar() { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('open'); const pe=document.getElementById('profileEditor'); const sp=document.getElementById('sidebarProfile'); const ph=document.getElementById('profileEditHint'); if(pe) { pe.classList.remove('open'); pe.setAttribute('aria-hidden','true'); } if(sp) { sp.classList.remove('active','editing'); sp.setAttribute('aria-expanded','false'); } if(ph) ph.textContent='Edit account'; }
 if (menuBtn) menuBtn.addEventListener('click', openSidebar);
 if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeSidebar);
 if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
 const AVATAR_DATA_URI = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOwAAADsCAIAAAD4sd1DAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAA7KADAAQAAAABAAAA7AAAAADysaFkAABAAElEQVR4Ae2daXMbSZKmCRAgCYAUT0mkpJZUZ6u6x7Ztur/umM1/X1sbW7NZG5uZnerq6SqVpKJEUhIP8QAvANzHwzMjPROZIC7iIlJQMjIyTo83PTw8PCJyNzc3M/fpaqRV9mbmplGXN/nZfG4ml5+ZqTVmLi4urq+vl5eXNAZ0ajRmrq9rUKxRr9cbDU+62vX1OaEvLnK5HHfC4/D55J17tlDwPsvLywTAX+6zs+5vbjafLxSL6ikpUBBJRyL5xLSteJyNkpcAelGBm5m6c+dvGjdBCjMSlBo1XdruSo/ofYM0witv40Xekk10NZfE+DRTO8opSqJXV863RK8pjUn8ZrJScE9Zh4ObWdfwWqGj41Nfs50Pu7V6HYrl8/nz83P157Feq0ki+XwuD3qCHJSwnrwglTB6FweB3eVRC5qLhYIPsPXkiabPvVIpq5s0+MnnVBeM5vMBmrXYhKEsEvJGKjQFsZBiIq9UEFNTxXF95kbY6vkVDLVaPeMOv/V0aPD65kZxBjP2MNUwwJGQV1dXPvzc3Jy6NYAHtA+AQ1NTKHuu7FPWkI8ePfJR1tfW8rMCXy0w1Qm/GleznLtPQezpNZGOLBAffTm6OL84PTsFuFeXTmZo1OntuWZnA05NNw5NFGGIB55rnp1G3Np7JqgHC/c+pYUF3Pbz4BEcKy/n7kOSGtnppZ74LFYqK6urlXJ5thCFJL0gFjg2IA5imb4ljOM/TiKGfpKK98c38jfeU3HCt89gHYoDi4/qxVW9Xjs8POKC6RIAfHCpA+hqAfHGgb8vr3XjSXi9e0EieHT+IFU5tEa3BRB2Gl6aJndlyZpmIi5v8UcW950AsvVCqbS4yEexMD8/72JLYVSQCNIOyh/mFP4N844gq28aKXB3b2xA644IEyZtfPTDCvMKA/T7772TiSHgyVkV7Far1d3dndnZAgig32cMB6ZrNeGXhQKjrDsBsQLRN6LHLj4wfHJVH8AKgrl8SBz6qJ9K4FZMN655XFpaWllZ2dhYY3RYnhdO7y+Q5FPyH2MIrFgWRJmC2NNt+I6wc5WS1GrXl5eXZ9UqKP3113c0ORyxVFooFIqwNVgbmgZ3FzEXGLnL46kVJ1YwkQWOdjgxKRMYnGkU7vbirefE7YC4srh4fXV1eXWOroQPj+qgnWB0+OjR43KlvFhZJLmbhpY/ykdx3DGIfQJJ2MP5w3f6yj+GIk6YVxis338nlhNbEL99+/asenZyfMyoK5dDpQWGA0kX7IEAqAoIuCvILJFzuUg1pv6EIRZ3LoW/CgaWRxKSMNwTIoFPAQfR9VHcTrRwSQqOiYWnpuDD6KPPxUdv3NT4CNFguA/1lF6FsekinHlpCbl5c/OppB9lFbhDYCUhmcmJfTmkZObBpBz4Gx9thTAvE6uvzskEMa0KTA8O9j/u7x8fH9fR+vqrYVtAyAto9KViCLdFj2LFyq8SwGkEQDC5EJgwNkoiBU1ccal5Wbe+JR0ciVz0lb8nOL33Dxyql5iZ4ZukML48dDXrGxvPnj5bXFxkHFiHV8vVmJ2dkbEpecYTMpSKvUgEi70b9kOS+sMuT2f512vyDwQUXQdNZFGNXV7Acbe3t+FMl9dXSL2z+UiTAG80ecRAjL9CVhGgbg1s3fg4kIjYihTr4WLjmiwCpwLX+vuPB89E+jZY4q3PLhFmJgQxAdw8jFQTKZvqkzjiPhx6Y+Physryg8UKrwCrdCNIVuH8jiY4BXGSsHf9TDMwFpOW4MrlAfTnz593Pu6dnpzkkA8Ab6EIp72pBxNylMeCIOdUUc1g0jAWWNatiRAGCGTFba54LyBuTi3FJw3EFJJiEhjpifHr9fUVCo2VlVXupdK8JgINcYgQ47hyFohTcmzyGha3Hm9OrGSEG6t+982bN/SU13WZP4ML0X5XqBtqjQeLSzSmAhFHSHzQLc4sIFrgWjdRBBstQdwM2TDT6G9zvtG7LlxpINZkKLyquiGGamAA9NbWI5TNK8srhGHW3WcIlL27U8cUxLdTrF67Ob84ZxTOv2IxUIEx/fvhwwcYsHSObiTubtgQSMOEQOFvStsoJ9aMw5BJTpQaURHMPfVtak0InPC3ccPcE0G6fLSfEPKOpgJ5cPhikDsCBlq59fX1tZUHVNtDMEmCtkvhU0jGsFVPaYdk8E6fx4YT0yvqpBdSgg5GmBXe+7j35s3rcrlMkyBX6EyVgtjp+ANqwIlS6XJ3IPZYSc1XPYcLYl8GhfLm5mPIeH5+US7HdMwtyt/8agriZppEPmACuwXEXrzUBOfw4PD9h/cw4IcP10X/UK/TRfYC4jCzJBvK4pFwOy4LxDAF+csr+5jqtnGzckmNeKtnO5zYJsIAmAk/LDS++uorWIR91ZF7CuK2yAWUv3z58ubtG+CLKLy8sowiYn6+yLgOHFtxolNOHGZ/H0HM5wSDUNOlf/qn/xmSouO/UxCnkEy47yxmhzOM22C0cN9Pnz59/Phxfr7kQ9+EMh8t0cz/FMpWbFBu7aOLww2JLF+0b1N5pLJhG6xrd1a+XSfYZsRmWmnEq6sLpOTnz58ze0KY+WIw18PH7XsXO77IBG6b5ehHsJSG70eyfUiDgRq8FcUZaTFk+/X1r0D57OyMx7yZRfMgTs1yCuJUsuCZBWLMiU5OxCjvyZOtZ8+ewZ4RmoEysyT+moLYk+J2BzY5DOMODg9//vlnAFwoFiAokgO8GeFB4/cLxFmlyeKUWSDISifLPyv9rPD98s8q/9nZcaWySC4nJydMXMOSNzY2CIydnM96CmJPitsdF+dXv7z+BRFirjiHNp4IIJg7ujbfBm2AONAHB/m5CY5Y3qGGNeYZPmSBzBcgDNjl36z0u0yu7Wip5acwqOTUmKRYLED5crny8OFDBnzYS/m0pyD2pEh3XF3V0APXG3Uk4F9/fes4bgMezKBN55aIZhtAFWrpaXnfZuD6VzhiINaBXSTpZYHMlsEm1qk7K/1O0+k0fFb5bXnseOCrr1+Wy6VKpYJkDIg9jiNKdVqC/oUfIZnYzVYgeeWZ0djd2YUHzxUXnAghYwtA7OnuHfhPQdwdGCwNbQoWxNb/+voCHdzW1pNVt3IWEVlxPAogTtoZ2nIP0g2C0VYyjDg5OQPBCGSrq6sM4JjCwLBQ5uJmi46+wikhoCmbVYplkDTGa03U1hzaBJw6aZqDg0MkjaurRxsb62iTPY6HTpyIvQ23KN7+4W9/+zviBKZVlIdF7NisX9cuYRuA2AnEDsRWCezXlkXzpm1XRUEcg/hUnLAMIqKk2F3X4SfMNdX+4R/+YXNzU3GscyMMtblEzMhgI1FCd+AaJoiBJhe0OT+/PD09ZeINHTAINtVEKsvVMBfDctdtzxCi15DKmla2AUqT+NQZUsD0SLlQ7+7eKZ2jvk6hzPQednCPH29idKFJoEeiKTH8lFlVZ1cViiVR3DAz03ahV49/LWJ6TKrj6NSTC/6682Hv5PQEHDcnAWkkkOwwYhSVzeGmPgOhAE2BdSuGnfv7B44B1VYeLIPdgWSemckwQUyhkIPB7s7uDuIEGgnUwJAGzttc3oAHo6JAynA2shoGjPvA2Thv5gcaqf9cwRdmsh20Et0mzXe5frGxviH6+1kG37bS/gGHpbP3J7D1t3E7cw8TxKw3xopyf3+/dt1wn3ghjuCUGjoCJIjSWYWnoXunAIKfm5RuwI8vqrIT0tbmFiJxRsop7ZgRskvvocnEjHZfv37N1wxwC7PBTjlAOf51Sv1REEvlYrJaVFvEDf+Qazh6pQzUfJCEI4O+RkaMa5ET0Sfl0dRXJ5XSKqYcVMxGeKt3CSbWAfX1tXXmqBGUhR+7AK4p5bWEiXFc9XHeMX/16eY+UE5Md6Oj1+Pj09evf0Z7xhCBO/o1tZGg/kY66KY+0zgDpkDtuoYun8XkLGpkAL66ssoQPIL4QEozUBDL2ot6g86I+czDw0MEqYLZK3Ig9Z1m0k8KMHyRRiwW6Ff3D/ZVMbq6uqzWAf3MqWVaAwUxu+wIgj9/Ojo8evDgATMaLC4qlUrKhluWc/pyFCmAbomdALDNUn785eiLK2VDJqqiTboiee+O6jAIzq9mwVRgb3f/7bu3Z6cnpXJJ9wNG4hQRwm3UpzU008gpAuuNk3dj9sF3RJhpslAgRe+epIvshOzUoLyonlfZO4Gdh9bW1549C7am1d0UvIARysrJdHp5TgFKL8k1x8WgR5UvH/c+g+Dz6jkI9nNyhM+ulR0BNCc89RkVCmgLAlNGOLQsare9vb13795RPhBM9+sRfEclHoQ4AY6RH6gV/Q7CA3uZoBK+64rdEb2myWZRAIF4Nsc2CTLsQURm2ENbY8aZFb6P/nfCia3Sm08Tg57Xv74+Pa0KggsF1mswtRGIE32syjSpYVMAlszF6B0RGTTDtrhsoXhrH/vlvhNOjBZC9kaamTmvXu7uffy49/Hy4pqeBdnJ7a8u9pZU1qkk3YylrZrR+zZXcioNN9PkDn1iGvfb8wG4XAzTZeX5DMeXXH76tM+CSKZC2Ezr9vjdhrgTTkxhYMYg+PDoEASzPxoMmOGqfKYA3I0DspXq3VZlGm+oFBAzLfYy5MAbtn5r1JEoEJFxoz9GDcXgnh+C5V2U8U5AzGeHKQRr65mQu7isAmB8wC47p4VTOG5DO/fA8M3+7qKS0zQHTwFOg6K7ZR6renHx7v327qePl7Vrjta5i5LcSaIUFKmXWRxOEihi9DTL0k5lwEM2d7oLCk7TbKYAHS+MCWYM54If7+x8OBftW+Hh+lpz4N59+g9iyo2S5ce//kgnsrz8gGNc6FPYso67FjewhXDz5qr3jc2t+90Neq/cNIVhUABNPy0NDMgcARlz8NXVNWwV3759B6BZcApT66/1fJ/FCYrO1hC//PILXyFCsB72hicSsPxCHA+DttM8B0cBWpwLs2N+5AoS2JaTyVrkY+2WL68u+zgL0E8QU24QjKIbKQI3B6lQAdYChEIvA1YsgILCo4RQPYSZohMqq79/K17TawwpQLNqy7JzyFX9mp12c4X80YngGDkTxavdT7bH+vUNxB7BDOaYT+fRrba3E3Ip356rZ9/K0CMtptH7TgGYkRxg6VY5KGP++3//nRG/8uN+ZdcfmZhhHHsGX9Uax6dnnCPLERlIDzeyQztzOJGCsHkVYV5n5409K2PCftVtms4QKYDwqLnLcpuczAtwsdAU+B4eHGBfsb66Cqfri4TZBxCDYP59OT17h3HPWVUPInblm7LYIaJoVLIGCRTFgnX/4IDpAiZEygsLfcFxrzgDv9d8X9fXIPgUkzx0gbHlyqNCymk5RoQCsGSkC5QVWCIovnsvWE8gVh7M0gzE352dXXYkKBbnuPderGkKE0kBRIvZ2blFd3zT2zdvUMJSzd6h3Ad74v3DLz/++CPYhQcHqoZQxuUTiS+1T34zKjBnr1KeyKYcy0pZecBWoDUEm9sX+2O1OEAJi0HYDz/8wJmR1mKMxJvHTjbHuFu0BUlUxUPc8kTeR4fHCBKIE6lSRIo+4pYkp68nnwKqrGBdE0Y1P//885ejk05Qm0KfnkDMntecPECnYPf9TMlk6jWlQJwCimMMG5kBQThmD9/4+86eegLx3u4edu5kGGPDoSwRFqSnLMJEpn8njQKKY2oFP2ZuQasHS+6CK3ePMASJvb1P5xeXLPl0AhNJ5cMTMZxbZBVN3z8mWwJpeCoQJ4kyQc+t2xccYx+GcRjLQFAOsCtqd1VXkHUWlwPkkIbJGFGYfQaYgGEDjc6SmIaeUiCkABwQZoy9zUJpDhwlBnlhqFZ/OwYx+x9iz/F5f393b5fRJSVgu0/M1oJMAtMIRnT+1yr76bv7RgG1qUjcMXZjIRNb6mBNf7fihCpTqmdVZpj5bnhEMEdrDZTBcdQYoYlP5DN1TSlwGwWYc/jpp5+ur641IPxYf7fFk/ft6omFz2OYVsjh+Ld/+7eDw4O11TUs3cmbVJAr8sUspp7l307xRjdMlt60XyVurX/tVy6DSceYzwC4dL0rJvPIpd9wffWSunNZClt3c5nbQhjAFT7vTDp+ffMrpnRYN+OjCCZRWHJz0lOfKQXapwA2C1hTbG9vf9o/UKQplNtJoS0Qg1c2FeDOkA5tCJDFHlQtLZN5GIvh8JUXjtM/wTDY9O+9oABcOfWH1TyWj0zjvX//njs4RnfBDwdXa9K0BeJiUTYDZzMB9hImA3QizBza44xa5zF9O6XArRRgCRNCKdN4LKo4OBBmDMZYPH1rRAK0BWLCqUy8/X67VKoQCwTjyTEEPgXOI5Af8x5ixO/c7t5OIaZhphRg6o49HTCc5/jH7d8+yO5nHB3bFobbBjEWw7Dhi3M0xGIeOr2mFOg7Bfy8L729m4UQZW47ubQViITQrCENY5bfTqLTMFMK9EIBhnSAjVXGyLHtpJMJShLS3XpIhQkOrHw45J5VJfi3k+40TPsUgKS6mEfv7Uec1JDFuSJ4gxm3JxLPZC5PgrII2mgh+CeK6L/9xIkMLOLAvIdXbqkqH4CZbQ6UgSrF2G/jlqHl2LVEYrAM8rggCbP/fPdiwuIuXy852o1BhRHDhH7uwsEqQxa2zzRu2OdLjn3w0TLOcQl37YjCtXahb20dYABv4+Yxpoo2b1NM6HhVq+1iFZTPffPVSxsq1Z0JYm0JtV/+sPMBKx8OO2Jyrh4J2+A1o0CpWU2KJ8hjGfosm9yIzcrl+fX1+toajnpNpt/rslVXcHGid+gMQKyAVk8oTCqqYidi46qhO9b5KPfWwWlwEAc6n19csKNfqTzfmhStQAx9SYt5FBi7mjCjZZuZisV0QPDVa5kgZVMQ9vqERICR77w4N7e2tuwpXiqVvZv5ee/+/PmTd385OOaLWCgtoMXUM3j8q3vrwJ4MtTH3k+NjjgJ5Vg42nc8iSCaIiaBfAzuhwCeQKphQQdYu5IPjurJSvA/+MImj4+PSwkJlcXFhefnJkyeMo2HPYLrRkI3RIZ2nA2oj3G6304Ck6+vrhNEAH377gFoUm4HLGyGyj2Ud2hDWZ4LdShnoiaNaPYdBcL5Ya2bcynYC3TDKjn/5l3/RAwrOL85JN1+4RyAuFsBVATnhuiZCArpMfOiUGB5sbm2BS3As80puv1qkC8JgTsLdYxS3AloFLwtuXoF6wE9ghh/MgL777R1KTFgGfSBDET2PB4W/bsdIeK5smThdtLMl0RRG/+7LDLmqp8f//M//zBFNLYrd6h3URNOBWMzFkI5UaNL21M8tchynV2CXzgdDEXYlODw62nz8eOPhQ+6AVw33GMxRH4gO0rqoGNhlQAh5QS25/OlPfzw8OPn8+TPsR6RkNzgHytIAhrV3kdF4RbGVxQ0IHz161ALHrUBcvbz47cN7ukkGINfXV0ynoAqauWcaNvoirpXV1a++/vrp0y2kAPgiaxBqNXZMNNgS8cGRpmP6gH4iw9DZlrxWKs1//fVLjiH6sLt7xtqvs2odlM+IrEIGVsUxXrjsurT0e5ydzHhjbm4xK5FMEF/Xb+g9UdcRH4ZBfPt9ZCU3ef5r6+sIDyvLywzazqsXMjGK7CsXRzfIIJoqW51DRxSAASu7lU2ULmWCCvmCTo9/T58+laF59RwoMyxhbw9EGzK6bzimgzo9OQWHOObn040lU0Ds+0XmmfNF2cywzjEiuQKjFYBM39lRO41+4ACIDo6oHeC7gAUBAUR9+913nCuIyCudu7sIfH0ty1iCTzpYARAN4xxbjcnBlgIq7WF6op6yrCsczHEuJ5sw8sMsJVdkq/2rQnF2aWWRX3mpjI3iydkpOJ6blTMEwjTT5eC46tPo8sNo4/UX4vMZM7yDbE3rPoSSWVSYOTo6RIRACMZYgq/fd52GguNFiszSikTrVJKoyfjYFbIw4P/xpz/RBQFoBnMoyOnQqbu/SA53ZqJtv9DcWyfFCPLJ1pN1t806uCdK28mPfUCaYHFpEX6KFXtWZVI4sQbdPzw8v7yU6bpQCobQkI9lI34uKT4Tk5XFiPp73CgmkJqA78U5cxfX33777cbGBoO5J0+2kIBhzygoqAaAlso47KoWwtUNZmCm+O3qrOTuBS548uZ7Pn0RPPqJNhgzS4LXNzZg1YSQDe9urhmmiI3gPQAzrQMnBcEMdtdWVw3xPN3sNKd7H3Z0olxDPoOUEMuz4cnjAYzNlC4MAPZ2d6ngq1evvvrqBXwXHfAV6lsGce7sCUM+O8DypLTvu3anpDY7k6OLgHvwmX318qvV1RUsbfmyJq8tUqkGgjHaWVpa0h1ONAzsxgZO0RPXb2ZQv//3z68ZTBCUYUy4m4REvDH2EuPLCZQNq+6KkRowZehPr/3y5QtGcYyoPI2cDk2218UHDYKDjlCQ/Ze9GxNqH56g3m1P3csHXDNGfUkzCk6i8tayV32r6TPoI0dKvreHWQEHq12xOR+Cu88u1aGW38Er20ukhh49T7obBFrXHTa+++67rc1NxGJ6S8bErrBCsRgJGGZwwXr29w9AMAxYEDyJl8OfCLVcIBhpYWV15fvvv3PVD7cfcBUHvhbBgtzwGhhhNEOWNNKeLA1D37e6tqZTgAmeNLAiDSwjtV9nVgiZav/zPvlCDT1Jw5chhlGd0aBRd3d3vAjhg06YA1rAg5nOAMFIDk+fPKWCsGGMHJjI4OfeyNFlosINL8U999Aj+VfD6z1Eu/xNhrvt2aagbmKQDhLO/Nw8Zyaj/78nOPakwo4Czbl/9I4YiHX1MopJBMEW7eQjj6ODeun8MIVXHgyCMWbgkc2VOW4N8Uv0tfoROzasnHhYlbUyG2jmm2OcuVipPH68ub6+cq9wTKOwjJSGSCxSjk0jz5cXEIjfvPmtWFxQ2ukYmYNwfBMy0vNu6+yC2UTpDMrFEBUckBucFq0Z36qTg3/Hui4AzSNSKTvfA3SAKyFvCB/pWWfRkqtZMAdTB5U31HC1CGVfWyWhXpSKvInoaccbwXlSGtUxe22FIE26DtLhfOwbNuGTbcuWKovzxblDNgE5PMjNzKXzHfsRuDKrnK3t5XUgmif3WHDvOxoOdrvCoPLVq+/zzFoEVlbChWMqNui2//lIfN0k52iUvJ+lQFmm8CXRs2qV8T4TY7jn5+cAMY6gaREhNFtGQs1qsqEOjyxSERP5FCkp09TXV8HGIFrwibxTXxqI3a6WFpmCjiS0mDjBA4eCMO5jwnoiqYAgQZekVYPXYsqzsrJSKBQRNPFUBOtb67akCK1xkgzYhyFidKkw6559gDYdUSKhKzUijcWsOLsx8ZaAqWEmxlOtrmHGiXm7GIirFzVm68vlsv3cJ4YEVISRHHNyGKbBhpk+eLz5mNG92vsrVEawsgn5JNZgAJfdUcHxyjJykYJ4gqE8VxSR6bx6jp7GtlSCJnRM52duDQKMih+adn7q1ruNPI5usd9xpjQvX7xA/wBRwLFFMD56tV87cOZ/In74X0oSyCn8ILv/pQTCK0rQyakiqiKOO4lc2sy5KecVYkStXilXvvv+m5XVB3IEpljliw2G/tJTj/uSuP/F34zWEwwIhTFTd4hPdvwQAzFmFlrqCf6aqRo6tecvXlBT3IjIXFrrTrE7Ii2MvoKSICbRhdLMI1KquyiGqoBppqPDAKiaSwzE+/ufsN+aLWCHHWPXd1GgYaWJCoLB0Mb6OvwYBMtqOSdK9oJgxvv+F5xfzeCvf+M/dAj+5xi5snNWVgt/5ofJG9MBnEbMGhwlbFApM304LIL3MV/ajrW02POgjbHJxnYKQlikTQmGKGEDTZLbsmFFsIevNnxWZUecIqiflhaXGOSBZqqgZspZdRlHf1oHUyw6HCrotzHWihRY2Hhdk8GNsCU5i87ZBIjlJp94eDWrmcI3Y/GXBsYAisEcerRvvvkGToxtO2gOUYu0j7bB1dcpTtkGwtcL6UPdMD3Voapu1UWBAQu2bb+l/kF0jeC0s2FeqtZI7+hs+pqC6nS9/bHzNHYaQTbyB1F4Jje/trbCoObXt++cfolmI8mmvIxHUECTzrCcMbqZQkT+rk14VJ+Li2gpv4zWmAJgkMsaMmCOvonhTkhxk9g4OzEI1p1NmOhyOrUCc8q6PM4TZZzrJ8I9OgpXpzqzjyB4wlpQWwcNg28ma14Md0bxBGOaYdAHPxI8803DYsLLRxtfB8MdxCm0EJi6I1TR2Go30y8Ee4HYMU44hv/1h2bZ6QcZSSPm8/Jl1jiZWDTHiIXkzdx5f0owAqmoht4XhLGd2quhbqOWuerZGfvWYPJOOMREH25iHNjjIjwwgmPoQzPDpTx8J4Nj0ZGiOaQuXHylKyurTpywds8T05hBRTAyRt3GA3dEunxxjgXojYP9Q7zUNoA29pX27Y0POPD+Y+QQo4iZGfrZjY11kX+dnb8z9QfN1Ej5ma2QkCX8Wf923D4ijozLK5JhIn3S0dK3aEsh9zOX7kbnogLPKEHM2+ukrXAfCzHsB60ad92Lg+JgI4+CnG2MxZNnmpPVpDyECE6nvk4JDLs63eQv/KlYZMJdN4sAx92kMtpxwCsSBRfFxMwNW02YMSP10S5196VjsRbjdeIDa6k0gznWRKM3FbFDf/InugDB+CJYGrVeRyzGkFytfLqn3JjE5FvFUBPzeabvxqTItxdT4ejDMc2ORIG6Dbk/zzpQrDOpdhZ/AsHE1LtPYrwcFB4FxdJSJWGHmlqL9G4oNeioeiI+LZYXKpVFlYxHtZg9lYuqseWXqsPdAtqzUzogSTLUB7v+VvhvkI/ojEO3XU/WUzEGF/nisvqHZ6+q1TMnMUWWvRavKkoJDdAHR5UVw5GooM5pnmMaYg3W1tdudPCtBxmhkGpK2oYshJ6b9SkrDxa3375rZyI6VgY5h2UIl9INduvzVq6au5HyyHplJxB7fow0LEcfNXK1mZtCaNzt406gA7th2pK+VUXGCaxhvEoqH6OvmF8oNs91xMOO95NAvyGsJPoOFebcx7tmTaVHbwqIXdNOWtWa6ioeNC2fK1VWk/nUMOPuKfY9avQiLqcVH1PdWZstoWx48j7OrOorM2LWg4pnhRl3f+oIiLlEE4Hi//DgyO1OYAQvqaKxi5WQiCYESIQZD1IsLi6hbEqTJVTWd3fkVP8bj2pllpKaqh5GF8BmhNPWbL5nBB8xbwUxqzzQrwFiGbGB6BErZD+LA0+a7AomiAWIkZ1Qxeha6MTbyXgExKqaQPiVVaOTUasWtVCNafuGBGqnpgmOoxAtDexA7GVi5VvcPZUiHY33co4oRNx/5J5krtPtn4TBj1qK2OqNXHF7KJB+oqkf6lgKRm2TwuOYGGpj0HbU8QioozhtWel3KDXa0DkZBAQSEoKy7OcaXoG/zviPRx1Fr1h2y9mxJOablW1ZnZWClwGph9oMaIV4L0H4vpH/zRXSoN2/o0Yetuei6GEdZS9NNj6SA+YdVw7HBHn0VPobtfI3l0dt+jB/Z7651qhfYMVGtyMGxOwR4rYPbI4z1j7dHaUx1lVuLrwHcfOr8fXBHJzvEBZ8dnZWYMKZkTvnA7mqjo1EdKfUd2bBQQ4ieY3/Bedl+bNyX6YgHQMO5igZANg6xsYDI1x3TMKLuRn475fTk5ATs+53Ejnx+MOvmxp40UdlxRZJWMi2CDY6r3zVKJIIvHyQ9QanGeTYoo7NrRArnB1fUGB5L4vD9IBSPl0nUcpLO7cu8vRkXc01GrPeSYUHe2/RQCEPNrV2tgphFOMfeg3rLx1HIw9QgwE5qmHUTRfV6jy6J47P5XsVO8xQ/yJgl9HemDXesIg7gvm6BhT8KZRHsIRdF0l0w6GZGomgC+cSy2KWJMFdfYVDEijkR1gs6poS9yBi2vRkstrpivORaXBVorEBlS93IMWrjSGCRAMZWK5QxZZkwz7iGDugAptWjXEF+lF0OljdVx3z8X6kNyppwGoRGPgvnJhJdly60gP5+EpOQ5iV3SONzWu84CMkJ8ULFnuS6tVq2P2ztzhbpZl30VyV7hoRmkpLvUL73Sj4yDCmqEitXV4sJJgQgS+ZBd6M5WWhh1qNSwLO4sANfBAcY5UcZvtSYF87rYge3qXtpz7KmYVD12W/FABsW9dHnxAHJxZQbasq1h5qQqrXXjVUQYEW1eKjvaijHgoxWGEdbbJtK4nbfo9M74x6hTLKhw58UjcMz6hx4E3rqhkQ2yUyCcDFI/uB2liCANewtnUtDGzgwbu1JApTzd2WDX+327SUfZI5sdZcd/rBfd/YsDa/m8mSSdlbdcZKrnG5K6C5cxmjYTHL5PTGWWps4A9Htkx5XOoYK+eRbG6UY99lKhh7MaEPVJNBDqyXO9fiYmVtzZ7FGVUbaTguEEevRsoFA/I8iNr5C85E+SefE9MYNCRdKYMA83GOVBv1vzCs6aCyLBf1SU9w3QvBcgap69hzXN9gCQf7dMGWgrU6AS+e2Mpq3bEkpspuf71A4p0AECeqwKNebXFiODmXUkc5eQIlI/4onDiX4zgdtk4c8aL2sXjMAqgczF0dfUx8pJLKs6uIFoiNntyexAkWBcoDoFv4qtveR6pWpjBUp3Fdu9rZ/cAWMZg5uQ4nUUcJ46qplU3cTWJj4oQ/0e0gS3ChpWBmix+OeB1tZewr6z84d8hVk3/bKQGlv/1qhu/tcUYphGiYZBKH5ZPB8RyjVLr+l4UpOjYB4gQWJApS1+YDHf3PaTRSZP81CqKciWoyj4PlqbGwcKXU19CCp3GkBWwJ6XBm5imzVoxnTZ2cc+Ju7O7KyRWfP39Wtqb1G8eGS7RMogpowvHhf1ucOJHW2D2yAxB7WB0fH3s1zdhVoaMCs9ihSoVZ8hDKih1FH9nAViKwhRQQ6/eagLkNJLKU1yjHX4zFk8C30djZ+Tg/FxwuFJcOIYL/mNVt72NRRQoZlZmtf/b2PmFOOztbzC59FD4Wxjd0sj+OhRrwg7DbUBwKpKOQDQszpjQK33TDvAEX9s6yU82/P6jP1/rOMhxmwmxAjUJm8rbETHBiz3ZFqvD0xp16SSD5L5cPPEYOtk3HbODi4nz/YH+Mit11UdkynW1PGQnUrid2k22g6HmzcGLlwWMK0HZaGgQ7VWmjelb14SesvlTH10jZsLO2DbT7vtaT5BBzEMec82ur6269B2tgW9iPO02qblU2ZmQQye/i4grTcDbEx/Z0d+djqVRhqKfqJ1MblRGNR0ungqb53jJSBy+bU1afeBJaZrmzZzoBHrAn8fb26WkVaZgqc6Rbng0y3S+H3SLaYm12aXs5/LmBTW78F21Il2lQHi/CwJ+ophzQTbVQo+VylcVF6h/IxCgsBl6eIWTIHvlIxqhRocUQsr/LLGnU/f1DDqG3maRB374fDzefHj+BLxcdKz/Upe6O6B8A17aoqt/Go3KdlxJ5cX9/HzVq51FHOgZ7VSEB7+7unpyejHRBeyuc8mDSYKYZHINgHBEn7i3xsYkNuzrYPzg8PLTf7diUPrugbL9QPa/u7e65XXqzw43tGyQHj2AqoawWsQIxMb+2voJUgS928vLOXergPlkXXyy2IkXOaD88/HJyclaYncMn/I13XdEKv3+/g7hPA9LxutVzUjU+Wq7WdVOr4nGxLda6AFcWrODmnGPhxHrdWtUw4Hj/pdtl6+mDg4PdnV3ck8GP2Ufv6MsR4gTjdTZjHu8Waq/0qCb4adgAxHIaWDjQEV48uYM8RvFsPY1Ahc4YjRuPIdGcBkbMSBK/8P0I/z08Ovzy5ZADNq9rl26q2VZhhMvdedEY3jVHCkAswA1B3BxoknwY2aJoQ8WGmSKb5VtmLCNfp7gZkU4ptRiUUHXevlFgwx8/fmSWTqfoOMHCv5owh1iUil4w4sFaQTEmXltbw15EnnVfAicZZ1EiC+upFNc8Ru1Oq/NbW13TCbzHmw/hzVhpytIPUY4KpeiMtNje0WMtOqIbBXBlECWgotbnrp8Zj0CWAqNpefPmzfHx0dLSMp5I/AJxs26ORXQ+brPDBGx+OUI+fnIOsvhi4Um3U5oP13BnkdhHmBgHX7Gti+A413j8+HGlUhG9W64BMqAUwYZIE7JGtGWvEwDJAg0euSg2dzzVjYU0xpZcBOCMM+RDis2ch21mW9MJcEvVQjlYdsZx5gQ0Z7CsQ+kCtFNljgmof2oV4FvXtWuYGW83tx5xZyMGOQuC1RB15cdAx4I+GgenJnjXnvJ1NRqwHxxYSG9vbwNlWDKKJjnVIGxgp2/xZRmh8vsyde2g4sE3XKtVymU+dXbWHnKrdF2ZfkUExyQFjgEEjtLCwvnFFfhFdFauJl//wC8yRXAXucD1mIgQvgjwXSDLjCPzGgTgFbyZy5QzCuxjTZ6D+sKJmbRDNqT3QdO2tLoSnewweRVuXSNIAVY+ftr/5fWb47Oz9bWHV7UGUGY/g+XlVSwQQkXy4MBBeRS4OECqwlTvGxsbfHK//PILKMfohQMXAbBjwRRPz92guuIOf61rL2/17BJ7gsntcYYdAm34/Hzx4cYKXaWXmIddqOHlD1Dgbatra2w9+Pbtm8+HnxYrFWboQcnZUGenKRhU0eLxpXFRToRgQCwIRhYsFlBKLC4uwp4NJx4eKQebM3JU/WYGqsS4i1JtsCUZldyABcMjSvNf/++/UL0hfNJPITHfXfmgduJqzgtocukgD6sPEPz27VsGoLQfrBqhgsORjg6PRK9yzy4UTNhN0DvxYQsnHobUN3IkBytMY6Jow/Hjjz/u7O4iLushYkMvKxIFOtC9vb13796BY8oDamHMgBttd2WxIjJxsAB26IUdUAHQ3NBbslsiW4nkxKq0PlOcnflf//v/MNyTMbkomKKBgjy2AXOCDaj4vWXDieyJBIKzkpz5bKIOdOd/+ctfHEHYvOIa2xo7xkqko4+2a7PAQutBAFhvIpalG4n7x6WlyvHxKSkwxAS+TJKzUrBULs0VsfeIXfasJ31xEyq5eRwXTXAzZWwlrdSrszmVyuKrV6+YoSzPL8i4V8e+TGJ1jWCb3yS5wfR//sd/Hh4cUCmYn6z4N+dC9L2m5VJZWOysDDSPDo9x8+X87ae//fbbb4i/a+trqkvpe77jmGClUi7O5vSTllbRvZ3W19boQ7vgweNIgo7K/OubN+Dp5YsXxSIfPQBDq5Vk5x0lqIETvAcejNQLwwapXIRB6/f+/XskYPf98AUVqzNV5hq7yGvyosCJqVTBMeBgsoNR3uLSUuP9e0jJBX25tyNFTA51VGUe7+3rjWv2b8BklSEUgvLDh4/prxYXl3RVIjP5faw+NF96sHh8fLKzuwOaEYKZcAHNlXKlVq8hS5AXaG4jRyvRtBF8fIIASC9X6HeuZRcQw1VQNMKfMTpmNg8fEMydCIpjH1MCj4nsS1E7utyxhMnmn82zUs0lw+nQs3MMqvb3DzBgffTo0cqKqDK43P7VjKwgjEynKXmUy3KXJbmhpkzDJ+7MqWCERFyWFb1+/ZqvhWWeeKL344cAzwJBohQLAl9n8B7/zuLJ6eGKuYapyKgulYsX/JYnizpoxZh2beVBGOfGgTjsG2EztBPaSMJxEcjjOIwwwX9Nw0e1xDOkDkiSaw6m+OHDewZh2CWDZnwANOgFwcxLYGRFF+aHcQ7GeTl9zbEGBTQnCgq0HbhZ8OcMKb8AX3yALzKx5q9NEJXFpGA9748bg2Hm1tGosW14WGtBaUAv6MPD+vrK3t6H+fkKpzzM6EftcBxGmIS/zWP59muFoQIqLfr0zc2tjx/3Dg4OmXcolyugDTs4Jh3cXeibk34vuKSfYwKZI+Adx+Uti4h8pu93P/A9oPddKJdQGNEMynVkKrXrayK4b3PtGSxcOx35ykps43sPYokCJ6ZzRHmMpVQPJGzOfUJ8UEwuLS0hORweHsCTASk+OEAhunf0YKBQxVbFrxsFipP6V0/OPBU8i+UVuCcRUoDyBPCvfOCpw1MAMuGGaHDisH8UnCqI8ZEHKPj06VNaCJmjVrv0kfNiPxCThseL1mGnIhWKf51ClECOdF+tdUtouSIxg+GuQg36KAUgKFN9Ggs487PpWyXGXGlB0nLaYpds7BaOEeHfgb8tsz0Ilp0jopiB/Vbkw4Fn7m1U5ijwRLjmUNKwNHIupiyPceL5YgHGwMCiUon5T0T1+1AJ++kqf7WJBm9NF2bDa8jIWDIEdAhfm9LUnU4B+AXwxToA4t84tqvM132yfNy5QPu4sbFWb9Sq1YnduwAOl/ilE6xbX5s48rf/ZaVnw1t3Vvj2/OHH/tdejHEIhcocvrC6uooAZstr+p1cvXp5USmVkIxlhNHLwMLmMG5uKw+MW9knvLyMN2Qzsqbl3A7EiFY3s/Jz15Otratr0U3er0uIwIHWcvf7l+EYJBHoJc0VqIpFYYyoHP5EPva/jMKNo31wRlVi3ucXF7BhoGw4rOwhGGskKMh50OVK5T7byMfINn0YJQqgxGQppJr62HLFQIwKA0X9YmVxdXXNBpq6+0UBWIi/3PyIGQb2K4/JTQcIl8tlC1k9nNr6BLVn2qlcKfOAPggtPUSfXLJMazbqFAB+SFIKQmQEVRUnCp1QpYFp9O7Frc2nf//vX4rFMoBmJMhkk4kmuEfwMD7iHGWsx8dqKd+tVMDoXyO9q7ywV3pcmz7m2T6CDa0qIUu3gGJG7I4T1ZYiSiltbxTbFjKwQcsRXaY8NG7kb12mDJYONshQ3I6HsmMBq7tloSE21pipQhchI2vSw2oma+WxuL4uEoV/HEodppnecwrAUKEAUMbBVDOTGDwiGXj4Kn1iIIbpgnG9nj17xuwUbk3onlOzX9WHKSSufqU8qemgUMNkBVOIJ0+2FhY4dV1AzGVxnBAnIlJgdMzsCDZDEH06qxTRZeoaLAXgocwzl0rIw2IFr2zYIhhPBXE0ZY+XhijNF8E+C2Pcd5CJ9cHWaNC5MYxAt06urCHFCJBpe5ZA07vRr51Xq7Klm/MnGF2WFs4sbwtK61/xrG61oFC3RqO/E6HPzUqrRVEQOfhj5eP4m0l/godSRaaaywuyQJ9LKW1FiFboBPv8sHeddEKl1w/yyap9t5MzwAVzunaLGXxO6yyVSmjd0Vxifs2iGJ/E8nLkVk8jPwSqHhZu+PAf92T1sizWZdjlViGQPm4+DNkDvVkp6mPeDwcyLdKw7qaQVWNRXrA1s74OTLndPoogvdaYgROz0itOSvsNRMnqFxM9T4oLmQpUYRSF0Tp14rPGGhN4bWyssmwJrin7HhjbtGbRy7FpPgHh1kpJfDSYEi1EeWN3d+/s7JS8APDlJYurBfQstyEi120UTefW8XZJb7vbUh7E+6wK1utXX3/9NUIBRYcTezLYmrTixERgioRftXqu7cRnEQf0IKp3R3kIdBj2ylZ8rS6WOsN0N9bXS+Uy/ABM88gWfuxQQf8Pn4ZJg2bwSSqkCOQUNx7NDorAUcxRoB6tpbAGqT5jAWlu9smTJ+g0SY2Qnz7ts2Ugq0goJGpPfFyYFCgr//Yfhk+zyWHbvenlKHlojbRESMOQXRGcVUb2nUAUQxUnxLVH2WmNT2XPjt3t7Q80Hkmcn3PYqqg5JuACFoIPOm4GDg4lIiecn+OG6a4wSb+6yiQnU0SwW6qvfFEqbjTKzlgsbmndztIRl4LQm8vpaJVHBD6iqxfuSwH5SPhUONgLNINpVkAijjcJ0LKVE98SiQUafav3jemGtVUtz1Z3hG8ylVIN/PJ115xpAmwfWGf+j//4p9/97ncckAQb1mX58aJJ+QsGwSlfOWIfrJivQballj1XUsLEEx2bJ5gi8KW4DKeoGygBqWz5Q5W3njwR8FYqgAbECHzhkA4lfOvNNbSeyM7NAZI+TWFCth0AiB4PUFJCvh/K8+DB8tlZVUUaegZx1OuUFnGccJeXGMawdpLaINsIz+7rKuxk2QfwDNnZnpQWefjwITaVt44LctcNWZ/o5qCjz9EVNIgLM97ZYQ+aPRbeQabMWZ8BVK6vWTBKAyh087BehAo0D2vr65uPH5crJZiRwogMvdLAZw6qndvzMxwR6UjQh1QuGz16V4yXe9/IIeWSkSRbbQNUzvQVtQbFZB0/H9fB/v6nT59oY9gVyAXMIBhmxHdGErLWSZepZ/LjKCPtSewzYot9HJhbMBheyjuo3VcvX754+VzZMO8jKkvIiP6y2YxaUTjfeDCXKJyA1byfP3+SZTjSx4VZjflflYYZqNFt0dtwUSE4bvXsXJmurZ8lsfU3pIx79/YEcmHCcH++Jfju4qJsDwCLZRCJULFQKv3+1SuAzlEdX46Ojk+OqtWrufkCIiFMWKDscMyy6+xi91a+O47Nl0k1GUC3wYYFyrnaTS0Ecaxo+Tju//3f/5N0WVDOaDkWbiQfvGAH9/J9vTJdbA9ABl853TG9FZRaWloUNuc+Tl1bT518CnXDmYKkAj6qnEDv0cd/Cye+jQcrOYWVyr5vHG7g+Y1sGEBtKJgvGxhFjoclsyxy/+CzrD4rFACxCBSC+GghGqPGjIaK0tcAw+PEEXdkY0f6fJZ7opRgyZwvYkRlKav3bg/ErD7k+MKf/vqTdHKzovznclw5ylg9R+dOi8KrEHalb8JOmgcn2s4W8sCWAa+Ad5GjCwXnvNLDIDw+fEWGAmLJPSYMyEfFRUXg0b5sPOqIHChT1+3tbZT6qP1clWXNP28JTCCkDHf3Ub0jgoJ6jQKI+Vxptu+//z1NxIfpyxrVXLyikrdSsfnIkGJtdZWtcD/ufWRFL/4ZFPExhu9gPRboFMUCk+/gGKq4em9tbSqIkTUpJfCVTTao0eh+j0JMCM4Fji1vxgfWzJ1qzhbmvvv+O6ZR3m9v08+IROT0JLzV6JLKmFz0JBwFhCyBo50itwViEoKlPXv67LPbHFfT5dNm96V28hh8GGlXpxOk2KipADRS7+bGBlNrm5sPEScALi3tQBCNJ1LLiZjRjtIsNW7fPRWRNlmn1kBygFULr+VcM34fdj4gY5yenIH45ig2+ui4kZ1cXYISbW09AcGMAdopYUwmTsjBifhXVzUkr3/9v/+6tSmL8OBz1zqZnQg3pEe4FDkzJOKOepW5CdgSoyIGOZxUt7a2zmkX8/NzZ2fRJibhLg3JEgfqB/HOs14r+VqePYdQR7yjiyKov4TR4oVvfHQ80uPGwZceJi018WM6hmpyCDv3z58PUC1LY11Jh4PuIoyV/tdt95b+KtW3H1+4UAMxCbZSWSwjGr36/SsECeR7Rmu3FNc1RLucmGxQ5bBFLuI2g2JYvaNyagOnVvbOPSkPYzW2mSInVA2YN0AUyvnNN9+oPQMwCs6c7KAs0LeZVVsIdpDWYIJCB75hSMFHyzGbgFIPbeDkZzk+FdY8ksp+ukcMdapnJ260HSC4TYrdBvR4MuD4+fPnkInhLxCJvxz+Ewh2urJFHMjBL54///333yMB62BIhngyiTBCH95dkIxvFUEf1otuFKOBVz+8erL1hIzOqme8kmuEKQC0mGlSHtw+cTrgxJoo2+WigEbqAhFz8zJy4rsnV4jTfq59D0nu2mwX7rwj5nuePH2qs27khYDIMI6JA/iTG+D1Pf8RShAcUBpaByhzMY2DKgZPZAykQZgxelI64VHjx7QOW0Fvbm3KvHpK79eKwoAYZtzcYyLEpUcDtXTQCC4cKCs0KhSY9MRziIM8CkMBAC6fEwa+TBezLAUGDEdCJgbffj42VFGYqoWK27zd09e8N/JxmyO81p2biiKtw5jsA2cHAoxyE73zYaM2vqpfsfKX8z7Ya54xLp80ZEKlfKt83FyOu/NBN6z9fGluvj4TrVOMg7OZbuLT7HtLOfmUGUi+/OolHzcXs7KMnOikcd8S825e01qIEGiFD4+OgDLGIl9//TVcR8tDKzLCzSxbiOC7KdrQUlUEa/Zi2cXA3+2a/O13XyMNsqeygNuZgwytiE0ZI+U8ffYMBF/VOxZTs0EMJlN/eOcZOZVR5QAQJGNkL4oEV24q2CA8sPVtNK6x+uI7Xl5Z2ni4hsESKgoKxqdFC/KN2QmCrDIxyvY/G8Z7tj0Mhw7+Z1Maphscs3n3eVXmKemyf//97+HMHeHY0sG6+1WrhYUShiukZhXhbSaeDeKMBOiGeHN6Wv3222/5oBk/IWzCjzO5XUY6/fJGYDg8PMLMgClKeAwkOD09073k+K4oFfMBzXkFM7P6J3iAf6VczXHH1Ie6iW3QbJ4WRLqAVgkc64CPYEOpIJ/WHCfrXFbpTjMKkNKOGhI9Md9ViiTQHENnT5QhaU3fvnn35u1bsVZp0WVnlKgXb1gvIgR6BsQ76ryxsb68vILYAJvRZGkJ/agomjrwCfQSGSKElX1t2frVqFoMm7IvarMnPlnhUwO39AxakgRtXYAy29wfHB6gP+YV8z/6zx1TEsODtrhmYQxJgjx7melECERdO79Q/MMf/rC2vorIjmULZ0EwX+5rNGvc3tM4pP/vWDth4svO8nzQpycnMsk5qAuuzzwcSjS4ChPrzE8iz3AxqmWEp6WgVbhwO+CiuIiIogFsc4Y++ndi74kqMwh+9PjRQmnht99+48wbqs1Refwa9cFJhvSijMK3th6hG6aNtNHcLjPJ9mrdKpkgbkZl81eI7obUf+Mg72pVQcMjxPLu1nl391YkXFkW2IDvlkoiBNMV8BWxGItv2DRVWzOWvgyW33hPHFkc2oaJuy3lmvuzeNjhPSFRVM+qCIQMhbEculXr71uf6tlaeX+q0ilXptW2NjeRA9GviewnvKYbYcaWp2OKkuvDDTkPi67aR7Zu79lfB1M7sF6WXvAFz8/J2hN6ItiwQXB/M5zA1OCC0BCpjEM50UjCj6AeCjjA5A/Iaa521MzN7zr3oSenBWWjS9EWdMZ9bW6ZMrENZJFuzSVUMmYZGAsNODub7ohYEIKhno3eFzfSAnILnSCkRz0C0ZlWRRo+PZPl72SNjKEZBf2AmjI6CVjlKoV4KNM3ffFx00df5nxkJuH9unHEe6eIonbvNptuPLx906k7yistpsCSlSFg1zXidr0mpvfkDqr0qLKAYm1grE1OLF9LtUqP+sc//hHryOKclDBcbZH8TLItobU2Er51DTVc5l1Vw5gB8j1xEY5eibF+ZoQeXoBgtL98u5CA5ZtYVLJbHCvP4MT8RD6G9k6w6iGTexoVxEI8pofoVGEWYBpC3NHsNHP/tCPpAxiP4B4hkykTt9me4JgSgGO4ImwSNqwMr83o7QcjcSqPLgJOjBwMJ4buiBBi6uSuO8q3/RKOaUgQzBw11GOMgZUFtoroK2BGMnGNMaQcbCoUDg966bWWMGBmVVlMjiyuPLhHBFOgnjixVkj5MdjiU4ZT4pA66zKE/rFGkuULYSCCgQjSMFthsH8A4hSDA3TVyBIytkMZ0TtJem2mMYuvFIMdAFZmi0oL86wjwA1FUZ0qgnuskk7ralIIfqdnZy9evFhbCfZW6zFxoscM2ztFtLW7v7wU9RaHvHIwPKvxZEGFO66QbYQ6BFZSKiJZUsA4mM7uxYvn7GLP48HBAf6YGsbsg4PzaFNSIHB/r6xKZbV6Vvj+lioltWZZv0lTTpl98QpzC5D6119f0/XJXKezP1YVO2FUFxGXfW9HDSKEsjYYfKm8gDri8eNNEbx9QwUpumesRa0dSxtrOm8vQQpd0ryYClooccrxyuqaHA0iKmt3pYXt2I+ZCiRgpChShuGen1fh+uVy6cuXI5tWLyNcm859dkNh5Arp64ty4GQwQ9QDRUiEb4E7afC1eARHXWYcwV1k1TcQKwcCx6zFQ6gA02I/1Q+1l1AhP8t6FfRB1BDRgVllssMTRxd1nkZJUEARpp6OAefp7vghvPHKkboN3UQi0fCRRLhIFpGPqQ3lwRGCw2C9/O0biH0hGH6tb6yjuEXdyGoC79+1A3bAozmqiAAAC4ZJREFUV8GFShyCMmEHUVBzQhc/z9x14tOICQqw+hAeTF+H8FYqLQBiXahngZ6I0vqRiCSICg+OBoNHiugvgsk9EoZaFcUqzTK+SdEvFoJFa+hxP3zY3fmwI1CTza9EuGqVfuydF5QwaKpRc/Qe33zzjZTVDSHVygnScOGjnppA+EVGKehiOHscXdbMXKwIbTyQe2ooWx4bICu8DXMn7ltkYqVVSDmhl2xqTUno6hCO3717ix6TPhCWkVGFKG5z+aGGTicT989//nOhGAsczIY6cSJrveOM3TEjA3uxRJsL0b4PxbXjPKYTn794jtIR+wa+Qsan7SflQ1Lz9fV1OiAm9RUcIBhPLsJkwcVHnzq6owACm/vV2JcDKY4+8NZJ6dSMFMGgH/XRd999hxW+KrJSA/fi2Z6eOOMLsBmL7VF4sd+paI7X1yn/x8+fTk5OZUmFLPyyM3mWX4Yx439RpW1ubrHwVaI7S1OFbzzU7U/94r635zSCISIVAFqeDngWpKYDRf9DnZiO7bRm8DRsYFmvwaZb7C+KoSFr45nc1ZmUIDWj5si0wWgDe+2BuMMaMHlGccHxkyebbFNK7ADHN3WGY605KG9R68AJiIWuA2YAG4YWTgUs3wnETU2hg/bpsDr3NjiknpsrIkvQCggVSgeEDW2dBFkIjC7Dty/tDAvD1B2dEqIw1gp0xzScSmHCkkFwxPcSiXX2GAexJmqwn5SYshMPgUWMPCagxVC9x/gAudZtST17dVlzEhKVlYQliuUTLnEWNrKoE0NhN0BeQSDhA2BIB4k0c2LF7BlCQvBXP2z7TWMVTyzZ0WlQly9njxmG9Ewm01P6TdRuPdslksC1WBu/ePHyP/7j39G+0ZCzs/OpIPYFZQ6VFmQ4xI7A7BrAlvrXtUu3vkbHRWqtBkZyYUsJGPIzwVtJhxbu5OosdHspK/KDsFDh2bNnzNBQMWbUmLDhU4YWWY0kM28N2YIAUYw7CEbdAdUU9+0VYBqq/xRg7xmZqijJ5iY6A5LIg9E7yiLaFxGYQxtg3ph6P958TBRWjiEQ0yXrD0sFOUuxT5ZVFCPOiRPlCh8tKrNRb0OpW8LezNQL+SLjMzdp/BkNTk0EI3Y2Z2Gc//iiVNkbjfnkjYcPHz3ecB0Uy6jlEhp0e1mZ2Iju3SY3ZvFsu3RPQ7Z9OuHshRvZbwTxAuvtBBm8FgJ/+s/Nrccb6xv0qixdji8d8uWhMN5tXPF02ylxO2HiqXb4RB9UvRSdLvyYLZPhqeggYbEewQmWrGM49gxm03boxdiORRzMfnaY7TR4nykguNzccgtqRFXfzIzpK+FTKCIYiBPy8aPHILhlISIEx4N1jEnZyyeeBBJJ5NGcT3YOybA60c4oDAFed/iiJwKXOzsfWFkFS4Yfs0E/ICakLwYQf/78BUOBy6vLfC69o7AyMbzBFzdNJnYvzajcxvURR9CR+LZ9CW19vWdLh22XjNYz9LG9ViJZGPBf//rXz58/M3nh+lLKIsQH0AiBNC67n7DLGc23vrocHMkl22YZPAm4Yo8mi/SypfuaaDjbCROP0eGTHYIyLc+2aAz1kHehAlIyiQklzIckRhGVMn69yA8dlnEa/HYKgFRG20i5GHMzaEFZ5PRMokqiswWpsGFEYEXw+aVsXqiXAj18upO/dw5iW2pOv+HTBcFs4cEBGUzmUEOsS20YrDnZKQsyMZ7FfwAksLlP3VkU0AE3zJj9RYGsH2fjzxgGQINvFi2L9HjBXj6yqX1WUn33H1xOWnSsVHFsrK0iIoNmt8dfbDKPPVngzGof3PfaThPsmgJODi4g7CEwoHDwzBgpAvtb9jL/4YcfOHpqkdNrOeUvS2ToOvuWEduznWiZROuXlpUmxCPqv729/fbtW4zakSL4yvmON9YfaYKJTznLzDJrjVrrUk3f2nax1LBnGVp/WK9vke3325hV8JYWpE2BNSwJPZoNn5m+DlyCoP3hobGMbSEG4GZ8QP2ZkwTHHDEGORAzMCQia9xKhQTuB1CqaRapFPAI5u2DpQdHh0eM0THYZITDUjFpL9lpMzXqnXsOE8TUHBxDAnccLOYWsn6uWruwlQbKUxxbgvTLnUnVSNmTmRXYPUZpfHyMJhj9MeqHK2Y4WHMeTtNmxrybF8MUJ3yNQCqzlFwoIy/ORYtuSazuqTjhyXW3DqNusxn5jpHlDvxD8c+RF7QXhuOshCCk2uL6KBreP3qHaFyjqz+s+85BHBU4w0Vt5XJaNpbXQgv6KTx88CmIPSkG4Ejd50H2U2FL35xsjKAzyPAUBAxZSWqmQC3rGUBRfRbDFCd8IbwDyjARPnczx4hBcTwsuvgiTR1QgFZwoJUdNfmn8FXZwXCboZFqVEDspQWOLJ1xVsfYWPD5G8JYt/GeOruiQDvcgTABK2F7Y6ZPAXBB1n3YQZ6mY3vOrorTU6RRAbGtBB892zNCl9qM2MIjaQiN3CffDultUlN37xRQmjO9KlOsoHiAsxhtFn74MjEFFZD6bkkOFQwKz5SHGL3Vgv3vCRMfFmiw/gwOogK0SbmMYFmfWb/Sz8i2Y++scqolgn+LA9ByDxFMRmHzBHkmHjsuSe8RRpET+1rx7TuujH2JTO2BAww1eetJ7ENOHf2lgOMXgk6niuCIy4IKxTCc/mbUl9RGBcRZuGRSHmFMRhWcW1VnOhry1u2KVGuTOgB7pr4QfVwScQhmMCdKCQdfRTCDE9v72bGK9R9cLUcFxK1rjC4nd1O44ZguoNxgWxaRk+PDvtYJTN92QAGkXrXvcaoI4cIuMndAbCHbQZp3GnQkZOJba+gEymCzQIfeBrZvweJ9Y8YZ5xC3phoL4LKI+XT3kNWl9Cv9TkuVVR5NR0vlw+AozM6BXTWE4OgDMwfXjiAxHPl4PDixbTlGGmxyx04tzBHBFqy9sg02dbemAJP8DDPguNxl2aM7tgdPq3wwCG6d2JDfjhOIDcNA1+MI53A8ZBKOZ/Y6UBbWW5DTghXEnsLjVadxArGlLPxYcdxi+Th95Zi2iq3pHblZiAHf1Qu7qzvKZTDJjodMrLRwApwOLKIdWKysScNoF6nhQXCnILapddcAnebYXS5txkI2gNFSKex1uNBU4gPTVezKDLLbdq3N1FywgP6dRLnzsGMPYkuh4EDBUKnsX3UBrK7R3EVevpx35KAuyL6y87uDL8JDDxNvUxD3oZUyiUhTyeWUFXI6prtUVaTZdgEv0kstMkm1eJUapVPP1qXV3G2YrPLgTzBlwIC4B/hqDTLp32kF+xh+XGXi1iSgm6TZuJQDaQM3N7xPxL/SJvf+ihJ96z3Hy4G8qwx4vIrdUWkzOUpHqYxgYIs8DDvhy4jLlNNyLyDu4eurQAAbxvtbh03c+vfFbXNXty2kusEleVGprByJqJ+xOzCZp0iDa91Z0cfLfzI5MW1gmwpuhHxBw9Pq1l/VTMCCC39/3dqEGp77rSEHFkBhrdkBX18Xb+M6sJIMPqOJBXGClAzD+QFlFo/YV8BaIByC2L5q4QYivOVOxNRgLV758JqIf0wkpW+BIwGsZG/BalPQkJqacl+f8sQ77guItSHBsT36AE/aXuXmobc0iLRg1fI0+2SV04JYFWeJryIr4gT4Z/KSCahb+1XQ9vatjkrVI9uCgwQtqhKxLF/0Wfs01ceGsW7ekhH54lB/e8cTBowPYWwsVA32UbNI3G0Bbg2ciDsuj1MQp7QUDe/MPsW0wDY8/lxEUCjj1rfqmZIQph1xecOmZt2gkzQJzKX+etdPiDsXPmKX6k6jt3Gtu7kMJOg9W4f0wcbOMQVxZpPR/AlrT1b8imeo01Ao+/gKFw8UfdS7D+Pf4uOlW+uJvz4m7qmBExF9LtZhC9BOeBt3XNz3SybuqFVocoTLGAiwam5w7kg0FuSth3IvELFx1Y2q25f2PmgYfGW7cPx/tOeFkh0WaM0AAAAASUVORK5CYII=";
 (function initProfile() {
-const name = "@3sa";
-document.getElementById('profileName').textContent = name;
-document.getElementById('profileAvatarImg').src = AVATAR_DATA_URI;
-document.getElementById('accountAvatarImg').src = AVATAR_DATA_URI;
-document.getElementById('accountNameLg').textContent = name;
-})();
-function generateMaskedCardNumber() {
-let digits = '';
-for (let i = 0; i < 16; i++) digits += Math.floor(Math.random()*10);
-const firstFour = digits.slice(0,4);
-return `${firstFour} **** **** ****`;
-}
-let userEmailFull = "";
-function maskEmail(email) {
-if (!email) return 'Not provided';
-const parts = email.split('@');
-if (parts.length !== 2) return email;
-const local = parts[0];
-const domain = parts[1];
-const visible = local.slice(0,1);
-const maskedLen = Math.max(local.length - 1, 4);
-return `${visible}${'*'.repeat(maskedLen)}@${domain}`;
-}
-const accountCardValue = document.getElementById('accountCardValue');
-const accountEmailValue = document.getElementById('accountEmailValue');
-const accountEmailEditRow = document.getElementById('accountEmailEditRow');
-const accountEmailInput = document.getElementById('accountEmailInput');
-const accountEmailEditBtn = document.getElementById('accountEmailEditBtn');
-const accountEmailSaveBtn = document.getElementById('accountEmailSaveBtn');
-const personalAccountModal = document.getElementById('personalAccountModal');
-const sidebarProfile = document.getElementById('sidebarProfile');
-const accountModalCloseBtn = document.getElementById('accountModalCloseBtn');
-(function initAccountModal() {
-accountCardValue.textContent = 'No card added';
-accountEmailValue.textContent = maskEmail(userEmailFull);
-})();
-function openAccountPage(){
-  sidebarItems.forEach(nav=>nav.classList.remove('active'));
-  sidebarProfile.classList.add('active');
-  currentPanelId='personalAccountModal';
-  pagePanels.forEach(panel=>{
-    const active=panel.id==='personalAccountModal';
-    panel.classList.toggle('active',active);
-    panel.classList.remove('panel-enter');
-    if(active){ void panel.offsetWidth; panel.classList.add('panel-enter'); }
+  const PROFILE_STORAGE_KEY='wallet_demo_profile_v3';
+  const profileName=document.getElementById('profileName');
+  const profileAvatarImg=document.getElementById('profileAvatarImg');
+  const profileEditHint=document.getElementById('profileEditHint');
+  const sidebarProfile=document.getElementById('sidebarProfile');
+  const profileEditor=document.getElementById('profileEditor');
+  const accountHandleInput=document.getElementById('accountHandleInput');
+  const accountEmailInputNew=document.getElementById('accountEmailInputNew');
+  const accountEditCancel=document.getElementById('accountEditCancel');
+  const accountEditSave=document.getElementById('accountEditSave');
+  const introProfileHandle=document.getElementById('introProfileHandle');
+
+  let profile={handle:'3sa',email:''};
+  try{
+    const saved=JSON.parse(localStorage.getItem(PROFILE_STORAGE_KEY)||'null');
+    if(saved&&typeof saved==='object'){
+      if(typeof saved.handle==='string'&&saved.handle.trim()) profile.handle=saved.handle.trim().replace(/^@+/,'');
+      if(typeof saved.email==='string') profile.email=saved.email.trim();
+    }
+  }catch(_){ }
+
+  function cleanHandle(value){
+    return String(value||'').trim().replace(/^@+/,'').replace(/[^A-Za-z0-9._-]/g,'').slice(0,30);
+  }
+  function renderProfile(){
+    const handle=cleanHandle(profile.handle)||'3sa';
+    profile.handle=handle;
+    const display='@'+handle;
+    profileName.textContent=display;
+    if(introProfileHandle) introProfileHandle.textContent=display;
+    if(profileAvatarImg) profileAvatarImg.src=AVATAR_DATA_URI;
+  }
+  function persistProfile(){
+    try{localStorage.setItem(PROFILE_STORAGE_KEY,JSON.stringify(profile));}catch(_){ }
+  }
+  function setProfileEditor(open){
+    const isOpen=Boolean(open);
+    profileEditor.classList.toggle('open',isOpen);
+    sidebarProfile.classList.toggle('editing',isOpen);
+    sidebarProfile.setAttribute('aria-expanded',String(isOpen));
+    profileEditor.setAttribute('aria-hidden',String(!isOpen));
+    if(isOpen){
+      accountHandleInput.value=profile.handle;
+      accountEmailInputNew.value=profile.email;
+      profileEditHint.textContent='Editing';
+      requestAnimationFrame(()=>{accountHandleInput.focus();accountHandleInput.select();});
+    }else{
+      profileEditHint.textContent='Edit account';
+    }
+  }
+  function saveProfile(){
+    const handle=cleanHandle(accountHandleInput.value);
+    if(!handle){accountHandleInput.focus();showToast('Enter a handle first',1800);return;}
+    const email=String(accountEmailInputNew.value||'').trim();
+    if(email && !email.includes('@')){accountEmailInputNew.focus();showToast('Enter a valid email',1800);return;}
+    profile={handle,email};
+    persistProfile();
+    renderProfile();
+    setProfileEditor(false);
+    showToast('Account updated',1800);
+  }
+
+  renderProfile();
+  sidebarProfile.addEventListener('click',e=>{
+    if(e.target.closest('.profile-editor')) return;
+    setProfileEditor(!profileEditor.classList.contains('open'));
   });
-  personalAccountModal.scrollTop=0;
-  accountEmailEditRow.classList.remove('open');
-  closeSidebar();
-}
-function closeAccountPage(){
-  sidebarProfile.classList.remove('active');
-  sidebarItems.forEach(nav=>nav.classList.remove('active'));
-  const walletNav=document.querySelector('.sidebar-item[data-target="walletPanel"]');
-  if(walletNav)walletNav.classList.add('active');
-  currentPanelId='walletPanel';
-  pagePanels.forEach(panel=>{
-    const active=panel.id==='walletPanel';
-    panel.classList.toggle('active',active);
-    panel.classList.remove('panel-enter');
+  sidebarProfile.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();setProfileEditor(!profileEditor.classList.contains('open'));}
   });
-  const walletPanelEl=document.getElementById('walletPanel');
-  if(walletPanelEl)walletPanelEl.scrollTop=0;
-  accountEmailEditRow.classList.remove('open');
-}
-sidebarProfile.addEventListener('click', openAccountPage);
-accountModalCloseBtn.addEventListener('click', closeAccountPage);
-accountEmailEditBtn.addEventListener('click', () => {
-accountEmailEditRow.classList.toggle('open');
-if (accountEmailEditRow.classList.contains('open')) { accountEmailInput.value = ''; accountEmailInput.focus(); }
-});
-function saveAccountEmail() {
-const val = accountEmailInput.value.trim();
-if (val && val.includes('@')) { userEmailFull=val; accountEmailValue.textContent=maskEmail(userEmailFull); try{localStorage.setItem('wallet_demo_email_v2',userEmailFull);}catch(_){ } showToast('Email updated successfully!'); }
-accountEmailEditRow.classList.remove('open');
-}
-accountEmailSaveBtn.addEventListener('click', saveAccountEmail);
-try{const savedEmail=localStorage.getItem('wallet_demo_email_v2');if(savedEmail&&savedEmail.includes('@')){userEmailFull=savedEmail;accountEmailValue.textContent=maskEmail(userEmailFull);}}catch(_){}
-accountEmailInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveAccountEmail(); } if (e.key === 'Escape') { e.preventDefault(); accountEmailEditRow.classList.remove('open'); } });
+  accountEditCancel.addEventListener('click',e=>{e.stopPropagation();setProfileEditor(false);});
+  accountEditSave.addEventListener('click',e=>{e.stopPropagation();saveProfile();});
+  [accountHandleInput,accountEmailInputNew].forEach(input=>{
+    input.addEventListener('click',e=>e.stopPropagation());
+    input.addEventListener('keydown',e=>{
+      if(e.key==='Enter'){e.preventDefault();saveProfile();}
+      if(e.key==='Escape'){e.preventDefault();setProfileEditor(false);}
+    });
+  });
+})();
 let recentActivities = [];
 let profitLossActivities = [];
 const costBasisLots = {BTC: [], SOL: [], ETH: []};
@@ -6214,7 +6242,7 @@ item.addEventListener('click', e => {
 e.preventDefault();
 sidebarItems.forEach(nav => nav.classList.remove('active'));
 item.classList.add('active');
-sidebarProfile.classList.remove('active');
+const sp=document.getElementById('sidebarProfile'); const pe=document.getElementById('profileEditor'); const ph=document.getElementById('profileEditHint'); if(sp){sp.classList.remove('active','editing');sp.setAttribute('aria-expanded','false');} if(pe){pe.classList.remove('open');pe.setAttribute('aria-hidden','true');} if(ph)ph.textContent='Edit account';
 const targetId = item.getAttribute('data-target');
 currentPanelId = targetId;
 if(targetId==='profitsPanel' && typeof renderExchangeTransactions==='function') renderExchangeTransactions();
@@ -8217,6 +8245,9 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   function seedAddressBook(){
     const now=new Date().toISOString();
     return [
+      {id:'contact-own-main',address:'7YQ9mL4rP8sT2vW6xN3cK5jH1fG8dR4bZ6uA9eS2',handle:'3sa',name:'Main Wallet',asset:'SOL',note:'My wallet',walletId:'main',isOwnWallet:true,createdAt:now},
+      {id:'contact-own-savings',address:'9SAV1NGS7WALLET4QX6M2P8R5T3N7C1K9D4F6H2J8L5',handle:'savings',name:'Savings Wallet',asset:'SOL',note:'My wallet',walletId:'savings',isOwnWallet:true,createdAt:now},
+      {id:'contact-own-trading',address:'7TRAD1NG4WALLET8Q2M6P9X3C5N1K7D4F8H2J6L9',handle:'trading',name:'Trading Wallet',asset:'SOL',note:'My wallet',walletId:'trading',isOwnWallet:true,createdAt:now},
       {id:'contact-4ranc',address:makeSavedAddress('4ranc-wallet'),handle:'4ranc',name:'',asset:'SOL',note:'',createdAt:now},
       {id:'contact-3zau',address:makeSavedAddress('3zau-wallet'),handle:'3zau',name:'',asset:'SOL',note:'',createdAt:now},
       {id:'contact-kkwaji',address:makeSavedAddress('kkwaji-wallet'),handle:'kkwaji',name:'',asset:'SOL',note:'',createdAt:now},
@@ -8241,6 +8272,8 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
           name:String(row?.name||'').trim().slice(0,50),
           asset:normalizeSymbol(row?.asset||'SOL'),
           note:String(row?.note||'').trim().slice(0,80),
+          walletId:String(row?.walletId||'').trim()||null,
+          isOwnWallet:!!row?.isOwnWallet,
           createdAt:row?.createdAt||new Date().toISOString()
         };
       }).filter(row=>{
@@ -8252,6 +8285,12 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
       });
     }else addressBook=seedAddressBook();
     if(!addressBook.length)addressBook=seedAddressBook();
+    const ownSeeded=seedAddressBook().filter(row=>row.isOwnWallet);
+    for(const own of ownSeeded){
+      if(!addressBook.some(row=>row.isOwnWallet&&row.walletId===own.walletId)){
+        addressBook.push(own);
+      }
+    }
     saveAddressBook();
   }
   function saveAddressBook(){
@@ -8393,7 +8432,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   function saveContact(data){
     const address=normalizeContactAddress(data.address);
     const handle=normalizeContactHandle(data.handle);
-    const record={address,handle,name:String(data.name||'').trim().slice(0,50),asset:normalizeSymbol(data.asset||'SOL'),note:String(data.note||'').trim().slice(0,80)};
+    const record={address,handle,name:String(data.name||'').trim().slice(0,50),asset:normalizeSymbol(data.asset||'SOL'),note:String(data.note||'').trim().slice(0,80),walletId:data.walletId||null,isOwnWallet:!!data.isOwnWallet};
     if(editingContactId){
       const idx=addressBook.findIndex(c=>c.id===editingContactId);
       if(idx>=0)addressBook[idx]={...addressBook[idx],...record};
@@ -8432,6 +8471,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
       const secondary=[];
       if(name && handle)secondary.push('@'+handle);
       if(address)secondary.push(address);
+      if(c.isOwnWallet)secondary.unshift('My wallet');
       if(c.note)secondary.push(String(c.note));
       const initials=(name||handle||address||'?').slice(0,2).toUpperCase();
       return `<div class="contact-card" data-contact-id="${esc(c.id)}">`+
@@ -8441,7 +8481,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
           `<div class="contact-meta">${esc(secondary.join(' · '))}</div>`+
         `</div>`+
         `<div class="contact-actions">`+
-          `<button class="contact-action primary" type="button" data-use-contact="${esc(c.id)}">Use</button>`+
+          `<button class="contact-action primary" type="button" data-use-contact="${esc(c.id)}">Send</button>`+
           `<button class="contact-action" type="button" data-edit-contact="${esc(c.id)}">Edit</button>`+
           `<button class="contact-action" type="button" data-delete-contact="${esc(c.id)}">Delete</button>`+
         `</div>`+
@@ -8456,6 +8496,11 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     if(sendAsset&&allWalletAssetSymbols().includes(c.asset)&&isCryptoAsset(c.asset))sendAsset.value=c.asset;
     if(sendAddress)sendAddress.value=contactAddress(c);
     if(sendAmount)sendAmount.value='';
+    const ownWalletPicker=document.getElementById('sendOwnWallet');
+    if(ownWalletPicker){
+      ownWalletPicker.value=c.walletId||'';
+      if(typeof window.__setOwnWalletRecipient==='function')window.__setOwnWalletRecipient(c.walletId||'',c.asset);
+    }
     renderDynamicAssetOptions();updateSendBalance();closeAddressBookPanel();sendModal?.classList.add('open');
     setTimeout(()=>sendAmount?.focus(),100);
     showToast(`${contactLabel(c)} loaded as recipient`,2000);
@@ -8837,3 +8882,646 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
   }
 }
 </style>
+<script id="multi-wallet-runtime">
+(function initMultiWalletRuntime(){
+  'use strict';
+
+  const WALLET_ACCOUNTS_STORAGE_KEY='wallet_demo_wallet_accounts_v1';
+  const APP_STATE_STORAGE_KEY='wallet_demo_everything_v1';
+  const MAIN_SOL_ADDRESS='7YQ9mL4rP8sT2vW6xN3cK5jH1fG8dR4bZ6uA9eS2';
+  const DEFAULT_WALLETS=[
+    {id:'main',name:'Main Wallet',handle:'3sa'},
+    {id:'savings',name:'Savings Wallet',handle:'savings'},
+    {id:'trading',name:'Trading Wallet',handle:'trading'}
+  ];
+  const clone=value=>{
+    try{return JSON.parse(JSON.stringify(value));}catch(_){return value;}
+  };
+  const escLocal=value=>String(value??'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+  const num=(value,fallback=0)=>{
+    const n=Number(value);
+    return Number.isFinite(n)?n:fallback;
+  };
+  const walletDefaults=()=>({
+    balances:{
+      displayBalanceCAD:0,
+      internalHiddenBalanceCAD:0,
+      displayBalanceUSD:0,
+      internalHiddenBalanceUSD:0,
+      balanceRateCAD:0,
+      balanceRateUSD:0,
+      bitcoinBalance:0,
+      solanaBalance:0,
+      ethereumBalance:0
+    },
+    costBasisLots:{BTC:[],SOL:[],ETH:[]},
+    profitLossActivities:[],
+    lifetimeRealizedPnlCad:0,
+    costBasisInitialized:false,
+    recentActivities:[]
+  });
+  const ownWalletAddress=(walletId,asset='SOL')=>{
+    const a=String(asset||'SOL').toUpperCase();
+    if(walletId==='main'&&a==='SOL')return MAIN_SOL_ADDRESS;
+    const seed=`${walletId}:${a}:1eisau-wallet`;
+    const chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789';
+    let h=2166136261;
+    for(let i=0;i<seed.length;i++){h^=seed.charCodeAt(i);h=Math.imul(h,16777619);}
+    let out='';
+    for(let i=0;i<36;i++){h^=(i+17);h=Math.imul(h,16777619);out+=chars[Math.abs(h)%chars.length];}
+    return `W${a}${out}`.slice(0,64);
+  };
+  const freshWallet=(meta,state=null)=>{
+    const d=walletDefaults();
+    return {
+      id:meta.id,
+      name:meta.name,
+      handle:meta.handle,
+      addresses:{
+        SOL:ownWalletAddress(meta.id,'SOL'),
+        BTC:ownWalletAddress(meta.id,'BTC'),
+        ETH:ownWalletAddress(meta.id,'ETH')
+      },
+      balances:state?.balances?{
+        displayBalanceCAD:num(state.balances.displayBalanceCAD),
+        internalHiddenBalanceCAD:num(state.balances.internalHiddenBalanceCAD),
+        displayBalanceUSD:num(state.balances.displayBalanceUSD),
+        internalHiddenBalanceUSD:num(state.balances.internalHiddenBalanceUSD),
+        balanceRateCAD:num(state.balances.balanceRateCAD),
+        balanceRateUSD:num(state.balances.balanceRateUSD),
+        bitcoinBalance:num(state.balances.bitcoinBalance),
+        solanaBalance:num(state.balances.solanaBalance),
+        ethereumBalance:num(state.balances.ethereumBalance)
+      }:d.balances,
+      costBasisLots:state?.costBasisLots&&typeof state.costBasisLots==='object'?clone(state.costBasisLots):clone(d.costBasisLots),
+      profitLossActivities:Array.isArray(state?.profitLossActivities)?clone(state.profitLossActivities):[],
+      lifetimeRealizedPnlCad:num(state?.lifetimeRealizedPnlCad),
+      costBasisInitialized:!!state?.costBasisInitialized,
+      recentActivities:Array.isArray(state?.recentActivities)?clone(state.recentActivities):[]
+    };
+  };
+
+  let walletAccounts=[];
+  let activeWalletId='main';
+
+  const normalizeWallet=(raw,meta)=>{
+    const base=freshWallet(meta);
+    const row=raw&&typeof raw==='object'?raw:{};
+    const state={balances:{...base.balances,...(row.balances||{})},
+      costBasisLots:{...base.costBasisLots,...(row.costBasisLots||{})},
+      profitLossActivities:Array.isArray(row.profitLossActivities)?row.profitLossActivities:[],
+      lifetimeRealizedPnlCad:row.lifetimeRealizedPnlCad,
+      costBasisInitialized:row.costBasisInitialized,
+      recentActivities:Array.isArray(row.recentActivities)?row.recentActivities:[]
+    };
+    const out=freshWallet({...meta,name:String(row.name||meta.name),handle:String(row.handle||meta.handle)},state);
+    out.addresses={...base.addresses,...(row.addresses&&typeof row.addresses==='object'?row.addresses:{})};
+    out.name=String(row.name||meta.name);
+    out.handle=String(row.handle||meta.handle).replace(/^@+/,'')||meta.handle;
+    return out;
+  };
+
+  const migrateLegacyState=()=>{
+    let stored=null;
+    try{stored=JSON.parse(localStorage.getItem(WALLET_ACCOUNTS_STORAGE_KEY)||'null');}catch(_){stored=null;}
+    if(stored&&stored.version===1&&Array.isArray(stored.wallets)){
+      walletAccounts=DEFAULT_WALLETS.map(meta=>{
+        const found=stored.wallets.find(w=>w&&w.id===meta.id);
+        return normalizeWallet(found||{},meta);
+      });
+      activeWalletId=stored.activeWalletId&&walletAccounts.some(w=>w.id===stored.activeWalletId)?stored.activeWalletId:'main';
+      return;
+    }
+    const legacyMain=freshWallet(DEFAULT_WALLETS[0],{
+      balances:{
+        displayBalanceCAD,
+        internalHiddenBalanceCAD,
+        displayBalanceUSD,
+        internalHiddenBalanceUSD,
+        balanceRateCAD,
+        balanceRateUSD,
+        bitcoinBalance,
+        solanaBalance,
+        ethereumBalance
+      },
+      costBasisLots,
+      profitLossActivities,
+      lifetimeRealizedPnlCad,
+      costBasisInitialized,
+      recentActivities
+    });
+    walletAccounts=[
+      legacyMain,
+      freshWallet(DEFAULT_WALLETS[1]),
+      freshWallet(DEFAULT_WALLETS[2])
+    ];
+  };
+
+  const saveWalletAccounts=()=>{
+    try{
+      localStorage.setItem(WALLET_ACCOUNTS_STORAGE_KEY,JSON.stringify({
+        version:1,
+        activeWalletId,
+        wallets:walletAccounts
+      }));
+    }catch(_){}
+  };
+
+  const syncActiveWalletIntoRecord=(id=activeWalletId)=>{
+    const rec=walletAccounts.find(w=>w.id===id);
+    if(!rec)return;
+    rec.balances={
+      displayBalanceCAD:num(displayBalanceCAD),
+      internalHiddenBalanceCAD:num(internalHiddenBalanceCAD),
+      displayBalanceUSD:num(displayBalanceUSD),
+      internalHiddenBalanceUSD:num(internalHiddenBalanceUSD),
+      balanceRateCAD:num(balanceRateCAD),
+      balanceRateUSD:num(balanceRateUSD),
+      bitcoinBalance:num(bitcoinBalance),
+      solanaBalance:num(solanaBalance),
+      ethereumBalance:num(ethereumBalance)
+    };
+    rec.costBasisLots=clone(costBasisLots);
+    rec.profitLossActivities=clone(profitLossActivities);
+    rec.lifetimeRealizedPnlCad=num(lifetimeRealizedPnlCad);
+    rec.costBasisInitialized=!!costBasisInitialized;
+    rec.recentActivities=clone(recentActivities);
+  };
+
+  const replaceCostBasisLots=(source)=>{
+    Object.keys(costBasisLots).forEach(key=>delete costBasisLots[key]);
+    const incoming=source&&typeof source==='object'?source:{};
+    Object.keys(incoming).forEach(key=>{
+      const rows=Array.isArray(incoming[key])?incoming[key]:[];
+      costBasisLots[key]=rows.map(row=>({
+        qty:num(row?.qty),
+        costCad:num(row?.costCad)
+      })).filter(row=>row.qty>1e-12&&row.costCad>=0);
+    });
+    ['BTC','SOL','ETH'].forEach(key=>{if(!Array.isArray(costBasisLots[key]))costBasisLots[key]=[];});
+    if(typeof CRYPTO_ASSETS!=='undefined')CRYPTO_ASSETS.forEach(key=>{if(!Array.isArray(costBasisLots[key]))costBasisLots[key]=[];});
+  };
+
+  const loadWalletIntoGlobals=(id)=>{
+    const rec=walletAccounts.find(w=>w.id===id);
+    if(!rec)return false;
+    activeWalletId=id;
+    const b=rec.balances||{};
+    displayBalanceCAD=num(b.displayBalanceCAD);
+    internalHiddenBalanceCAD=num(b.internalHiddenBalanceCAD);
+    displayBalanceUSD=num(b.displayBalanceUSD);
+    internalHiddenBalanceUSD=num(b.internalHiddenBalanceUSD);
+    balanceRateCAD=num(b.balanceRateCAD);
+    balanceRateUSD=num(b.balanceRateUSD);
+    bitcoinBalance=num(b.bitcoinBalance);
+    solanaBalance=num(b.solanaBalance);
+    ethereumBalance=num(b.ethereumBalance);
+    replaceCostBasisLots(rec.costBasisLots);
+    profitLossActivities=Array.isArray(rec.profitLossActivities)?clone(rec.profitLossActivities):[];
+    lifetimeRealizedPnlCad=num(rec.lifetimeRealizedPnlCad);
+    costBasisInitialized=!!rec.costBasisInitialized;
+    recentActivities=Array.isArray(rec.recentActivities)?clone(rec.recentActivities):[];
+    return true;
+  };
+
+  migrateLegacyState();
+  const initialActive=activeWalletId;
+  loadWalletIntoGlobals(initialActive);
+  saveWalletAccounts();
+
+  const basePersistAccountingState=window.__basePersistAccountingState||persistAccountingState;
+  window.__basePersistAccountingState=basePersistAccountingState;
+  persistAccountingState=function(){
+    try{
+      syncActiveWalletIntoRecord();
+      saveWalletAccounts();
+    }catch(_){}
+    try{basePersistAccountingState();}catch(_){}
+  };
+
+  const walletSelector=document.getElementById('walletSelector');
+  const sendOwnWallet=document.getElementById('sendOwnWallet');
+  const sendAddress=document.getElementById('sendAddress');
+  const sendAsset=document.getElementById('sendAsset');
+  const tradeConfirmButton=document.getElementById('tradeConfirmSubmit');
+  const tradeConfirmDialog=document.getElementById('tradeConfirmModal');
+  const sendDialog=document.getElementById('sendModal');
+
+  const populateWalletSelectors=()=>{
+    if(walletSelector){
+      walletSelector.innerHTML=walletAccounts.map(w=>`<option value="${w.id}">${String(w.name)} • @${String(w.handle)}</option>`).join('');
+      walletSelector.value=activeWalletId;
+    }
+    if(sendOwnWallet){
+      const current=sendOwnWallet.value;
+      sendOwnWallet.innerHTML='<option value="">External wallet / saved contact</option>'+walletAccounts.filter(w=>w.id!==activeWalletId).map(w=>`<option value="${w.id}">${String(w.name)} • @${String(w.handle)}</option>`).join('');
+      if(walletAccounts.some(w=>w.id===current&&w.id!==activeWalletId))sendOwnWallet.value=current;
+      else sendOwnWallet.value='';
+    }
+  };
+
+  const refreshWalletLabel=()=>{
+    const w=walletAccounts.find(row=>row.id===activeWalletId);
+    const name=document.getElementById('editWalletName');
+    if(name&&w)name.textContent=`${w.name} • @${w.handle}`;
+  };
+
+  const rerenderWalletUI=()=>{
+    populateWalletSelectors();
+    refreshWalletLabel();
+    renderBalance();
+    updateAvailableBalanceSubtext();
+    window.renderTransactionHistory?.();
+    window.renderRecentActivityTab?.();
+    renderRecentActivity();
+    renderExchangeTransactions?.();
+    window.lucide?.createIcons();
+  };
+
+  const currentWallet=()=>walletAccounts.find(w=>w.id===activeWalletId)||walletAccounts[0];
+
+  const switchWallet=(nextId)=>{
+    if(!walletAccounts.some(w=>w.id===nextId)||nextId===activeWalletId)return;
+    syncActiveWalletIntoRecord();
+    activeWalletId=nextId;
+    loadWalletIntoGlobals(nextId);
+    saveWalletAccounts();
+    rerenderWalletUI();
+    saveEverything();
+    showToast(`${currentWallet().name} selected`,1800);
+  };
+
+  const baseOpenWalletEditor=window.openWalletEditor;
+  if(typeof baseOpenWalletEditor==='function'&&!window.__multiWalletEditorWrapped){
+    window.openWalletEditor=function(){
+      baseOpenWalletEditor();
+      refreshWalletLabel();
+    };
+    window.__multiWalletEditorWrapped=true;
+  }
+
+  if(walletSelector){
+    walletSelector.addEventListener('change',e=>{
+      e.stopImmediatePropagation();
+      switchWallet(e.target.value);
+    },true);
+  }
+
+  const setOwnWalletRecipient=(walletId,asset)=>{
+    const w=walletAccounts.find(row=>row.id===walletId);
+    const a=String(asset||sendAsset?.value||'SOL').toUpperCase();
+    if(!sendOwnWallet||!sendAddress)return;
+    if(!w||w.id===activeWalletId){
+      sendOwnWallet.value='';
+      sendAddress.readOnly=false;
+      if(!w)sendAddress.value='';
+      return;
+    }
+    sendOwnWallet.value=w.id;
+    sendAddress.value=w.addresses?.[a]||ownWalletAddress(w.id,a);
+    sendAddress.readOnly=true;
+  };
+  window.__setOwnWalletRecipient=setOwnWalletRecipient;
+
+  if(sendOwnWallet){
+    sendOwnWallet.addEventListener('change',()=>{
+      setOwnWalletRecipient(sendOwnWallet.value,sendAsset?.value||'SOL');
+    });
+  }
+  if(sendAsset){
+    sendAsset.addEventListener('change',()=>{
+      if(sendOwnWallet?.value)setOwnWalletRecipient(sendOwnWallet.value,sendAsset.value);
+    });
+  }
+  if(sendAddress){
+    sendAddress.addEventListener('input',()=>{
+      if(sendOwnWallet?.value){
+        sendOwnWallet.value='';
+        sendAddress.readOnly=false;
+      }
+    });
+  }
+
+  const normalizeStoredContacts=()=>{
+    let list=[];
+    try{
+      const raw=JSON.parse(localStorage.getItem('wallet_demo_address_book_v2')||'[]');
+      list=Array.isArray(raw)?raw:[];
+    }catch(_){list=[];}
+    const own=walletAccounts.map(w=>({
+      id:`contact-own-${w.id}`,
+      address:w.addresses?.SOL||ownWalletAddress(w.id,'SOL'),
+      handle:w.handle,
+      name:w.name,
+      asset:'SOL',
+      note:'My wallet',
+      walletId:w.id,
+      isOwnWallet:true,
+      createdAt:new Date().toISOString()
+    }));
+    const filtered=list.filter(c=>!c?.isOwnWallet&&!String(c?.id||'').startsWith('contact-own-'));
+    for(const c of own){
+      if(!filtered.some(row=>row&&row.walletId===c.walletId))filtered.push(c);
+    }
+    try{localStorage.setItem('wallet_demo_address_book_v2',JSON.stringify(filtered.slice(0,100)));}catch(_){}
+    const listEl=document.getElementById('addressBookList');
+    if(listEl){
+      const visible=filtered;
+      if(!visible.length){
+        listEl.innerHTML='<div class="contact-empty">No contacts yet. Add someone you want to send to.</div>';
+      }else{
+        listEl.innerHTML=visible.map(c=>{
+          const name=String(c?.name||'').trim();
+          const handle=String(c?.handle||'').replace(/^@+/,'');
+          const address=String(c?.address||'');
+          const primary=name||(`@${handle}`)||address;
+          const meta=[c?.isOwnWallet?'My wallet':'',name&&handle?`@${handle}`:'',address,c?.note||''].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i);
+          const initials=(name||handle||address||'?').slice(0,2).toUpperCase();
+          return `<div class="contact-card" data-contact-id="${escLocal(c.id)}"><div class="contact-avatar">${escLocal(initials)}</div><div class="contact-main"><div class="contact-handle">${escLocal(primary)}</div><div class="contact-meta">${escLocal(meta.join(' · '))}</div></div><div class="contact-actions"><button class="contact-action primary" type="button" data-use-contact="${escLocal(c.id)}">Send</button><button class="contact-action" type="button" data-edit-contact="${escLocal(c.id)}">Edit</button><button class="contact-action" type="button" data-delete-contact="${escLocal(c.id)}">Delete</button></div></div>`;
+        }).join('');
+        document.getElementById('addressBookCount')?.replaceChildren(document.createTextNode(String(visible.length)));
+        window.lucide?.createIcons({nodes:[listEl]});
+      }
+    }
+  };
+  normalizeStoredContacts();
+
+  const internalDestinationForCurrentSend=()=>{
+    const id=sendOwnWallet?.value||'';
+    if(!id)return null;
+    const target=walletAccounts.find(w=>w.id===id);
+    if(!target||target.id===activeWalletId)return null;
+    return {target,asset:String(sendAsset?.value||'').toUpperCase(),address:String(sendAddress?.value||'').trim(),amount:Number(document.getElementById('sendAmount')?.value)||0};
+  };
+
+  let pendingInternalTransfer=null;
+
+  document.getElementById('sendSubmitBtn')?.addEventListener('click',()=>{
+    const next=internalDestinationForCurrentSend();
+    pendingInternalTransfer=next&&next.amount>0?next:null;
+    if(pendingInternalTransfer){
+      setTimeout(()=>{
+        if(!tradeConfirmDialog?.classList.contains('open'))return;
+        const summary=document.getElementById('tradeConfirmSummary');
+        if(!summary)return;
+        const w=pendingInternalTransfer.target;
+        const row=document.createElement('div');
+        row.className='send-security-preview';
+        row.innerHTML=`<div class="send-security-head"><i data-lucide="wallet"></i><span>Internal wallet transfer</span><span class="send-security-badge trusted">My wallet</span></div><div class="send-security-row"><span>Destination</span><span>${escLocal(w.name)} · @${escLocal(w.handle)}</span></div><div class="send-security-row"><span>Address</span><span>${escLocal(pendingInternalTransfer.address)}</span></div>`;
+        summary.appendChild(row);
+        window.lucide?.createIcons({nodes:[row]});
+      },0);
+    }
+  },true);
+
+  const transferBetweenWallets=(request)=>{
+    syncActiveWalletIntoRecord();
+    const from=walletAccounts.find(w=>w.id===activeWalletId);
+    const to=walletAccounts.find(w=>w.id===request.target.id);
+    if(!from||!to)return {ok:false,error:'Wallet not found.'};
+    const asset=request.asset;
+    const amount=num(request.amount);
+    if(amount<=0)return {ok:false,error:'Enter an amount greater than zero.'};
+
+    const getWalletBalance=(wallet,curr)=>{
+      const b=wallet.balances;
+      if(curr==='CAD')return num(b.displayBalanceCAD);
+      if(curr==='USD')return num(b.displayBalanceUSD);
+      if(curr==='BTC')return num(b.bitcoinBalance);
+      if(curr==='SOL')return num(b.solanaBalance);
+      if(curr==='ETH')return num(b.ethereumBalance);
+      return 0;
+    };
+    const setWalletBalance=(wallet,curr,value)=>{
+      const v=Math.max(0,value);
+      if(curr==='CAD'){wallet.balances.displayBalanceCAD=v;wallet.balances.internalHiddenBalanceCAD=v;}
+      else if(curr==='USD'){wallet.balances.displayBalanceUSD=v;wallet.balances.internalHiddenBalanceUSD=v;}
+      else if(curr==='BTC')wallet.balances.bitcoinBalance=normalizeAssetAmount('BTC',v);
+      else if(curr==='SOL')wallet.balances.solanaBalance=normalizeAssetAmount('SOL',v);
+      else if(curr==='ETH')wallet.balances.ethereumBalance=normalizeAssetAmount('ETH',v);
+      else return false;
+      return true;
+    };
+    const available=getWalletBalance(from,asset);
+    if(amount>available+1e-10)return {ok:false,error:`Insufficient ${asset} balance.`};
+
+    let transferredBasis=0;
+    if(isCryptoAsset(asset)){
+      const lots=Array.isArray(from.costBasisLots?.[asset])?from.costBasisLots[asset]:[];
+      let remaining=amount;
+      while(remaining>1e-10&&lots.length){
+        const lot=lots[0];
+        const take=Math.min(remaining,num(lot.qty));
+        const unit=num(lot.qty)>0?num(lot.costCad)/num(lot.qty):0;
+        transferredBasis+=unit*take;
+        lot.qty-=take;
+        lot.costCad-=unit*take;
+        remaining-=take;
+        if(lot.qty<=1e-10||Math.abs(lot.costCad)<1e-10)lots.shift();
+      }
+      if(transferredBasis<=0)transferredBasis=amount*(liveCadPrice(asset)||0);
+      if(!Array.isArray(to.costBasisLots[asset]))to.costBasisLots[asset]=[];
+      to.costBasisLots[asset].push({qty:amount,costCad:Math.max(0,transferredBasis)});
+    }
+    if(!setWalletBalance(from,asset,available-amount))return {ok:false,error:'Unsupported asset.'};
+    setWalletBalance(to,asset,getWalletBalance(to,asset)+amount);
+    from.costBasisInitialized=from.costBasisInitialized||isCryptoAsset(asset);
+    to.costBasisInitialized=true;
+
+    loadWalletIntoGlobals(activeWalletId);
+    saveWalletAccounts();
+    try{basePersistAccountingState();}catch(_){}
+    renderBalance();
+    updateAvailableBalanceSubtext();
+    window.renderTransactionHistory?.();
+    window.renderRecentActivityTab?.();
+
+    const address=to.addresses?.[asset]||ownWalletAddress(to.id,asset);
+    window.addTransactionRecord?.({
+      type:'send',
+      asset,
+      amount,
+      address,
+      fromWalletId:from.id,
+      toWalletId:to.id,
+      internal:true,
+      walletName:to.name
+    });
+    showToast(`Moved ${amount.toFixed(isCryptoAsset(asset)?6:2)} ${asset} to ${to.name}`,2600);
+    return {ok:true};
+  };
+
+  document.getElementById('tradeConfirmSubmit')?.addEventListener('click',e=>{
+    if(!pendingInternalTransfer)return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    const request=pendingInternalTransfer;
+    tradeConfirmButton?.classList.add('loading');
+    setTimeout(()=>{
+      try{
+        const result=transferBetweenWallets(request);
+        if(!result.ok){
+          showToast(result.error||'Transfer failed',2400);
+          return;
+        }
+        pendingInternalTransfer=null;
+        if(sendDialog){
+          sendDialog.classList.remove('open');
+          document.getElementById('sendAmount').value='';
+          document.getElementById('sendAddress').value='';
+        }
+        if(sendOwnWallet)sendOwnWallet.value='';
+        if(sendAddress)sendAddress.readOnly=false;
+      }finally{
+        tradeConfirmButton?.classList.remove('loading');
+        tradeConfirmDialog?.classList.remove('open');
+      }
+    },260);
+  },true);
+
+  document.getElementById('tradeConfirmCancel')?.addEventListener('click',()=>{pendingInternalTransfer=null;});
+  tradeConfirmDialog?.addEventListener('click',e=>{if(e.target===tradeConfirmDialog&&e.target===tradeConfirmDialog)pendingInternalTransfer=null;},true);
+
+  const receiveButton=document.getElementById('receiveBtn');
+  const receiveModal=document.getElementById('receiveModal');
+  const receiveQr=document.getElementById('receiveQr');
+  const receiveAddressText=document.getElementById('receiveAddressText');
+  const receiveTitle=document.querySelector('#receiveModal .modal-title');
+  const receiveStatus=document.getElementById('receiveAutoStatus');
+
+  const renderOwnReceive=()=>{
+    const wallet=currentWallet();
+    const address=wallet?.addresses?.SOL||ownWalletAddress(activeWalletId,'SOL');
+    if(receiveTitle)receiveTitle.textContent=`Receive SOL · @${wallet?.handle||'3sa'}`;
+    if(receiveAddressText)receiveAddressText.textContent=address;
+    if(receiveQr){
+      receiveQr.innerHTML='';
+      if(typeof QRCode==='function')new QRCode(receiveQr,{text:`wallet://receive?asset=SOL&address=${encodeURIComponent(address)}`,width:150,height:150,colorDark:'#111111',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+    }
+    if(receiveStatus)receiveStatus.textContent=`Receiving into ${wallet?.name||'Main Wallet'}`;
+    window.lucide?.createIcons();
+  };
+
+  if(receiveButton){
+    receiveButton.addEventListener('click',e=>{
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      receiveModal?.classList.add('open');
+      renderOwnReceive();
+      const targetWalletId=activeWalletId;
+      const delay=2000+Math.floor(Math.random()*3001);
+      setTimeout(()=>{
+        if(targetWalletId!==activeWalletId)return;
+        let amount=Number((1+Math.random()*4).toFixed(6));
+        if(Number.isInteger(amount))amount=Number((amount+0.000001).toFixed(6));
+        addBalanceForCurrency('SOL',amount);
+        const receiveBasis=amount*(liveCadPrice('SOL')||0);
+        if(receiveBasis>0)addCostBasisLot('SOL',amount,receiveBasis);
+        renderBalance();
+        persistAccountingState();
+        window.addTransactionRecord?.({type:'receive',asset:'SOL',amount,address:currentWallet().addresses?.SOL||ownWalletAddress(activeWalletId,'SOL'),walletId:activeWalletId});
+        if(receiveStatus)receiveStatus.textContent=`+${amount.toFixed(6)} SOL received`;
+        showToast(`Received ${amount.toFixed(6)} SOL`,2500);
+      },delay);
+    },true);
+  }
+
+  const saveEverything=()=>{
+    try{
+      syncActiveWalletIntoRecord();
+      saveWalletAccounts();
+      const panel=document.querySelector('.sidebar-item.active')?.dataset?.target||currentPanelId||'walletPanel';
+      const range=document.querySelector('#chartTimeframes .tr-btn.active')?.dataset?.range||'1D';
+      const snapshot={
+        version:1,
+        savedAt:new Date().toISOString(),
+        activeWalletId,
+        activePanel:panel,
+        activeCoin:typeof activeCoin!=='undefined'?activeCoin:'SOL',
+        marketRange:range,
+        ui:{
+          theme:document.body.classList.contains('theme-light')?'light':'dark',
+          currentCurrency:typeof currentCurrency!=='undefined'?currentCurrency:'CAD'
+        }
+      };
+      localStorage.setItem(APP_STATE_STORAGE_KEY,JSON.stringify(snapshot));
+    }catch(_){}
+  };
+  window.__saveEverything=saveEverything;
+
+  const restoreEverything=()=>{
+    let state=null;
+    try{state=JSON.parse(localStorage.getItem(APP_STATE_STORAGE_KEY)||'null');}catch(_){state=null;}
+    if(!state||state.version!==1)return;
+    if(state.activeWalletId&&walletAccounts.some(w=>w.id===state.activeWalletId)&&state.activeWalletId!==activeWalletId){
+      loadWalletIntoGlobals(state.activeWalletId);
+    }
+    if(state.ui?.currentCurrency==='USD'||state.ui?.currentCurrency==='CAD')currentCurrency=state.ui.currentCurrency;
+    populateWalletSelectors();
+    rerenderWalletUI();
+    setTimeout(()=>{
+      const ticker=document.querySelector(`.ticker-item[data-coin="${CSS.escape(String(state.activeCoin||'SOL'))}"]`);
+      ticker?.click();
+      if(state.marketRange&&window.setMarketTimeframe)window.setMarketTimeframe(state.marketRange);
+      if(state.activePanel){
+        document.querySelector(`.sidebar-item[data-target="${CSS.escape(String(state.activePanel))}"]`)?.click();
+      }
+    },80);
+  };
+
+  const patchMarketPersistence=()=>{
+    if(typeof window.setMarketTimeframe==='function'&&!window.__marketPersistenceWrapped){
+      const base=window.setMarketTimeframe;
+      window.setMarketTimeframe=function(range){
+        const result=base(range);
+        saveEverything();
+        return result;
+      };
+      window.__marketPersistenceWrapped=true;
+    }
+    document.querySelectorAll('.ticker-item').forEach(item=>item.addEventListener('click',()=>setTimeout(saveEverything,0)));
+  };
+  patchMarketPersistence();
+
+  document.querySelectorAll('.sidebar-item[data-target]').forEach(item=>item.addEventListener('click',()=>setTimeout(saveEverything,0)));
+  ['toggleHideBalances','toggleBiometrics','toggleTxAlerts','togglePriceAlerts','settingLanguage','settingDefaultCurrency'].forEach(id=>{
+    document.getElementById(id)?.addEventListener('change',()=>setTimeout(saveEverything,0));
+  });
+  document.getElementById('themeDarkCard')?.addEventListener('click',()=>setTimeout(saveEverything,0));
+  document.getElementById('themeLightCard')?.addEventListener('click',()=>setTimeout(saveEverything,0));
+
+  const originalAddContact=document.getElementById('addressBookSaveBtn');
+  originalAddContact?.addEventListener('click',()=>setTimeout(()=>{
+    try{
+      const raw=JSON.parse(localStorage.getItem('wallet_demo_address_book_v2')||'[]');
+      const merged=Array.isArray(raw)?raw:[];
+      for(const w of walletAccounts){
+        if(!merged.some(c=>c?.isOwnWallet&&c.walletId===w.id))merged.push({
+          id:`contact-own-${w.id}`,
+          address:w.addresses.SOL,
+          handle:w.handle,
+          name:w.name,
+          asset:'SOL',
+          note:'My wallet',
+          walletId:w.id,
+          isOwnWallet:true,
+          createdAt:new Date().toISOString()
+        });
+      }
+      localStorage.setItem('wallet_demo_address_book_v2',JSON.stringify(merged.slice(0,100)));
+    }catch(_){}
+    saveEverything();
+  },20));
+
+  populateWalletSelectors();
+  refreshWalletLabel();
+  renderBalance();
+  updateAvailableBalanceSubtext();
+  normalizeStoredContacts();
+  restoreEverything();
+  setTimeout(saveEverything,250);
+
+  window.addEventListener('pagehide',saveEverything);
+  window.addEventListener('beforeunload',saveEverything);
+})();
+</script>
