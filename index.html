@@ -334,12 +334,12 @@ will-change: transform;
 .balance-card:hover { transform: translateY(-3px); box-shadow: 0 28px 55px -10px rgba(0,0,0,0.85), inset 0 1px 1px rgba(255,255,255,0.18); }
 .balance-header-row { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
 .balance-title-row { color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
-.wallet-selector-group { display:flex; align-items:center; justify-content:flex-end; gap:6px; min-width:0; }
-.account-wallet-selector { max-width:118px; }
-@media (max-width:600px) {
-  .wallet-selector-group { gap:5px; }
-  .wallet-selector { padding:7px 10px; font-size:11px; }
-  .account-wallet-selector { max-width:92px; }
+ .wallet-selector-group{display:flex;align-items:center;justify-content:flex-end;gap:6px;min-width:0}
+.account-wallet-selector{max-width:110px}
+@media(max-width:600px){
+  .wallet-selector-group{gap:5px}
+  .wallet-selector{padding:7px 10px;font-size:11px}
+  .account-wallet-selector{max-width:86px}
 }
 .wallet-selector { background: rgba(255,255,255,0.05); border: 1px solid var(--border-hover); color: #ffffff; padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; outline: none; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background 0.2s ease, border-color 0.2s ease; }
 .wallet-selector:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
@@ -6069,16 +6069,11 @@ body.theme-light .profile-editor{
 <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span data-i18n="navSettings">Settings</span></a>
 </div>
 </div>
-<div class="sidebar-profile" id="sidebarProfile" role="button" tabindex="0" aria-expanded="false">
+<div class="sidebar-profile" id="sidebarProfile" aria-hidden="false">
 <div class="profile-avatar"><img id="profileAvatarImg" src="" alt="avatar"></div>
 <div class="profile-info">
 <div class="profile-name" id="profileName">@3sa</div>
-<div class="profile-tag" id="profileEditHint">Switch account</div>
-</div>
-<div class="profile-chevron"><i data-lucide="chevrons-up-down"></i></div>
-<div class="profile-editor account-switcher" id="profileEditor" aria-hidden="true">
-  <div class="profile-editor-title">Switch account</div>
-  <div class="account-switcher-list" id="accountSwitcherList"></div>
+<div class="profile-tag" id="profileEditHint">Current wallet</div>
 </div>
 </div>
 </nav>
@@ -6096,7 +6091,7 @@ body.theme-light .profile-editor{
 <div class="balance-header-row">
 <div class="balance-title-row" data-i18n="totalBalanceTitle">Total Balance</div>
 <div class="wallet-selector-group">
-<select class="wallet-selector account-wallet-selector" id="accountWalletSelector" aria-label="Select wallet">
+<select class="wallet-selector" id="accountWalletSelector" aria-label="Select wallet">
 <option value="main">@3sa</option>
 <option value="1eisau">@1eisau</option>
 </select>
@@ -6810,10 +6805,7 @@ const AVATAR_DATA_URI = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOwAAADsC
   const profileName=document.getElementById('profileName');
   const profileAvatarImg=document.getElementById('profileAvatarImg');
   const profileEditHint=document.getElementById('profileEditHint');
-  const sidebarProfile=document.getElementById('sidebarProfile');
-  const profileEditor=document.getElementById('profileEditor');
   const introProfileHandle=document.getElementById('introProfileHandle');
-
   let profile={handle:'3sa',email:''};
   try{
     const saved=JSON.parse(localStorage.getItem(PROFILE_STORAGE_KEY)||'null');
@@ -6821,38 +6813,18 @@ const AVATAR_DATA_URI = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOwAAADsC
       if(typeof saved.handle==='string'&&saved.handle.trim()) profile.handle=saved.handle.trim().replace(/^@+/,'');
       if(typeof saved.email==='string') profile.email=saved.email.trim();
     }
-  }catch(_){ }
-
+  }catch(_){}
   function renderProfile(){
     const handle=String(profile.handle||'3sa').trim().replace(/^@+/,'')||'3sa';
     profile.handle=handle;
     const display='@'+handle;
-    profileName.textContent=display;
-    if(introProfileHandle) introProfileHandle.textContent=display;
-    if(profileEditHint) profileEditHint.textContent='Switch account';
-    if(profileAvatarImg) profileAvatarImg.src=AVATAR_DATA_URI;
+    if(profileName)profileName.textContent=display;
+    if(introProfileHandle)introProfileHandle.textContent=display;
+    if(profileEditHint)profileEditHint.textContent='Current wallet';
+    if(profileAvatarImg)profileAvatarImg.src=AVATAR_DATA_URI;
   }
-
-  function setProfileEditor(open){
-    const isOpen=Boolean(open);
-    profileEditor?.classList.toggle('open',isOpen);
-    sidebarProfile?.classList.toggle('editing',isOpen);
-    sidebarProfile?.setAttribute('aria-expanded',String(isOpen));
-    profileEditor?.setAttribute('aria-hidden',String(!isOpen));
-  }
-
   renderProfile();
-  sidebarProfile?.addEventListener('click',e=>{
-    if(e.target.closest('.account-switcher-btn')) return;
-    setProfileEditor(!profileEditor?.classList.contains('open'));
-  });
-  sidebarProfile?.addEventListener('keydown',e=>{
-    if(e.key==='Enter'||e.key===' '){e.preventDefault();setProfileEditor(!profileEditor?.classList.contains('open'));}
-  });
-  document.addEventListener('click',e=>{
-    if(!sidebarProfile?.contains(e.target)) setProfileEditor(false);
-  });
-})();
+})();;
 let recentActivities = [];
 let profitLossActivities = [];
 const costBasisLots = {BTC: [], SOL: [], ETH: []};
@@ -8087,7 +8059,6 @@ globalAlertsOn=false;
 priceAlertsEnabled={BTC:false,SOL:false,ETH:false};
 currentCurrency='CAD';
 walletSelector.value='CAD';
-if(document.getElementById('accountWalletSelector'))document.getElementById('accountWalletSelector').value=activeWalletId;
 renderBalance();
 updateMarketAlerts();
 const dict=translations[currentLang]||translations['en-CA'];
@@ -9074,8 +9045,6 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
       });
     }else addressBook=seedAddressBook();
     if(!addressBook.length)addressBook=seedAddressBook();
-    const allowedWalletIds=new Set(DEFAULT_WALLETS.map(w=>w.id));
-    addressBook=addressBook.filter(row=>!row.isOwnWallet||allowedWalletIds.has(row.walletId));
     const ownSeeded=seedAddressBook().filter(row=>row.isOwnWallet);
     for(const own of ownSeeded){
       if(!addressBook.some(row=>row.isOwnWallet&&row.walletId===own.walletId)){
@@ -9889,7 +9858,6 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     try{basePersistAccountingState();}catch(_){}
   };
 
-  const accountWalletSelector=document.getElementById('accountSwitcherList');
   const accountWalletSelect=document.getElementById('accountWalletSelector');
   const currencySelector=document.getElementById('walletSelector');
   const sendOwnWallet=document.getElementById('sendOwnWallet');
@@ -9904,22 +9872,9 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
       accountWalletSelect.innerHTML=walletAccounts.map(w=>`<option value="${escLocal(w.id)}">@${escLocal(w.handle)}</option>`).join('');
       accountWalletSelect.value=activeWalletId;
     }
-    if(accountWalletSelector){
-      accountWalletSelector.innerHTML=walletAccounts.map(w=>{
-        return `<button class="account-switcher-btn${w.id===activeWalletId?' active':''}" type="button" data-wallet-account="${escLocal(w.id)}"><span class="account-switcher-icon"><i data-lucide="wallet"></i></span><span class="account-switcher-copy"><span class="account-switcher-name">@${escLocal(w.handle)}</span><span class="account-switcher-meta">${escLocal(w.id===activeWalletId?'Current wallet':'Switch wallet')}</span></span><i class="account-switcher-check" data-lucide="check"></i></button>`;
-      }).join('');
-      accountWalletSelector.querySelectorAll('[data-wallet-account]').forEach(btn=>btn.addEventListener('click',e=>{
-        e.stopPropagation();
-        switchWallet(btn.dataset.walletAccount);
-        document.getElementById('profileEditor')?.classList.remove('open');
-        document.getElementById('sidebarProfile')?.classList.remove('editing');
-        document.getElementById('sidebarProfile')?.setAttribute('aria-expanded','false');
-      }));
-      window.lucide?.createIcons({nodes:[accountWalletSelector]});
-    }
     if(sendOwnWallet){
       const current=sendOwnWallet.value;
-      sendOwnWallet.innerHTML='<option value="">External wallet / saved contact</option>'+walletAccounts.filter(w=>w.id!==activeWalletId).map(w=>`<option value="${w.id}">@${String(w.handle)}</option>`).join('');
+      sendOwnWallet.innerHTML='<option value="">External wallet / saved contact</option>'+walletAccounts.filter(w=>w.id!==activeWalletId).map(w=>`<option value="${escLocal(w.id)}">@${escLocal(w.handle)}</option>`).join('');
       if(walletAccounts.some(w=>w.id===current&&w.id!==activeWalletId))sendOwnWallet.value=current;
       else sendOwnWallet.value='';
     }
@@ -9954,9 +9909,12 @@ const renderProfileAccountLabel=()=>{
 
 
   const switchWallet=(nextId)=>{
-    if(accountWalletSelect)accountWalletSelect.value=nextId;
-    if(!walletAccounts.some(w=>w.id===nextId)||nextId===activeWalletId){
+    if(!walletAccounts.some(w=>w.id===nextId)){
       populateWalletSelectors();
+      return;
+    }
+    if(nextId===activeWalletId){
+      if(accountWalletSelect)accountWalletSelect.value=activeWalletId;
       return;
     }
     syncActiveWalletIntoRecord();
@@ -10022,11 +9980,13 @@ const renderProfileAccountLabel=()=>{
       const raw=JSON.parse(localStorage.getItem('wallet_demo_address_book_v2')||'[]');
       list=Array.isArray(raw)?raw:[];
     }catch(_){list=[];}
+    const allowedWalletIds=new Set(walletAccounts.map(w=>w.id));
+    list=list.filter(c=>!c?.isOwnWallet||allowedWalletIds.has(c.walletId));
     const own=walletAccounts.map(w=>({
       id:`contact-own-${w.id}`,
       address:w.addresses?.SOL||ownWalletAddress(w.id,'SOL'),
       handle:w.handle,
-      name:w.name,
+      name:'',
       asset:'SOL',
       note:'My wallet',
       walletId:w.id,
@@ -10081,7 +10041,7 @@ const renderProfileAccountLabel=()=>{
         const w=pendingInternalTransfer.target;
         const row=document.createElement('div');
         row.className='send-security-preview';
-        row.innerHTML=`<div class="send-security-head"><i data-lucide="wallet"></i><span>Internal wallet transfer</span><span class="send-security-badge trusted">My wallet</span></div><div class="send-security-row"><span>Destination</span><span>${escLocal(w.name)} · @${escLocal(w.handle)}</span></div><div class="send-security-row"><span>Address</span><span>${escLocal(pendingInternalTransfer.address)}</span></div>`;
+        row.innerHTML=`<div class="send-security-head"><i data-lucide="wallet"></i><span>Internal wallet transfer</span><span class="send-security-badge trusted">My wallet</span></div><div class="send-security-row"><span>Destination</span><span>@${escLocal(w.handle)}</span></div><div class="send-security-row"><span>Address</span><span>${escLocal(pendingInternalTransfer.address)}</span></div>`;
         summary.appendChild(row);
         window.lucide?.createIcons({nodes:[row]});
       },0);
@@ -10159,9 +10119,9 @@ const renderProfileAccountLabel=()=>{
       fromWalletId:from.id,
       toWalletId:to.id,
       internal:true,
-      walletName:`@${to.handle}`
+      walletName:to.name
     });
-    showToast(`Moved ${amount.toFixed(isCryptoAsset(asset)?6:2)} ${asset} to @${to.handle}`,2600);
+    showToast(`Moved ${amount.toFixed(isCryptoAsset(asset)?6:2)} ${asset} to ${to.name}`,2600);
     return {ok:true};
   };
 
@@ -10212,7 +10172,7 @@ const renderProfileAccountLabel=()=>{
       receiveQr.innerHTML='';
       if(typeof QRCode==='function')new QRCode(receiveQr,{text:`wallet://receive?asset=SOL&address=${encodeURIComponent(address)}`,width:150,height:150,colorDark:'#111111',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
     }
-    if(receiveStatus)receiveStatus.textContent=`Receiving into @${wallet?.handle||'3sa'}`;
+    if(receiveStatus)receiveStatus.textContent=`Receiving into ${wallet?.name||'Main Wallet'}`;
     window.lucide?.createIcons();
   };
 
@@ -10342,3 +10302,12 @@ const renderProfileAccountLabel=()=>{
   window.addEventListener('beforeunload',saveEverything);
 })();
 </script>
+<style id="native-wallet-selector-cleanup">
+#profileEditor,
+.account-switcher,
+.account-switcher-list,
+.account-switcher-btn{display:none !important;}
+#sidebarProfile{cursor:default !important;}
+#sidebarProfile:hover,
+#sidebarProfile:active{background:transparent !important;}
+</style>
