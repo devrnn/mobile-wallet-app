@@ -5939,8 +5939,10 @@ const costBasisLots = {BTC: [], SOL: [], ETH: []};
 let costBasisInitialized = false;
 let lifetimeRealizedPnlCad = 0;
 const CRYPTO_ASSETS = new Set(['BTC','SOL','ETH']);
-const ACCOUNTING_STORAGE_KEY = 'wallet_demo_accounting_v2';
-const WALLET_BALANCE_STORAGE_KEY = 'wallet_demo_balances_v2';
+const ACCOUNTING_STORAGE_KEY = 'wallet_demo_accounting_v3';
+const WALLET_BALANCE_STORAGE_KEY = 'wallet_demo_balances_v3';
+const DEMO_SOL_MIN = 13.839130;
+const DEMO_SOL_MAX = 46.482340;
 
 function isCryptoAsset(curr){ return CRYPTO_ASSETS.has(curr); }
 function assetDecimals(curr){ return isCryptoAsset(curr) ? 8 : 4; }
@@ -5971,15 +5973,15 @@ function sanitizeLots(raw){
 }
 function persistAccountingState(){
   try{
-    localStorage.setItem(ACCOUNTING_STORAGE_KEY,JSON.stringify({version:2,lots:costBasisLots,realizedPnl:profitLossActivities,lifetimeRealizedPnlCad:Number(lifetimeRealizedPnlCad)||0}));
-    localStorage.setItem(WALLET_BALANCE_STORAGE_KEY,JSON.stringify({version:2,currentCurrency,displayBalanceCAD,internalHiddenBalanceCAD,displayBalanceUSD,internalHiddenBalanceUSD,balanceRateCAD,balanceRateUSD,bitcoinBalance,solanaBalance,ethereumBalance}));
+    localStorage.setItem(ACCOUNTING_STORAGE_KEY,JSON.stringify({version:3,lots:costBasisLots,realizedPnl:profitLossActivities,lifetimeRealizedPnlCad:Number(lifetimeRealizedPnlCad)||0}));
+    localStorage.setItem(WALLET_BALANCE_STORAGE_KEY,JSON.stringify({version:3,currentCurrency,displayBalanceCAD,internalHiddenBalanceCAD,displayBalanceUSD,internalHiddenBalanceUSD,balanceRateCAD,balanceRateUSD,bitcoinBalance,solanaBalance,ethereumBalance}));
   }catch(_){ }
 }
 function restoreAccountingState(){
   let loadedBalances=false,loadedAccounting=false;
   try{
     const raw=localStorage.getItem(WALLET_BALANCE_STORAGE_KEY); const b=raw?JSON.parse(raw):null;
-    if(b&&b.version===2){
+    if(b&&b.version===3){
       if(Number.isFinite(Number(b.displayBalanceCAD)))displayBalanceCAD=Number(b.displayBalanceCAD);
       if(Number.isFinite(Number(b.internalHiddenBalanceCAD)))internalHiddenBalanceCAD=Number(b.internalHiddenBalanceCAD);
       if(Number.isFinite(Number(b.displayBalanceUSD)))displayBalanceUSD=Number(b.displayBalanceUSD);
@@ -5995,7 +5997,7 @@ function restoreAccountingState(){
   }catch(_){ }
   try{
     const raw=localStorage.getItem(ACCOUNTING_STORAGE_KEY); const a=raw?JSON.parse(raw):null;
-    if(a&&a.version===2){
+    if(a&&a.version===3){
       const lots=sanitizeLots(a.lots);
       for(const coin of Object.keys(costBasisLots))costBasisLots[coin].splice(0,costBasisLots[coin].length,...lots[coin]);
       profitLossActivities=Array.isArray(a.realizedPnl)?a.realizedPnl.filter(r=>r&&Number.isFinite(Number(r.gainCad))):[];
@@ -6134,7 +6136,7 @@ let internalHiddenBalanceUSD = 0.00;
 let balanceRateCAD = 0.00;
 let balanceRateUSD = 0.00;
 let bitcoinBalance = 0.00;
-let solanaBalance = parseFloat((Math.random() * (46.482340 - 13.839130) + 13.839130).toFixed(6));
+let solanaBalance = Number((DEMO_SOL_MIN + Math.random() * (DEMO_SOL_MAX - DEMO_SOL_MIN)).toFixed(6));
 let ethereumBalance = 0.00;
 restoreAccountingState();
 const balanceText = document.getElementById('totalBalance');
@@ -7727,7 +7729,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   });
 
   const sendModal=document.getElementById('sendModal');
-  function updateSendBalance(){const a=document.getElementById('sendAsset').value;const b=getBalanceForCurrency(a);document.getElementById('sendAmountUnit').textContent=a;document.getElementById('sendAvailableBalance').textContent=`Available: ${b.toFixed(a==='SOL'||a==='BTC'||a==='ETH'?6:2)} ${a}`;}
+  function updateSendBalance(){const a=document.getElementById('sendAsset')?.value; if(!a)return; const b=Number(getBalanceForCurrency(a)||0); const dec=displayAssetDecimals(a); const unit=document.getElementById('sendAmountUnit'); const avail=document.getElementById('sendAvailableBalance'); if(unit)unit.textContent=a; if(avail)avail.textContent=`Available: ${b.toFixed(dec)} ${a}`;}
   document.getElementById('sendAsset')?.addEventListener('change',updateSendBalance);
   document.getElementById('sendBtn')?.addEventListener('click',()=>{
     sendModal.classList.add('open');
@@ -8467,12 +8469,17 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   document.getElementById('txStatusDoneBtn')?.addEventListener('click',()=>{clearStatusTimers();document.getElementById('txStatusModal').classList.remove('open');});
   document.getElementById('txStatusModal')?.addEventListener('click',e=>{if(e.target.id==='txStatusModal'){clearStatusTimers();e.currentTarget.classList.remove('open');}});
 
-  // Keep custom crypto assets compatible with the existing send amount formatter.
-  updateSendBalance = function(){
-    const a=document.getElementById('sendAsset')?.value,b=Number(getBalanceForCurrency(a)||0),unit=document.getElementById('sendAmountUnit'),avail=document.getElementById('sendAvailableBalance');
+  // Enhancement-scope helper. The base send runtime keeps its own private helper.
+  function updateSendBalance(){
+    const a=document.getElementById('sendAsset')?.value;
     if(!a)return;
-    const dec=displayAssetDecimals(a);if(unit)unit.textContent=a;if(avail)avail.textContent=`Available: ${b.toFixed(dec)} ${a}`;
-  };
+    const b=Number(getBalanceForCurrency(a)||0);
+    const dec=displayAssetDecimals(a);
+    const unit=document.getElementById('sendAmountUnit');
+    const avail=document.getElementById('sendAvailableBalance');
+    if(unit)unit.textContent=a;
+    if(avail)avail.textContent=`Available: ${b.toFixed(dec)} ${a}`;
+  }
 
   // Re-render after the existing runtime finishes wiring its controls.
   renderAddressBook();
