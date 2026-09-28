@@ -7147,7 +7147,7 @@ assetModalInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefa
 (function setupAssetTripleClicks(){document.querySelectorAll('.item-value[data-asset]').forEach(el=>{let clicks=[];el.addEventListener('click',e=>{const now=Date.now();clicks.push(now);clicks=clicks.filter(t=>now-t<=1000);if(clicks.length>=3){clicks=[];e.preventDefault();e.stopPropagation();openAssetModal(el.getAttribute('data-asset')); }});});})();
 window.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;if(!e.shiftKey)return;if(e.key.toLowerCase()==='q'){e.preventDefault();openWalletEditor();}});
 restoreUiSettings();['toggleHideBalances','toggleBiometrics','toggleTxAlerts','togglePriceAlerts','settingLanguage','settingDefaultCurrency'].forEach(id=>document.getElementById(id)?.addEventListener('change',persistUiSettings));
-currencySelector?.addEventListener('change',()=>{saveEverything();});
+document.getElementById('walletSelector')?.addEventListener('change',()=>{saveEverything();});
 window.addEventListener('pagehide',()=>{persistAccountingState();persistUiSettings();});
 
 function updateTickerBar(coin){
@@ -8809,10 +8809,11 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     openTradeConfirmation({confirmLabel:`Confirm Send ${asset}`,rows:[{label:'Recipient',value:address},{label:'Amount',value:`-${amount.toFixed(asset==='SOL'||asset==='BTC'||asset==='ETH'?6:2)} ${asset}`,emphasis:true}]});
   });
   let pendingSend=null;
+  const tradeConfirmModal=document.getElementById('tradeConfirmModal');
+  const tradeConfirmSubmit=document.getElementById('tradeConfirmSubmit');
   document.getElementById('tradeConfirmCancel')?.addEventListener('click',()=>{pendingSend=null;});
   tradeConfirmModal?.addEventListener('click',e=>{if(e.target===tradeConfirmModal)pendingSend=null;});
-  // Extend the existing trade-confirm button by handling the pending send case.
-  tradeConfirmSubmit.addEventListener('click',()=>{
+  tradeConfirmSubmit?.addEventListener('click',()=>{
     if(!pendingSend)return;
     const p=pendingSend;tradeConfirmSubmit.classList.add('loading');
     setTimeout(()=>{
