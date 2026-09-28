@@ -6069,11 +6069,15 @@ body.theme-light .profile-editor{
 <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span data-i18n="navSettings">Settings</span></a>
 </div>
 </div>
-<div class="sidebar-profile" id="sidebarProfile" aria-hidden="false">
+<div class="sidebar-profile wallet-account-area" id="sidebarProfile" aria-hidden="false">
 <div class="profile-avatar"><img id="profileAvatarImg" src="" alt="avatar"></div>
 <div class="profile-info">
 <div class="profile-name" id="profileName">@3sa</div>
-<div class="profile-tag" id="profileEditHint">Current wallet</div>
+<div class="profile-tag" id="profileEditHint">Change account</div>
+<select class="sidebar-wallet-selector" id="accountWalletSelector" aria-label="Change account">
+<option value="main">@3sa</option>
+<option value="1eisau">@1eisau</option>
+</select>
 </div>
 </div>
 </nav>
@@ -6090,16 +6094,10 @@ body.theme-light .profile-editor{
 <div class="balance-card">
 <div class="balance-header-row">
 <div class="balance-title-row" data-i18n="totalBalanceTitle">Total Balance</div>
-<div class="wallet-selector-group">
-<select class="wallet-selector" id="accountWalletSelector" aria-label="Select wallet">
-<option value="main">@3sa</option>
-<option value="1eisau">@1eisau</option>
-</select>
 <select class="wallet-selector" id="walletSelector" aria-label="Select currency">
 <option value="CAD">CAD Wallet</option>
 <option value="USD">USD Wallet</option>
 </select>
-</div>
 </div>
 <div>
 <div class="main-balance" id="totalBalance">$1,000.00<span class="currency-label">CAD</span></div>
@@ -6820,7 +6818,7 @@ const AVATAR_DATA_URI = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOwAAADsC
     const display='@'+handle;
     if(profileName)profileName.textContent=display;
     if(introProfileHandle)introProfileHandle.textContent=display;
-    if(profileEditHint)profileEditHint.textContent='Current wallet';
+    if(profileEditHint)profileEditHint.textContent='Change account';
     if(profileAvatarImg)profileAvatarImg.src=AVATAR_DATA_URI;
   }
   renderProfile();
@@ -10310,4 +10308,32 @@ const renderProfileAccountLabel=()=>{
 #sidebarProfile{cursor:default !important;}
 #sidebarProfile:hover,
 #sidebarProfile:active{background:transparent !important;}
+#accountWalletSelector{display:block !important;}
+</style>
+
+<style id="sidebar-native-wallet-selector">
+.wallet-account-area{cursor:default!important;align-items:center}
+.wallet-account-area .profile-info{min-width:0;flex:1}
+.sidebar-wallet-selector{
+  display:block;
+  width:100%;
+  margin-top:5px;
+  padding:0;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--text-muted);
+  font:inherit;
+  font-size:11px;
+  line-height:1.2;
+  appearance:auto;
+  -webkit-appearance:auto;
+  cursor:pointer;
+}
+.sidebar-wallet-selector option{color:#111;background:#fff}
+.theme-light .sidebar-wallet-selector option{color:#111;background:#fff}
+.wallet-account-area .profile-tag{display:none}
+@media(max-width:600px){
+  .sidebar-wallet-selector{font-size:11px;min-height:24px}
+}
 </style>
