@@ -5053,6 +5053,9 @@ body.theme-light .own-wallet-picker select{
   }
 }
 body.theme-light .address-book-hero{background:linear-gradient(135deg,#fff,#f6f8fb);border-color:#e2e7ee}body.theme-light .contact-avatar,body.theme-light .asset-manager-icon{background:#f1f4f8;border-color:#dfe4ea;color:#1d2430}body.theme-light .contact-action,body.theme-light .asset-manager-action{background:#f6f8fb;border-color:#dfe4ea;color:#28303c}body.theme-light .send-security-preview{background:#f7f9fb;border-color:#e2e7ee}
+.send-contact-picker select{width:100%;background:transparent;border:none;color:#fff;font-size:14px;font-weight:600;outline:none;cursor:pointer}.send-contact-picker select option{background:var(--bg-card);color:#fff}.send-contact-picker .input-row{min-height:42px}.send-contact-picker .input-row::after{display:none}.send-contact-picker select:focus{outline:none}.send-contact-picker .field-subtext{margin-top:5px}
+body.theme-light .send-contact-picker select,body.theme-light .send-contact-picker select option{color:#151a22;background:#fff}
+@media(max-width:600px){.send-contact-picker select{font-size:13px}}
 </style>
 
 <style id="all-tab-refresh-style">
@@ -6079,7 +6082,6 @@ body.theme-light .profile-editor{
 <a href="#" class="sidebar-item" data-target="marketPanel"><i data-lucide="candlestick-chart"></i><span data-i18n="navMarket">Market</span></a>
 <a href="#" class="sidebar-item" data-target="profitsPanel"><i data-lucide="chart-no-axes-combined"></i><span data-i18n="navProfits">Profits & Loss</span></a>
 <a href="#" class="sidebar-item" data-target="recentActivityPage"><i data-lucide="history"></i><span>Recent Activity</span></a>
-<a href="#" class="sidebar-item" data-target="addressBookPanel"><i data-lucide="contact"></i><span>Contacts</span></a>
 <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span data-i18n="navSettings">Settings</span></a>
 </div>
 </div>
@@ -6310,22 +6312,6 @@ body.theme-light .profile-editor{
 </div>
 </section>
 
-<section class="page-panel" id="addressBookPanel">
-<div class="scroll-content">
-<div class="dashboard-header">
-<div class="dashboard-title-group">
-<button class="menu-btn" type="button" onclick="openSidebar()"><i data-lucide="menu"></i></button>
-<h1 class="dashboard-title">Contacts</h1>
-</div>
-<button class="wallet-inline-btn prominent" id="addAddressBookContactBtn" type="button"><i data-lucide="plus"></i>Add Contact</button>
-</div>
-<div class="asset-list">
-<div class="panel-header"><span class="panel-title">Contacts</span><span class="contact-count" id="addressBookCount">0</span></div>
-<div id="addressBookList"></div>
-</div>
-</div>
-</section>
-
 <section class="page-panel" id="assetsPanel">
 <div class="scroll-content">
 <div class="dashboard-header">
@@ -6478,6 +6464,10 @@ body.theme-light .profile-editor{
 <label>Asset</label>
 <div class="input-row"><select id="sendAsset"><option value="SOL">SOL</option><option value="BTC">BTC</option><option value="ETH">ETH</option></select></div>
 </div>
+<div class="modal-field send-contact-picker" style="margin-bottom:10px;">
+<label>Contact</label>
+<div class="input-row"><select id="sendContactPicker" aria-label="Choose saved contact"><option value="">Choose a contact</option></select></div>
+</div>
 <div class="modal-field" style="margin-bottom:10px;">
 <label>Recipient address</label>
 <div class="input-row"><input type="text" id="sendAddress" value="" placeholder="Wallet address" autocomplete="off" maxlength="64" spellcheck="false" style="text-align:left;"></div>
@@ -6490,7 +6480,7 @@ body.theme-light .profile-editor{
 <div class="feature-inline-actions" style="margin-bottom:12px;">
 <button class="modal-btn" id="scanQrBtn" type="button" style="background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.1);"><i data-lucide="scan-line"></i>Scan QR</button>
 <button class="modal-btn" id="pasteQrBtn" type="button" style="background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.1);"><i data-lucide="clipboard"></i>Paste</button>
-<button class="modal-btn" id="openAddressBookFromSendBtn" type="button" style="background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.1);"><i data-lucide="contact"></i>Contacts</button>
+
 </div>
 <div class="modal-field" style="margin-bottom:10px;">
 <label>Amount</label>
@@ -8688,6 +8678,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   sendAddressInput?.addEventListener('focus',()=>{setTimeout(()=>{try{sendAddressInput.setSelectionRange(sendAddressInput.value.length,sendAddressInput.value.length);}catch(_){ }},0);});
   sendAddressInput?.addEventListener('input',normalizeSendAddress);
   function updateSendBalance(){const a=document.getElementById('sendAsset')?.value; if(!a)return; const b=Number(getBalanceForCurrency(a)||0); const dec=displayAssetDecimals(a); const unit=document.getElementById('sendAmountUnit'); const avail=document.getElementById('sendAvailableBalance'); if(unit)unit.textContent=a; if(avail)avail.textContent=`Available: ${b.toFixed(dec)} ${a}`;}
+  window.updateSendBalance=updateSendBalance;
   document.getElementById('sendAsset')?.addEventListener('change',updateSendBalance);
   document.getElementById('sendBtn')?.addEventListener('click',()=>{
     sendModal.classList.add('open');
@@ -8924,6 +8915,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
 
     // Address-book contacts can be saved against any wallet crypto asset.
     fillSelect('addressBookAssetInput', walletCrypto, 'SOL');
+    renderSendContactOptions();
 
     // Exchange can use fiat or any crypto asset, including custom assets.
     const exchangeAssets = ['CAD','USD',...walletCrypto];
@@ -9026,6 +9018,42 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
       {id:'contact-abdullakh',address:makeSavedAddress('abdullakh-wallet'),handle:'abdullakh',name:'',asset:'SOL',note:'',createdAt:now}
     ];
   }
+  function renderSendContactOptions(){
+    const select=document.getElementById('sendContactPicker');
+    if(!select)return;
+    const current=select.value;
+    const contacts=Array.isArray(addressBook)?addressBook.filter(c=>!c?.isOwnWallet):[];
+    select.innerHTML='<option value="">Choose a contact</option>'+contacts.map(c=>{
+      const id=esc(c.id);
+      const label=contactLabel(c);
+      const asset=normalizeSymbol(c.asset||'SOL');
+      const suffix=asset?` · ${asset}`:'';
+      return `<option value="${id}">${esc(label)}${esc(suffix)}</option>`;
+    }).join('');
+    if(current&&contacts.some(c=>String(c.id)===current))select.value=current;
+  }
+  function selectSendContact(id){
+    const c=addressBook.find(row=>String(row.id)===String(id));
+    const sendAsset=document.getElementById('sendAsset');
+    const sendAddress=document.getElementById('sendAddress');
+    const sendOwnWallet=document.getElementById('sendOwnWallet');
+    if(!c){
+      if(sendOwnWallet){sendOwnWallet.value='';}
+      if(sendAddress){sendAddress.readOnly=false;}
+      return;
+    }
+    const asset=normalizeSymbol(c.asset||'SOL');
+    if(sendAsset&&isCryptoAsset(asset)&&allWalletAssetSymbols().includes(asset))sendAsset.value=asset;
+    if(sendOwnWallet)sendOwnWallet.value='';
+    if(sendAddress){
+      sendAddress.readOnly=false;
+      sendAddress.value=contactAddress(c);
+    }
+    updateSendBalance();
+    const sendError=document.getElementById('sendError');
+    if(sendError)sendError.style.display='none';
+  }
+
   function loadAddressBook(){
     const newKey=ADDRESS_BOOK_STORAGE_KEY;
     const legacyKey='wallet_demo_address_book_v1';
@@ -9290,7 +9318,6 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     if(typeof window.setActivePanel==='function')window.setActivePanel('walletPanel');
   }
   document.getElementById('addAddressBookContactBtn')?.addEventListener('click',()=>openContactModal());
-  document.getElementById('openAddressBookFromSendBtn')?.addEventListener('click',()=>{document.getElementById('sendModal')?.classList.remove('open');document.querySelector('[data-target="addressBookPanel"]')?.click();});
   document.getElementById('addressBookCancelBtn')?.addEventListener('click',closeContactModal);
   document.getElementById('addressBookEditModal')?.addEventListener('click',e=>{if(e.target.id==='addressBookEditModal')closeContactModal();});
   const contactAddressInput=document.getElementById('addressBookAddressInput');
@@ -9386,6 +9413,8 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
 
   // Load persisted/seeded contacts before the first render.
   loadAddressBook();
+  renderSendContactOptions();
+  document.getElementById('sendContactPicker')?.addEventListener('change',e=>selectSendContact(e.target.value));
 
   // Re-render after the existing runtime finishes wiring its controls.
   renderAddressBook();
@@ -9552,8 +9581,21 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
 </script>
 
 
-</body>
-</html>
+
+
+<style id="mobile-intro-lower-only">
+@media (max-width:768px){
+  /* Lower the intro composition on phones only. Desktop is unchanged. */
+  .intro .orb{
+    position:relative;
+    top:clamp(22px,4vh,30px)!important;
+  }
+  .intro .intro-welcome{
+    top:calc(50% + min(163px,41vw))!important;
+  }
+}
+</style>
+
 <style>
 
 /* Light appearance: keep the reload indicator visually consistent with the light UI. */
@@ -9934,10 +9976,15 @@ const renderProfileAccountLabel=()=>{
       if(accountWalletSelect)accountWalletSelect.value=activeWalletId;
       return;
     }
+    // Save the wallet we are leaving, then load the destination directly from
+    // the in-memory multi-wallet record that was just persisted by a transfer.
     syncActiveWalletIntoRecord();
-    activeWalletId=nextId;
-    loadWalletIntoGlobals(nextId);
     saveWalletAccounts();
+    activeWalletId=nextId;
+    if(!loadWalletIntoGlobals(nextId)){
+      populateWalletSelectors();
+      return;
+    }
     rerenderWalletUI();
     renderProfileAccountLabel?.();
     saveEverything();
@@ -10058,7 +10105,7 @@ const renderProfileAccountLabel=()=>{
         const w=pendingInternalTransfer.target;
         const row=document.createElement('div');
         row.className='send-security-preview';
-        row.innerHTML=`<div class="send-security-head"><i data-lucide="wallet"></i><span>Internal wallet transfer</span><span class="send-security-badge trusted">My wallet</span></div><div class="send-security-row"><span>Destination</span><span>@${escLocal(w.handle)}</span></div><div class="send-security-row"><span>Address</span><span>${escLocal(pendingInternalTransfer.address)}</span></div>`;
+        row.innerHTML=`<div class="send-security-head"><i data-lucide="wallet"></i><span>Internal wallet transfer</span><span class="send-security-badge trusted">My wallet</span></div><div class="send-security-row"><span>Destination</span><span>@${escLocal(w.handle)}</span></div><div class="send-security-row"><span>Address</span><span>${escLocal(pendingInternalTransfer.address)}</span></div><div class="send-security-row"><span>Amount</span><span>${escLocal(String(pendingInternalTransfer.amount))} ${escLocal(pendingInternalTransfer.asset)}</span></div>`;
         summary.appendChild(row);
         window.lucide?.createIcons({nodes:[row]});
       },0);
@@ -10066,16 +10113,22 @@ const renderProfileAccountLabel=()=>{
   },true);
 
   const transferBetweenWallets=(request)=>{
+    // Commit the currently displayed wallet first so the source balance is current.
     syncActiveWalletIntoRecord();
-    const from=walletAccounts.find(w=>w.id===activeWalletId);
-    const to=walletAccounts.find(w=>w.id===request.target.id);
+    const sourceId=activeWalletId;
+    const targetId=request?.target?.id;
+    const from=walletAccounts.find(w=>w.id===sourceId);
+    const to=walletAccounts.find(w=>w.id===targetId);
     if(!from||!to)return {ok:false,error:'Wallet not found.'};
-    const asset=request.asset;
-    const amount=num(request.amount);
+    if(from.id===to.id)return {ok:false,error:'Choose a different wallet.'};
+
+    const asset=String(request?.asset||'').toUpperCase();
+    const amount=num(request?.amount);
+    if(!['CAD','USD','BTC','SOL','ETH'].includes(asset))return {ok:false,error:'Unsupported asset.'};
     if(amount<=0)return {ok:false,error:'Enter an amount greater than zero.'};
 
     const getWalletBalance=(wallet,curr)=>{
-      const b=wallet.balances;
+      const b=wallet.balances||{};
       if(curr==='CAD')return num(b.displayBalanceCAD);
       if(curr==='USD')return num(b.displayBalanceUSD);
       if(curr==='BTC')return num(b.bitcoinBalance);
@@ -10084,7 +10137,8 @@ const renderProfileAccountLabel=()=>{
       return 0;
     };
     const setWalletBalance=(wallet,curr,value)=>{
-      const v=Math.max(0,value);
+      const v=Math.max(0,num(value));
+      wallet.balances=wallet.balances||{};
       if(curr==='CAD'){wallet.balances.displayBalanceCAD=v;wallet.balances.internalHiddenBalanceCAD=v;}
       else if(curr==='USD'){wallet.balances.displayBalanceUSD=v;wallet.balances.internalHiddenBalanceUSD=v;}
       else if(curr==='BTC')wallet.balances.bitcoinBalance=normalizeAssetAmount('BTC',v);
@@ -10093,35 +10147,50 @@ const renderProfileAccountLabel=()=>{
       else return false;
       return true;
     };
+
     const available=getWalletBalance(from,asset);
     if(amount>available+1e-10)return {ok:false,error:`Insufficient ${asset} balance.`};
 
+    // Move crypto cost basis with the coins, then move the visible balance itself.
     let transferredBasis=0;
     if(isCryptoAsset(asset)){
-      const lots=Array.isArray(from.costBasisLots?.[asset])?from.costBasisLots[asset]:[];
+      if(!from.costBasisLots||typeof from.costBasisLots!=='object')from.costBasisLots={};
+      if(!Array.isArray(from.costBasisLots[asset]))from.costBasisLots[asset]=[];
+      if(!to.costBasisLots||typeof to.costBasisLots!=='object')to.costBasisLots={};
+      if(!Array.isArray(to.costBasisLots[asset]))to.costBasisLots[asset]=[];
+
       let remaining=amount;
-      while(remaining>1e-10&&lots.length){
-        const lot=lots[0];
-        const take=Math.min(remaining,num(lot.qty));
-        const unit=num(lot.qty)>0?num(lot.costCad)/num(lot.qty):0;
+      while(remaining>1e-10&&from.costBasisLots[asset].length){
+        const lot=from.costBasisLots[asset][0];
+        const qty=num(lot?.qty);
+        const costCad=num(lot?.costCad);
+        const take=Math.min(remaining,qty);
+        const unit=qty>0?costCad/qty:0;
         transferredBasis+=unit*take;
-        lot.qty-=take;
-        lot.costCad-=unit*take;
+        lot.qty=Math.max(0,qty-take);
+        lot.costCad=Math.max(0,costCad-unit*take);
         remaining-=take;
-        if(lot.qty<=1e-10||Math.abs(lot.costCad)<1e-10)lots.shift();
+        if(lot.qty<=1e-10)from.costBasisLots[asset].shift();
       }
       if(transferredBasis<=0)transferredBasis=amount*(liveCadPrice(asset)||0);
-      if(!Array.isArray(to.costBasisLots[asset]))to.costBasisLots[asset]=[];
-      to.costBasisLots[asset].push({qty:amount,costCad:Math.max(0,transferredBasis)});
+      to.costBasisLots[asset].push({qty:normalizeAssetAmount(asset,amount),costCad:Math.max(0,transferredBasis)});
     }
-    if(!setWalletBalance(from,asset,available-amount))return {ok:false,error:'Unsupported asset.'};
-    setWalletBalance(to,asset,getWalletBalance(to,asset)+amount);
-    from.costBasisInitialized=from.costBasisInitialized||isCryptoAsset(asset);
-    to.costBasisInitialized=true;
 
-    loadWalletIntoGlobals(activeWalletId);
+    if(!setWalletBalance(from,asset,available-amount))return {ok:false,error:'Unsupported asset.'};
+    if(!setWalletBalance(to,asset,getWalletBalance(to,asset)+amount))return {ok:false,error:'Unsupported asset.'};
+
+    from.costBasisInitialized=from.costBasisInitialized||isCryptoAsset(asset);
+    to.costBasisInitialized=to.costBasisInitialized||isCryptoAsset(asset);
+
+    // Keep the destination wallet record persistent. This is the critical part:
+    // the receiving wallet must be written to the multi-wallet store before any
+    // global single-wallet persistence runs.
     saveWalletAccounts();
-    try{basePersistAccountingState();}catch(_){}
+
+    // Restore the source wallet globals and persist those globals as well.
+    loadWalletIntoGlobals(sourceId);
+    try{persistAccountingState();}catch(_){}
+
     renderBalance();
     updateAvailableBalanceSubtext();
     window.renderTransactionHistory?.();
@@ -10135,9 +10204,11 @@ const renderProfileAccountLabel=()=>{
       address,
       fromWalletId:from.id,
       toWalletId:to.id,
+      walletId:sourceId,
       internal:true,
       walletName:to.name
     });
+
     showToast(`Moved ${amount.toFixed(isCryptoAsset(asset)?6:2)} ${asset} to ${to.name}`,2600);
     return {ok:true};
   };
@@ -10356,3 +10427,5 @@ const renderProfileAccountLabel=()=>{
   .sidebar-wallet-selector{font-size:11px;min-height:24px}
 }
 </style>
+</body>
+</html>
