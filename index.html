@@ -5058,26 +5058,27 @@ body.theme-light .address-book-hero{background:linear-gradient(135deg,#fff,#f6f8
 .sidebar-profile:focus-visible{outline:2px solid rgba(255,255,255,.25);outline-offset:2px;}
 .sidebar-profile.editing{background:rgba(255,255,255,.045);}
 .profile-chevron{transition:transform .22s cubic-bezier(.22,1,.36,1),opacity .18s ease;}
-.sidebar-profile.editing .profile-chevron{transform:rotate(-8deg);opacity:1;}
+.sidebar-profile.editing .profile-chevron{transform:translateY(-1px);opacity:1;}
 .profile-editor{position:absolute;left:10px;right:10px;bottom:calc(100% + 10px);padding:14px;border:1px solid var(--border-hover);border-radius:16px;background:rgba(18,18,21,.98);box-shadow:0 18px 48px rgba(0,0,0,.48),0 3px 12px rgba(0,0,0,.3);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);opacity:0;transform:translateY(8px) scale(.985);pointer-events:none;transition:opacity .18s ease,transform .22s cubic-bezier(.22,1,.36,1);z-index:30;}
 .profile-editor.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
-.profile-editor-title{font-size:13px;font-weight:800;color:var(--text-main);margin-bottom:12px;}
-.profile-editor-label{display:block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text-muted);margin:10px 0 6px;}
-.profile-editor-label span{font-weight:500;text-transform:none;letter-spacing:0;}
-.profile-handle-input{display:flex;align-items:center;gap:7px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:10px;padding:0 11px;min-height:42px;}
-.profile-handle-input span{font-size:13px;font-weight:700;color:var(--text-muted);}
-.profile-handle-input input,.profile-editor-input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--text-main);font-size:13px;font-weight:600;padding:10px 0;}
-.profile-editor-input{box-sizing:border-box;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:10px;padding:10px 11px;}
-.profile-handle-input:focus-within,.profile-editor-input:focus{border-color:rgba(255,255,255,.28);}
-.profile-editor-actions{display:flex;gap:8px;margin-top:14px;}
-.profile-editor-btn{flex:1;min-height:40px;border-radius:10px;border:1px solid var(--border-hover);font-size:12px;font-weight:700;cursor:pointer;}
-.profile-editor-btn.cancel{background:rgba(255,255,255,.05);color:var(--text-main);}
-.profile-editor-btn.save{background:#fff;color:#0b0b0d;border-color:#fff;}
-.profile-editor-btn:active{transform:scale(.98);}
+.profile-editor-title{font-size:13px;font-weight:800;color:var(--text-main);margin-bottom:10px;}
+.account-switcher-list{display:flex;flex-direction:column;gap:7px;max-height:min(42vh,300px);overflow:auto;}
+.account-switcher-btn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 11px;border:1px solid var(--border-subtle);border-radius:12px;background:rgba(255,255,255,.035);color:var(--text-main);cursor:pointer;text-align:left;transition:background .18s ease,border-color .18s ease,transform .18s cubic-bezier(.22,1,.36,1);}
+.account-switcher-btn:hover{background:rgba(255,255,255,.07);border-color:var(--border-hover);transform:translateY(-1px);}
+.account-switcher-btn.active{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);}
+.account-switcher-icon{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--text-main);flex-shrink:0;}
+.account-switcher-icon i{width:14px;height:14px;}
+.account-switcher-copy{min-width:0;flex:1;}
+.account-switcher-name{font-size:12px;font-weight:750;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.account-switcher-meta{font-size:10px;color:var(--text-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.account-switcher-check{width:15px;height:15px;color:var(--accent-green);opacity:0;}
+.account-switcher-btn.active .account-switcher-check{opacity:1;}
 body.theme-light .profile-editor{background:rgba(255,255,255,.98);border-color:#dfe4eb;box-shadow:0 18px 48px rgba(20,28,38,.18),0 3px 12px rgba(20,28,38,.1);}
-body.theme-light .profile-handle-input,body.theme-light .profile-editor-input{background:#f5f7fa;border-color:#dfe4eb;}
-body.theme-light .profile-editor-btn.cancel{background:#f2f5f8;border-color:#dfe4eb;color:#18202b;}
-@media(max-width:768px){.profile-editor{left:8px;right:8px;bottom:calc(100% + 8px);max-height:min(52vh,360px);overflow-y:auto;}}
+body.theme-light .account-switcher-btn{background:#f7f9fb;border-color:#e0e5eb;color:#17202a;}
+body.theme-light .account-switcher-btn:hover{background:#eef2f6;border-color:#d4dbe3;}
+body.theme-light .account-switcher-btn.active{background:#e8edf2;border-color:#cfd7e0;}
+body.theme-light .account-switcher-icon{background:#eef2f6;border-color:#dbe1e8;color:#18202b;}
+@media(max-width:768px){.profile-editor{left:8px;right:8px;bottom:calc(100% + 8px);max-height:min(52vh,360px);overflow-y:auto;}.account-switcher-list{max-height:min(38vh,260px);}}
 </style>
 
 </head>
@@ -5248,21 +5249,12 @@ body.theme-light .profile-editor-btn.cancel{background:#f2f5f8;border-color:#dfe
 <div class="profile-avatar"><img id="profileAvatarImg" src="" alt="avatar"></div>
 <div class="profile-info">
 <div class="profile-name" id="profileName">@3sa</div>
-<div class="profile-tag" id="profileEditHint">Edit account</div>
+<div class="profile-tag" id="profileEditHint">Switch account</div>
 </div>
-<div class="profile-chevron"><i data-lucide="pencil"></i></div>
-<div class="profile-editor" id="profileEditor" aria-hidden="true">
-  <div class="profile-editor-title">Edit account</div>
-  <label class="profile-editor-label" for="accountHandleInput">Handle</label>
-  <div class="profile-handle-input">
-    <span>@</span><input id="accountHandleInput" type="text" inputmode="text" autocomplete="off" spellcheck="false" maxlength="30" placeholder="3sa">
-  </div>
-  <label class="profile-editor-label" for="accountEmailInputNew">Email <span>(optional)</span></label>
-  <input id="accountEmailInputNew" class="profile-editor-input" type="email" autocomplete="email" placeholder="Email address">
-  <div class="profile-editor-actions">
-    <button type="button" class="profile-editor-btn cancel" id="accountEditCancel">Cancel</button>
-    <button type="button" class="profile-editor-btn save" id="accountEditSave">Save</button>
-  </div>
+<div class="profile-chevron"><i data-lucide="chevrons-up-down"></i></div>
+<div class="profile-editor account-switcher" id="profileEditor" aria-hidden="true">
+  <div class="profile-editor-title">Switch account</div>
+  <div class="account-switcher-list" id="accountSwitcherList"></div>
 </div>
 </div>
 </nav>
@@ -5279,10 +5271,9 @@ body.theme-light .profile-editor-btn.cancel{background:#f2f5f8;border-color:#dfe
 <div class="balance-card">
 <div class="balance-header-row">
 <div class="balance-title-row" data-i18n="totalBalanceTitle">Total Balance</div>
-<select class="wallet-selector" id="walletSelector" aria-label="Select wallet">
-<option value="main">Main Wallet • @3sa</option>
-<option value="savings">Savings Wallet • @savings</option>
-<option value="trading">Trading Wallet • @trading</option>
+<select class="wallet-selector" id="walletSelector" aria-label="Select currency">
+<option value="CAD">CAD Wallet</option>
+<option value="USD">USD Wallet</option>
 </select>
 </div>
 <div>
@@ -5979,7 +5970,7 @@ const sidebarOverlay = document.getElementById('sidebarOverlay');
 const menuBtn = document.getElementById('menuBtn');
 const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
 function openSidebar() { sidebar.classList.add('open'); sidebarOverlay.classList.add('open'); }
-function closeSidebar() { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('open'); const pe=document.getElementById('profileEditor'); const sp=document.getElementById('sidebarProfile'); const ph=document.getElementById('profileEditHint'); if(pe) { pe.classList.remove('open'); pe.setAttribute('aria-hidden','true'); } if(sp) { sp.classList.remove('active','editing'); sp.setAttribute('aria-expanded','false'); } if(ph) ph.textContent='Edit account'; }
+function closeSidebar() { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('open'); const pe=document.getElementById('profileEditor'); const sp=document.getElementById('sidebarProfile'); if(pe) { pe.classList.remove('open'); pe.setAttribute('aria-hidden','true'); } if(sp) { sp.classList.remove('active','editing'); sp.setAttribute('aria-expanded','false'); } }
 if (menuBtn) menuBtn.addEventListener('click', openSidebar);
 if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeSidebar);
 if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
@@ -5991,10 +5982,6 @@ const AVATAR_DATA_URI = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOwAAADsC
   const profileEditHint=document.getElementById('profileEditHint');
   const sidebarProfile=document.getElementById('sidebarProfile');
   const profileEditor=document.getElementById('profileEditor');
-  const accountHandleInput=document.getElementById('accountHandleInput');
-  const accountEmailInputNew=document.getElementById('accountEmailInputNew');
-  const accountEditCancel=document.getElementById('accountEditCancel');
-  const accountEditSave=document.getElementById('accountEditSave');
   const introProfileHandle=document.getElementById('introProfileHandle');
 
   let profile={handle:'3sa',email:''};
@@ -6006,63 +5993,34 @@ const AVATAR_DATA_URI = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOwAAADsC
     }
   }catch(_){ }
 
-  function cleanHandle(value){
-    return String(value||'').trim().replace(/^@+/,'').replace(/[^A-Za-z0-9._-]/g,'').slice(0,30);
-  }
   function renderProfile(){
-    const handle=cleanHandle(profile.handle)||'3sa';
+    const handle=String(profile.handle||'3sa').trim().replace(/^@+/,'')||'3sa';
     profile.handle=handle;
     const display='@'+handle;
     profileName.textContent=display;
     if(introProfileHandle) introProfileHandle.textContent=display;
+    if(profileEditHint) profileEditHint.textContent='Switch account';
     if(profileAvatarImg) profileAvatarImg.src=AVATAR_DATA_URI;
   }
-  function persistProfile(){
-    try{localStorage.setItem(PROFILE_STORAGE_KEY,JSON.stringify(profile));}catch(_){ }
-  }
+
   function setProfileEditor(open){
     const isOpen=Boolean(open);
-    profileEditor.classList.toggle('open',isOpen);
-    sidebarProfile.classList.toggle('editing',isOpen);
-    sidebarProfile.setAttribute('aria-expanded',String(isOpen));
-    profileEditor.setAttribute('aria-hidden',String(!isOpen));
-    if(isOpen){
-      accountHandleInput.value=profile.handle;
-      accountEmailInputNew.value=profile.email;
-      profileEditHint.textContent='Editing';
-      requestAnimationFrame(()=>{accountHandleInput.focus();accountHandleInput.select();});
-    }else{
-      profileEditHint.textContent='Edit account';
-    }
-  }
-  function saveProfile(){
-    const handle=cleanHandle(accountHandleInput.value);
-    if(!handle){accountHandleInput.focus();showToast('Enter a handle first',1800);return;}
-    const email=String(accountEmailInputNew.value||'').trim();
-    if(email && !email.includes('@')){accountEmailInputNew.focus();showToast('Enter a valid email',1800);return;}
-    profile={handle,email};
-    persistProfile();
-    renderProfile();
-    setProfileEditor(false);
-    showToast('Account updated',1800);
+    profileEditor?.classList.toggle('open',isOpen);
+    sidebarProfile?.classList.toggle('editing',isOpen);
+    sidebarProfile?.setAttribute('aria-expanded',String(isOpen));
+    profileEditor?.setAttribute('aria-hidden',String(!isOpen));
   }
 
   renderProfile();
-  sidebarProfile.addEventListener('click',e=>{
-    if(e.target.closest('.profile-editor')) return;
-    setProfileEditor(!profileEditor.classList.contains('open'));
+  sidebarProfile?.addEventListener('click',e=>{
+    if(e.target.closest('.account-switcher-btn')) return;
+    setProfileEditor(!profileEditor?.classList.contains('open'));
   });
-  sidebarProfile.addEventListener('keydown',e=>{
-    if(e.key==='Enter'||e.key===' '){e.preventDefault();setProfileEditor(!profileEditor.classList.contains('open'));}
+  sidebarProfile?.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();setProfileEditor(!profileEditor?.classList.contains('open'));}
   });
-  accountEditCancel.addEventListener('click',e=>{e.stopPropagation();setProfileEditor(false);});
-  accountEditSave.addEventListener('click',e=>{e.stopPropagation();saveProfile();});
-  [accountHandleInput,accountEmailInputNew].forEach(input=>{
-    input.addEventListener('click',e=>e.stopPropagation());
-    input.addEventListener('keydown',e=>{
-      if(e.key==='Enter'){e.preventDefault();saveProfile();}
-      if(e.key==='Escape'){e.preventDefault();setProfileEditor(false);}
-    });
+  document.addEventListener('click',e=>{
+    if(!sidebarProfile?.contains(e.target)) setProfileEditor(false);
   });
 })();
 let recentActivities = [];
@@ -6242,7 +6200,7 @@ item.addEventListener('click', e => {
 e.preventDefault();
 sidebarItems.forEach(nav => nav.classList.remove('active'));
 item.classList.add('active');
-const sp=document.getElementById('sidebarProfile'); const pe=document.getElementById('profileEditor'); const ph=document.getElementById('profileEditHint'); if(sp){sp.classList.remove('active','editing');sp.setAttribute('aria-expanded','false');} if(pe){pe.classList.remove('open');pe.setAttribute('aria-hidden','true');} if(ph)ph.textContent='Edit account';
+const sp=document.getElementById('sidebarProfile'); const pe=document.getElementById('profileEditor'); if(sp){sp.classList.remove('active','editing');sp.setAttribute('aria-expanded','false');} if(pe){pe.classList.remove('open');pe.setAttribute('aria-hidden','true');}
 const targetId = item.getAttribute('data-target');
 currentPanelId = targetId;
 if(targetId==='profitsPanel' && typeof renderExchangeTransactions==='function') renderExchangeTransactions();
@@ -6372,6 +6330,7 @@ assetModalInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefa
 (function setupAssetTripleClicks(){document.querySelectorAll('.item-value[data-asset]').forEach(el=>{let clicks=[];el.addEventListener('click',e=>{const now=Date.now();clicks.push(now);clicks=clicks.filter(t=>now-t<=1000);if(clicks.length>=3){clicks=[];e.preventDefault();e.stopPropagation();openAssetModal(el.getAttribute('data-asset')); }});});})();
 window.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;if(!e.shiftKey)return;if(e.key.toLowerCase()==='q'){e.preventDefault();openWalletEditor();}});
 restoreUiSettings();['toggleHideBalances','toggleBiometrics','toggleTxAlerts','togglePriceAlerts','settingLanguage','settingDefaultCurrency'].forEach(id=>document.getElementById(id)?.addEventListener('change',persistUiSettings));
+currencySelector?.addEventListener('change',()=>{saveEverything();});
 window.addEventListener('pagehide',()=>{persistAccountingState();persistUiSettings();});
 
 function updateTickerBar(coin){
@@ -9099,7 +9058,8 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     try{basePersistAccountingState();}catch(_){}
   };
 
-  const walletSelector=document.getElementById('walletSelector');
+  const accountWalletSelector=document.getElementById('accountSwitcherList');
+const currencySelector=document.getElementById('walletSelector');
   const sendOwnWallet=document.getElementById('sendOwnWallet');
   const sendAddress=document.getElementById('sendAddress');
   const sendAsset=document.getElementById('sendAsset');
@@ -9108,9 +9068,19 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
   const sendDialog=document.getElementById('sendModal');
 
   const populateWalletSelectors=()=>{
-    if(walletSelector){
-      walletSelector.innerHTML=walletAccounts.map(w=>`<option value="${w.id}">${String(w.name)} • @${String(w.handle)}</option>`).join('');
-      walletSelector.value=activeWalletId;
+    if(accountWalletSelector){
+      accountWalletSelector.innerHTML=walletAccounts.map(w=>{
+        const icon=w.id==='main'?'wallet':w.id==='savings'?'piggy-bank':'candlestick-chart';
+        return `<button class="account-switcher-btn${w.id===activeWalletId?' active':''}" type="button" data-wallet-account="${escLocal(w.id)}"><span class="account-switcher-icon"><i data-lucide="${icon}"></i></span><span class="account-switcher-copy"><span class="account-switcher-name">${escLocal(w.name)}</span><span class="account-switcher-meta">@${escLocal(w.handle)} · ${escLocal(w.id===activeWalletId?'Current account':'Switch to account')}</span></span><i class="account-switcher-check" data-lucide="check"></i></button>`;
+      }).join('');
+      accountWalletSelector.querySelectorAll('[data-wallet-account]').forEach(btn=>btn.addEventListener('click',e=>{
+        e.stopPropagation();
+        switchWallet(btn.dataset.walletAccount);
+        document.getElementById('profileEditor')?.classList.remove('open');
+        document.getElementById('sidebarProfile')?.classList.remove('editing');
+        document.getElementById('sidebarProfile')?.setAttribute('aria-expanded','false');
+      }));
+      window.lucide?.createIcons({nodes:[accountWalletSelector]});
     }
     if(sendOwnWallet){
       const current=sendOwnWallet.value;
@@ -9139,6 +9109,14 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
   };
 
   const currentWallet=()=>walletAccounts.find(w=>w.id===activeWalletId)||walletAccounts[0];
+const renderProfileAccountLabel=()=>{
+    const w=currentWallet();
+    const name=document.getElementById('profileName');
+    const hint=document.getElementById('profileEditHint');
+    if(name&&w)name.textContent='@'+String(w.handle||'3sa').replace(/^@+/,'');
+    if(hint)hint.textContent='Switch account';
+  };
+
 
   const switchWallet=(nextId)=>{
     if(!walletAccounts.some(w=>w.id===nextId)||nextId===activeWalletId)return;
@@ -9147,6 +9125,7 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     loadWalletIntoGlobals(nextId);
     saveWalletAccounts();
     rerenderWalletUI();
+    renderProfileAccountLabel?.();
     saveEverything();
     showToast(`${currentWallet().name} selected`,1800);
   };
@@ -9160,12 +9139,6 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     window.__multiWalletEditorWrapped=true;
   }
 
-  if(walletSelector){
-    walletSelector.addEventListener('change',e=>{
-      e.stopImmediatePropagation();
-      switchWallet(e.target.value);
-    },true);
-  }
 
   const setOwnWalletRecipient=(walletId,asset)=>{
     const w=walletAccounts.find(row=>row.id===walletId);
@@ -9457,6 +9430,7 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
       loadWalletIntoGlobals(state.activeWalletId);
     }
     if(state.ui?.currentCurrency==='USD'||state.ui?.currentCurrency==='CAD')currentCurrency=state.ui.currentCurrency;
+    if(currencySelector)currencySelector.value=currentCurrency;
     populateWalletSelectors();
     rerenderWalletUI();
     setTimeout(()=>{
@@ -9515,6 +9489,7 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
 
   populateWalletSelectors();
   refreshWalletLabel();
+  renderProfileAccountLabel();
   renderBalance();
   updateAvailableBalanceSubtext();
   normalizeStoredContacts();
