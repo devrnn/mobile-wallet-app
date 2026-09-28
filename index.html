@@ -1518,7 +1518,7 @@ overflow: hidden;
 .tx-history-right{text-align:right;flex-shrink:0;min-width:112px}
 .tx-history-amount{font-size:13px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .tx-history-amount.in{color:var(--accent-green)} .tx-history-amount.out{color:var(--accent-red)}
-.tx-history-status{margin-top:3px;font-size:9px;color:var(--text-muted);font-weight:700}
+
 .tx-empty-state{text-align:center;color:var(--text-muted);padding:38px 8px;font-size:12px}
 .qr-layout{display:grid;grid-template-columns:170px minmax(0,1fr);gap:18px;align-items:center;margin-bottom:16px}
 .qr-box{width:170px;height:170px;border-radius:16px;background:#fff;padding:10px;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -2077,7 +2077,7 @@ button,input,select,textarea{max-width:100%;min-width:0}
 .theme-light .recent-activity-page .tx-history-card{background:#fff!important;border-color:#dde3ea!important}
 .theme-light .recent-activity-page .tx-history-row{background:#f8fafc;border-color:#e0e5eb}
 .theme-light .recent-activity-page .tx-history-title{color:#151a22!important}
-.theme-light .recent-activity-page .tx-history-meta,.theme-light .recent-activity-page .tx-history-status{color:#697383!important}
+.theme-light .recent-activity-page .tx-history-meta{color:#697383!important}
 .theme-light .recent-activity-page .tx-history-amount{color:#151a22}
 .theme-light .recent-activity-page .tx-history-amount.in{color:var(--accent-green)!important}
 .theme-light .recent-activity-page .tx-history-amount.out{color:var(--accent-red)!important}
@@ -4964,7 +4964,7 @@ button,
 .address-book-hero{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;margin-bottom:18px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.018));border:1px solid var(--border-subtle);border-radius:18px}.address-book-hero-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:0 0 40px;border-radius:13px;background:rgba(52,211,153,.09);border:1px solid rgba(52,211,153,.18);color:var(--accent-green)}.address-book-hero-icon i{width:19px;height:19px}.address-book-hero-title{font-size:13px;font-weight:800;color:#fff}.address-book-hero-sub{margin-top:4px;font-size:11px;line-height:1.5;color:var(--text-muted)}.contact-count{min-width:24px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--border-subtle);color:var(--text-muted);font-size:10px;font-weight:700;text-align:center}.contact-card{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border-subtle)}.contact-card:last-child{border-bottom:0}.contact-avatar{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#24242b,#151519);border:1px solid rgba(255,255,255,.08);font-size:12px;font-weight:850;color:#fff;flex:0 0 38px}.contact-main{flex:1;min-width:0}.contact-handle{font-size:13px;font-weight:800;color:#fff}.contact-meta{margin-top:3px;font-size:10.5px;color:var(--text-muted);overflow-wrap:anywhere}.contact-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.contact-action{padding:7px 9px;border-radius:9px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#dfe3ec;font-size:10px;font-weight:750;cursor:pointer}.contact-action:hover{background:rgba(255,255,255,.08)}.contact-action.primary{background:#fff;color:#0b0b0d;border-color:#fff}.contact-empty{padding:24px 0;color:var(--text-muted);font-size:12px;text-align:center}.asset-manager-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border-subtle)}.asset-manager-row:last-child{border-bottom:0}.asset-manager-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.045);border:1px solid var(--border-subtle);font-weight:850;color:#fff;flex:0 0 40px}.asset-manager-main{flex:1;min-width:0}.asset-manager-name{font-size:13px;font-weight:800;color:#fff}.asset-manager-meta{margin-top:3px;font-size:10.5px;color:var(--text-muted)}.asset-manager-value{text-align:right;font-variant-numeric:tabular-nums}.asset-manager-balance{font-size:12px;font-weight:800;color:#fff}.asset-manager-cad{margin-top:3px;font-size:10px;color:var(--text-muted)}.asset-manager-actions{display:flex;gap:6px;margin-left:6px}.asset-manager-action{padding:7px 8px;border-radius:9px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#dfe3ec;font-size:10px;font-weight:750;cursor:pointer}.asset-manager-action:hover{background:rgba(255,255,255,.08)}.asset-manager-action.danger{color:#ff9b9b}.asset-manager-note{margin-top:12px;color:var(--text-muted);font-size:10px;line-height:1.45}
 .send-security-preview{margin-top:10px;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025)}.send-security-head{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;color:#fff}.send-security-head i{width:14px;height:14px}.send-security-badge{margin-left:auto;padding:4px 7px;border-radius:7px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px}.send-security-badge.trusted{background:rgba(52,211,153,.1);color:var(--accent-green)}.send-security-badge.review{background:rgba(251,191,36,.1);color:#fbbf24}.send-security-badge.blocked{background:rgba(248,113,113,.1);color:var(--accent-red)}.send-security-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:10.5px}.send-security-row span:first-child{color:var(--text-muted)}.send-security-row span:last-child{color:#fff;font-weight:650;text-align:right;overflow-wrap:anywhere}.send-security-advice{margin-top:6px;font-size:10px;line-height:1.45;color:var(--text-muted)}
 .asset-manager-hero{margin-bottom:18px}
-@media(max-width:600px){.dashboard-header:has(.wallet-inline-btn){align-items:flex-start}.wallet-inline-btn.prominent{padding:8px 10px}.address-book-hero{padding:15px}.contact-card{align-items:flex-start}.contact-actions{max-width:120px}.asset-manager-row{align-items:flex-start}.asset-manager-actions{flex-direction:column}.tx-status-steps{gap:6px}.tx-status-step{padding:9px 6px}}
+@media(max-width:600px){.dashboard-header:has(.wallet-inline-btn){align-items:flex-start}.wallet-inline-btn.prominent{padding:8px 10px}.address-book-hero{padding:15px}.contact-card{align-items:flex-start}.contact-actions{max-width:120px}.asset-manager-row{align-items:flex-start}.asset-manager-actions{flex-direction:column}}
 body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#dfe4ea;color:#293140}body.theme-light .wallet-inline-btn.prominent{background:#101418;color:#fff;border-color:#101418}body.theme-light .address-book-hero{background:linear-gradient(135deg,#fff,#f6f8fb);border-color:#e2e7ee}body.theme-light .contact-avatar,body.theme-light .asset-manager-icon{background:#f1f4f8;border-color:#dfe4ea;color:#1d2430}body.theme-light .contact-action,body.theme-light .asset-manager-action{background:#f6f8fb;border-color:#dfe4ea;color:#28303c}body.theme-light .send-security-preview{background:#f7f9fb;border-color:#e2e7ee}
 </style>
 
@@ -4972,8 +4972,92 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 .tab-pull-indicator{z-index:100}
 </style>
 
+
 </head>
-<body>
+<body>\n<script id="contacts-data-migration-final">
+(function(){
+  try{
+    const key='wallet_demo_address_book_v2';
+    const legacyKey='wallet_demo_address_book_v1';
+    const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const clean=s=>String(s??'').trim();
+    const stripAt=s=>clean(s).replace(/^@+/, '');
+    const makeAddress=seed=>{
+      let h=0, str=String(seed);
+      for(let i=0;i<str.length;i++) h=((h<<5)-h)+str.charCodeAt(i)|0;
+      let out='';
+      for(let i=0;i<10;i++){ h=Math.imul(h^i,16777619); out+=chars[Math.abs(h)%chars.length]; }
+      return out;
+    };
+    const known={
+      '4ranc':makeAddress('4ranc-wallet'),
+      '3zau':makeAddress('3zau-wallet'),
+      'kkwaji':makeAddress('kkwaji-wallet'),
+      'abdullakh':makeAddress('abdullakh-wallet')
+    };
+    let rows=[];
+    const current=JSON.parse(localStorage.getItem(key)||'null');
+    if(Array.isArray(current)) rows=current;
+    else {
+      const legacy=JSON.parse(localStorage.getItem(legacyKey)||'null');
+      if(Array.isArray(legacy)) rows=legacy;
+    }
+
+    const migrated=[];
+    const seenHandles=new Set();
+    const seenAddresses=new Set();
+    rows.forEach((row,index)=>{
+      if(!row || typeof row!=='object') return;
+      let handle=stripAt(row.handle||'');
+      let address=stripAt(row.address||'');
+      if(!handle && row.address && String(row.address).trim().startsWith('@')) handle=stripAt(row.address);
+      if(!address) return;
+
+      // Old versions used @handle as the address. Turn those saved identities
+      // into stable random-looking addresses while keeping the handle.
+      const looksLikeOldIdentity=String(row.address||'').trim().startsWith('@') ||
+        (handle && address.toLowerCase()===handle.toLowerCase());
+      if(known[handle.toLowerCase()]) address=known[handle.toLowerCase()];
+      else if(looksLikeOldIdentity) address=makeAddress((handle||address||row.id||('contact-'+index))+'-wallet');
+
+      const handleKey=handle.toLowerCase();
+      const addressKey=address.toLowerCase();
+      if(handleKey==='raomee' || addressKey==='raomee') return;
+
+      const duplicate=seenAddresses.has(addressKey) || (handleKey && seenHandles.has(handleKey));
+      if(duplicate){
+        const existing=migrated.find(x=>x.address.toLowerCase()===addressKey || (handleKey && x.handle.toLowerCase()===handleKey));
+        if(existing){
+          if(!existing.name && clean(row.name)) existing.name=clean(row.name).slice(0,50);
+          if(!existing.note && clean(row.note)) existing.note=clean(row.note).slice(0,80);
+        }
+        return;
+      }
+      const record={
+        id:String(row.id||`contact-${Date.now()}-${index}`),
+        address:address.slice(0,64),
+        handle:handle.slice(0,50),
+        name:clean(row.name).slice(0,50),
+        asset:clean(row.asset||'SOL').toUpperCase(),
+        note:clean(row.note).slice(0,80),
+        createdAt:row.createdAt||new Date().toISOString()
+      };
+      migrated.push(record); seenAddresses.add(addressKey); if(handleKey)seenHandles.add(handleKey);
+    });
+
+    const now=new Date().toISOString();
+    Object.entries(known).forEach(([handle,address])=>{
+      if(!migrated.some(r=>r.handle.toLowerCase()===handle)) migrated.push({
+        id:`contact-seeded-${handle}`,address,handle,name:'',asset:'SOL',note:'',createdAt:now
+      });
+    });
+    localStorage.setItem(key,JSON.stringify(migrated.slice(0,100)));
+    try{localStorage.removeItem(legacyKey);}catch(_){ }
+  }catch(err){ console.warn('[CONTACTS] migration failed',err); }
+})();
+</script>
+
+
 <div class="intro" aria-hidden="true">
   <div class="orb">
     <div class="w" aria-hidden="true">W</div>
@@ -5282,7 +5366,7 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 <div class="dashboard-header">
 <div class="dashboard-title-group">
 <button class="menu-btn" type="button" onclick="openSidebar()"><i data-lucide="menu"></i></button>
-<h1 class="dashboard-title">Address Book</h1>
+<h1 class="dashboard-title">Contacts</h1>
 </div>
 <button class="wallet-inline-btn prominent" id="addAddressBookContactBtn" type="button"><i data-lucide="plus"></i>Add Contact</button>
 </div>
@@ -5510,7 +5594,7 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 </div>
 <div class="modal-field" style="margin-bottom:10px;">
 <label>Recipient address</label>
-<div class="input-row"><input type="text" id="sendAddress" value="@" placeholder="@4zau" autocomplete="off" maxlength="32" spellcheck="false" style="text-align:left;"></div>
+<div class="input-row"><input type="text" id="sendAddress" value="" placeholder="Wallet address" autocomplete="off" maxlength="64" spellcheck="false" style="text-align:left;"></div>
 </div>
 <div class="feature-inline-actions" style="margin-bottom:12px;">
 <button class="modal-btn" id="scanQrBtn" type="button" style="background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.1);"><i data-lucide="scan-line"></i>Scan QR</button>
@@ -5629,7 +5713,11 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 </div>
 <div class="modal-field" style="margin-bottom:10px;">
 <label>Wallet address</label>
-<div class="input-row"><input type="text" id="addressBookAddressInput" value="@" placeholder="@4zau" autocomplete="off" maxlength="32" spellcheck="false" style="text-align:left;"></div>
+<div class="input-row"><input type="text" id="addressBookAddressInput" value="" placeholder="e.g. D3M4D3A21D" autocomplete="off" maxlength="64" spellcheck="false" style="text-align:left;"></div>
+</div>
+<div class="modal-field" style="margin-bottom:10px;">
+<label>Handle (optional)</label>
+<div class="input-row"><input type="text" id="addressBookHandleInput" value="" placeholder="e.g. 4zau" autocomplete="off" maxlength="50" style="text-align:left;"></div>
 </div>
 <div class="modal-field" style="margin-bottom:14px;">
 <label>Note (optional)</label>
@@ -6776,6 +6864,7 @@ function updateLivePreview() {
   document.getElementById('previewTaxVal').textContent=`${conversion.impactPct.toFixed(2)}%`;
   document.getElementById('livePreviewVal').textContent=`${conversion.receivedAmount.toFixed(toDec)} ${toCurr}`;
 }
+const monthlyOpeningSeed=130.33+Math.random()*(237.49-130.33);
 function formatProfitLossValue(value, compact=false){
  const amount=Math.abs(Number(value)||0);
  const epsilon=.005;
@@ -6818,19 +6907,9 @@ function renderExchangeTransactions(){
    }
  });
 
- // Give the monthly card a persistent starting value in the requested range.
+ // Give the monthly card a fresh starting value for this wallet open.
  // Real monthly realized P&L is added on top, so trades continue to update it.
- const MONTHLY_PNL_KEY='wallet_monthly_pnl_seed_v1';
- let monthlySeed=130.33;
- try{
-   const saved=Number(localStorage.getItem(MONTHLY_PNL_KEY));
-   if(Number.isFinite(saved)&&saved>=130.33&&saved<=237.49) monthlySeed=saved;
-   else{
-     monthlySeed=130.33+Math.random()*(237.49-130.33);
-     localStorage.setItem(MONTHLY_PNL_KEY,monthlySeed.toFixed(2));
-   }
- }catch(_){ }
- monthlyCad=monthlySeed+monthlyCad;
+ monthlyCad=monthlyOpeningSeed+monthlyCad;
 
  // Main Total is today's earnings, not lifetime earnings.
  totalCad=dailyCad;
@@ -6862,11 +6941,11 @@ function renderExchangeTransactions(){
   const pnlClass=Math.abs(gainCad)<0.005?'zero':gainCad>0?'pos':'neg';
   const pnlPrefix=Math.abs(gainCad)<0.005?'':gainCad>0?'+':'-';
   const title=roundTrip ? `${Number(t.buyQty||amount).toFixed(4)} ${coin} Buy + Sell` : `${amount.toFixed(fromDec)} ${t.fromCurr} → ${received.toFixed(toDec)} ${t.toCurr}`;
-  const subtitle=roundTrip ? `Bought ${Number(t.buyQty||amount).toFixed(4)} ${coin} · Sold ${Number(t.soldQty||amount).toFixed(4)} ${coin}` : (t.time||'Completed');
+  const subtitle=roundTrip ? `Bought ${Number(t.buyQty||amount).toFixed(4)} ${coin} · Sold ${Number(t.soldQty||amount).toFixed(4)} ${coin}` : (t.time||'');
   const resultLabel=roundTrip?'Realized profit · Buy + Sell':'Profit / loss · Tap for details';
   const detailRows=roundTrip
-    ? `<div class="tx-detail-row"><span>Buy amount</span><span>$${Number(t.buyAmountCad||0).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Sell amount</span><span>$${Number(t.sellAmountCad||proceedsCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Amount sold</span><span>${Number(t.soldQty||amount).toFixed(4)} ${coin}</span></div><div class="tx-detail-row"><span>Buy price</span><span>$${Number(t.buyPrice||0).toFixed(2)} CAD / ${coin}</span></div><div class="tx-detail-row"><span>Sell price</span><span>$${Number(t.sellPrice||0).toFixed(2)} CAD / ${coin}</span></div><div class="tx-detail-row"><span>Profit / loss</span><span class="${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Cost basis</span><span>$${basisCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Proceeds</span><span>$${proceedsCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Status</span><span>Completed</span></div>`
-    : `<div class="tx-detail-row"><span>Amount sent</span><span>${amount.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Amount received</span><span>${received.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Exchange rate</span><span>1 ${t.fromCurr} = ${rate.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Profit / loss</span><span class="${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Cost basis</span><span>$${basisCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Proceeds / fair value</span><span>$${proceedsCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Trading fee</span><span>${fee.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Tax estimate</span><span>Not calculated</span></div><div class="tx-detail-row"><span>Status</span><span>Completed</span></div>`;
+    ? `<div class="tx-detail-row"><span>Buy amount</span><span>$${Number(t.buyAmountCad||0).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Sell amount</span><span>$${Number(t.sellAmountCad||proceedsCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Amount sold</span><span>${Number(t.soldQty||amount).toFixed(4)} ${coin}</span></div><div class="tx-detail-row"><span>Buy price</span><span>$${Number(t.buyPrice||0).toFixed(2)} CAD / ${coin}</span></div><div class="tx-detail-row"><span>Sell price</span><span>$${Number(t.sellPrice||0).toFixed(2)} CAD / ${coin}</span></div><div class="tx-detail-row"><span>Profit / loss</span><span class="${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Cost basis</span><span>$${basisCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Proceeds</span><span>$${proceedsCad.toFixed(2)} CAD</span></div>`
+    : `<div class="tx-detail-row"><span>Amount sent</span><span>${amount.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Amount received</span><span>${received.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Exchange rate</span><span>1 ${t.fromCurr} = ${rate.toFixed(toDec)} ${t.toCurr}</span></div><div class="tx-detail-row"><span>Profit / loss</span><span class="${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Cost basis</span><span>$${basisCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Proceeds / fair value</span><span>$${proceedsCad.toFixed(2)} CAD</span></div><div class="tx-detail-row"><span>Trading fee</span><span>${fee.toFixed(fromDec)} ${t.fromCurr}</span></div><div class="tx-detail-row"><span>Tax estimate</span><span>Not calculated</span></div>`;
   return `<div class="tx-card" data-tx-index="${i}"><div class="tx-summary"><div class="tx-main"><div class="tx-title">${title}</div><div class="tx-time">${subtitle}</div></div><div class="tx-result"><div class="tx-result-value ${pnlClass}">${pnlPrefix}$${Math.abs(gainCad).toFixed(2)} CAD</div><div class="tx-result-label">${resultLabel}</div></div></div><div class="tx-details">${detailRows}</div></div>`;
  }).join('');
  list.querySelectorAll('.tx-card').forEach(card=>card.addEventListener('click',()=>card.classList.toggle('open')));
@@ -7623,11 +7702,21 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   let activeTxFilter='all';
 
   window.transactionHistory=[];
-  try{const raw=localStorage.getItem(TX_KEY);const parsed=raw?JSON.parse(raw):[];if(Array.isArray(parsed))window.transactionHistory=parsed;}catch(_){window.transactionHistory=[];}
+  try{
+    const raw=localStorage.getItem(TX_KEY);
+    const parsed=raw?JSON.parse(raw):[];
+    if(Array.isArray(parsed)){
+      window.transactionHistory=parsed.map(row=>{
+        if(!row||typeof row!=='object')return row;
+        const {status:ignoredStatus,...cleanRow}=row;
+        return cleanRow;
+      }).filter(Boolean);
+    }
+  }catch(_){window.transactionHistory=[];}
 
   function saveTransactionHistory(){try{localStorage.setItem(TX_KEY,JSON.stringify(window.transactionHistory.slice(0,250)));}catch(_){} }
   function addTransactionRecord(record){
-    const item={id:`tx-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,timestamp:new Date().toISOString(),status:'Completed',...record};
+    const item={id:`tx-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,timestamp:new Date().toISOString(),...record};
     window.transactionHistory.unshift(item);window.transactionHistory=window.transactionHistory.slice(0,250);saveTransactionHistory();renderTransactionHistory();
     return item;
   }
@@ -7655,7 +7744,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   }
   function buildTransactionRows(rows){
     if(!rows.length)return '<div class="tx-empty-state">No recent activity yet.</div>';
-    return rows.map(tx=>{const amt=txAmount(tx);return `<div class="tx-history-row"><div class="tx-history-left"><div class="tx-history-icon"><i data-lucide="${txIcon(tx)}"></i></div><div><div class="tx-history-title">${txTitle(tx)}</div><div class="tx-history-meta">${txMeta(tx)}<br>${formatTxTime(tx.timestamp)}</div></div></div><div class="tx-history-right"><div class="tx-history-amount ${amt.kind}">${amt.text}</div><div class="tx-history-status">${tx.status||'Completed'}</div></div></div>`;}).join('');
+    return rows.map(tx=>{const amt=txAmount(tx);return `<div class="tx-history-row"><div class="tx-history-left"><div class="tx-history-icon"><i data-lucide="${txIcon(tx)}"></i></div><div><div class="tx-history-title">${txTitle(tx)}</div><div class="tx-history-meta">${txMeta(tx)}<br>${formatTxTime(tx.timestamp)}</div></div></div><div class="tx-history-right"><div class="tx-history-amount ${amt.kind}">${amt.text}</div></div></div>`;}).join('');
   }
   function renderRecentActivityTab(){
     const list=document.getElementById('recentActivityTabList');
@@ -7731,23 +7820,22 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
 
   const sendModal=document.getElementById('sendModal');
   function normalizeRecipientIdentity(value){
-    let raw=String(value??'').trim().replace(/^@+/,'').replace(/[^A-Za-z0-9._-]/g,'').slice(0,31);
-    return raw ? `@${raw}` : '@';
+    return String(value??'').trim().replace(/^@+/,'').replace(/[^A-Za-z0-9._-]/g,'').slice(0,64);
   }
   const sendAddressInput=document.getElementById('sendAddress');
   function normalizeSendAddress(){
     if(!sendAddressInput)return;
     const raw=String(sendAddressInput.value||'');
-    const body=raw.trim().replace(/^@+/,'').replace(/[^A-Za-z0-9._-]/g,'').slice(0,31);
-    sendAddressInput.value='@'+body;
+    const body=raw.trim().replace(/^@+/,'').replace(/[^A-Za-z0-9._-]/g,'').slice(0,64);
+    sendAddressInput.value=body;
   }
-  sendAddressInput?.addEventListener('focus',()=>{if(!sendAddressInput.value.trim())sendAddressInput.value='@';setTimeout(()=>{try{sendAddressInput.setSelectionRange(sendAddressInput.value.length,sendAddressInput.value.length);}catch(_){ }},0);});
+  sendAddressInput?.addEventListener('focus',()=>{setTimeout(()=>{try{sendAddressInput.setSelectionRange(sendAddressInput.value.length,sendAddressInput.value.length);}catch(_){ }},0);});
   sendAddressInput?.addEventListener('input',normalizeSendAddress);
   function updateSendBalance(){const a=document.getElementById('sendAsset')?.value; if(!a)return; const b=Number(getBalanceForCurrency(a)||0); const dec=displayAssetDecimals(a); const unit=document.getElementById('sendAmountUnit'); const avail=document.getElementById('sendAvailableBalance'); if(unit)unit.textContent=a; if(avail)avail.textContent=`Available: ${b.toFixed(dec)} ${a}`;}
   document.getElementById('sendAsset')?.addEventListener('change',updateSendBalance);
   document.getElementById('sendBtn')?.addEventListener('click',()=>{
     sendModal.classList.add('open');
-    if(sendAddressInput&&!sendAddressInput.value.trim())sendAddressInput.value='@';
+    if(sendAddressInput&&!sendAddressInput.value.trim())sendAddressInput.value='';
     updateSendBalance();
     if(window.matchMedia?.('(min-width:601px)').matches)setTimeout(()=>document.getElementById('sendAddress')?.focus(),80);
   });
@@ -7855,11 +7943,11 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   const sendError=document.getElementById('sendError');
   document.getElementById('sendSubmitBtn')?.addEventListener('click',()=>{
     const asset=document.getElementById('sendAsset').value,address=document.getElementById('sendAddress').value.trim(),amount=Number(document.getElementById('sendAmount').value)||0,balance=getBalanceForCurrency(asset);
-    if(!/^@[A-Za-z0-9._-]{2,31}$/.test(address)){sendError.textContent='Enter a recipient address like @4zau.';sendError.style.display='block';return;}
+    if(!/^[A-Za-z0-9._-]{6,64}$/.test(address)){sendError.textContent='Enter a valid recipient address.';sendError.style.display='block';return;}
     if(amount<=0||amount>balance+1e-9){sendError.textContent=`Insufficient ${asset} balance.`;sendError.style.display='block';return;}
     sendError.style.display='none';
     pendingMarketTrade=null; pendingExchangeTrade=null; pendingSend={asset,address,amount};
-    openTradeConfirmation({confirmLabel:`Confirm Send ${asset}`,rows:[{label:'Recipient',value:address},{label:'Amount',value:`-${amount.toFixed(asset==='SOL'||asset==='BTC'||asset==='ETH'?6:2)} ${asset}`,emphasis:true},{label:'Status',value:'Transfer'}]});
+    openTradeConfirmation({confirmLabel:`Confirm Send ${asset}`,rows:[{label:'Recipient',value:address},{label:'Amount',value:`-${amount.toFixed(asset==='SOL'||asset==='BTC'||asset==='ETH'?6:2)} ${asset}`,emphasis:true}]});
   });
   let pendingSend=null;
   document.getElementById('tradeConfirmCancel')?.addEventListener('click',()=>{pendingSend=null;});
@@ -7885,7 +7973,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
             showToast(`Cost basis unavailable for ${p.asset}`);return;
           }
         }
-        renderBalance();window.addTransactionRecord({type:'send',asset:p.asset,amount:p.amount,address:p.address});persistAccountingState();showToast(`Sent ${p.amount.toFixed(dec)} ${p.asset}`);updateSendBalance();pendingSend=null;sendModal.classList.remove('open');document.getElementById('sendAmount').value='';document.getElementById('sendAddress').value='@';
+        renderBalance();window.addTransactionRecord({type:'send',asset:p.asset,amount:p.amount,address:p.address});persistAccountingState();showToast(`Sent ${p.amount.toFixed(dec)} ${p.asset}`);updateSendBalance();pendingSend=null;sendModal.classList.remove('open');document.getElementById('sendAmount').value='';document.getElementById('sendAddress').value='';
       }finally{tradeConfirmSubmit.classList.remove('loading');tradeConfirmModal.classList.remove('open');}
     },350);
   });
@@ -8047,21 +8135,36 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   }
 
   function normalizeContactAddress(value){
-    let raw=String(value??'').trim();
-    raw=raw.replace(/^@+/, '').replace(/[^A-Za-z0-9._-]/g,'');
-    return raw ? `@${raw.slice(0,31)}` : '@';
+    return String(value??'').trim().replace(/^@+/, '').replace(/[^A-Za-z0-9._-]/g,'').slice(0,64);
+  }
+  function normalizeContactHandle(value){
+    return String(value??'').trim().replace(/^@+/, '').replace(/[^A-Za-z0-9._-]/g,'').slice(0,50);
   }
   function contactName(contact){return String(contact?.name||'').trim();}
-  function contactAddress(contact){return normalizeContactAddress(contact?.address||contact?.handle||'');}
-  function contactLabel(contact){return contactName(contact)||contactAddress(contact);}
+  function contactAddress(contact){return normalizeContactAddress(contact?.address||'');}
+  function contactHandle(contact){return normalizeContactHandle(contact?.handle||'');}
+  function contactLabel(contact){
+    const name=contactName(contact), handle=contactHandle(contact);
+    return name || (handle ? '@'+handle : contactAddress(contact));
+  }
+  function makeSavedAddress(seed){
+    let hash=0;
+    for(let i=0;i<seed.length;i++) hash=((hash<<5)-hash)+seed.charCodeAt(i)|0;
+    const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let out='';
+    for(let i=0;i<10;i++){
+      hash=Math.imul(hash^i,16777619);
+      out+=chars[Math.abs(hash)%chars.length];
+    }
+    return out;
+  }
   function seedAddressBook(){
     const now=new Date().toISOString();
     return [
-      {id:'contact-raomee',address:'@raomee',handle:'@raomee',name:'',asset:'SOL',note:'',createdAt:now},
-      {id:'contact-4ranc',address:'@4ranc',handle:'@4ranc',name:'',asset:'SOL',note:'',createdAt:now},
-      {id:'contact-3zau',address:'@3zau',handle:'@3zau',name:'',asset:'SOL',note:'',createdAt:now},
-      {id:'contact-kkwaji',address:'@kkwaji',handle:'@kkwaji',name:'',asset:'SOL',note:'',createdAt:now},
-      {id:'contact-abdullakh',address:'@abdullakh',handle:'@abdullakh',name:'',asset:'SOL',note:'',createdAt:now}
+      {id:'contact-4ranc',address:makeSavedAddress('4ranc-wallet'),handle:'4ranc',name:'',asset:'SOL',note:'',createdAt:now},
+      {id:'contact-3zau',address:makeSavedAddress('3zau-wallet'),handle:'3zau',name:'',asset:'SOL',note:'',createdAt:now},
+      {id:'contact-kkwaji',address:makeSavedAddress('kkwaji-wallet'),handle:'kkwaji',name:'',asset:'SOL',note:'',createdAt:now},
+      {id:'contact-abdullakh',address:makeSavedAddress('abdullakh-wallet'),handle:'abdullakh',name:'',asset:'SOL',note:'',createdAt:now}
     ];
   }
   function loadAddressBook(){
@@ -8070,20 +8173,28 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     let parsed=safeJsonParse(localStorage.getItem(newKey),null);
     if(!Array.isArray(parsed))parsed=safeJsonParse(localStorage.getItem(legacyKey),null);
     if(Array.isArray(parsed)){
+      const seen=new Set();
       addressBook=parsed.map((row,i)=>{
-        const legacyHandle=String(row?.handle||'').trim();
-        const address=normalizeContactAddress(legacyHandle||row?.address||'');
+        const address=normalizeContactAddress(row?.address||'');
+        const handle=normalizeContactHandle(row?.handle||'');
+        if(!address)return null;
         return {
           id:String(row?.id||`contact-${Date.now()}-${i}`),
           address,
-          handle:address,
+          handle,
           name:String(row?.name||'').trim().slice(0,50),
           asset:normalizeSymbol(row?.asset||'SOL'),
           note:String(row?.note||'').trim().slice(0,80),
           createdAt:row?.createdAt||new Date().toISOString()
         };
-      }).filter(row=>row.address!=='@');
-    } else addressBook=seedAddressBook();
+      }).filter(row=>{
+        if(!row)return false;
+        if(row.handle.toLowerCase()==='raomee'||row.address.toLowerCase()==='raomee')return false;
+        const k=row.address.toLowerCase();
+        if(seen.has(k))return false;
+        seen.add(k);return true;
+      });
+    }else addressBook=seedAddressBook();
     if(!addressBook.length)addressBook=seedAddressBook();
     saveAddressBook();
   }
@@ -8222,10 +8333,11 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     if(del)deleteCustomAsset(del.dataset.deleteCustomAsset);
   });
 
-  // Address Book UI. A contact's wallet address is its @identity; Name is optional display text.
+  // Contacts UI. Wallet addresses are plain strings; handles are separate display identities.
   function saveContact(data){
     const address=normalizeContactAddress(data.address);
-    const record={address,handle:address,name:String(data.name||'').trim().slice(0,50),asset:normalizeSymbol(data.asset||'SOL'),note:String(data.note||'').trim().slice(0,80)};
+    const handle=normalizeContactHandle(data.handle);
+    const record={address,handle,name:String(data.name||'').trim().slice(0,50),asset:normalizeSymbol(data.asset||'SOL'),note:String(data.note||'').trim().slice(0,80)};
     if(editingContactId){
       const idx=addressBook.findIndex(c=>c.id===editingContactId);
       if(idx>=0)addressBook[idx]={...addressBook[idx],...record};
@@ -8236,11 +8348,11 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   }
   function openContactModal(contact=null){
     editingContactId=contact?.id||null;
-    const address=contact?contactAddress(contact):'@';
     document.getElementById('addressBookEditTitle').textContent=contact?'Edit Contact':'Add Contact';
     document.getElementById('addressBookNameInput').value=contactName(contact);
     document.getElementById('addressBookAssetInput').value=contact?.asset||'SOL';
-    document.getElementById('addressBookAddressInput').value=address || '@';
+    document.getElementById('addressBookAddressInput').value=contact?contactAddress(contact):'';
+    document.getElementById('addressBookHandleInput').value=contact?contactHandle(contact):'';
     document.getElementById('addressBookNoteInput').value=contact?.note||'';
     document.getElementById('addressBookEditError').style.display='none';
     document.getElementById('addressBookEditModal').classList.add('open');
@@ -8248,27 +8360,47 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   }
   function closeContactModal(){document.getElementById('addressBookEditModal').classList.remove('open');editingContactId=null;}
   function renderAddressBook(){
-    const list=document.getElementById('addressBookList'),count=document.getElementById('addressBookCount');
-    if(count)count.textContent=addressBook.length;
+    const list=document.getElementById('addressBookList');
+    const count=document.getElementById('addressBookCount');
+    if(count)count.textContent=Array.isArray(addressBook)?addressBook.length:0;
     if(!list)return;
-    if(!addressBook.length){list.innerHTML='<div class="contact-empty">No contacts yet. Add someone you want to send to.</div>';return;}
+    if(!Array.isArray(addressBook)||!addressBook.length){
+      list.innerHTML='<div class="contact-empty">No contacts yet. Add someone you want to send to.</div>';
+      return;
+    }
     list.innerHTML=addressBook.map(c=>{
+      const name=contactName(c);
+      const handle=contactHandle(c);
       const address=contactAddress(c);
-      const label=contactLabel(c);
-      const initials=(String(label).replace(/^@/,'').slice(0,2)||'?').toUpperCase();
-      const meta=`${esc(c.asset)} · ${esc(address)}`;
-      return `<div class="contact-card" data-contact-id="${esc(c.id)}"><div class="contact-avatar">${esc(initials)}</div><div class="contact-main"><div class="contact-handle">${esc(label)}</div><div class="contact-meta">${meta}</div>${c.note?`<div class="contact-meta">${esc(c.note)}</div>`:''}</div><div class="contact-actions"><button class="contact-action primary" type="button" data-use-contact="${esc(c.id)}">Use</button><button class="contact-action" type="button" data-edit-contact="${esc(c.id)}">Edit</button><button class="contact-action" type="button" data-delete-contact="${esc(c.id)}">Delete</button></div></div>`;
+      const primary=name || (handle ? '@'+handle : address);
+      const secondary=[];
+      if(name && handle)secondary.push('@'+handle);
+      if(address)secondary.push(address);
+      if(c.note)secondary.push(String(c.note));
+      const initials=(name||handle||address||'?').slice(0,2).toUpperCase();
+      return `<div class="contact-card" data-contact-id="${esc(c.id)}">`+
+        `<div class="contact-avatar">${esc(initials)}</div>`+
+        `<div class="contact-main">`+
+          `<div class="contact-handle">${esc(primary)}</div>`+
+          `<div class="contact-meta">${esc(secondary.join(' · '))}</div>`+
+        `</div>`+
+        `<div class="contact-actions">`+
+          `<button class="contact-action primary" type="button" data-use-contact="${esc(c.id)}">Use</button>`+
+          `<button class="contact-action" type="button" data-edit-contact="${esc(c.id)}">Edit</button>`+
+          `<button class="contact-action" type="button" data-delete-contact="${esc(c.id)}">Delete</button>`+
+        `</div>`+
+      `</div>`;
     }).join('');
-    lucide.createIcons();
+    if(window.lucide)window.lucide.createIcons({nodes:[list]});
   }
   function useContact(id){
     const c=addressBook.find(row=>row.id===id);if(!c)return;
     const sendModal=document.getElementById('sendModal');
     const sendAsset=document.getElementById('sendAsset'),sendAddress=document.getElementById('sendAddress'),sendAmount=document.getElementById('sendAmount');
-    if(sendAsset && allWalletAssetSymbols().includes(c.asset) && isCryptoAsset(c.asset))sendAsset.value=c.asset;
+    if(sendAsset&&allWalletAssetSymbols().includes(c.asset)&&isCryptoAsset(c.asset))sendAsset.value=c.asset;
     if(sendAddress)sendAddress.value=contactAddress(c);
     if(sendAmount)sendAmount.value='';
-    renderDynamicAssetOptions();enhancementUpdateSendBalance();closeAddressBookPanel();sendModal?.classList.add('open');
+    renderDynamicAssetOptions();updateSendBalance();closeAddressBookPanel();sendModal?.classList.add('open');
     setTimeout(()=>sendAmount?.focus(),100);
     showToast(`${contactLabel(c)} loaded as recipient`,2000);
   }
@@ -8284,41 +8416,37 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   document.getElementById('addressBookCancelBtn')?.addEventListener('click',closeContactModal);
   document.getElementById('addressBookEditModal')?.addEventListener('click',e=>{if(e.target.id==='addressBookEditModal')closeContactModal();});
   const contactAddressInput=document.getElementById('addressBookAddressInput');
-  function normalizeAtInput(input){
+  const contactHandleInput=document.getElementById('addressBookHandleInput');
+  function normalizeContactInput(input,max){
     if(!input)return;
-    const raw=String(input.value||'');
-    const hadAt=raw.trim().startsWith('@');
-    let body=raw.trim().replace(/^@+/,'').replace(/[^A-Za-z0-9._-]/g,'').slice(0,31);
-    input.value='@'+body;
-    if(!hadAt && raw.trim() && input.selectionStart!==null){
-      const pos=Math.min(input.value.length,input.selectionStart+1);
-      try{input.setSelectionRange(pos,pos);}catch(_){ }
-    }
+    input.value=String(input.value||'').trim().replace(/^@+/,'').replace(/[^A-Za-z0-9._-]/g,'').slice(0,max);
   }
-  contactAddressInput?.addEventListener('focus',()=>{if(!contactAddressInput.value.trim())contactAddressInput.value='@';setTimeout(()=>{try{contactAddressInput.setSelectionRange(contactAddressInput.value.length,contactAddressInput.value.length);}catch(_){ }},0);});
-  contactAddressInput?.addEventListener('input',()=>normalizeAtInput(contactAddressInput));
+  contactAddressInput?.addEventListener('input',()=>normalizeContactInput(contactAddressInput,64));
+  contactHandleInput?.addEventListener('input',()=>normalizeContactInput(contactHandleInput,50));
   document.getElementById('addressBookSaveBtn')?.addEventListener('click',()=>{
     const err=document.getElementById('addressBookEditError');
     const name=String(document.getElementById('addressBookNameInput').value||'').trim().slice(0,50);
     const asset=normalizeSymbol(document.getElementById('addressBookAssetInput').value||'SOL');
-    const address=normalizeContactAddress(document.getElementById('addressBookAddressInput').value||'@');
+    const address=normalizeContactAddress(document.getElementById('addressBookAddressInput').value||'');
+    const handle=normalizeContactHandle(document.getElementById('addressBookHandleInput').value||'');
     const note=String(document.getElementById('addressBookNoteInput').value||'').trim().slice(0,80);
-    if(!/^@[A-Za-z0-9._-]{2,31}$/.test(address)){err.textContent='Enter an address like @4zau.';err.style.display='block';return;}
+    if(!/^[A-Za-z0-9._-]{6,64}$/.test(address)){err.textContent='Enter a wallet address with at least 6 characters.';err.style.display='block';return;}
+    if(handle&&!/^[A-Za-z0-9._-]{2,50}$/.test(handle)){err.textContent='Enter a valid handle.';err.style.display='block';return;}
     if(!isCryptoAsset(asset)){err.textContent='Choose a crypto asset.';err.style.display='block';return;}
     if(addressBook.some(c=>c.id!==editingContactId&&contactAddress(c).toLowerCase()===address.toLowerCase())){err.textContent='That wallet address is already in your contacts.';err.style.display='block';return;}
-    saveContact({name,address,asset,note});closeContactModal();showToast(`${name||address} saved`,2200);
+    saveContact({name,address,handle,asset,note});closeContactModal();showToast(`${name||handle||address} saved`,2200);
   });
   document.getElementById('addressBookList')?.addEventListener('click',e=>{
     const use=e.target.closest('[data-use-contact]'),edit=e.target.closest('[data-edit-contact]'),del=e.target.closest('[data-delete-contact]');
-    if(use)useContact(use.dataset.useContact);
-    if(edit){const c=addressBook.find(row=>row.id===edit.dataset.editContact);if(c)openContactModal(c);}
-    if(del){const c=addressBook.find(row=>row.id===del.dataset.deleteContact);if(c&&confirm(`Delete ${contactLabel(c)} from your contacts?`)){addressBook=addressBook.filter(row=>row.id!==c.id);saveAddressBook();renderAddressBook();showToast(`${contactLabel(c)} removed`,2000);}}
+    if(use){useContact(use.dataset.useContact);return;}
+    if(edit){const c=addressBook.find(row=>row.id===edit.dataset.editContact);if(c)openContactModal(c);return;}
+    if(del){const c=addressBook.find(row=>row.id===del.dataset.deleteContact);if(c&&confirm(`Delete ${contactLabel(c)} from your contacts?`)){addressBook=addressBook.filter(row=>row.id!==c.id);saveAddressBook();renderAddressBook();renderSecurityPreview();showToast(`${contactLabel(c)} removed`,2000);}}
   });
 
   // Security preview for Send: format checks + saved-contact matching + self-address + large-transfer warning.
   function findContactForRecipient(asset,address){
-    const a=String(address||'').trim().toLowerCase();
-    return addressBook.find(c=>c.asset===asset&&c.address&&c.address.trim().toLowerCase()===a)||null;
+    const a=normalizeContactAddress(address).toLowerCase();
+    return addressBook.find(c=>c.asset===asset&&contactAddress(c).toLowerCase()===a)||null;
   }
   function assessRecipient(asset,address,amount){
     const a=String(address||'').trim();
@@ -8378,6 +8506,9 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     if(avail)avail.textContent=`Available: ${b.toFixed(dec)} ${a}`;
   }
 
+  // Load persisted/seeded contacts before the first render.
+  loadAddressBook();
+
   // Re-render after the existing runtime finishes wiring its controls.
   renderAddressBook();
   renderCustomAssetRows();
@@ -8397,6 +8528,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   renderAddressBook();
 
   // Expose a few helpers for future wallet screens/debugging without leaking internal mutable state.
+  window.renderAddressBook = renderAddressBook;
   window.walletEnhancements = Object.freeze({
     getCustomAssets:()=>Object.fromEntries(Object.entries(customAssets).map(([k,v])=>[k,{...v}])),
     getAddressBook:()=>addressBook.map(v=>({...v})),
@@ -8541,29 +8673,6 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
 })();
 </script>
 
-
-<script id="contacts-visibility-migration">
-(function(){
-  try{
-    const key = 'wallet_address_book_v3';
-    const wanted = ['@raomee','@4ranc','@3zau','@kkwaji','@abdullakh'];
-    const raw = localStorage.getItem(key);
-    let rows = raw ? JSON.parse(raw) : null;
-    if(!Array.isArray(rows) || !wanted.every(a => rows.some(r => String(r.address||r.handle||'').toLowerCase()===a))){
-      const now = new Date().toISOString();
-      localStorage.setItem(key, JSON.stringify(wanted.map((address,i)=>({
-        id:'contact-visible-'+i+'-'+address.slice(1),
-        address,
-        handle:address,
-        name:'',
-        asset:'SOL',
-        note:'',
-        createdAt:now
-      }))));
-    }
-  }catch(_){}
-})();
-</script>
 
 </body>
 </html>
