@@ -4973,6 +4973,42 @@ body.theme-light .wallet-inline-btn{background:rgba(12,20,30,.04);border-color:#
 </style>
 
 
+
+<style id="wallet-edit-rate-visibility-fix">
+.edit-panel{
+  box-sizing:border-box;
+  overflow-y:auto;
+  overflow-x:hidden;
+  justify-content:flex-start;
+  padding-top:22px;
+  padding-bottom:22px;
+}
+.balance-card.wallet-editing{
+  min-height:360px !important;
+}
+@media(max-width:700px){
+  .balance-card.wallet-editing{
+    min-height:350px !important;
+  }
+  .edit-panel{
+    padding:18px !important;
+    gap:12px !important;
+  }
+  .edit-row{
+    width:100%;
+  }
+  .edit-row input{
+    width:100%;
+    min-height:44px;
+  }
+}
+@media(max-height:560px){
+  .balance-card.wallet-editing{
+    min-height:330px !important;
+  }
+}
+</style>
+
 </head>
 <body>\n<script id="contacts-data-migration-final">
 (function(){
@@ -6266,8 +6302,28 @@ const editBalanceInput=document.getElementById('editBalanceInput');
 const editRateInput=document.getElementById('editRateInput');
 const editWalletName=document.getElementById('editWalletName');
 const editUnitLabel=document.getElementById('editUnitLabel');
-function openWalletEditor() { editWalletName.textContent=currentCurrency; editUnitLabel.textContent=currentCurrency; if(currentCurrency==='CAD'){editBalanceInput.value=displayBalanceCAD.toFixed(2);editRateInput.value=balanceRateCAD.toFixed(2);}else{editBalanceInput.value=displayBalanceUSD.toFixed(2);editRateInput.value=balanceRateUSD.toFixed(2);} walletEditPanel.classList.add('open'); editBalanceInput.focus(); editBalanceInput.select(); }
-function closeWalletEditor() { walletEditPanel.classList.remove('open'); }
+function openWalletEditor() {
+  editWalletName.textContent=currentCurrency;
+  editUnitLabel.textContent=currentCurrency;
+  if(currentCurrency==='CAD'){
+    editBalanceInput.value=displayBalanceCAD.toFixed(2);
+    editRateInput.value=balanceRateCAD.toFixed(2);
+  }else{
+    editBalanceInput.value=displayBalanceUSD.toFixed(2);
+    editRateInput.value=balanceRateUSD.toFixed(2);
+  }
+  walletEditPanel.closest('.balance-card')?.classList.add('wallet-editing');
+  walletEditPanel.classList.add('open');
+  requestAnimationFrame(()=>{
+    editBalanceInput.focus();
+    editBalanceInput.select();
+    walletEditPanel.scrollTop=0;
+  });
+}
+function closeWalletEditor() {
+  walletEditPanel.classList.remove('open');
+  walletEditPanel.closest('.balance-card')?.classList.remove('wallet-editing');
+}
 function saveWalletEditor() { const amt=parseFloat(editBalanceInput.value); const rate=parseFloat(editRateInput.value); if(!isNaN(amt)&&amt>=0){if(currentCurrency==='CAD'){displayBalanceCAD=amt;internalHiddenBalanceCAD=amt;}else{displayBalanceUSD=amt;internalHiddenBalanceUSD=amt;}} if(!isNaN(rate)){if(currentCurrency==='CAD')balanceRateCAD=rate;else balanceRateUSD=rate;} persistAccountingState(); renderBalance(); closeWalletEditor(); }
 document.getElementById('walletEditSave').addEventListener('click',saveWalletEditor);
 document.getElementById('walletEditCancel').addEventListener('click',closeWalletEditor);
