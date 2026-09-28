@@ -5901,6 +5901,20 @@ body.theme-light .profile-editor{
 }
 </style>
 
+<style id="mobile-only-intro-position-final">
+@media (max-width:768px){
+  .intro{
+    --mobile-intro-lower:clamp(70px,9vh,100px);
+  }
+  .intro .orb{
+    top:var(--mobile-intro-lower);
+  }
+  .intro .intro-welcome{
+    top:calc(50% + min(145px,37vw) + var(--mobile-intro-lower)) !important;
+  }
+}
+</style>
+
 </head>
 <body><script id="contacts-data-migration-final">
 (function(){
@@ -9257,7 +9271,12 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     const ownWalletPicker=document.getElementById('sendOwnWallet');
     if(ownWalletPicker){
       ownWalletPicker.value=c.walletId||'';
-      if(typeof window.__setOwnWalletRecipient==='function')window.__setOwnWalletRecipient(c.walletId||'',c.asset);
+      if(c.walletId&&typeof window.__setOwnWalletRecipient==='function'){
+        window.__setOwnWalletRecipient(c.walletId,c.asset);
+      }else if(sendAddress){
+        sendAddress.readOnly=false;
+        sendAddress.value=contactAddress(c);
+      }
     }
     renderDynamicAssetOptions();updateSendBalance();closeAddressBookPanel();sendModal?.classList.add('open');
     setTimeout(()=>sendAmount?.focus(),100);
