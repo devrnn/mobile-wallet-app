@@ -5918,6 +5918,278 @@ body.theme-light .profile-editor{
 }
 </style>
 
+
+<style id="final-smoothness-and-viewport-pass">
+/* Final visual pass:
+   - keeps the existing theme, layout, controls, and functionality
+   - normalizes motion so interactions feel softer and less "floaty"
+   - removes hover-only motion from touch devices
+   - reduces artificial mobile bottom spacing while preserving the safe-area itself
+   - uses the full dynamic viewport without changing the app's feature logic
+*/
+:root{
+  --motion-ease:cubic-bezier(.22,1,.36,1);
+  --motion-soft:cubic-bezier(.25,.8,.25,1);
+  --motion-fast:.16s;
+  --motion-med:.24s;
+  --motion-slow:.34s;
+}
+
+/* Keep transforms on their own compositor layer where the app already animates. */
+.sidebar,
+.sidebar-overlay,
+.page-panel,
+.modal-overlay,
+.lock-overlay,
+.modal-card,
+.lock-card,
+.toast-notification,
+.balance-card,
+.action-btn,
+.modal-btn,
+.menu-btn,
+.theme-card,
+.tx-card,
+.list-item{
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+}
+
+/* One consistent feel for the small interactive controls already present. */
+.sidebar-item,
+.action-btn,
+.modal-btn,
+.menu-btn,
+.account-edit-btn,
+.contact-action,
+.asset-manager-action,
+.wallet-inline-btn,
+.tr-btn,
+.tv-tool,
+.max-btn,
+.settings-btn-danger,
+.theme-card{
+  transition:
+    background-color var(--motion-fast) var(--motion-soft),
+    border-color var(--motion-fast) var(--motion-soft),
+    color var(--motion-fast) var(--motion-soft),
+    opacity var(--motion-fast) var(--motion-soft),
+    box-shadow var(--motion-fast) var(--motion-soft),
+    transform var(--motion-med) var(--motion-ease) !important;
+}
+
+.balance-card,
+.asset-list,
+.activity-panel,
+.exchange-transactions,
+.profit-summary-card,
+.cost-card,
+.market-ticker-bar,
+.market-chart-panel,
+.orderbook-panel,
+.market-action-card,
+.recent-trades-panel,
+.tx-history-card,
+.security-card,
+.lock-card{
+  transition:
+    border-color var(--motion-med) var(--motion-soft),
+    box-shadow var(--motion-med) var(--motion-soft),
+    transform var(--motion-med) var(--motion-ease) !important;
+}
+
+.modal-overlay,
+.lock-overlay,
+.sidebar-overlay{
+  transition:opacity var(--motion-med) var(--motion-soft) !important;
+}
+
+.modal-card,
+.lock-card{
+  will-change:transform,opacity;
+}
+
+.page-panel.panel-enter{
+  animation:walletCleanPanelEnter .26s var(--motion-ease) both !important;
+}
+
+@keyframes walletCleanPanelEnter{
+  from{
+    opacity:0;
+    transform:translate3d(0,6px,0) scale(.997);
+  }
+  to{
+    opacity:1;
+    transform:translate3d(0,0,0) scale(1);
+  }
+}
+
+.sidebar{
+  transition:transform .32s var(--motion-ease) !important;
+}
+
+.toast-notification{
+  transition:
+    transform .28s var(--motion-ease),
+    opacity .20s var(--motion-soft) !important;
+}
+
+.pull-indicator{
+  transition:
+    transform .32s var(--motion-ease),
+    opacity .20s var(--motion-soft) !important;
+}
+
+.refresh-capsule{
+  transition:
+    background-color .22s var(--motion-soft),
+    border-color .22s var(--motion-soft),
+    box-shadow .26s var(--motion-soft),
+    transform .26s var(--motion-ease) !important;
+}
+
+@media (hover:hover){
+  .sidebar-item:hover{transform:translateX(2px) !important;}
+  .action-btn:hover,
+  .modal-btn:hover,
+  .theme-card:hover{
+    transform:translateY(-1px) !important;
+  }
+  .list-item:hover,
+  .tx-card:hover{
+    transform:translateY(-1px) !important;
+  }
+}
+
+@media (hover:none){
+  .sidebar-item:hover,
+  .action-btn:hover,
+  .modal-btn:hover,
+  .menu-btn:hover,
+  .theme-card:hover,
+  .list-item:hover,
+  .tx-card:hover,
+  .contact-action:hover,
+  .asset-manager-action:hover,
+  .wallet-inline-btn:hover{
+    transform:none !important;
+  }
+
+  .action-btn:active,
+  .modal-btn:active,
+  .menu-btn:active,
+  .contact-action:active,
+  .asset-manager-action:active,
+  .wallet-inline-btn:active{
+    transform:scale(.985) !important;
+  }
+}
+
+/* Mobile: let the app occupy the full dynamic viewport. The browser's
+   toolbar/home-indicator remains OS UI; only the extra page-created gap is
+   reduced here. Keep a small safe-area buffer for the final content row. */
+@media (max-width:768px){
+  html{
+    width:100% !important;
+    height:100% !important;
+    min-height:100% !important;
+    overflow:hidden !important;
+  }
+
+  body{
+    width:100% !important;
+    height:100dvh !important;
+    min-height:0 !important;
+    max-height:none !important;
+    overflow:hidden !important;
+  }
+
+  .main-dashboard{
+    width:100% !important;
+    height:100dvh !important;
+    min-height:0 !important;
+    overflow:hidden !important;
+  }
+
+  .page-panel{
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    overscroll-behavior-y:contain;
+  }
+
+  .scroll-content{
+    min-height:100% !important;
+    padding-top:max(18px,calc(env(safe-area-inset-top) + 10px)) !important;
+    padding-bottom:max(14px,calc(env(safe-area-inset-bottom) + 8px)) !important;
+  }
+
+  .account-page-panel .account-page-layout{
+    padding-bottom:max(14px,calc(env(safe-area-inset-bottom) + 8px)) !important;
+  }
+
+  .modal-overlay,
+  .lock-overlay{
+    height:100dvh !important;
+    min-height:0 !important;
+    padding:
+      max(10px,env(safe-area-inset-top))
+      max(10px,env(safe-area-inset-right))
+      max(10px,env(safe-area-inset-bottom))
+      max(10px,env(safe-area-inset-left)) !important;
+  }
+
+  .modal-card,
+  .lock-card,
+  .account-modal-card{
+    max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px) !important;
+  }
+
+  .sidebar{
+    height:100dvh !important;
+    max-height:none !important;
+  }
+
+  .sidebar-profile{
+    padding-bottom:max(10px,calc(env(safe-area-inset-bottom) + 6px)) !important;
+  }
+}
+
+@media (max-height:700px) and (max-width:900px){
+  .scroll-content{
+    padding-top:max(12px,env(safe-area-inset-top)) !important;
+    padding-bottom:max(12px,calc(env(safe-area-inset-bottom) + 6px)) !important;
+  }
+}
+
+@supports (height:100svh){
+  @media (max-width:768px){
+    body,
+    .main-dashboard{
+      min-height:100svh;
+    }
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .page-panel.panel-enter{
+    animation:none !important;
+  }
+
+  .sidebar,
+  .toast-notification,
+  .pull-indicator,
+  .refresh-capsule,
+  .modal-overlay,
+  .lock-overlay,
+  .sidebar-overlay,
+  .modal-card,
+  .lock-card{
+    transition:none !important;
+  }
+}
+</style>
+
 </head>
 <body><script id="contacts-data-migration-final">
 (function(){
