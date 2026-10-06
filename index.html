@@ -6351,7 +6351,13 @@ body.theme-light .profile-editor{
 </div>
 <div class="sidebar-group">
 <a href="#" class="sidebar-item active" data-target="walletPanel"><i data-lucide="wallet"></i><span data-i18n="navOverview">Overview</span></a>
-<a href="#" class="sidebar-item" data-target="marketPanel"><i data-lucide="candlestick-chart"></i><span data-i18n="navMarket">Market</span></a>
+<div class="sidebar-section-label">Actions</div>
+<a href="https://app.tradelocker.com/en/trade?tu=806903880876968935" class="sidebar-item trade-nav-item" id="tradeNavItem"
+   data-external-url="https://app.tradelocker.com/en/trade?tu=806903880876968935" aria-label="Open TradeLocker" title="Open TradeLocker">
+  <i data-lucide="candlestick-chart"></i>
+  <span>Trade</span>
+  <span class="trade-nav-arrow" aria-hidden="true"><i data-lucide="arrow-up-right"></i></span>
+</a>
 <a href="#" class="sidebar-item" data-target="profitsPanel"><i data-lucide="chart-no-axes-combined"></i><span data-i18n="navProfits">Profits & Loss</span></a>
 <a href="#" class="sidebar-item" data-target="recentActivityPage"><i data-lucide="history"></i><span>Recent Activity</span></a>
 <a href="#" class="sidebar-item" data-target="settingsPanel"><i data-lucide="settings"></i><span data-i18n="navSettings">Settings</span></a>
@@ -6378,6 +6384,9 @@ body.theme-light .profile-editor{
 <h1 class="dashboard-title" data-i18n="titleWallet">Wallet</h1>
 </div>
 </div>
+
+
+
 <div class="top-row-grid">
 <div class="balance-card">
 <div class="balance-header-row">
@@ -6442,6 +6451,13 @@ body.theme-light .profile-editor{
 </div>
 </div>
 </div>
+</div>
+<div class="wallet-bottom-dock visible" id="walletBottomDock" aria-label="Quick navigation">
+  <button type="button" class="wallet-dock-item active" data-dock-target="walletPanel"><i data-lucide="wallet"></i><span>Overview</span></button>
+  <a class="wallet-dock-item wallet-dock-trade" href="https://app.tradelocker.com/en/trade?tu=806903880876968935" data-external-url="https://app.tradelocker.com/en/trade?tu=806903880876968935"><i data-lucide="candlestick-chart"></i><span>Trade</span></a>
+  <button type="button" class="wallet-dock-item" data-dock-target="profitsPanel"><i data-lucide="chart-no-axes-combined"></i><span>P&amp;L</span></button>
+  <button type="button" class="wallet-dock-item" data-dock-target="recentActivityPage"><i data-lucide="history"></i><span>Activity</span></button>
+  <button type="button" class="wallet-dock-item" data-dock-target="settingsPanel"><i data-lucide="settings"></i><span>Settings</span></button>
 </div>
 </section>
 <section class="page-panel" id="marketPanel">
@@ -7068,8 +7084,8 @@ const sidebar = document.getElementById('sidebar');
 const sidebarOverlay = document.getElementById('sidebarOverlay');
 const menuBtn = document.getElementById('menuBtn');
 const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
-function openSidebar() { sidebar.classList.add('open'); sidebarOverlay.classList.add('open'); }
-function closeSidebar() { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('open'); const pe=document.getElementById('profileEditor'); const sp=document.getElementById('sidebarProfile'); if(pe) { pe.classList.remove('open'); pe.setAttribute('aria-hidden','true'); } if(sp) { sp.classList.remove('active','editing'); sp.setAttribute('aria-expanded','false'); } }
+function openSidebar() { sidebar.classList.add('open'); sidebarOverlay.classList.add('open'); document.body.classList.add('sidebar-is-open'); }
+function closeSidebar() { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('open'); document.body.classList.remove('sidebar-is-open'); const pe=document.getElementById('profileEditor'); const sp=document.getElementById('sidebarProfile'); if(pe) { pe.classList.remove('open'); pe.setAttribute('aria-hidden','true'); } if(sp) { sp.classList.remove('active','editing'); sp.setAttribute('aria-expanded','false'); } }
 if (menuBtn) menuBtn.addEventListener('click', openSidebar);
 if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeSidebar);
 if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
@@ -7271,27 +7287,60 @@ function roundPrecision(val, decimals=4) { return Number(Math.round(val+'e'+deci
 const sidebarItems = document.querySelectorAll('.sidebar-item');
 const pagePanels = document.querySelectorAll('.page-panel');
 let currentPanelId = 'walletPanel';
-sidebarItems.forEach(item => {
-item.addEventListener('click', e => {
-e.preventDefault();
-sidebarItems.forEach(nav => nav.classList.remove('active'));
-item.classList.add('active');
-const sp=document.getElementById('sidebarProfile'); const pe=document.getElementById('profileEditor'); if(sp){sp.classList.remove('active','editing');sp.setAttribute('aria-expanded','false');} if(pe){pe.classList.remove('open');pe.setAttribute('aria-hidden','true');}
-const targetId = item.getAttribute('data-target');
-currentPanelId = targetId;
-if(targetId==='profitsPanel' && typeof renderExchangeTransactions==='function') renderExchangeTransactions();
-pagePanels.forEach(panel => {
-if (panel.id === targetId) {
-panel.classList.add('active');
-panel.classList.remove('panel-enter');
-void panel.offsetWidth;
-panel.classList.add('panel-enter');
-} else {
-panel.classList.remove('active','panel-enter');
+
+function navigateExternal(url){
+  const destination=String(url||'').trim();
+  if(!destination)return false;
+  window.location.href=destination;
+  return true;
 }
-});
-closeSidebar();
-});
+
+sidebarItems.forEach(item=>{
+  item.addEventListener('click',e=>{
+    const externalUrl=item.getAttribute('data-external-url');
+    if(externalUrl){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      closeSidebar();
+      navigateExternal(externalUrl);
+      return;
+    }
+
+    const targetId=item.getAttribute('data-target');
+    if(targetId==='marketPanel'){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      closeSidebar();
+      navigateExternal('https://app.tradelocker.com/en/trade?tu=806903880876968935');
+      return;
+    }
+
+    e.preventDefault();
+    sidebarItems.forEach(nav=>nav.classList.remove('active'));
+    item.classList.add('active');
+
+    const sp=document.getElementById('sidebarProfile');
+    const pe=document.getElementById('profileEditor');
+    if(sp){sp.classList.remove('active','editing');sp.setAttribute('aria-expanded','false');}
+    if(pe){pe.classList.remove('open');pe.setAttribute('aria-hidden','true');}
+
+    if(!targetId)return;
+    currentPanelId=targetId;
+    if(targetId==='profitsPanel' && typeof renderExchangeTransactions==='function') renderExchangeTransactions();
+
+    pagePanels.forEach(panel=>{
+      if(panel.id===targetId){
+        panel.classList.add('active');
+        panel.classList.remove('panel-enter');
+        void panel.offsetWidth;
+        panel.classList.add('panel-enter');
+      }else{
+        panel.classList.remove('active','panel-enter');
+      }
+    });
+    closeSidebar();
+    window.__syncWalletBottomDock?.();
+  });
 });
 let currentCurrency = 'CAD';
 let randomStartingValue = Math.floor(Math.random()*1001)+2000;
@@ -10565,12 +10614,13 @@ const renderProfileAccountLabel=()=>{
       syncActiveWalletIntoRecord();
       saveWalletAccounts();
       const panel=document.querySelector('.sidebar-item.active')?.dataset?.target||currentPanelId||'walletPanel';
+      const safePanel=panel==='marketPanel'?'walletPanel':panel;
       const range=document.querySelector('#chartTimeframes .tr-btn.active')?.dataset?.range||'1D';
       const snapshot={
         version:1,
         savedAt:new Date().toISOString(),
         activeWalletId,
-        activePanel:panel,
+        activePanel:safePanel,
         activeCoin:typeof activeCoin!=='undefined'?activeCoin:'SOL',
         marketRange:range,
         ui:{
@@ -10599,6 +10649,10 @@ const renderProfileAccountLabel=()=>{
       const ticker=document.querySelector(`.ticker-item[data-coin="${CSS.escape(String(state.activeCoin||'SOL'))}"]`);
       ticker?.click();
       if(state.marketRange&&window.setMarketTimeframe)window.setMarketTimeframe(state.marketRange);
+      if(state.activePanel === 'marketPanel'){
+        window.openTradeLocker?.();
+        return;
+      }
       if(state.activePanel){
         document.querySelector(`.sidebar-item[data-target="${CSS.escape(String(state.activePanel))}"]`)?.click();
       }
@@ -10699,5 +10753,464 @@ const renderProfileAccountLabel=()=>{
   .sidebar-wallet-selector{font-size:11px;min-height:24px}
 }
 </style>
+
+
+
+<style id="clean-modern-ui-v3">
+:root{--wallet-sidebar:250px;--wallet-radius-xl:22px;--wallet-radius-lg:18px;--wallet-ease:cubic-bezier(.22,1,.36,1);--wallet-shadow:0 16px 40px -29px rgba(0,0,0,.78)}
+body{background:radial-gradient(circle at 10% 0%,rgba(255,255,255,.025),transparent 25%),radial-gradient(circle at 94% 88%,rgba(255,255,255,.016),transparent 28%),var(--bg-main)!important}
+.sidebar{width:var(--wallet-sidebar)!important;padding:25px 15px 0!important;background:linear-gradient(180deg,rgba(15,15,18,.985),rgba(9,9,12,.99))!important;border-right:1px solid rgba(255,255,255,.055)!important;box-shadow:10px 0 38px rgba(0,0,0,.14)!important}
+.sidebar-header{margin:3px 5px 17px!important}.sidebar-label{font-size:9px!important;letter-spacing:1.35px!important;color:#52555f!important}.sidebar-group{padding:4px 0 0!important;margin:0!important}
+.sidebar-item{position:relative;min-height:45px;margin:4px 0!important;padding:0 12px!important;gap:12px!important;border:1px solid transparent!important;border-radius:13px!important;color:#8c9099!important;font-size:12.8px!important;font-weight:650!important;transform:none!important}
+.sidebar-item i{width:16px!important;height:16px!important;opacity:.84}.sidebar-item:hover{color:#f5f6f8!important;background:rgba(255,255,255,.042)!important;border-color:rgba(255,255,255,.05)!important;transform:translateX(1px)!important}
+.sidebar-item.active{color:#fff!important;background:rgba(255,255,255,.065)!important;border-color:rgba(255,255,255,.075)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important}.sidebar-item.active::before{content:"";position:absolute;left:-1px;top:9px;bottom:9px;width:2px;border-radius:999px;background:#fff}
+.sidebar-section-label{margin:20px 10px 7px;font-size:9px;line-height:1;text-transform:uppercase;letter-spacing:1.2px;font-weight:750;color:#4f525b}
+.trade-nav-item{margin-top:4px!important;color:#e6e8ec!important;background:rgba(255,255,255,.032)!important;border-color:rgba(255,255,255,.06)!important;box-shadow:none!important}.trade-nav-item:hover{background:rgba(255,255,255,.058)!important;border-color:rgba(255,255,255,.095)!important}
+.trade-nav-arrow{display:flex;align-items:center;margin-left:auto;opacity:.34}.trade-nav-arrow i{width:13px!important;height:13px!important}
+.sidebar-profile{margin:10px 0 0!important;padding:12px 9px 14px!important;border-top:1px solid rgba(255,255,255,.05)!important;border-radius:15px 15px 0 0!important}.sidebar-profile::before{display:none!important}.profile-avatar{width:38px!important;height:38px!important;border-radius:11px!important}
+.scroll-content{width:min(100%,1480px)!important;margin:0 auto!important;padding:max(28px,calc(env(safe-area-inset-top) + 22px)) clamp(18px,3.1vw,52px) max(42px,calc(env(safe-area-inset-bottom) + 34px))!important}
+.dashboard-header{min-height:42px!important;margin-bottom:20px!important}.dashboard-title{font-size:25px!important;letter-spacing:-.85px!important}.dashboard-title-group{gap:10px!important}.menu-btn{width:40px!important;height:40px!important;border-radius:12px!important}
+.balance-card{padding:28px!important;min-height:225px!important;border-radius:var(--wallet-radius-xl)!important;border-color:rgba(255,255,255,.07)!important;box-shadow:var(--wallet-shadow)!important;background:radial-gradient(circle at 88% 12%,rgba(255,255,255,.095),transparent 35%),linear-gradient(145deg,#1b1b20,#111115 68%)!important}.balance-card:hover{transform:translateY(-2px)!important;box-shadow:0 22px 50px -28px rgba(0,0,0,.86)!important}.main-balance{font-size:43px!important;letter-spacing:-1.45px!important}
+.card-actions.feature-actions{gap:9px!important}.card-actions.feature-actions .action-btn{min-height:45px!important;border-radius:13px!important;background:rgba(255,255,255,.045)!important;border:1px solid rgba(255,255,255,.085)!important;color:#f2f3f5!important;box-shadow:none!important}.card-actions.feature-actions .action-btn:hover{background:rgba(255,255,255,.073)!important;border-color:rgba(255,255,255,.13)!important;transform:translateY(-1px)!important}.card-actions.feature-actions .action-btn i{color:#aab0ba!important}
+.asset-list,.activity-panel,.exchange-transactions,.profit-summary-card,.cost-card,.tx-history-card{padding:19px!important;border-radius:var(--wallet-radius-lg)!important;background:rgba(17,17,21,.90)!important;border-color:rgba(255,255,255,.05)!important;box-shadow:var(--wallet-shadow)!important}.panel-header{margin-bottom:14px!important}.panel-title{color:#696d77!important;letter-spacing:1px!important}.list-item{padding:13px 11px!important;border-radius:12px!important}.icon-wrapper,.bitcoin-icon,.solana-icon,.eth-icon{width:39px!important;height:39px!important;border-radius:12px!important}.wallet-selector{padding:8px 11px!important;border-radius:10px!important;background:rgba(255,255,255,.05)!important;border-color:rgba(255,255,255,.09)!important}
+.modal-overlay{background:rgba(0,0,0,.70)!important;backdrop-filter:blur(15px)!important;-webkit-backdrop-filter:blur(15px)!important}.modal-card,.account-modal-card,.lock-card{border-radius:20px!important;border-color:rgba(255,255,255,.09)!important;box-shadow:0 28px 80px rgba(0,0,0,.60)!important}.tx-card{border-radius:14px!important}.settings-row{padding:14px 0!important}
+.wallet-bottom-dock{display:flex;align-items:center;justify-content:center;gap:4px;width:max-content;max-width:100%;margin:8px auto 24px;padding:5px;border:1px solid rgba(255,255,255,.07);border-radius:999px;background:rgba(14,14,17,.74);box-shadow:0 16px 35px -25px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.035);backdrop-filter:blur(18px) saturate(130%);-webkit-backdrop-filter:blur(18px) saturate(130%);opacity:1;transform:translateY(0) scale(1);transition:opacity .23s ease,transform .28s var(--wallet-ease),filter .23s ease}
+.wallet-bottom-dock:not(.visible),.sidebar-is-open .wallet-bottom-dock{opacity:0;transform:translateY(9px) scale(.97);filter:blur(2px);pointer-events:none}
+.wallet-dock-item{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:0 12px;border:1px solid transparent;border-radius:999px;background:transparent;color:#80848e;text-decoration:none;font-size:10.4px;font-weight:750;cursor:pointer;transition:background .16s ease,border-color .16s ease,color .16s ease,transform .18s var(--wallet-ease)}
+.wallet-dock-item i{width:14px;height:14px}.wallet-dock-item:hover{color:#f5f6f8;background:rgba(255,255,255,.045);transform:translateY(-1px)}.wallet-dock-item.active{color:#fff;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.07)}.wallet-dock-trade{color:#e8eaee;background:rgba(255,255,255,.025)}.wallet-dock-trade:hover{color:#fff;background:rgba(255,255,255,.06)}
+#marketPanel{display:none!important}
+@media(max-width:900px){.wallet-bottom-dock{width:100%;margin:8px 0 20px;padding:4px;gap:2px}.wallet-dock-item{flex:1 1 0;min-width:0;padding:0 7px;font-size:9.8px}}
+@media(max-width:768px){.sidebar{width:min(316px,88vw)!important;padding:calc(18px + env(safe-area-inset-top)) 13px 0!important}.sidebar-item{min-height:47px}}
+@media(max-width:600px){.scroll-content{padding:calc(17px + env(safe-area-inset-top)) max(13px,env(safe-area-inset-left),env(safe-area-inset-right)) calc(30px + env(safe-area-inset-bottom))!important}.dashboard-title{font-size:21px!important}.balance-card{padding:20px!important;min-height:188px!important;border-radius:18px!important}.main-balance{font-size:clamp(30px,8.5vw,39px)!important}.asset-list,.activity-panel,.exchange-transactions,.profit-summary-card,.cost-card,.tx-history-card{padding:15px!important;border-radius:17px!important}.wallet-bottom-dock{position:sticky;bottom:10px;z-index:20;margin-top:17px}.wallet-dock-item span{white-space:nowrap}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+
+
+
+<script id="tradelocker-legacy-route-guard">
+(function(){
+  const TRADELOCKER_URL='https://app.tradelocker.com/en/trade?tu=806903880876968935';
+  const go=()=>{window.location.href=TRADELOCKER_URL;};
+  window.openTradeLocker=go;
+  document.addEventListener('click',event=>{
+    const trade=event.target.closest?.('#tradeNavItem,[data-external-url="https://app.tradelocker.com/en/trade?tu=806903880876968935"]');
+    if(trade){event.preventDefault();event.stopImmediatePropagation();go();return;}
+    const market=event.target.closest?.('[data-target="marketPanel"]');
+    if(market){event.preventDefault();event.stopImmediatePropagation();go();}
+  },true);
+  if(/market/i.test(window.location.hash||''))go();
+})();
+</script>
+
+<script id="wallet-bottom-dock-runtime">
+(function(){
+  const dock=document.getElementById('walletBottomDock');
+  if(!dock)return;
+  function sync(){
+    const active=document.querySelector('.sidebar-item.active')?.dataset?.target || 'walletPanel';
+    const overviewActive=document.getElementById('walletPanel')?.classList.contains('active');
+    dock.classList.toggle('visible',!!overviewActive);
+    dock.querySelectorAll('.wallet-dock-item').forEach(item=>item.classList.toggle('active',item.dataset.dockTarget===active));
+  }
+  dock.addEventListener('click',e=>{
+    const item=e.target.closest('.wallet-dock-item');
+    if(!item)return;
+    const external=item.getAttribute('data-external-url');
+    if(external){
+      e.preventDefault();e.stopImmediatePropagation();window.location.href=external;return;
+    }
+    const target=item.getAttribute('data-dock-target');
+    if(!target)return;
+    const sidebarItem=document.querySelector(`.sidebar-item[data-target="${CSS.escape(target)}"]`);
+    if(sidebarItem)sidebarItem.click();
+  });
+  window.__syncWalletBottomDock=sync;
+  new MutationObserver(sync).observe(document.getElementById('walletPanel'),{attributes:true,attributeFilter:['class']});
+  sync();
+})();
+</script>
+
+<style id="final-scroll-dock-and-white-contrast-fix">
+/*
+  Final interaction/appearance pass.
+  - Pull indicators are positioned inside their page panels, so they sit at the
+    top of the current screen and naturally scroll away with the panel.
+  - The bottom quick-navigation dock is content-anchored, not fixed to the
+    browser viewport. It appears near the bottom of the current screen, then
+    scrolls with that page when the user continues down.
+  - The sidebar stays above the pull indicator/dock while retaining its own
+    existing visual treatment.
+  - White appearance corrects late dark-mode !important rules without changing
+    coin/logo artwork.
+*/
+
+.page-panel{
+  position:relative;
+}
+
+.page-panel > .pull-indicator{
+  position:absolute !important;
+  top:max(18px,calc(env(safe-area-inset-top) + 6px)) !important;
+  left:50% !important;
+  z-index:780 !important;
+}
+
+.wallet-bottom-dock{
+  position:absolute !important;
+  left:50% !important;
+  top:calc(100dvh - 64px - env(safe-area-inset-bottom)) !important;
+  bottom:auto !important;
+  margin:0 !important;
+  transform:translate3d(-50%,0,0) scale(1) !important;
+  z-index:760 !important;
+  max-width:calc(100% - 20px) !important;
+}
+
+.wallet-bottom-dock:not(.visible),
+.sidebar-is-open .wallet-bottom-dock{
+  transform:translate3d(-50%,9px,0) scale(.97) !important;
+  opacity:0 !important;
+  filter:blur(2px);
+  pointer-events:none !important;
+}
+
+.sidebar{
+  z-index:1000 !important;
+}
+
+.sidebar-overlay{
+  z-index:990 !important;
+}
+
+.modal-overlay{
+  z-index:1100 !important;
+}
+
+.lock-overlay{
+  z-index:1110 !important;
+}
+
+.toast-notification{
+  z-index:1120 !important;
+}
+
+/* Keep the existing dark drawer appearance even when White appearance is selected. */
+body.theme-light .sidebar{
+  background:linear-gradient(180deg,rgba(15,15,18,.985),rgba(9,9,12,.99)) !important;
+  border-right-color:rgba(255,255,255,.055) !important;
+}
+body.theme-light .sidebar-label{color:#52555f !important;}
+body.theme-light .sidebar-item{color:#8c9099 !important;background:transparent !important;border-color:transparent !important;}
+body.theme-light .sidebar-item:hover{color:#f5f6f8 !important;background:rgba(255,255,255,.042) !important;border-color:rgba(255,255,255,.05) !important;}
+body.theme-light .sidebar-item.active{color:#fff !important;background:rgba(255,255,255,.065) !important;border-color:rgba(255,255,255,.075) !important;}
+body.theme-light .sidebar-section-label{color:#4f525b !important;}
+body.theme-light .trade-nav-item{color:#e6e8ec !important;background:rgba(255,255,255,.032) !important;border-color:rgba(255,255,255,.06) !important;}
+body.theme-light .sidebar-close-btn{color:#aeb4bf !important;}
+body.theme-light .wallet-account-area .profile-name{color:#fff !important;}
+body.theme-light .wallet-account-area .profile-tag{color:#7a8492 !important;}
+body.theme-light .sidebar-wallet-selector{color:#aeb4bf !important;background:transparent !important;}
+body.theme-light .sidebar-wallet-selector option{color:#111 !important;background:#fff !important;}
+
+/* Late clean-modern-ui-v3 rules: restore readable White appearance. */
+body.theme-light .balance-card{
+  background:linear-gradient(145deg,#ffffff,#eef2f6 68%) !important;
+  border-color:#dce2e9 !important;
+  box-shadow:0 16px 36px -18px rgba(22,31,44,.18) !important;
+}
+
+body.theme-light .card-actions.feature-actions .action-btn:not(.primary){
+  background:#f7f9fb !important;
+  color:#16202b !important;
+  border-color:#d5dce5 !important;
+  box-shadow:none !important;
+}
+body.theme-light .card-actions.feature-actions .action-btn:not(.primary):hover{
+  background:#eef2f6 !important;
+  border-color:#cdd5df !important;
+}
+body.theme-light .card-actions.feature-actions .action-btn i{
+  color:#5d6877 !important;
+}
+body.theme-light .card-actions.feature-actions .action-btn.primary{
+  background:#11161e !important;
+  color:#fff !important;
+  border-color:#11161e !important;
+}
+
+body.theme-light .asset-list,
+body.theme-light .activity-panel,
+body.theme-light .exchange-transactions,
+body.theme-light .profit-summary-card,
+body.theme-light .cost-card,
+body.theme-light .tx-history-card{
+  background:#fff !important;
+  border-color:#dde3ea !important;
+  box-shadow:0 12px 28px rgba(22,31,44,.07) !important;
+}
+
+body.theme-light .wallet-selector{
+  background:#eef1f5 !important;
+  color:#151a22 !important;
+  border-color:#d8dfe7 !important;
+}
+body.theme-light .wallet-selector option{
+  background:#fff !important;
+  color:#151a22 !important;
+}
+
+body.theme-light .edit-panel{
+  background:rgba(255,255,255,.98) !important;
+  border-color:#dce2e9 !important;
+}
+body.theme-light .edit-row input,
+body.theme-light .settings-select,
+body.theme-light .modal-field,
+body.theme-light .mac-input-field{
+  background:#eef1f5 !important;
+  color:#141a23 !important;
+  border-color:#d9e0e8 !important;
+}
+body.theme-light .edit-btn:not(.save){
+  background:#f4f6f8 !important;
+  color:#151a22 !important;
+  border-color:#d7dee7 !important;
+}
+body.theme-light .edit-btn.save{
+  background:#11161e !important;
+  color:#fff !important;
+}
+
+body.theme-light .modal-card,
+body.theme-light .account-modal-card{
+  background:#fff !important;
+  color:#151a22 !important;
+  border-color:#d7dee7 !important;
+  box-shadow:0 28px 80px rgba(22,31,44,.16) !important;
+}
+
+body.theme-light .modal-card .modal-title,
+body.theme-light .account-name-lg,
+body.theme-light .address-book-hero-title,
+body.theme-light .asset-manager-name,
+body.theme-light .asset-manager-balance,
+body.theme-light .send-security-head{
+  color:#151a22 !important;
+}
+
+body.theme-light .send-security-row span:last-child{
+  color:#151a22 !important;
+}
+
+body.theme-light .confirm-summary-row span:last-child,
+body.theme-light .confirm-total{
+  color:#151a22 !important;
+}
+
+body.theme-light .lock-card{
+  background:linear-gradient(180deg,#ffffff,#f3f5f8) !important;
+  color:#151a22 !important;
+  border-color:#d7dee7 !important;
+  box-shadow:0 28px 80px rgba(22,31,44,.16) !important;
+}
+body.theme-light .lock-title,
+body.theme-light .pin-input{
+  color:#151a22 !important;
+}
+body.theme-light .pin-dot{
+  border-color:#b8c1cc !important;
+}
+body.theme-light .pin-dot.filled{
+  background:#151a22 !important;
+  border-color:#151a22 !important;
+  box-shadow:0 0 10px rgba(22,31,44,.12) !important;
+}
+
+/* Keep transaction controls and colored action buttons legible without
+   recoloring their intentional semantic backgrounds. */
+body.theme-light .tx-filter{
+  color:#697383 !important;
+  background:#f5f7f9 !important;
+  border-color:#dfe4eb !important;
+}
+body.theme-light .tx-filter.active{
+  color:#fff !important;
+  background:#11161e !important;
+  border-color:#11161e !important;
+}
+body.theme-light .confirm-exchange-btn{
+  color:#fff !important;
+}
+body.theme-light .mac-submit-btn.buy-btn{
+  color:#000 !important;
+}
+body.theme-light .mac-submit-btn.sell-btn{
+  color:#fff !important;
+}
+
+/* The dock changes surface/text for White appearance, but the coin/logo
+   artwork itself remains untouched. */
+body.theme-light .wallet-bottom-dock{
+  background:rgba(255,255,255,.96) !important;
+  border-color:#d7dee7 !important;
+  box-shadow:0 16px 35px -25px rgba(22,31,44,.28),inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+body.theme-light .wallet-dock-item{
+  color:#697383 !important;
+}
+body.theme-light .wallet-dock-item:hover{
+  color:#151a22 !important;
+  background:#f1f4f7 !important;
+}
+body.theme-light .wallet-dock-item.active{
+  color:#151a22 !important;
+  background:#e9edf2 !important;
+  border-color:#d6dde6 !important;
+}
+body.theme-light .wallet-dock-trade{
+  color:#27313e !important;
+  background:#f3f5f8 !important;
+}
+
+/* Address/asset management text that was previously hard-coded white. */
+body.theme-light .address-book-hero-title,
+body.theme-light .asset-manager-name,
+body.theme-light .asset-manager-balance,
+body.theme-light .account-name-lg{
+  color:#151a22 !important;
+}
+
+/* Preserve Solana/Ethereum/Bitcoin artwork and its intended dark/orange surfaces. */
+body.theme-light .solana-icon{background:#000 !important;}
+body.theme-light .eth-icon{background:#0d0d0d !important;}
+body.theme-light .mci-icon.sol-bg{background:#000 !important;}
+body.theme-light .mci-icon.eth-bg{background:#0d0d0d !important;}
+body.theme-light .sol-mini{color:#fff !important;}
+</style>
+
+<script id="final-panel-dock-and-pull-placement">
+(function(){
+  'use strict';
+
+  const pullTargets = [
+    ['pullIndicator','walletPanel'],
+    ['marketPullIndicator','marketPanel'],
+    ['profitsPullIndicator','profitsPanel']
+  ];
+
+  function movePullIndicator(id,panelId){
+    const indicator=document.getElementById(id);
+    const panel=document.getElementById(panelId);
+    if(!indicator || !panel) return;
+    if(indicator.parentElement !== panel){
+      panel.insertBefore(indicator,panel.firstChild);
+    }
+  }
+
+  pullTargets.forEach(([id,panelId])=>movePullIndicator(id,panelId));
+
+  const source=document.getElementById('walletBottomDock');
+  if(!source) return;
+
+  /* The original dock is nested inside walletScroll in the source file.
+     Move it to be a direct child of the page panel so it behaves the same
+     way as every cloned dock and scrolls with the panel rather than with
+     the pull-to-refresh content transform. */
+  const walletPanel=document.getElementById('walletPanel');
+  if(walletPanel && source.parentElement!==walletPanel){
+    walletPanel.appendChild(source);
+  }
+
+  const panelIds=[
+    'walletPanel',
+    'marketPanel',
+    'profitsPanel',
+    'assetsPanel',
+    'settingsPanel',
+    'recentActivityPage'
+  ];
+
+  function bindDock(dock){
+    if(dock.dataset.bound==='1') return;
+    dock.dataset.bound='1';
+
+    dock.addEventListener('click',e=>{
+      const item=e.target.closest('.wallet-dock-item');
+      if(!item) return;
+
+      const external=item.getAttribute('data-external-url');
+      if(external){
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.href=external;
+        return;
+      }
+
+      const target=item.getAttribute('data-dock-target');
+      if(!target) return;
+
+      const sidebarItem=document.querySelector(`.sidebar-item[data-target="${CSS.escape(target)}"]`);
+      if(sidebarItem){
+        e.preventDefault();
+        sidebarItem.click();
+      }
+    });
+  }
+
+  panelIds.forEach(panelId=>{
+    const panel=document.getElementById(panelId);
+    if(!panel) return;
+
+    let dock=Array.from(panel.children).find(
+      child=>child.classList?.contains('wallet-bottom-dock')
+    );
+    if(!dock){
+      dock=source.cloneNode(true);
+      dock.removeAttribute('id');
+      dock.id=`walletBottomDock-${panelId}`;
+      panel.appendChild(dock);
+
+      /* Clones are not covered by the original runtime's single-dock listener. */
+      bindDock(dock);
+      if(window.lucide) window.lucide.createIcons({nodes:[dock]});
+    }
+  });
+
+  function sync(){
+    const activePanel=document.querySelector('.page-panel.active');
+    const activeTarget=activePanel?.id || 'walletPanel';
+    const drawerOpen=document.body.classList.contains('sidebar-is-open');
+
+    document.querySelectorAll('.page-panel > .wallet-bottom-dock').forEach(dock=>{
+      const panel=dock.parentElement;
+      const isActive=panel?.classList.contains('active');
+
+      dock.classList.toggle('visible',!!isActive && !drawerOpen);
+
+      dock.querySelectorAll('.wallet-dock-item').forEach(item=>{
+        item.classList.toggle(
+          'active',
+          item.dataset.dockTarget===activeTarget
+        );
+      });
+    });
+  }
+
+  document.querySelectorAll('.page-panel').forEach(panel=>{
+    new MutationObserver(sync).observe(panel,{
+      attributes:true,
+      attributeFilter:['class']
+    });
+  });
+
+  new MutationObserver(sync).observe(document.body,{
+    attributes:true,
+    attributeFilter:['class']
+  });
+
+  window.__syncWalletBottomDockAll=sync;
+  sync();
+})();
+</script>
+
 </body>
 </html>
