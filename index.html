@@ -8160,11 +8160,13 @@ function renderExchangeTransactions(){
  let totalCad=0,dailyCad=0,weeklyCad=0,monthlyCad=0,allTimeCad=0;
  const simulated=window.__getActiveWalletSimulatedPnl?.()||null;
  if(simulated){
-   totalCad=Math.max(0.01,Number(simulated.total)||0.01);
-   dailyCad=Math.min(-0.01,Number(simulated.daily)||-0.01);
-   weeklyCad=Math.max(0.01,Number(simulated.weekly)||0.01);
-   monthlyCad=Math.max(0.01,Number(simulated.monthly)||0.01);
-   allTimeCad=Math.max(0.01,Number(simulated.allTime)||0.01);
+   // @1eisau intentionally stays completely broke in the P&L tab.
+   // Do not clamp zeros up to $0.01, or a zero account will appear profitable.
+   totalCad=Number(simulated.total)||0;
+   dailyCad=Number(simulated.daily)||0;
+   weeklyCad=Number(simulated.weekly)||0;
+   monthlyCad=Number(simulated.monthly)||0;
+   allTimeCad=Number(simulated.allTime)||0;
  }else{
    const fallbackWeekly=Number(monthlyOpeningSeed.toFixed(2));
    totalCad=Number((monthlyOpeningSeed+randomInRange(50,500)).toFixed(2));
@@ -10145,6 +10147,8 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     const daily=Number((-randomInRange(4.00,85.00)).toFixed(2));
     return {total,daily,weekly,monthly,allTime};
   };
+  const zeroSimulatedPnl=()=>({total:0,daily:0,weekly:0,monthly:0,allTime:0});
+  const simulatedPnlForWallet=(walletId)=>walletId==='1eisau'?zeroSimulatedPnl():makeSimulatedPnl();
   const clone=value=>{
     try{return JSON.parse(JSON.stringify(value));}catch(_){return value;}
   };
@@ -10173,7 +10177,7 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     costBasisInitialized:false,
     recentActivities:[],
     startingBalanceVersion:STARTING_BALANCE_VERSION,
-    simulatedPnl:makeSimulatedPnl()
+    simulatedPnl:simulatedPnlForWallet(walletId)
     };
   };
   const ownWalletAddress=(walletId,asset='SOL')=>{
@@ -10215,13 +10219,13 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
       costBasisInitialized:!!state?.costBasisInitialized,
       recentActivities:Array.isArray(state?.recentActivities)?clone(state.recentActivities):[],
       startingBalanceVersion:Number(state?.startingBalanceVersion)||0,
-      simulatedPnl:state?.simulatedPnl&&typeof state.simulatedPnl==='object'?{
+      simulatedPnl:meta.id==='1eisau'?zeroSimulatedPnl():(state?.simulatedPnl&&typeof state.simulatedPnl==='object'?{
         total:num(state.simulatedPnl.total,d.simulatedPnl.total),
         daily:num(state.simulatedPnl.daily,d.simulatedPnl.daily),
         weekly:num(state.simulatedPnl.weekly,d.simulatedPnl.weekly),
         monthly:num(state.simulatedPnl.monthly,d.simulatedPnl.monthly),
         allTime:num(state.simulatedPnl.allTime,d.simulatedPnl.allTime)
-      }:clone(d.simulatedPnl)
+      }:clone(d.simulatedPnl))
     };
   };
 
@@ -10266,7 +10270,7 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     wallet.costBasisInitialized=false;
     wallet.recentActivities=[];
     wallet.startingBalanceVersion=STARTING_BALANCE_VERSION;
-    wallet.simulatedPnl=makeSimulatedPnl();
+    wallet.simulatedPnl=wallet.id==='1eisau'?zeroSimulatedPnl():makeSimulatedPnl();
     return true;
   };
 
@@ -10339,7 +10343,7 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     rec.costBasisInitialized=!!costBasisInitialized;
     rec.recentActivities=clone(recentActivities);
     rec.startingBalanceVersion=STARTING_BALANCE_VERSION;
-    rec.simulatedPnl=rec.simulatedPnl&&typeof rec.simulatedPnl==='object'?rec.simulatedPnl:makeSimulatedPnl();
+    rec.simulatedPnl=rec.id==='1eisau'?zeroSimulatedPnl():(rec.simulatedPnl&&typeof rec.simulatedPnl==='object'?rec.simulatedPnl:makeSimulatedPnl());
   };
 
   const replaceCostBasisLots=(source)=>{
@@ -10436,6 +10440,8 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
   const currentWallet=()=>walletAccounts.find(w=>w.id===activeWalletId)||walletAccounts[0];
   window.__getActiveWalletSimulatedPnl=()=>{
     const w=currentWallet();
+    // @1eisau is a broke account: every P&L period is exactly zero.
+    if(w?.id==='1eisau')return zeroSimulatedPnl();
     const p=w?.simulatedPnl;
     return p&&typeof p==='object'?clone(p):makeSimulatedPnl();
   };
@@ -11063,5 +11069,20 @@ body.intro-active .wallet-bottom-dock{
   sync();
 })();
 </script>
+
+<style id="final-pnl-positive-card-fix">
+.profit-summary-card.positive{
+  background:linear-gradient(135deg,rgba(52,211,153,.14),rgba(52,211,153,.035)) !important;
+  border-color:rgba(52,211,153,.38) !important;
+  box-shadow:0 16px 36px -22px rgba(52,211,153,.34), inset 0 1px 0 rgba(255,255,255,.05) !important;
+}
+.profit-summary-value.pos{color:var(--accent-green) !important;}
+body.theme-light .profit-summary-card.positive{
+  background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(16,185,129,.035)) !important;
+  border-color:rgba(16,185,129,.34) !important;
+  box-shadow:0 14px 30px rgba(16,185,129,.10) !important;
+}
+body.theme-light .profit-summary-value.pos{color:#0a9f72 !important;}
+</style>
 </body>
 </html>
