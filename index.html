@@ -6190,6 +6190,95 @@ body.theme-light .profile-editor{
 }
 </style>
 
+
+<style id="final-account-start-pnl-profile-light-fix">
+/* Account starting balances */
+
+/* Fix the profile image so the source image's white square can never show outside the circle. */
+.profile-avatar{
+  width:38px !important;
+  height:38px !important;
+  min-width:38px !important;
+  min-height:38px !important;
+  border-radius:50% !important;
+  overflow:hidden !important;
+  background:transparent !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08), inset 0 1px 0 rgba(255,255,255,.18) !important;
+  clip-path:circle(50% at 50% 50%) !important;
+}
+.profile-avatar img{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  border-radius:50% !important;
+  object-fit:cover !important;
+  clip-path:circle(50% at 50% 50%) !important;
+}
+
+/* The modern UI block uses !important dark drawer rules, so the light theme needs
+   an equally explicit final cascade. */
+body.theme-light .sidebar{
+  background:#ffffff !important;
+  border-right:1px solid #dfe4eb !important;
+  box-shadow:10px 0 38px rgba(22,31,44,.08) !important;
+  color:#151a22 !important;
+}
+body.theme-light .sidebar-label,
+body.theme-light .sidebar-section-label{color:#8a94a3 !important}
+body.theme-light .sidebar-item{
+  color:#687384 !important;
+  background:transparent !important;
+  border-color:transparent !important;
+  box-shadow:none !important;
+}
+body.theme-light .sidebar-item:hover{
+  color:#111722 !important;
+  background:#f2f5f8 !important;
+  border-color:#e4e8ee !important;
+}
+body.theme-light .sidebar-item.active{
+  color:#111722 !important;
+  background:#edf1f5 !important;
+  border-color:#dfe4eb !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 4px 12px rgba(22,31,44,.05) !important;
+}
+body.theme-light .sidebar-item.active::before{background:#151a22 !important}
+body.theme-light .trade-nav-item{
+  color:#27313e !important;
+  background:#f7f9fb !important;
+  border-color:#e1e6ec !important;
+}
+body.theme-light .trade-nav-item:hover{background:#eef2f6 !important;border-color:#d6dde5 !important}
+body.theme-light .trade-nav-arrow{color:#667281 !important}
+body.theme-light .sidebar-profile{
+  background:transparent !important;
+  border-top-color:#e2e6ec !important;
+  border-radius:15px 15px 0 0 !important;
+}
+body.theme-light .sidebar-profile:hover,
+body.theme-light .sidebar-profile:active{background:#f6f8fa !important}
+body.theme-light .profile-name{color:#151a22 !important}
+body.theme-light .profile-tag{color:#697383 !important}
+body.theme-light .sidebar-wallet-selector{color:#697383 !important;background:transparent !important;border-color:transparent !important}
+body.theme-light .sidebar-wallet-selector option{color:#151a22 !important;background:#ffffff !important}
+body.theme-light .sidebar-close-btn{color:#697383 !important;background:transparent !important}
+body.theme-light .sidebar-close-btn:hover{color:#151a22 !important;background:#f1f4f7 !important}
+body.theme-light .sidebar-overlay{background:rgba(18,25,35,.26) !important}
+
+/* Four P&L cards: keep the negative daily card visibly red and everything else green. */
+#dailyProfitLoss.neg{color:var(--accent-red) !important}
+#weeklyProfitLoss.pos,#monthlyProfitLoss.pos,#allTimeProfitLoss.pos{color:var(--accent-green) !important}
+body.theme-light #dailyProfitLoss.neg{color:#dc414b !important}
+body.theme-light #weeklyProfitLoss.pos,
+body.theme-light #monthlyProfitLoss.pos,
+body.theme-light #allTimeProfitLoss.pos{color:#0a9f72 !important}
+
+@media(max-width:600px){
+  .profit-period-grid{grid-template-columns:1fr 1fr !important}
+  .profit-period-card{min-width:0 !important}
+}
+</style>
+
 </head>
 <body><script id="contacts-data-migration-final">
 (function(){
@@ -6550,13 +6639,23 @@ body.theme-light .profile-editor{
 <div class="profit-period-grid">
   <div class="profit-period-card">
     <div class="profit-period-label">Daily profit &amp; loss</div>
-    <div class="profit-period-value zero" id="dailyProfitLoss">$0.00 <span>CAD</span></div>
-    <div class="profit-period-sub">Since midnight</div>
+    <div class="profit-period-value neg" id="dailyProfitLoss">-$0.00 <span>CAD</span></div>
+    <div class="profit-period-sub">Today</div>
+  </div>
+  <div class="profit-period-card">
+    <div class="profit-period-label">Weekly profit &amp; loss</div>
+    <div class="profit-period-value pos" id="weeklyProfitLoss">+$0.00 <span>CAD</span></div>
+    <div class="profit-period-sub">Last 7 days</div>
   </div>
   <div class="profit-period-card">
     <div class="profit-period-label">Monthly profit &amp; loss</div>
-    <div class="profit-period-value zero" id="monthlyProfitLoss">$0.00 <span>CAD</span></div>
-    <div class="profit-period-sub">Since the start of this month</div>
+    <div class="profit-period-value pos" id="monthlyProfitLoss">+$0.00 <span>CAD</span></div>
+    <div class="profit-period-sub">This month</div>
+  </div>
+  <div class="profit-period-card">
+    <div class="profit-period-label">All-time profit &amp; loss</div>
+    <div class="profit-period-value pos" id="allTimeProfitLoss">+$0.00 <span>CAD</span></div>
+    <div class="profit-period-sub">All recorded history</div>
   </div>
 </div>
 <div class="exchange-transactions" id="exchangeTransactionsPanel">
@@ -8058,29 +8157,22 @@ function renderExchangeTransactions(){
  const txs=(profitLossActivities||[]).filter(t=>t&&t.fromCurr&&t.toCurr);
  if(txPanel) txPanel.style.display='block';
  if(count)count.textContent=txs.length;
- let totalCad=0,dailyCad=0,monthlyCad=0;
- const now=Date.now();
- const current=new Date(now);
- const dayStart=new Date(current.getFullYear(),current.getMonth(),current.getDate()).getTime();
- const monthStart=new Date(current.getFullYear(),current.getMonth(),1).getTime();
-
- // Daily card intentionally remains the live realized-daily calculation.
- // The main Total card is today's earnings as requested.
- txs.forEach(t=>{
-   const gain=typeof t.gainCad==='number'&&Number.isFinite(t.gainCad)?t.gainCad:0;
-   const stamp=Date.parse(t.timestamp||'');
-   if(Number.isFinite(stamp)){
-     if(stamp>=dayStart)dailyCad+=gain;
-     if(stamp>=monthStart)monthlyCad+=gain;
-   }
- });
-
- // Give the monthly card a fresh starting value for this wallet open.
- // Real monthly realized P&L is added on top, so trades continue to update it.
- monthlyCad=monthlyOpeningSeed+monthlyCad;
-
- // Main Total is today's earnings, not lifetime earnings.
- totalCad=dailyCad;
+ let totalCad=0,dailyCad=0,weeklyCad=0,monthlyCad=0,allTimeCad=0;
+ const simulated=window.__getActiveWalletSimulatedPnl?.()||null;
+ if(simulated){
+   totalCad=Math.max(0.01,Number(simulated.total)||0.01);
+   dailyCad=Math.min(-0.01,Number(simulated.daily)||-0.01);
+   weeklyCad=Math.max(0.01,Number(simulated.weekly)||0.01);
+   monthlyCad=Math.max(0.01,Number(simulated.monthly)||0.01);
+   allTimeCad=Math.max(0.01,Number(simulated.allTime)||0.01);
+ }else{
+   const fallbackWeekly=Number(monthlyOpeningSeed.toFixed(2));
+   totalCad=Number((monthlyOpeningSeed+randomInRange(50,500)).toFixed(2));
+   dailyCad=-Number((randomInRange(4,85)).toFixed(2));
+   weeklyCad=fallbackWeekly;
+   monthlyCad=Number((fallbackWeekly+randomInRange(60,600)).toFixed(2));
+   allTimeCad=Number((monthlyCad+randomInRange(250,4000)).toFixed(2));
+ }
 
  if(totalEl){
    const formatted=formatProfitLossValue(totalCad);
@@ -8090,7 +8182,9 @@ function renderExchangeTransactions(){
    if(summaryCard){summaryCard.classList.toggle('negative',totalCad<-0.005);summaryCard.classList.toggle('positive',totalCad>0.005);}
  }
  renderPeriodProfitLoss('dailyProfitLoss',dailyCad);
+ renderPeriodProfitLoss('weeklyProfitLoss',weeklyCad);
  renderPeriodProfitLoss('monthlyProfitLoss',monthlyCad);
+ renderPeriodProfitLoss('allTimeProfitLoss',allTimeCad);
  if(!list)return;
  if(!txs.length){list.innerHTML='<div class="tx-empty">No completed trades yet. Your realized profit and loss will appear here after a completed sale, swap, or matched buy + sell.</div>';return;}
  list.innerHTML=txs.slice(0,30).map((t,i)=>{
@@ -10033,6 +10127,24 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     {id:'main',name:'@3sa',handle:'3sa'},
     {id:'1eisau',name:'@1eisau',handle:'1eisau'}
   ];
+  const STARTING_BALANCE_VERSION=2;
+  const STARTING_BALANCE_RANGES={
+    main:[951.13,2443.23],
+    '1eisau':[0.31,135.23]
+  };
+  const randomInRange=(min,max)=>min+Math.random()*(max-min);
+  const startingBalanceFor=walletId=>{
+    const range=STARTING_BALANCE_RANGES[walletId]||STARTING_BALANCE_RANGES.main;
+    return Number(randomInRange(range[0],range[1]).toFixed(2));
+  };
+  const makeSimulatedPnl=()=>{
+    const weekly=Number(randomInRange(24.00,185.00).toFixed(2));
+    const monthly=Number((weekly+randomInRange(65.00,780.00)).toFixed(2));
+    const total=Number(randomInRange(180.00,3600.00).toFixed(2));
+    const allTime=Number((Math.max(total,monthly)+randomInRange(250.00,5200.00)).toFixed(2));
+    const daily=Number((-randomInRange(4.00,85.00)).toFixed(2));
+    return {total,daily,weekly,monthly,allTime};
+  };
   const clone=value=>{
     try{return JSON.parse(JSON.stringify(value));}catch(_){return value;}
   };
@@ -10041,10 +10153,12 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     const n=Number(value);
     return Number.isFinite(n)?n:fallback;
   };
-  const walletDefaults=()=>({
+  const walletDefaults=(walletId='main')=>{
+    const startingCad=startingBalanceFor(walletId);
+    return {
     balances:{
-      displayBalanceCAD:0,
-      internalHiddenBalanceCAD:0,
+      displayBalanceCAD:startingCad,
+      internalHiddenBalanceCAD:startingCad,
       displayBalanceUSD:0,
       internalHiddenBalanceUSD:0,
       balanceRateCAD:0,
@@ -10057,8 +10171,11 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     profitLossActivities:[],
     lifetimeRealizedPnlCad:0,
     costBasisInitialized:false,
-    recentActivities:[]
-  });
+    recentActivities:[],
+    startingBalanceVersion:STARTING_BALANCE_VERSION,
+    simulatedPnl:makeSimulatedPnl()
+    };
+  };
   const ownWalletAddress=(walletId,asset='SOL')=>{
     const a=String(asset||'SOL').toUpperCase();
     if(walletId==='main'&&a==='SOL')return MAIN_SOL_ADDRESS;
@@ -10071,7 +10188,7 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     return `W${a}${out}`.slice(0,64);
   };
   const freshWallet=(meta,state=null)=>{
-    const d=walletDefaults();
+    const d=walletDefaults(meta.id);
     return {
       id:meta.id,
       name:meta.name,
@@ -10096,7 +10213,15 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
       profitLossActivities:Array.isArray(state?.profitLossActivities)?clone(state.profitLossActivities):[],
       lifetimeRealizedPnlCad:num(state?.lifetimeRealizedPnlCad),
       costBasisInitialized:!!state?.costBasisInitialized,
-      recentActivities:Array.isArray(state?.recentActivities)?clone(state.recentActivities):[]
+      recentActivities:Array.isArray(state?.recentActivities)?clone(state.recentActivities):[],
+      startingBalanceVersion:Number(state?.startingBalanceVersion)||0,
+      simulatedPnl:state?.simulatedPnl&&typeof state.simulatedPnl==='object'?{
+        total:num(state.simulatedPnl.total,d.simulatedPnl.total),
+        daily:num(state.simulatedPnl.daily,d.simulatedPnl.daily),
+        weekly:num(state.simulatedPnl.weekly,d.simulatedPnl.weekly),
+        monthly:num(state.simulatedPnl.monthly,d.simulatedPnl.monthly),
+        allTime:num(state.simulatedPnl.allTime,d.simulatedPnl.allTime)
+      }:clone(d.simulatedPnl)
     };
   };
 
@@ -10111,7 +10236,9 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
       profitLossActivities:Array.isArray(row.profitLossActivities)?row.profitLossActivities:[],
       lifetimeRealizedPnlCad:row.lifetimeRealizedPnlCad,
       costBasisInitialized:row.costBasisInitialized,
-      recentActivities:Array.isArray(row.recentActivities)?row.recentActivities:[]
+      recentActivities:Array.isArray(row.recentActivities)?row.recentActivities:[],
+      startingBalanceVersion:Number(row.startingBalanceVersion)||0,
+      simulatedPnl:row.simulatedPnl
     };
     const out=freshWallet({...meta,name:String(row.name||meta.name),handle:String(row.handle||meta.handle)},state);
     out.addresses={...base.addresses,...(row.addresses&&typeof row.addresses==='object'?row.addresses:{})};
@@ -10120,15 +10247,41 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     return out;
   };
 
+  const seedWalletStartingBalance=(wallet)=>{
+    if(!wallet||wallet.startingBalanceVersion===STARTING_BALANCE_VERSION)return false;
+    const seed=startingBalanceFor(wallet.id);
+    wallet.balances=wallet.balances||{};
+    wallet.balances.displayBalanceCAD=seed;
+    wallet.balances.internalHiddenBalanceCAD=seed;
+    wallet.balances.displayBalanceUSD=0;
+    wallet.balances.internalHiddenBalanceUSD=0;
+    wallet.balances.balanceRateCAD=0;
+    wallet.balances.balanceRateUSD=0;
+    wallet.balances.bitcoinBalance=0;
+    wallet.balances.solanaBalance=0;
+    wallet.balances.ethereumBalance=0;
+    wallet.costBasisLots={BTC:[],SOL:[],ETH:[]};
+    wallet.profitLossActivities=[];
+    wallet.lifetimeRealizedPnlCad=0;
+    wallet.costBasisInitialized=false;
+    wallet.recentActivities=[];
+    wallet.startingBalanceVersion=STARTING_BALANCE_VERSION;
+    wallet.simulatedPnl=makeSimulatedPnl();
+    return true;
+  };
+
   const migrateLegacyState=()=>{
     let stored=null;
     try{stored=JSON.parse(localStorage.getItem(WALLET_ACCOUNTS_STORAGE_KEY)||'null');}catch(_){stored=null;}
     if(stored&&stored.version===1&&Array.isArray(stored.wallets)){
       walletAccounts=DEFAULT_WALLETS.map(meta=>{
         const found=stored.wallets.find(w=>w&&w.id===meta.id);
-        return normalizeWallet(found||{},meta);
+        const wallet=normalizeWallet(found||{},meta);
+        if(!found||Number(found.startingBalanceVersion)!==STARTING_BALANCE_VERSION)seedWalletStartingBalance(wallet);
+        return wallet;
       });
       activeWalletId=stored.activeWalletId&&walletAccounts.some(w=>w.id===stored.activeWalletId)?stored.activeWalletId:'main';
+      walletAccounts.forEach(wallet=>{if(wallet.startingBalanceVersion!==STARTING_BALANCE_VERSION)seedWalletStartingBalance(wallet);});
       return;
     }
     const legacyMain=freshWallet(DEFAULT_WALLETS[0],{
@@ -10151,9 +10304,9 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     });
     walletAccounts=[
       legacyMain,
-      freshWallet(DEFAULT_WALLETS[1]),
-      freshWallet(DEFAULT_WALLETS[2])
+      freshWallet(DEFAULT_WALLETS[1])
     ];
+    walletAccounts.forEach(seedWalletStartingBalance);
   };
 
   const saveWalletAccounts=()=>{
@@ -10185,6 +10338,8 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
     rec.lifetimeRealizedPnlCad=num(lifetimeRealizedPnlCad);
     rec.costBasisInitialized=!!costBasisInitialized;
     rec.recentActivities=clone(recentActivities);
+    rec.startingBalanceVersion=STARTING_BALANCE_VERSION;
+    rec.simulatedPnl=rec.simulatedPnl&&typeof rec.simulatedPnl==='object'?rec.simulatedPnl:makeSimulatedPnl();
   };
 
   const replaceCostBasisLots=(source)=>{
@@ -10279,6 +10434,11 @@ body.theme-light .pull-indicator.ready .refresh-capsule {
   };
 
   const currentWallet=()=>walletAccounts.find(w=>w.id===activeWalletId)||walletAccounts[0];
+  window.__getActiveWalletSimulatedPnl=()=>{
+    const w=currentWallet();
+    const p=w?.simulatedPnl;
+    return p&&typeof p==='object'?clone(p):makeSimulatedPnl();
+  };
 const renderProfileAccountLabel=()=>{
     const w=currentWallet();
     const name=document.getElementById('profileName');
