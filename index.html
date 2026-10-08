@@ -8488,57 +8488,355 @@ if(typeof window.refreshPinSettingsUI==='function')window.refreshPinSettingsUI()
 if(typeof window.renderTransactionHistory==='function')window.renderTransactionHistory();
 
 });
+
 const walletPanel = document.getElementById('walletPanel');
 const content = document.getElementById('walletScroll');
 const indicator = document.getElementById('pullIndicator');
 const spinnerArc = document.getElementById('spinnerArc');
 const refreshText = document.getElementById('refreshText');
-let startY=0,currentY=0,isDragging=false,isRefreshing=false;
-const triggerThreshold=80;
-const CIRCUMFERENCE=53.4;
-function triggerHaptic(){if('vibrate' in navigator)navigator.vibrate(10);}
-function handleStart(y){if(walletPanel.scrollTop<=0&&!isRefreshing){startY=y;currentY=y;isDragging=true;content.style.transition='none';indicator.classList.remove('completed');}}
-function handleMove(y,e){if(!isDragging||isRefreshing)return;currentY=y;const rawDistance=currentY-startY;const dict=translations[currentLang]||translations['en-CA'];if(rawDistance>0&&walletPanel.scrollTop<=0){if(e.cancelable)e.preventDefault();const dragOffset=Math.pow(rawDistance*0.45,0.90);content.style.transform=`translateY(${dragOffset}px)`;const progress=Math.min(dragOffset/triggerThreshold,1.0);spinnerArc.style.strokeDashoffset=CIRCUMFERENCE-(progress*CIRCUMFERENCE*0.82);if(dragOffset>10)indicator.classList.add('visible');else indicator.classList.remove('visible');if(dragOffset>=triggerThreshold){if(!indicator.classList.contains('ready')){triggerHaptic();indicator.classList.add('ready');refreshText.textContent=dict.releaseToUpdate;}}else{if(indicator.classList.contains('ready')){indicator.classList.remove('ready');refreshText.textContent=dict.pullToRefresh;}}}}
-function exitRefreshState(){content.style.transition='transform 0.38s cubic-bezier(0.22,1,0.36,1)';content.style.transform='translateY(0)';indicator.classList.remove('visible','ready','completed');setTimeout(()=>{isRefreshing=false;refreshText.textContent=(translations[currentLang]||translations['en-CA']).pullToRefresh;spinnerArc.style.strokeDashoffset=CIRCUMFERENCE;},380);}
-function handleEnd(){if(!isDragging)return;isDragging=false;const rawDistance=currentY-startY;const finalOffset=Math.pow(Math.max(0,rawDistance)*0.45,0.90);const dict=translations[currentLang]||translations['en-CA'];content.style.transition='transform 0.42s cubic-bezier(0.22,1,0.36,1)';if(finalOffset>=triggerThreshold&&rawDistance>0){isRefreshing=true;content.style.transform=`translateY(${triggerThreshold-12}px)`;indicator.classList.add('visible','refreshing');indicator.classList.remove('ready');refreshText.textContent=dict.updatingBalance;spinnerArc.style.strokeDashoffset=CIRCUMFERENCE*0.25;setTimeout(()=>{indicator.classList.remove('refreshing');indicator.classList.add('completed');refreshText.textContent=dict.updated;triggerHaptic();if(currentCurrency==='CAD')displayBalanceCAD=internalHiddenBalanceCAD;else if(currentCurrency==='USD')displayBalanceUSD=internalHiddenBalanceUSD;persistAccountingState();renderBalance();setTimeout(()=>exitRefreshState(),420);},300);}else{content.style.transform='translateY(0)';indicator.classList.remove('visible','ready');}}
-walletPanel.addEventListener('touchstart',e=>handleStart(e.touches[0].clientY),{passive:true});
-walletPanel.addEventListener('touchmove',e=>handleMove(e.touches[0].clientY,e),{passive:false});
-walletPanel.addEventListener('touchend',handleEnd);
-walletPanel.addEventListener('mousedown',e=>handleStart(e.clientY));
-window.addEventListener('mousemove',e=>{if(isDragging)handleMove(e.clientY,e);});
-window.addEventListener('mouseup',()=>{if(isDragging)handleEnd();});
-const profitsPanel=document.getElementById('profitsPanel');
-const profitsContent=document.getElementById('profitsScroll');
-const profitsIndicator=document.getElementById('profitsPullIndicator');
-const profitsSpinnerArc=document.getElementById('profitsSpinnerArc');
-const profitsRefreshText=document.getElementById('profitsRefreshText');
-let pStartY=0,pCurrentY=0,pIsDragging=false,pIsRefreshing=false;
-function pHandleStart(y){if(profitsPanel.scrollTop<=0&&!pIsRefreshing){pStartY=y;pCurrentY=y;pIsDragging=true;profitsContent.style.transition='none';profitsIndicator.classList.remove('completed');}}
-function pHandleMove(y,e){if(!pIsDragging||pIsRefreshing)return;pCurrentY=y;const raw=pCurrentY-pStartY;if(raw>0&&profitsPanel.scrollTop<=0){if(e.cancelable)e.preventDefault();const off=Math.pow(raw*0.45,0.90);profitsContent.style.transform=`translateY(${off}px)`;const progress=Math.min(off/triggerThreshold,1);profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE-(progress*CIRCUMFERENCE*0.82);profitsIndicator.classList.toggle('visible',off>10);if(off>=triggerThreshold){if(!profitsIndicator.classList.contains('ready')){triggerHaptic();profitsIndicator.classList.add('ready');profitsRefreshText.textContent='Release to update';}}else{profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Pull to refresh';}}}
-function pExitRefresh(){profitsContent.style.transition='transform .38s cubic-bezier(.22,1,.36,1)';profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready','completed');setTimeout(()=>{pIsRefreshing=false;profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE;profitsRefreshText.textContent='Pull to refresh';},380);}
-function pHandleEnd(){if(!pIsDragging)return;pIsDragging=false;const raw=pCurrentY-pStartY;const off=Math.pow(Math.max(0,raw)*0.45,0.90);profitsContent.style.transition='transform .42s cubic-bezier(.22,1,.36,1)';if(off>=triggerThreshold&&raw>0){pIsRefreshing=true;profitsContent.style.transform=`translateY(${triggerThreshold-12}px)`;profitsIndicator.classList.add('visible','refreshing');profitsIndicator.classList.remove('ready');profitsRefreshText.textContent='Updating portfolio...';profitsSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*.25;Promise.resolve().then(()=>{refreshMarketUI();renderExchangeTransactions();profitsIndicator.classList.remove('refreshing');profitsIndicator.classList.add('completed');profitsRefreshText.textContent='Updated';triggerHaptic();setTimeout(pExitRefresh,520);});}else{profitsContent.style.transform='translateY(0)';profitsIndicator.classList.remove('visible','ready');}}
-profitsPanel.addEventListener('touchstart',e=>pHandleStart(e.touches[0].clientY),{passive:true});
-profitsPanel.addEventListener('touchmove',e=>pHandleMove(e.touches[0].clientY,e),{passive:false});
-profitsPanel.addEventListener('touchend',pHandleEnd);
-profitsPanel.addEventListener('mousedown',e=>pHandleStart(e.clientY));
-window.addEventListener('mousemove',e=>{if(pIsDragging)pHandleMove(e.clientY,e);});
-window.addEventListener('mouseup',()=>{if(pIsDragging)pHandleEnd();});
-const marketPanel=document.getElementById('marketPanel');
-const marketContent=document.getElementById('marketScroll');
-const marketIndicator=document.getElementById('marketPullIndicator');
-const marketSpinnerArc=document.getElementById('marketSpinnerArc');
-const marketRefreshText=document.getElementById('marketRefreshText');
-let mStartY=0,mCurrentY=0,mIsDragging=false,mIsRefreshing=false;
-function mHandleStart(y){if(marketPanel.scrollTop<=0&&!mIsRefreshing){mStartY=y;mCurrentY=y;mIsDragging=true;marketContent.style.transition='none';marketIndicator.classList.remove('completed');}}
-function mHandleMove(y,e){if(!mIsDragging||mIsRefreshing)return;mCurrentY=y;const raw=mCurrentY-mStartY;if(raw>0&&marketPanel.scrollTop<=0){if(e.cancelable)e.preventDefault();const off=Math.pow(raw*0.45,0.90);marketContent.style.transform=`translateY(${off}px)`;const progress=Math.min(off/triggerThreshold,1);marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE-(progress*CIRCUMFERENCE*0.82);marketIndicator.classList.toggle('visible',off>10);if(off>=triggerThreshold){if(!marketIndicator.classList.contains('ready')){triggerHaptic();marketIndicator.classList.add('ready');marketRefreshText.textContent='Release to update';}}else{marketIndicator.classList.remove('ready');marketRefreshText.textContent='Pull to refresh';}}}
-function mExitRefresh(){marketContent.style.transition='transform .38s cubic-bezier(.22,1,.36,1)';marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready','completed');setTimeout(()=>{mIsRefreshing=false;marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE;marketRefreshText.textContent='Pull to refresh';},380);}
-function mHandleEnd(){if(!mIsDragging)return;mIsDragging=false;const raw=mCurrentY-mStartY;const off=Math.pow(Math.max(0,raw)*0.45,0.90);marketContent.style.transition='transform .42s cubic-bezier(.22,1,.36,1)';if(off>=triggerThreshold&&raw>0){mIsRefreshing=true;marketContent.style.transform=`translateY(${triggerThreshold-12}px)`;marketIndicator.classList.add('visible','refreshing');marketIndicator.classList.remove('ready');marketRefreshText.textContent='Updating market...';marketSpinnerArc.style.strokeDashoffset=CIRCUMFERENCE*.25;setTimeout(()=>{if(typeof refreshMarketUI==='function')refreshMarketUI();marketIndicator.classList.remove('refreshing');marketIndicator.classList.add('completed');marketRefreshText.textContent='Updated';triggerHaptic();setTimeout(mExitRefresh,420);},220);}else{marketContent.style.transform='translateY(0)';marketIndicator.classList.remove('visible','ready');}}
-marketPanel.addEventListener('touchstart',e=>mHandleStart(e.touches[0].clientY),{passive:true});
-marketPanel.addEventListener('touchmove',e=>mHandleMove(e.touches[0].clientY,e),{passive:false});
-marketPanel.addEventListener('touchend',mHandleEnd);
-marketPanel.addEventListener('mousedown',e=>mHandleStart(e.clientY));
-window.addEventListener('mousemove',e=>{if(mIsDragging)mHandleMove(e.clientY,e);});
-window.addEventListener('mouseup',()=>{if(mIsDragging)mHandleEnd();});
+const triggerThreshold = 80;
+const CIRCUMFERENCE = 53.4;
+
+function triggerHaptic(){
+  try{ if('vibrate' in navigator) navigator.vibrate(10); }catch(_){}
+}
+
+/*
+ * Pull-to-refresh is intentionally conservative:
+ * - A tap on a button/input/select/link can never start a pull.
+ * - A drag is not considered a pull until the finger/mouse has moved downward.
+ * - Native page scrolling is left alone until a real pull begins at scrollTop 0.
+ * - touchcancel/blur/visibility changes always clear the temporary transform.
+ * - No window-level mouse state is allowed to remain stuck.
+ */
+window.__installPullRefresh = function installPullRefresh(options){
+  const panel = options && options.panel;
+  const target = options && options.content;
+  const pullIndicator = options && options.indicator;
+  const arc = options && options.spinner;
+  const label = options && options.label;
+  const refresh = options && options.refresh;
+  const refreshLabel = options && options.refreshLabel || 'Updating…';
+  const updatedLabel = options && options.updatedLabel || 'Updated';
+
+  if(!panel || !target || !pullIndicator || !arc || !label || typeof refresh!=='function') return null;
+  if(target.__pullRefreshInstalled) return target.__pullRefreshController || null;
+  target.__pullRefreshInstalled = true;
+
+  const threshold = 80;
+  const circumference = 53.4;
+  const activationDistance = 9;
+  const maxPullDistance = threshold + 28;
+
+  let startY = 0;
+  let currentY = 0;
+  let candidate = false;
+  let dragging = false;
+  let refreshing = false;
+  let source = '';
+  let refreshTimer = 0;
+  let resetTimer = 0;
+
+  const isElement = value => value && value.nodeType === 1;
+  const isInteractive = node => {
+    if(!isElement(node)) return false;
+    return !!node.closest(
+      'button,a,input,select,textarea,[contenteditable="true"],' +
+      '[role="button"],[data-no-pull-refresh],.modal-overlay,.sidebar,.sidebar-overlay'
+    );
+  };
+
+  function clearTimers(){
+    if(refreshTimer){ clearTimeout(refreshTimer); refreshTimer=0; }
+    if(resetTimer){ clearTimeout(resetTimer); resetTimer=0; }
+  }
+
+  function hardReset(){
+    clearTimers();
+    removeMouseCapture();
+    candidate = false;
+    dragging = false;
+    refreshing = false;
+    source = '';
+    target.style.transition = 'none';
+    target.style.transform = 'none';
+    void target.offsetHeight;
+    target.style.transition = '';
+    pullIndicator.classList.remove('visible','ready','refreshing','completed');
+    arc.style.strokeDashoffset = circumference;
+    label.textContent = 'Pull to refresh';
+  }
+
+  function releaseToRest(){
+    clearTimers();
+    removeMouseCapture();
+    candidate = false;
+    dragging = false;
+    source = '';
+    target.style.transition = 'transform .36s cubic-bezier(.22,1,.36,1)';
+    target.style.transform = 'translate3d(0,0,0)';
+    pullIndicator.classList.remove('visible','ready','refreshing','completed');
+    resetTimer = window.setTimeout(()=>{
+      refreshing = false;
+      resetTimer = 0;
+      target.style.transition = '';
+      target.style.transform = 'none';
+      arc.style.strokeDashoffset = circumference;
+      label.textContent = 'Pull to refresh';
+      }, 380);
+  }
+
+  function canStart(eventTarget){
+    if(refreshing || panel.scrollTop > 0) return false;
+    if(isInteractive(eventTarget)) return false;
+    return true;
+  }
+
+  function begin(y, eventTarget, kind, pointerId){
+    if(!canStart(eventTarget)) return;
+    clearTimers();
+    startY = currentY = y;
+    candidate = true;
+    dragging = false;
+    source = kind || '';
+    lastPointerId = pointerId ?? null;
+    pullIndicator.classList.remove('completed','ready','refreshing','visible');
+  }
+
+  function move(y, event){
+    if(refreshing || !candidate) return;
+
+    currentY = y;
+    const raw = currentY - startY;
+
+    if(raw <= 0){
+      if(!dragging) candidate = false;
+      return;
+    }
+
+    if(panel.scrollTop > 0){
+      candidate = false;
+      if(dragging) releaseToRest();
+      return;
+    }
+
+    if(!dragging){
+      if(raw < activationDistance) return;
+      dragging = true;
+      target.style.transition = 'none';
+    }
+
+    if(event?.cancelable) event.preventDefault();
+
+    const eased = Math.min(
+      maxPullDistance,
+      Math.pow(raw * 0.45, 0.90)
+    );
+    target.style.transform = `translate3d(0,${eased}px,0)`;
+
+    const progress = Math.min(eased / threshold, 1);
+    arc.style.strokeDashoffset = circumference - (progress * circumference * 0.82);
+
+    pullIndicator.classList.toggle('visible', eased > 10);
+
+    if(eased >= threshold){
+      if(!pullIndicator.classList.contains('ready')){
+        triggerHaptic();
+        pullIndicator.classList.add('ready');
+        label.textContent = 'Release to update';
+      }
+    }else{
+      pullIndicator.classList.remove('ready');
+      label.textContent = 'Pull to refresh';
+    }
+  }
+
+  function end(){
+    if(!candidate && !dragging) return;
+
+    const raw = currentY - startY;
+    candidate = false;
+
+    if(!dragging){
+        return;
+    }
+
+    dragging = false;
+    const eased = Math.min(
+      maxPullDistance,
+      Math.pow(Math.max(0, raw) * 0.45, 0.90)
+    );
+
+    target.style.transition = 'transform .38s cubic-bezier(.22,1,.36,1)';
+
+    if(eased >= threshold && raw > 0 && panel.scrollTop <= 0){
+      clearTimers();
+      refreshing = true;
+      target.style.transform = `translate3d(0,${threshold - 12}px,0)`;
+      pullIndicator.classList.add('visible','refreshing');
+      pullIndicator.classList.remove('ready');
+      label.textContent = refreshLabel;
+      arc.style.strokeDashoffset = circumference * 0.25;
+      triggerHaptic();
+
+      let settled = false;
+      const finishRefresh = () => {
+        if(settled) return;
+        settled = true;
+
+        pullIndicator.classList.remove('refreshing');
+        pullIndicator.classList.add('completed');
+        label.textContent = updatedLabel;
+        arc.style.strokeDashoffset = circumference * 0.02;
+
+        resetTimer = window.setTimeout(()=>{
+          releaseToRest();
+        }, 360);
+      };
+
+      Promise.resolve()
+        .then(()=>refresh())
+        .catch(err=>console.warn('[PULL REFRESH]', err))
+        .finally(()=>{
+          refreshTimer = window.setTimeout(()=>{
+            refreshTimer = 0;
+            finishRefresh();
+          }, 220);
+        });
+    }else{
+      releaseToRest();
+    }
+  }
+
+  function cancel(){
+    if(refreshing){
+      return;
+    }
+    hardReset();
+  }
+
+  const touchStart = event => {
+    if(!event.touches || !event.touches[0]) return;
+    begin(event.touches[0].clientY, event.target, 'touch');
+  };
+
+  const touchMove = event => {
+    if(!candidate && !dragging) return;
+    if(!event.touches || !event.touches[0]) return;
+    move(event.touches[0].clientY, event);
+  };
+
+  const touchEnd = () => end();
+  const touchCancel = () => cancel();
+
+  let mouseCaptured = false;
+
+  const mouseMove = event => {
+    if(source !== 'mouse' || (!candidate && !dragging)) return;
+    move(event.clientY, event);
+  };
+
+  const mouseUp = () => {
+    if(source === 'mouse') end();
+  };
+
+  function addMouseCapture(){
+    if(mouseCaptured) return;
+    mouseCaptured = true;
+    document.addEventListener('mousemove', mouseMove, {passive:true});
+    document.addEventListener('mouseup', mouseUp, {passive:true});
+  }
+
+  function removeMouseCapture(){
+    if(!mouseCaptured) return;
+    mouseCaptured = false;
+    document.removeEventListener('mousemove', mouseMove);
+    document.removeEventListener('mouseup', mouseUp);
+  }
+
+  const mouseDown = event => {
+    if(event.button !== 0) return;
+    begin(event.clientY, event.target, 'mouse');
+    if(source === 'mouse') addMouseCapture();
+  };
+
+  target.addEventListener('touchstart', touchStart, {passive:true});
+  target.addEventListener('touchmove', touchMove, {passive:false});
+  target.addEventListener('touchend', touchEnd, {passive:true});
+  target.addEventListener('touchcancel', touchCancel, {passive:true});
+  target.addEventListener('mousedown', mouseDown);
+
+  window.addEventListener('blur', hardReset, {passive:true});
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.hidden) hardReset();
+  }, {passive:true});
+  window.addEventListener('pagehide', hardReset, {passive:true});
+
+  const controller = {
+    reset: hardReset,
+    release: releaseToRest,
+    isRefreshing: () => refreshing
+  };
+  target.__pullRefreshController = controller;
+
+  return controller;
+};
+
+const walletPullController = window.__installPullRefresh({
+  panel: walletPanel,
+  content,
+  indicator,
+  spinner: spinnerArc,
+  label: refreshText,
+  refreshLabel: (translations[currentLang] || translations['en-CA']).updatingBalance,
+  updatedLabel: (translations[currentLang] || translations['en-CA']).updated,
+  refresh: function(){
+    if(currentCurrency==='CAD') displayBalanceCAD=internalHiddenBalanceCAD;
+    else if(currentCurrency==='USD') displayBalanceUSD=internalHiddenBalanceUSD;
+    persistAccountingState();
+    renderBalance();
+  }
+});
+
+const profitsPanel = document.getElementById('profitsPanel');
+const profitsContent = document.getElementById('profitsScroll');
+const profitsIndicator = document.getElementById('profitsPullIndicator');
+const profitsSpinnerArc = document.getElementById('profitsSpinnerArc');
+const profitsRefreshText = document.getElementById('profitsRefreshText');
+
+const profitsPullController = window.__installPullRefresh({
+  panel: profitsPanel,
+  content: profitsContent,
+  indicator: profitsIndicator,
+  spinner: profitsSpinnerArc,
+  label: profitsRefreshText,
+  refreshLabel: 'Updating portfolio…',
+  updatedLabel: 'Updated',
+  refresh: function(){
+    if(typeof refreshMarketUI==='function') refreshMarketUI();
+    if(typeof renderExchangeTransactions==='function') renderExchangeTransactions();
+  }
+});
+
+const marketPanel = document.getElementById('marketPanel');
+const marketContent = document.getElementById('marketScroll');
+const marketIndicator = document.getElementById('marketPullIndicator');
+const marketSpinnerArc = document.getElementById('marketSpinnerArc');
+const marketRefreshText = document.getElementById('marketRefreshText');
+
+const marketPullController = window.__installPullRefresh({
+  panel: marketPanel,
+  content: marketContent,
+  indicator: marketIndicator,
+  spinner: marketSpinnerArc,
+  label: marketRefreshText,
+  refreshLabel: 'Updating market…',
+  updatedLabel: 'Updated',
+  refresh: function(){
+    if(typeof refreshMarketUI==='function') refreshMarketUI();
+  }
+});
+
 </script>
 <script id="realistic-market-engine">
 /* Enhanced market feed and execution updates. */
@@ -9863,137 +10161,79 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
 
 <script id="all-tab-pull-refresh">
 (function(){
-  const existing = new Set(['walletPanel','marketPanel','profitsPanel']);
   const configs = {
     recentActivityPage: {
-      label:'Updating activity...',
-      refresh: function(){
-        if(typeof window.renderTransactionHistory==='function') window.renderTransactionHistory();
-        if(typeof window.renderRecentActivityTab==='function') window.renderRecentActivityTab();
-        if(typeof window.renderRecentActivity==='function') window.renderRecentActivity();
+      label:'Updating activity…',
+      refresh:function(){
+        window.renderTransactionHistory?.();
+        window.renderRecentActivityTab?.();
+        window.renderRecentActivity?.();
       }
     },
     addressBookPanel: {
-      label:'Updating contacts...',
-      refresh: function(){
-        if(typeof window.renderAddressBook==='function') window.renderAddressBook();
+      label:'Updating contacts…',
+      refresh:function(){
+        window.renderAddressBook?.();
       }
     },
     settingsPanel: {
-      label:'Updating settings...',
-      refresh: function(){
-        if(typeof window.updateMarketAlerts==='function') window.updateMarketAlerts();
-        if(typeof window.updateAvailableBalanceSubtext==='function') window.updateAvailableBalanceSubtext();
-        if(typeof window.refreshPinSettingsUI==='function') window.refreshPinSettingsUI();
-        if(typeof window.persistUiSettings==='function') window.persistUiSettings();
+      label:'Updating settings…',
+      refresh:function(){
+        window.updateMarketAlerts?.();
+        window.updateAvailableBalanceSubtext?.();
+        window.refreshPinSettingsUI?.();
+        window.persistUiSettings?.();
       }
     }
   };
 
   function makeIndicator(panelId){
-    const panel=document.getElementById(panelId);
-    if(!panel || existing.has(panelId) || panel.querySelector('.tab-pull-indicator')) return;
-    const indicator=document.createElement('div');
-    const key=panelId.replace(/[^a-z0-9]/gi,'');
-    indicator.className='pull-indicator tab-pull-indicator';
-    indicator.id=key+'PullIndicator';
-    indicator.innerHTML='<div class="refresh-capsule"><div class="spinner-box"><svg class="spinner-svg" viewBox="0 0 24 24"><circle class="spinner-bg" cx="12" cy="12" r="8.5"></circle><circle class="spinner-arc" cx="12" cy="12" r="8.5"></circle></svg><div class="success-icon"><i data-lucide="check"></i></div></div><span class="refresh-text">Pull to refresh</span></div>';
-    panel.insertBefore(indicator,panel.firstChild);
-    if(window.lucide) window.lucide.createIcons({nodes:[indicator]});
+    const panel = document.getElementById(panelId);
+    if(!panel || panel.querySelector('.tab-pull-indicator')) return null;
+
+    const indicator = document.createElement('div');
+    const key = panelId.replace(/[^a-z0-9]/gi,'');
+    indicator.className = 'pull-indicator tab-pull-indicator';
+    indicator.id = key + 'PullIndicator';
+    indicator.innerHTML =
+      '<div class="refresh-capsule">' +
+        '<div class="spinner-box">' +
+          '<svg class="spinner-svg" viewBox="0 0 24 24">' +
+            '<circle class="spinner-bg" cx="12" cy="12" r="8.5"></circle>' +
+            '<circle class="spinner-arc" cx="12" cy="12" r="8.5"></circle>' +
+          '</svg>' +
+          '<div class="success-icon"><i data-lucide="check"></i></div>' +
+        '</div>' +
+        '<span class="refresh-text">Pull to refresh</span>' +
+      '</div>';
+
+    panel.insertBefore(indicator, panel.firstChild);
+    window.lucide?.createIcons({nodes:[indicator]});
+    return indicator;
   }
 
-  function wire(panelId,cfg){
-    const panel=document.getElementById(panelId);
-    if(!panel || !cfg) return;
-    makeIndicator(panelId);
-    const content=panel.querySelector('.scroll-content') || panel.firstElementChild;
-    const indicator=panel.querySelector('.tab-pull-indicator');
-    const spinner=indicator?.querySelector('.spinner-arc');
-    const label=indicator?.querySelector('.refresh-text');
+  Object.entries(configs).forEach(([panelId, cfg])=>{
+    const panel = document.getElementById(panelId);
+    if(!panel) return;
+
+    const content = panel.querySelector('.scroll-content');
+    const indicator = makeIndicator(panelId) || panel.querySelector('.tab-pull-indicator');
+    const spinner = indicator?.querySelector('.spinner-arc');
+    const label = indicator?.querySelector('.refresh-text');
+
     if(!content || !indicator || !spinner || !label) return;
 
-    let startY=0,currentY=0,dragging=false,refreshing=false;
-    const threshold=80, circumference=53.4;
-
-    function reset(){
-      content.style.transition='transform .38s cubic-bezier(.22,1,.36,1)';
-      content.style.transform='translateY(0)';
-      indicator.classList.remove('visible','ready','refreshing','completed');
-      setTimeout(()=>{
-        refreshing=false;
-        spinner.style.strokeDashoffset=circumference;
-        label.textContent='Pull to refresh';
-      },380);
-    }
-
-    function start(y){
-      if(panel.scrollTop<=0 && !refreshing){
-        startY=y; currentY=y; dragging=true;
-        content.style.transition='none';
-        indicator.classList.remove('completed');
-      }
-    }
-
-    function move(y,e){
-      if(!dragging || refreshing) return;
-      currentY=y;
-      const raw=currentY-startY;
-      if(raw>0 && panel.scrollTop<=0){
-        if(e.cancelable) e.preventDefault();
-        const offset=Math.pow(raw*.45,.90);
-        content.style.transform=`translateY(${offset}px)`;
-        const progress=Math.min(offset/threshold,1);
-        spinner.style.strokeDashoffset=circumference-(progress*circumference*.82);
-        indicator.classList.toggle('visible',offset>10);
-        if(offset>=threshold){
-          if(!indicator.classList.contains('ready')){
-            if('vibrate' in navigator) navigator.vibrate(10);
-            indicator.classList.add('ready');
-            label.textContent='Release to update';
-          }
-        }else{
-          indicator.classList.remove('ready');
-          label.textContent='Pull to refresh';
-        }
-      }
-    }
-
-    function end(){
-      if(!dragging) return;
-      dragging=false;
-      const raw=currentY-startY;
-      const offset=Math.pow(Math.max(0,raw)*.45,.90);
-      content.style.transition='transform .42s cubic-bezier(.22,1,.36,1)';
-      if(offset>=threshold && raw>0){
-        refreshing=true;
-        content.style.transform=`translateY(${threshold-12}px)`;
-        indicator.classList.add('visible','refreshing');
-        indicator.classList.remove('ready');
-        label.textContent=cfg.label;
-        spinner.style.strokeDashoffset=circumference*.25;
-        Promise.resolve().then(()=>{
-          try{ cfg.refresh(); }catch(err){ console.warn('[TAB REFRESH]',panelId,err); }
-          indicator.classList.remove('refreshing');
-          indicator.classList.add('completed');
-          label.textContent='Updated';
-          if('vibrate' in navigator) navigator.vibrate(10);
-          setTimeout(reset,420);
-        });
-      }else{
-        content.style.transform='translateY(0)';
-        indicator.classList.remove('visible','ready');
-      }
-    }
-
-    panel.addEventListener('touchstart',e=>start(e.touches[0].clientY),{passive:true});
-    panel.addEventListener('touchmove',e=>move(e.touches[0].clientY,e),{passive:false});
-    panel.addEventListener('touchend',end);
-    panel.addEventListener('mousedown',e=>start(e.clientY));
-    window.addEventListener('mousemove',e=>{if(dragging) move(e.clientY,e);});
-    window.addEventListener('mouseup',()=>{if(dragging) end();});
-  }
-
-  Object.entries(configs).forEach(([id,cfg])=>wire(id,cfg));
+    window.__installPullRefresh?.({
+      panel,
+      content,
+      indicator,
+      spinner,
+      label,
+      refreshLabel: cfg.label,
+      updatedLabel: 'Updated',
+      refresh: cfg.refresh
+    });
+  });
 })();
 </script>
 
@@ -11084,5 +11324,168 @@ body.theme-light .profit-summary-card.positive{
 }
 body.theme-light .profit-summary-value.pos{color:#0a9f72 !important;}
 </style>
+
+<style id="pull-refresh-keyboard-stability-fix">
+/*
+  Single stability layer for scrolling/keyboard behavior.
+  Page panels are the only vertical scroll surfaces.
+*/
+html,
+body{
+  width:100%;
+  max-width:100%;
+  overflow:hidden !important;
+}
+
+body{
+  min-width:0;
+  overscroll-behavior:none !important;
+}
+
+.main-dashboard{
+  min-width:0;
+  overflow:hidden !important;
+}
+
+.page-panel{
+  min-width:0;
+  overscroll-behavior-y:contain;
+  overscroll-behavior-x:none;
+  scrollbar-width:none;
+}
+
+.page-panel::-webkit-scrollbar{
+  width:0;
+  height:0;
+  display:none;
+}
+
+.scroll-content{
+  min-width:0;
+  max-width:100%;
+  touch-action:pan-y;
+  overscroll-behavior-y:contain;
+}
+
+.modal-overlay{
+  overflow:hidden;
+  padding-top:env(safe-area-inset-top);
+  padding-right:env(safe-area-inset-right);
+  padding-bottom:env(safe-area-inset-bottom);
+  padding-left:env(safe-area-inset-left);
+}
+
+.modal-card,
+.account-modal-card,
+.lock-card{
+  box-sizing:border-box;
+  scroll-margin-top:12px;
+  scroll-margin-bottom:24px;
+}
+
+@media (max-width:768px){
+  .modal-overlay,
+  .lock-overlay{
+    align-items:center;
+  }
+
+  .modal-card,
+  .account-modal-card,
+  .lock-card{
+    width:min(380px,calc(100vw - 24px)) !important;
+    max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px) !important;
+  }
+}
+</style>
+
+<script id="scroll-keyboard-stability-runtime">
+(function(){
+  'use strict';
+
+  let protectedPanel = null;
+  let protectedScrollTop = 0;
+  let keyboardTarget = null;
+
+  function activePanel(){
+    return document.querySelector('.page-panel.active');
+  }
+
+  function capturePanel(){
+    protectedPanel = activePanel();
+    protectedScrollTop = protectedPanel ? protectedPanel.scrollTop : 0;
+
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo(0,0);
+  }
+
+  function restorePanel(){
+    if(!protectedPanel || !document.contains(protectedPanel)) return;
+
+    protectedPanel.scrollTop = protectedScrollTop;
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    document.querySelectorAll('.scroll-content').forEach(el=>{
+      const controller = el.__pullRefreshController;
+      if(controller && !controller.isRefreshing()) controller.reset();
+    });
+  }
+
+  function focusInsideOverlay(target){
+    return !!(target && target.closest &&
+      target.closest('.modal-overlay,.account-modal-card,.lock-card,.lock-overlay'));
+  }
+
+  function handleFocusIn(event){
+    const target = event.target;
+    if(!target || !/^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
+    if(!focusInsideOverlay(target)) return;
+
+    keyboardTarget = target;
+    capturePanel();
+
+    const restore = ()=>{
+      if(keyboardTarget === target) restorePanel();
+    };
+
+    requestAnimationFrame(restore);
+    window.setTimeout(restore,40);
+    window.setTimeout(restore,140);
+    window.setTimeout(restore,320);
+  }
+
+  function handleFocusOut(){
+    keyboardTarget = null;
+    protectedPanel = null;
+  }
+
+  document.addEventListener('focusin', handleFocusIn, true);
+  document.addEventListener('focusout', handleFocusOut, true);
+
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize', ()=>{
+      if(keyboardTarget) restorePanel();
+    }, {passive:true});
+
+    window.visualViewport.addEventListener('scroll', ()=>{
+      if(keyboardTarget) restorePanel();
+    }, {passive:true});
+  }
+
+  window.addEventListener('orientationchange', ()=>{
+    if(keyboardTarget){
+      window.setTimeout(restorePanel,80);
+      window.setTimeout(restorePanel,240);
+    }
+  }, {passive:true});
+
+  window.addEventListener('blur', ()=>{
+    keyboardTarget = null;
+    protectedPanel = null;
+  }, {passive:true});
+})();
+</script>
+
 </body>
 </html>
