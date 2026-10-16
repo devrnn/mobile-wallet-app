@@ -21,6 +21,70 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script id="wallet-lucide-offline-fallback">
+(function () {
+  if (window.lucide && typeof window.lucide.createIcons === 'function') return;
+  const NS = 'http://www.w3.org/2000/svg';
+  const shapes = {
+    wallet:'<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 9h18M16 14h2"/>',
+    menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+    'arrow-up-right':'<path d="M7 17 17 7M7 7h10v10"/>',
+    'arrow-right':'<path d="M5 12h14M13 6l6 6-6 6"/>',
+    'arrow-left-right':'<path d="M4 8h15l-4-4M20 16H5l4 4"/>',
+    'candlestick-chart':'<path d="M5 4v16M3 8h4M3 14h4M12 3v18M10 7h4M10 15h4M19 5v15M17 10h4"/>',
+    'chart-no-axes-combined':'<path d="M3 3v18h18M7 14l4-4 4 3 5-7"/>',
+    check:'<path d="m5 12 4 4L19 6"/>',
+    'check-circle':'<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
+    'shield-check':'<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/>',
+    'shield-alert':'<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="M12 8v5M12 16h.01"/>',
+    'shield-x':'<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 9 6 6m0-6-6 6"/>',
+    x:'<path d="m18 6-12 12M6 6l12 12"/>',
+    history:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
+    settings:'<circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.6-1.4-2.4 1.4-1.1a7 7 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.6a8 8 0 0 1 1.7-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.6 1.4 2.4-1.4 1.1a7 7 0 0 1 0 2Z"/>',
+    'trash-2':'<path d="M3 6h18M8 6V4h8v2m-11 0 1 14h12l1-14M10 10v6M14 10v6"/>',
+    pencil:'<path d="m4 16.5-.8 4.3 4.3-.8L20 7.5 16.5 4 4 16.5Z"/><path d="m14.5 6 3.5 3.5"/>',
+    'qr-code':'<rect x="3" y="3" width="6" height="6"/><rect x="15" y="3" width="6" height="6"/><rect x="3" y="15" width="6" height="6"/><path d="M15 15h3v3h-3zM21 15v2M18 21h3M12 3v2M12 9v3M3 12h3"/>',
+    'dollar-sign':'<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/>',
+    layers:'<path d="m12 3 9 5-9 5-9-5 9-5Z M3 12l9 5 9-5M3 16l9 5 9-5"/>',
+    coins:'<circle cx="8" cy="8" r="5"/><path d="M13 5.5A5 5 0 0 1 18 13M13 9a5 5 0 0 1 5 5M3 13a5 5 0 0 0 10 0"/>',
+    plus:'<path d="M12 5v14M5 12h14"/>',
+    bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>',
+    'bell-off':'<path d="m3 3 18 18M10 5a6 6 0 0 1 8 5c0 7 3 7 3 9h-9M6 8c0 7-3 7-3 9h10M10 21h4"/>',
+    clipboard:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M8 9h8M8 13h8M8 17h5"/>',
+    copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>',
+    percent:'<path d="m19 5-14 14M7 7h.01M17 17h.01"/><circle cx="7" cy="7" r="2"/><circle cx="17" cy="17" r="2"/>',
+    receipt:'<path d="M4 3v18l4-2 4 2 4-2 4 2V3l-4 2-4-2-4 2-4-2Z"/><path d="M8 9h8M8 13h6"/>',
+    'shopping-bag':'<path d="M5 8h14l-1 13H6L5 8Z M9 8a3 3 0 0 1 6 0"/>',
+    'scan-line':'<path d="M4 7V4h3M17 4h3v3M20 17v3h-3M7 20H4v-3M4 12h16"/>',
+    'lock-keyhole':'<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/>',
+    activity:'<path d="M3 12h4l3-8 4 16 3-8h4"/>',
+    'check-circle-2':'<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
+    'chart-line':'<path d="M3 3v18h18M6 15l5-5 4 3 5-7"/>'
+  };
+  function render(root) {
+    const nodes = [];
+    if (root && root.nodeType === 1 && root.matches?.('i[data-lucide]')) nodes.push(root);
+    if (root?.querySelectorAll) nodes.push(...root.querySelectorAll('i[data-lucide]'));
+    for (const old of nodes) {
+      const name = old.getAttribute('data-lucide') || 'activity';
+      const svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('viewBox','0 0 24 24');
+      svg.setAttribute('width','1em'); svg.setAttribute('height','1em');
+      svg.setAttribute('fill','none'); svg.setAttribute('stroke','currentColor');
+      svg.setAttribute('stroke-width','2'); svg.setAttribute('stroke-linecap','round'); svg.setAttribute('stroke-linejoin','round');
+      svg.setAttribute('aria-hidden','true');
+      const classes = old.getAttribute('class'); if (classes) svg.setAttribute('class',classes);
+      const inlineStyle = old.getAttribute('style'); if (inlineStyle) svg.setAttribute('style',inlineStyle);
+      svg.innerHTML = shapes[name] || '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>';
+      old.replaceWith(svg);
+    }
+  }
+  window.lucide = { createIcons(options) {
+    const roots = Array.isArray(options?.nodes) && options.nodes.length ? options.nodes : [document];
+    roots.forEach(render);
+  }};
+})();
+</script>
 <style>
 :root {
 --bg-main: #070709;
@@ -6540,7 +6604,6 @@ body.theme-light #allTimeProfitLoss.pos{color:#0a9f72 !important}
 </div>
 </div>
 </div>
-
 </section>
 <section class="page-panel" id="marketPanel">
 <div class="scroll-content" id="marketScroll">
@@ -7043,7 +7106,7 @@ body.theme-light #allTimeProfitLoss.pos{color:#0a9f72 !important}
 <span id="toastMessage">Exchange completed successfully!</span>
 </div>
 <script>
-lucide.createIcons();
+window.lucide?.createIcons?.();
 const translations = {
 'en-CA': {
 pullToRefresh:"Pull to refresh",updatingBalance:"Updating balance...",updated:"Updated",releaseToUpdate:"Release to update",
@@ -7372,7 +7435,7 @@ activityList.innerHTML = recentActivities.map(act => `
 <div class="item-right"><div class="item-value ${Number(act.gainCad||0)>=0?'pos':'neg'}">${Number(act.gainCad||0)>=0?'+':'-'}$${Math.abs(Number(act.gainCad||0)).toFixed(2)}<span class="currency-label">CAD</span></div></div>
 </div>
 `).join('');
-lucide.createIcons();
+window.lucide?.createIcons?.();
 }
 
 function roundPrecision(val, decimals=4) { return Number(Math.round(val+'e'+decimals)+'e-'+decimals); }
@@ -7423,7 +7486,6 @@ sidebarItems.forEach(item=>{
       }
     });
     closeSidebar();
-    window.__syncWalletBottomDock?.();
   });
 });
 let currentCurrency = 'CAD';
@@ -8029,7 +8091,7 @@ bell.classList.remove('active');
 bell.innerHTML = '<i data-lucide="bell-off"></i>';
 }
 });
-lucide.createIcons();
+window.lucide?.createIcons?.();
 }
 document.getElementById('togglePriceAlerts').addEventListener('change', e => {
 globalAlertsOn = e.target.checked;
@@ -8371,7 +8433,7 @@ function renderPendingMarketTradeConfirmation(){
     `<div class="confirm-summary-row"><span>${p.tab==='buy'?'Estimated receive':'Estimated proceeds'}</span><span class="confirm-total" data-live-confirm-result>${resultText}</span></div>`,
     `<div class="confirm-summary-live"><i data-lucide="activity"></i><span>Market price</span></div>`
   ].join('');
-  lucide.createIcons();
+  window.lucide?.createIcons?.();
 }
 function startTradeConfirmPriceUpdates(){
   stopTradeConfirmPriceUpdates();
@@ -8392,7 +8454,7 @@ function openTradeConfirmation(data){
   tradeConfirmSubmit.textContent = data.confirmLabel || 'Confirm Trade';
   tradeConfirmSubmit.classList.remove('loading');
   tradeConfirmModal.classList.add('open');
-  lucide.createIcons();
+  window.lucide?.createIcons?.();
 }
 function closeTradeConfirmation(){stopTradeConfirmPriceUpdates();tradeConfirmModal.classList.remove('open');pendingExchangeTrade=null;pendingMarketTrade=null;}
 tradeConfirmCancel.addEventListener('click',closeTradeConfirmation);
@@ -9296,7 +9358,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     const list=document.getElementById('recentActivityTabList');
     if(!list)return;
     list.innerHTML=buildTransactionRows(window.transactionHistory.slice(0,100));
-    lucide.createIcons();
+    window.lucide?.createIcons?.();
   }
   function renderTransactionHistory(){
     const list=document.getElementById('txHistoryList');
@@ -9305,7 +9367,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
       list.innerHTML=buildTransactionRows(rows);
     }
     renderRecentActivityTab();
-    lucide.createIcons();
+    window.lucide?.createIcons?.();
   }
   window.renderTransactionHistory=renderTransactionHistory;
   window.renderRecentActivityTab=renderRecentActivityTab;
@@ -9331,7 +9393,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     if(addressText)addressText.textContent=address;
     const status=document.getElementById('receiveAutoStatus');
     if(status)status.textContent='Preparing your SOL deposit…';
-    lucide.createIcons();
+    window.lucide?.createIcons?.();
   }
   function scheduleAutomaticReceive(){
     if(receiveAutoTimer)return;
@@ -9565,7 +9627,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
   window.renderRecentActivityTab?.();
   
   // A successful exchange was historically added before this runtime loads; no migration is needed.
-  lucide.createIcons();
+  window.lucide?.createIcons?.();
 })();
 </script>
 
@@ -9826,7 +9888,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     };
     if(manager)manager.innerHTML=build(false);
     if(overview)overview.innerHTML=build(true);
-    lucide.createIcons();
+    window.lucide?.createIcons?.();
   }
 
   const originalRenderBalance = renderBalance;
@@ -9987,7 +10049,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
         `</div>`+
       `</div>`;
     }).join('');
-    if(window.lucide)window.lucide.createIcons({nodes:[list]});
+    if(window.lucide)window.lucide?.createIcons?.({nodes:[list]});
   }
   function useContact(id){
     const c=addressBook.find(row=>row.id===id);if(!c)return;
@@ -10077,7 +10139,7 @@ window.addEventListener('load',()=>{syncExchangeConverter();if(typeof renderExch
     let old=summary.querySelector('.send-security-preview'); if(old)old.remove();
     const contactRow=a.contact?`<div class="send-security-row"><span>Saved contact</span><span>${esc(contactLabel(a.contact))} · ${esc(contactAddress(a.contact))}</span></div>`:'';
     const html=`<div class="send-security-preview"><div class="send-security-head"><i data-lucide="${a.icon}"></i><span>Security preview</span><span class="send-security-badge ${a.level}">${a.label}</span></div><div class="send-security-row"><span>Recipient check</span><span>${esc(a.format)}</span></div>${contactRow}<div class="send-security-row"><span>Transfer</span><span>${Number(amount).toFixed(displayAssetDecimals(asset))} ${esc(asset)}</span></div><div class="send-security-advice">${esc(a.advice)}</div></div>`;
-    summary.insertAdjacentHTML('beforeend',html);lucide.createIcons();
+    summary.insertAdjacentHTML('beforeend',html);window.lucide?.createIcons?.();
     const submit=document.getElementById('tradeConfirmSubmit');
     if(submit)submit.disabled=a.level==='blocked';
   }
@@ -11161,19 +11223,17 @@ body{background:radial-gradient(circle at 10% 0%,rgba(255,255,255,.025),transpar
 .card-actions.feature-actions{gap:9px!important}.card-actions.feature-actions .action-btn{min-height:45px!important;border-radius:13px!important;background:rgba(255,255,255,.045)!important;border:1px solid rgba(255,255,255,.085)!important;color:#f2f3f5!important;box-shadow:none!important}.card-actions.feature-actions .action-btn:hover{background:rgba(255,255,255,.073)!important;border-color:rgba(255,255,255,.13)!important;transform:translateY(-1px)!important}.card-actions.feature-actions .action-btn i{color:#aab0ba!important}
 .asset-list,.activity-panel,.exchange-transactions,.profit-summary-card,.cost-card,.tx-history-card{padding:19px!important;border-radius:var(--wallet-radius-lg)!important;background:rgba(17,17,21,.90)!important;border-color:rgba(255,255,255,.05)!important;box-shadow:var(--wallet-shadow)!important}.panel-header{margin-bottom:14px!important}.panel-title{color:#696d77!important;letter-spacing:1px!important}.list-item{padding:13px 11px!important;border-radius:12px!important}.icon-wrapper,.bitcoin-icon,.solana-icon,.eth-icon{width:39px!important;height:39px!important;border-radius:12px!important}.wallet-selector{padding:8px 11px!important;border-radius:10px!important;background:rgba(255,255,255,.05)!important;border-color:rgba(255,255,255,.09)!important}
 .modal-overlay{background:rgba(0,0,0,.70)!important;backdrop-filter:blur(15px)!important;-webkit-backdrop-filter:blur(15px)!important}.modal-card,.account-modal-card,.lock-card{border-radius:20px!important;border-color:rgba(255,255,255,.09)!important;box-shadow:0 28px 80px rgba(0,0,0,.60)!important}.tx-card{border-radius:14px!important}.settings-row{padding:14px 0!important}
-
-.wallet-bottom-dock:not(.visible),.wallet-bottom-dock.drawer-hidden,.sidebar-is-open 
-
-
-
-@media(max-width:900px){}
+.wallet-bottom-dock{position:fixed;left:50%;bottom:max(12px,calc(env(safe-area-inset-bottom) + 10px));transform:translateX(-50%) translateY(0) scale(1);display:flex;align-items:center;justify-content:center;gap:4px;width:max-content;max-width:calc(100vw - 24px);margin:0;padding:5px;border:1px solid rgba(255,255,255,.07);border-radius:999px;background:rgba(14,14,17,.82);box-shadow:0 18px 42px -24px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.035);backdrop-filter:blur(20px) saturate(135%);-webkit-backdrop-filter:blur(20px) saturate(135%);opacity:1;z-index:950;transition:opacity .23s ease,transform .28s var(--wallet-ease),filter .23s ease;will-change:transform,opacity}
+.wallet-bottom-dock:not(.visible),.wallet-bottom-dock.drawer-hidden,.sidebar-is-open .wallet-bottom-dock{opacity:0;transform:translateX(-50%) translateY(9px) scale(.97);filter:blur(2px);pointer-events:none}
+.wallet-dock-item{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:0 12px;border:1px solid transparent;border-radius:999px;background:transparent;color:#80848e;text-decoration:none;font-size:10.4px;font-weight:750;cursor:pointer;transition:background .16s ease,border-color .16s ease,color .16s ease,transform .18s var(--wallet-ease)}
+.wallet-dock-item i{width:14px;height:14px}.wallet-dock-item:hover{color:#f5f6f8;background:rgba(255,255,255,.045);transform:translateY(-1px)}.wallet-dock-item.active{color:#fff;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.07)}.wallet-dock-trade{color:#e8eaee;background:rgba(255,255,255,.025)}.wallet-dock-trade:hover{color:#fff;background:rgba(255,255,255,.06)}
+@media(max-width:900px){.wallet-bottom-dock{width:calc(100vw - 20px);margin:0;bottom:max(10px,calc(env(safe-area-inset-bottom) + 8px));padding:4px;gap:2px}.wallet-dock-item{flex:1 1 0;min-width:0;padding:0 7px;font-size:9.8px}}
 @media(max-width:768px){.sidebar{width:min(316px,88vw)!important;padding:calc(18px + env(safe-area-inset-top)) 13px 0!important}.sidebar-item{min-height:47px}}
-@media(max-width:600px){.scroll-content{padding:calc(17px + env(safe-area-inset-top)) max(13px,env(safe-area-inset-left),env(safe-area-inset-right)) calc(20px + env(safe-area-inset-bottom))!important}.dashboard-title{font-size:21px!important}.balance-card{padding:20px!important;min-height:188px!important;border-radius:18px!important}.main-balance{font-size:clamp(30px,8.5vw,39px)!important}.asset-list,.activity-panel,.exchange-transactions,.profit-summary-card,.cost-card,.tx-history-card{padding:15px!important;border-radius:17px!important}.wallet-dock-item span{white-space:nowrap}}
+@media(max-width:600px){.scroll-content{padding:calc(17px + env(safe-area-inset-top)) max(13px,env(safe-area-inset-left),env(safe-area-inset-right)) calc(90px + env(safe-area-inset-bottom))!important}.dashboard-title{font-size:21px!important}.balance-card{padding:20px!important;min-height:188px!important;border-radius:18px!important}.main-balance{font-size:clamp(30px,8.5vw,39px)!important}.asset-list,.activity-panel,.exchange-transactions,.profit-summary-card,.cost-card,.tx-history-card{padding:15px!important;border-radius:17px!important}.wallet-bottom-dock{position:fixed;left:50%;bottom:max(10px,calc(env(safe-area-inset-bottom) + 8px));z-index:950;margin:0;transform:translateX(-50%) translateY(0)}.wallet-dock-item span{white-space:nowrap}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 
-<style id="final-intro-and-floating-dock-fix">
-/* Splash owns the entire viewport. Nothing from the dashboard/dock may peek through it. */
+<style id="final-intro-layout-fix">
 .intro{
   position:fixed !important;
   inset:0 !important;
@@ -11185,18 +11245,9 @@ body{background:radial-gradient(circle at 10% 0%,rgba(255,255,255,.025),transpar
   overflow:hidden !important;
   isolation:isolate !important;
 }
-html.intro-active,
-body.intro-active{
-  overflow:hidden !important;
-}
-body.intro-active 
-
-
+html.intro-active, body.intro-active{overflow:hidden !important;}
 @media(max-width:600px){
-  
-  .scroll-content{
-    padding-bottom:calc(20px + env(safe-area-inset-bottom)) !important;
-  }
+  .scroll-content{padding-bottom:max(18px, env(safe-area-inset-bottom)) !important;}
 }
 </style>
 
@@ -11217,6 +11268,7 @@ body.intro-active
   setTimeout(finish,7000);
 })();
 </script>
+
 <style id="final-pnl-positive-card-fix">
 .profit-summary-card.positive{
   background:linear-gradient(135deg,rgba(52,211,153,.14),rgba(52,211,153,.035)) !important;
@@ -11393,6 +11445,57 @@ body{
   }, {passive:true});
 })();
 </script>
+
+
+<style id="wallet-finish-polish">
+:root{
+  --wallet-finish-line:rgba(255,255,255,.075);
+  --wallet-finish-panel:rgba(16,16,20,.94);
+  --wallet-finish-ease:cubic-bezier(.2,.8,.2,1);
+}
+html{scrollbar-gutter:stable;}
+body{background:var(--bg-main);}
+.page-panel{min-width:0;}
+.page-panel.active{display:block;}
+.scroll-content{padding-bottom:max(24px,calc(env(safe-area-inset-bottom) + 18px))!important;}
+.dashboard-header{gap:12px;}
+.dashboard-title{font-weight:750;letter-spacing:-.7px;}
+.balance-card,.activity-panel,.asset-list,.exchange-transactions,.profit-summary-card,.cost-card,.tx-history-card,.market-chart-card,.settings-card{
+  border-color:var(--wallet-finish-line);
+  box-shadow:0 16px 44px rgba(0,0,0,.20);
+}
+.balance-card{overflow:hidden;}
+.balance-title-row,.panel-title{letter-spacing:.025em;}
+.main-balance{font-variant-numeric:tabular-nums;line-height:1.12;}
+.action-btn,.wallet-inline-btn,.modal-btn,.edit-btn,.sidebar-item,.list-item,.settings-row{
+  transition:background-color .18s ease,border-color .18s ease,color .18s ease,transform .18s var(--wallet-finish-ease);
+}
+.action-btn:focus-visible,.wallet-inline-btn:focus-visible,.modal-btn:focus-visible,.edit-btn:focus-visible,.sidebar-item:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{
+  outline:2px solid rgba(52,211,153,.82);outline-offset:2px;
+}
+.list-item{min-width:0;}
+.item-left,.item-right{min-width:0;}
+.item-title,.item-subtitle{overflow-wrap:anywhere;}
+.bitcoin-icon,.solana-icon,.eth-icon{display:flex;align-items:center;justify-content:center;flex:0 0 auto;overflow:hidden;}
+.bitcoin-icon svg,.solana-icon svg,.eth-icon svg{display:block;width:100%;height:100%;max-width:100%;max-height:100%;}
+.icon-wrapper svg,.sidebar-item svg,.menu-btn svg,.action-btn svg,.toast-notification svg{display:block;flex:0 0 auto;}
+.modal-overlay{overscroll-behavior:contain;}
+.modal-card{max-height:min(88dvh,780px);overflow-y:auto;overscroll-behavior:contain;}
+input,select,textarea,button{font:inherit;}
+button{touch-action:manipulation;}
+@media(max-width:900px){
+  .scroll-content{padding-top:max(18px,calc(env(safe-area-inset-top) + 14px))!important;}
+  .top-row-grid{grid-template-columns:minmax(0,1fr)!important;}
+}
+@media(max-width:600px){
+  .scroll-content{padding-left:max(14px,env(safe-area-inset-left))!important;padding-right:max(14px,env(safe-area-inset-right))!important;padding-bottom:max(18px,env(safe-area-inset-bottom))!important;}
+  .balance-card{padding:19px!important;min-height:0!important;}
+  .main-balance{font-size:clamp(29px,8vw,39px)!important;overflow-wrap:anywhere;}
+  .asset-list,.activity-panel,.exchange-transactions,.profit-summary-card,.cost-card,.tx-history-card{padding:14px!important;}
+  .modal-card{width:min(100% - 24px,480px);}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important;}}
+</style>
 
 </body>
 </html>
