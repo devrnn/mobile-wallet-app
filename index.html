@@ -1893,7 +1893,7 @@ target.style.transition = 'none';
 }
 if(event?.cancelable) event.preventDefault();
 const eased = Math.min(maxPullDistance, raw * 0.88);
-target.style.transform = 'none';
+target.style.transform = `translate3d(0,${eased}px,0)`;
 const progress = Math.min(eased / threshold, 1);
 arc.style.strokeDashoffset = circumference - (progress * circumference * 0.82);
 pullIndicator.classList.toggle('visible', eased > 10);
@@ -1921,7 +1921,7 @@ target.style.transition = 'transform .38s cubic-bezier(.22,1,.36,1)';
 if(eased >= threshold && raw > 0 && panel.scrollTop <= 0){
 clearTimers();
 refreshing = true;
-target.style.transform = 'none';
+target.style.transform = `translate3d(0,${threshold - 12}px,0)`;
 pullIndicator.classList.add('visible','refreshing');
 pullIndicator.classList.remove('ready');
 label.textContent = refreshLabel;
