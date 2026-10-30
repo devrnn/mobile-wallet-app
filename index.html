@@ -4970,32 +4970,4 @@ modal.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
 .wallet-native-refresh{display:none;align-items:center;justify-content:center;width:38px;height:38px;padding:0;border:1px solid var(--border-subtle);border-radius:12px;color:var(--text-main);background:var(--ws-surface);font-size:21px;line-height:1;cursor:pointer}
 </style><script id="wallet-standalone-refresh">
 (()=>{if(!(window.navigator.standalone||window.matchMedia?.('(display-mode: standalone)').matches))return;const title=document.querySelector('#walletPanel .dashboard-header');if(!title)return;const b=document.createElement('button');b.type='button';b.className='wallet-native-refresh';b.style.display='inline-flex';b.setAttribute('aria-label','Refresh wallet');b.title='Refresh wallet';b.textContent='↻';b.addEventListener('click',()=>location.reload());title.appendChild(b);})();
-</script><style id="pull-refresh-mobile-lock">@media(pointer:coarse){html,body{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;overflow:hidden!important;overscroll-behavior:none!important}.page-panel,.scroll-content{overscroll-behavior-y:contain!important}}</style><script id="swipe-open-menu">
-(()=>{
-let gesture=null;
-const excluded='input,textarea,select,button,a,[contenteditable="true"],[data-no-pull-refresh],.modal-overlay,.lock-overlay,.sidebar,.sidebar-overlay,.activity-swipe-row,.tv-chart-stage,.market-ticker-bar,.chart-timeframe-row,.chart-timerange,.tv-chart-toolbar';
-function blocked(target){
-  if(!(target instanceof Element))return true;
-  if(target.closest(excluded)||document.querySelector('.modal-overlay.open,.lock-overlay.open,.sidebar.open'))return true;
-  for(let node=target;node&&node!==document.body;node=node.parentElement){
-    const overflow=getComputedStyle(node).overflowX;
-    if((overflow==='auto'||overflow==='scroll')&&node.scrollWidth>node.clientWidth+2)return true;
-  }
-  return false;
-}
-document.addEventListener('touchstart',event=>{
-  gesture=null;
-  if(!window.matchMedia('(max-width: 768px)').matches||event.touches.length!==1||blocked(event.target))return;
-  const t=event.touches[0];gesture={id:t.identifier,x:t.clientX,y:t.clientY,time:Date.now()};
-},{passive:true});
-document.addEventListener('touchend',event=>{
-  if(!gesture)return;
-  const start=gesture;gesture=null;
-  const t=Array.from(event.changedTouches).find(touch=>touch.identifier===start.id);
-  if(!t||event.touches.length||Date.now()-start.time>1500)return;
-  const dx=t.clientX-start.x,dy=t.clientY-start.y;
-  if(dx>=70&&dx>Math.abs(dy)*1.5&&typeof openSidebar==='function')openSidebar();
-},{passive:true});
-document.addEventListener('touchcancel',()=>{gesture=null;},{passive:true});
-})();
-</script></body></html>
+</script><style id="pull-refresh-mobile-lock">@media(pointer:coarse){html,body{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;overflow:hidden!important;overscroll-behavior:none!important}.page-panel,.scroll-content{overscroll-behavior-y:contain!important}}</style></body></html>
