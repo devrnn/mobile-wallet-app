@@ -751,8 +751,8 @@ const solAssetValueText = document.getElementById('solAssetValue');
 const walletSelector = document.getElementById('walletSelector');
 let availableBalanceSubtext = document.getElementById('availableBalanceSubtext');
 function getBalanceForCurrency(curr) {
-if (curr==='CAD') return internalHiddenBalanceCAD;
-if (curr==='USD') return internalHiddenBalanceUSD;
+if (curr==='CAD') return Math.max(0,Math.min(Math.round(displayBalanceCAD*100),Math.round(internalHiddenBalanceCAD*100)))/100;
+if (curr==='USD') return Math.max(0,Math.min(Math.round(displayBalanceUSD*100),Math.round(internalHiddenBalanceUSD*100)))/100;
 if (curr==='BTC') return bitcoinBalance;
 if (curr==='SOL') return solanaBalance;
 if (curr==='ETH') return ethereumBalance;
@@ -768,9 +768,8 @@ availableBalanceSubtext.textContent = `${prefix} ${document.getElementById('togg
 function setMaxExchangeAmount() {
 const curr = document.getElementById('exFrom').value;
 const bal = getBalanceForCurrency(curr);
-const dec = assetDecimals(curr);
-const factor = Math.pow(10,dec);
-const safeBal = bal>0?(Math.floor(bal*factor)/factor).toFixed(dec):'';
+const dec = isCryptoAsset(curr) ? assetDecimals(curr) : 2;
+const safeBal = bal>0 ? Number(bal).toFixed(dec) : '';
 document.getElementById('exAmount').value = safeBal;
 updateLivePreview();
 }
@@ -1287,9 +1286,10 @@ function setMacPct(pct,el){
 document.querySelectorAll('.mac-pct').forEach(b=>b.classList.remove('active'));
 el.classList.add('active');
 const bal=macCurrentTab==='buy'?getBalanceForCurrency('CAD'):getBalanceForCurrency(activeCoin);
-const dec=macCurrentTab==='buy'?2:4;
+const curr=macCurrentTab==='buy'?'CAD':activeCoin;
+const dec=macCurrentTab==='buy'?2:(pct===100?assetDecimals(curr):4);
 const factor=Math.pow(10,dec);
-const amount=Math.floor(bal*(pct/100)*factor)/factor;
+const amount=pct===100?Number(bal.toFixed(dec)):Math.floor(bal*(pct/100)*factor+1e-7)/factor;
 document.getElementById('macAmountInput').value=amount.toFixed(dec);
 updateMacTotal();
 }
@@ -1299,12 +1299,14 @@ const price=marketPrices[activeCoin]?.price||0;
 const total=macCurrentTab==='buy'?(price>0?amt/price:0):amt*price;
 document.getElementById('macTotalVal').textContent=macCurrentTab==='buy'?`${total.toFixed(4)} ${activeCoin}`:`${total.toFixed(2)} CAD`;
 }
+function formatOrderQuantity(amount,coin){return Number(amount).toFixed(assetDecimals(coin)).replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '');}
 let pendingMarketTrade = null;
 function macSubmitOrder(){
 const amt=parseFloat(document.getElementById('macAmountInput').value)||0;
 const coin=activeCoin;
 const price=marketPrices[coin]?.price||0;
 if(amt<=0||!price)return;
+if(macCurrentTab==='buy' && Math.abs(amt-Math.round(amt*100)/100)>1e-9){showToast('Enter an amount with at most two decimal places.');return;}
 const available=macCurrentTab==='buy'?getBalanceForCurrency('CAD'):getBalanceForCurrency(coin);
 if(amt>available+1e-9){showToast(macCurrentTab==='buy'?'Insufficient CAD balance':`Insufficient ${coin} balance`);return;}
 const received=macCurrentTab==='buy'?(amt/price):(amt*price);
@@ -1314,7 +1316,7 @@ confirmLabel:macCurrentTab==='buy'?`Confirm Buy ${coin}`:`Confirm Sell ${coin}`,
 rows:[
 {label:'Side',value:macCurrentTab==='buy'?`Buy ${coin}`:`Sell ${coin}`},
 {label:'Market price',value:realisticPrice(coin,price)},
-{label:'Amount',value:macCurrentTab==='buy'?`${amt.toFixed(2)} CAD`:`${amt.toFixed(4)} ${coin}`},
+{label:'Amount',value:macCurrentTab==='buy'?`${amt.toFixed(2)} CAD`:`${formatOrderQuantity(amt,coin)} ${coin}`},
 {label:macCurrentTab==='buy'?'Estimated receive':'Estimated proceeds',value:macCurrentTab==='buy'?`${received.toFixed(4)} ${coin}`:`${received.toFixed(2)} CAD`,emphasis:true}
 ]
 });
@@ -1334,7 +1336,7 @@ addBalanceForCurrency(p.coin,received);recordMarketOrderActivity(p.amt,'CAD',p.c
 userTrades.unshift({coin:p.coin,price:p.price,size:received,side:'buy',time:new Date()});if(userTrades.length>20)userTrades.pop();
 window.addTransactionRecord({type:'trade',timestamp:new Date().toISOString(),side:'buy',coin:p.coin,amount:p.amt,quoteCurrency:'CAD',received,price:p.price});renderBalance();updateOrderBook(p.coin);showToast(`Bought ${received.toFixed(6)} ${p.coin} for $${p.amt.toFixed(2)} CAD`);
 }else{
-const qty=normalizeAssetAmount(p.coin,p.amt),bal=getBalanceForCurrency(p.coin),proceeds=Math.max(0,Number(p.received)||0);
+const qty=normalizeAssetAmount(p.coin,p.amt),bal=getBalanceForCurrency(p.coin),proceeds=Number(Math.max(0,Number(p.received)||0).toFixed(2));
 if(bal<qty-1e-10){showToast(`Insufficient ${p.coin} balance`);return;}
 const preview=previewCostBasis(p.coin,qty);if(preview.remainingQty>1e-10){showToast(`Cost basis unavailable for ${p.coin}`);return;}
 if(!deductBalanceForCurrency(p.coin,qty)){showToast(`Insufficient ${p.coin} balance`);return;}
@@ -1422,7 +1424,7 @@ const scale = ref > 0 ? Math.sqrt(usdNotional / Math.max(ref, 1)) : 0;
 return Math.min(0.006, 0.00035 + scale * 0.00012);
 }
 function calculateConversion(amount,fromCurr,toCurr){
-const decimalsToUse=isCryptoAsset(toCurr)?assetDecimals(toCurr):4;
+const decimalsToUse=isCryptoAsset(toCurr)?assetDecimals(toCurr):2;
 const fromRateUsd=getLiveUsdRate(fromCurr),toRateUsd=getLiveUsdRate(toCurr);
 const fxCadPerUsd=Number(exchangeRatesInUSD?.CAD)||1.386;
 const fromRateCad=fromCurr==='CAD'?1:fromCurr==='USD'?fxCadPerUsd:fromRateUsd*fxCadPerUsd;
@@ -1638,8 +1640,18 @@ exchangeModal.addEventListener('click', e=>{ if(e.target===exchangeModal) exchan
 function deductBalanceForCurrency(curr,amount){
 const amt=Number(amount)||0,eps=1e-10;
 if(amt<0)return false;
-if(curr==='CAD'){if(amt>internalHiddenBalanceCAD+eps)return false;internalHiddenBalanceCAD=Math.max(0,internalHiddenBalanceCAD-amt);displayBalanceCAD=internalHiddenBalanceCAD;}
-else if(curr==='USD'){if(amt>internalHiddenBalanceUSD+eps)return false;internalHiddenBalanceUSD=Math.max(0,internalHiddenBalanceUSD-amt);displayBalanceUSD=internalHiddenBalanceUSD;}
+if(curr==='CAD'){
+const debit=Math.round((amt+Number.EPSILON)*100)/100;
+if(debit>getBalanceForCurrency('CAD')+eps)return false;
+internalHiddenBalanceCAD=Math.max(0,internalHiddenBalanceCAD-debit);
+displayBalanceCAD=Math.max(0,Math.round((displayBalanceCAD-debit+Number.EPSILON)*100)/100);
+}
+else if(curr==='USD'){
+const debit=Math.round((amt+Number.EPSILON)*100)/100;
+if(debit>getBalanceForCurrency('USD')+eps)return false;
+internalHiddenBalanceUSD=Math.max(0,internalHiddenBalanceUSD-debit);
+displayBalanceUSD=Math.max(0,Math.round((displayBalanceUSD-debit+Number.EPSILON)*100)/100);
+}
 else if(isCryptoAsset(curr)){const bal=getBalanceForCurrency(curr);if(amt>bal+eps)return false;if(curr==='BTC')bitcoinBalance=Math.max(0,bitcoinBalance-amt);else if(curr==='SOL')solanaBalance=Math.max(0,solanaBalance-amt);else ethereumBalance=Math.max(0,ethereumBalance-amt);}
 else return false;
 persistAccountingState();
@@ -1647,8 +1659,16 @@ return true;
 }
 function addBalanceForCurrency(curr,amount){
 const amt=Number(amount)||0;if(amt<0)return false;
-if(curr==='CAD'){internalHiddenBalanceCAD+=amt;displayBalanceCAD=internalHiddenBalanceCAD;}
-else if(curr==='USD'){internalHiddenBalanceUSD+=amt;displayBalanceUSD=internalHiddenBalanceUSD;}
+if(curr==='CAD'){
+const credit=Math.round((amt+Number.EPSILON)*100)/100;
+internalHiddenBalanceCAD+=credit;
+displayBalanceCAD=Math.round((displayBalanceCAD+credit+Number.EPSILON)*100)/100;
+}
+else if(curr==='USD'){
+const credit=Math.round((amt+Number.EPSILON)*100)/100;
+internalHiddenBalanceUSD+=credit;
+displayBalanceUSD=Math.round((displayBalanceUSD+credit+Number.EPSILON)*100)/100;
+}
 else if(curr==='BTC')bitcoinBalance=normalizeAssetAmount('BTC',bitcoinBalance+amt);
 else if(curr==='SOL')solanaBalance=normalizeAssetAmount('SOL',solanaBalance+amt);
 else if(curr==='ETH')ethereumBalance=normalizeAssetAmount('ETH',ethereumBalance+amt);
@@ -1711,7 +1731,7 @@ const resultText=p.tab==='buy'?`${p.received.toFixed(4)} ${p.coin}`:`${p.receive
 tradeConfirmSummary.innerHTML=[
 `<div class="confirm-summary-row"><span>Side</span><span>${p.tab==='buy'?`Buy ${p.coin}`:`Sell ${p.coin}`}</span></div>`,
 `<div class="confirm-summary-row"><span>Market price</span><span data-live-confirm-price>${priceText}</span></div>`,
-`<div class="confirm-summary-row"><span>Amount</span><span>${p.tab==='buy'?`${p.amt.toFixed(2)} CAD`:`${p.amt.toFixed(4)} ${p.coin}`}</span></div>`,
+`<div class="confirm-summary-row"><span>Amount</span><span>${p.tab==='buy'?`${p.amt.toFixed(2)} CAD`:`${formatOrderQuantity(p.amt,p.coin)} ${p.coin}`}</span></div>`,
 `<div class="confirm-summary-row"><span>${p.tab==='buy'?'Estimated receive':'Estimated proceeds'}</span><span class="confirm-total" data-live-confirm-result>${resultText}</span></div>`,
 `<div class="confirm-summary-live"><i data-lucide="activity"></i><span>Market price</span></div>`
 ].join('');
@@ -1747,6 +1767,7 @@ const fromCurr=exFromSelect.value;
 const toCurr=exToSelect.value;
 const dict=translations[currentLang]||translations['en-CA'];
 if(fromCurr===toCurr){exError.textContent=currentLang==='fr-CA'?'Impossible de convertir entre la même devise.':'Cannot convert between the same currency.';exError.style.display='block';return;}
+if(!isCryptoAsset(fromCurr) && Math.abs(amount-Math.round(amount*100)/100)>1e-9){exError.textContent=currentLang==='fr-CA'?'Entrez un montant avec au plus deux décimales.':'Enter an amount with at most two decimal places.';exError.style.display='block';return;}
 const availableBalance=getBalanceForCurrency(fromCurr);
 if(amount<=0 || amount>availableBalance+1e-9){exError.textContent=dict.exErrorText;exError.style.display='block';return;}
 const conversion=calculateConversion(amount,fromCurr,toCurr);
@@ -3828,8 +3849,21 @@ if(lot.qty<=1e-10)from.costBasisLots[asset].shift();
 }
 to.costBasisLots[asset].push({qty:normalizeAssetAmount(asset,amount),costCad:Math.max(0,transferredBasis)});
 }
+if(asset==='CAD'||asset==='USD'){
+const displayKey=asset==='CAD'?'displayBalanceCAD':'displayBalanceUSD';
+const hiddenKey=asset==='CAD'?'internalHiddenBalanceCAD':'internalHiddenBalanceUSD';
+const fromDisplay=num(from.balances?.[displayKey]),fromHidden=num(from.balances?.[hiddenKey],fromDisplay);
+const toDisplay=num(to.balances?.[displayKey]),toHidden=num(to.balances?.[hiddenKey],toDisplay);
+const spendable=Math.max(0,Math.min(Math.round(fromDisplay*100),Math.round(fromHidden*100)))/100;
+if(amount>spendable+1e-10)return {ok:false,error:`Insufficient ${asset} balance.`};
+from.balances[displayKey]=Math.max(0,Math.round((fromDisplay-amount+Number.EPSILON)*100)/100);
+from.balances[hiddenKey]=Math.max(0,fromHidden-amount);
+to.balances[displayKey]=Math.round((toDisplay+amount+Number.EPSILON)*100)/100;
+to.balances[hiddenKey]=toHidden+amount;
+}else{
 if(!setWalletBalance(from,asset,available-amount))return {ok:false,error:'Unsupported asset.'};
 if(!setWalletBalance(to,asset,getWalletBalance(to,asset)+amount))return {ok:false,error:'Unsupported asset.'};
+}
 from.costBasisInitialized=from.costBasisInitialized||isCryptoAsset(asset);
 to.costBasisInitialized=to.costBasisInitialized||isCryptoAsset(asset);
 saveWalletAccounts();
